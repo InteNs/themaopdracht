@@ -1,16 +1,17 @@
 
-public class Factuur {
-	private double amount;
+public class Invoice {
+	private double totalPrice;
 	private int daysToPay;
 	private boolean isPayed;
-	public Factuur(double amount){
-		this.amount = amount;
+	public Invoice(double amount, int daysToPay){
+		this.totalPrice = amount;
+		this.daysToPay = daysToPay;
 	}
-	public double getAmount() {
-		return amount;
+	public double getTotalPrice() {
+		return totalPrice;
 	}
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public void setTotalPrice(double price) {
+		this.totalPrice = price;
 	}
 	public int getDaysToPay() {
 		return daysToPay;
