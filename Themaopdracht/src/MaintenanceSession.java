@@ -31,14 +31,14 @@ public class MaintenanceSession {
 		return this.mechanic;
 	}
 	public void endSession(int hours){
-		receipt.addItem(hours * mechanic.getHourlyFee(), "hourlyFee - "+ hours +" - $"+ hours * mechanic.getHourlyFee());	
+		receipt.addItem(hours * mechanic.getHourlyFee(),"hourlyfee", ""+hours);	
 		mechanic.setWorkedHours(mechanic.getWorkedHours()+hours);
 		Iterator<Part> keySetIterator = usedParts.keySet().iterator();
 		while(keySetIterator.hasNext()){
 			Part key = keySetIterator.next();
 			double price = key.getSellPrice() * usedParts.get(key);
 			stock.usePart(key.getPartId(), usedParts.get(key));
-			receipt.addItem(price, key.getName()+ " - "+ usedParts.get(key)+ " - $"+price);
+			receipt.addItem(price, key.getName(),""+usedParts.get(key));
 		}
 	}
 }

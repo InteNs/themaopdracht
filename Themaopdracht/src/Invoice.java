@@ -16,22 +16,31 @@ public class Invoice {
 		return totalPrice;
 	}
 	/**
-	 * 
 	 * @param price
 	 * @param description "name - amount - totalPrice"
 	 */
-	public void addItem(double price, String description) {
+	public void addItem(double price, String description, String amount) {
 		this.totalPrice += price;
-		InvoiceItems.add(description);
+		InvoiceItems.add(description+"\tX"+amount+"\t$"+price+"\n");
 	}
 	public boolean isPayed() {
 		return isPayed;
 	}
 	public void payNow(PayMethod payMethod){
-		
 	}
 	public void bindToCustomer(Customer customer){
 		this.customer = customer;
+	}
+	public String toString(){
+		String info = "", line = "", items = "";
+		if(customer !=null){
+			info = "customer: "+customer+"\n";
+		}
+		line = "-------------------------------\n";
+		for (String string : InvoiceItems) {
+			items = items + string;
+		}
+		return info + line + items;
 	}
 }
 
