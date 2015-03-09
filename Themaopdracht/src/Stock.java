@@ -22,19 +22,17 @@ public class Stock {
 			if(fuelType.gettSIC() == tSIC) toOrder.put(tSIC, liters);
 		}
 	}
-	public void usePart(int partId, int amount, Invoice receipt){
+	public void usePart(int partId, int amount){
 		for (Part partType : partTypes) {
 			if(partType.getPartId()==partId){
 				partType.setAmount(partType.getAmount() - amount);
-				receipt.setTotalPrice(receipt.getTotalPrice() + partType.getAmount() * partType.getSellPrice());
 			}
 		}
 	}
-	public void useFuel(int tSIC, int liters, Invoice receipt){
+	public void useFuel(int tSIC, int liters){
 		for (Fuel fuelType : fuelTypes){
 			if(fuelType.gettSIC() == tSIC){
 				fuelType.setLiters(fuelType.getLiters() - liters);
-				receipt.setTotalPrice(receipt.getTotalPrice() + liters * fuelType.getSellPrice());
 			}
 		}
 	}

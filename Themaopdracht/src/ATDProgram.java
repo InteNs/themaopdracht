@@ -20,7 +20,7 @@ public class ATDProgram extends Application {
 		for (int i = 0; i < 10; i++) {
 			parkingSpaces.add(new ParkingSpace(i));
 		}
-		mechanics.add(new Mechanic(0, "harry jekkers"));
+		mechanics.add(new Mechanic(0, "harry jekkers", 15.0));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
 		customers.add(new Customer("Paula Koe", "Breda",LocalDate.parse("1959-sep-24",formatter), LocalDate.parse("2014-dec-24",formatter), customers.size()+1));
 	}
@@ -30,6 +30,7 @@ public class ATDProgram extends Application {
 		}
 		return null;
 	}
+	
 	public boolean isInBlackList(Customer customer){
 		if(blackList.contains(customer)) return true;
 		else return false;

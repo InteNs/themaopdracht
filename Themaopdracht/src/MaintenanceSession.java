@@ -1,18 +1,18 @@
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Iterator;
 
 
 public class MaintenanceSession {
-	private double hourlyFee;
-	private int hours;
+	private LocalDate plannedDate;
 	private Invoice receipt;
 	private Stock stock;
 	private Mechanic mechanic;
 	private HashMap<Part, Integer> usedParts;
-	public MaintenanceSession(double hourlyFee, Invoice receipt, Stock stock, Mechanic mechanic) {
-		this.mechanic = mechanic;
+	public MaintenanceSession(Invoice receipt, Stock stock,LocalDate plannedDate) {
+
+		this.plannedDate = plannedDate;
 		this.stock = stock;
-		this.hourlyFee = hourlyFee;
 		this.receipt = receipt;
 		usedParts = new HashMap<Part, Integer>();
 	}
@@ -21,16 +21,24 @@ public class MaintenanceSession {
 			usedParts.put(part, usedParts.get(part)+1);
 		}
 	}
-	public void setHours(int hours) {
-		this.hours = hours;
+	public LocalDate getPlannedDate(){
+		return plannedDate;
 	}
-	public void endSession(){
-		receipt.setTotalPrice(receipt.getTotalPrice() + hours * hourlyFee);
+	public void setMechanic(Mechanic mechanic){
+		this.mechanic = mechanic;
+	}
+	public Mechanic getMechanic(){
+		return this.mechanic;
+	}
+	public void endSession(int hours){
+		receipt.addItem(hours * mechanic.getHourlyFee(), "hourlyFee - "+ hours +" - $"+ hours * mechanic.getHourlyFee());	
 		mechanic.setWorkedHours(mechanic.getWorkedHours()+hours);
 		Iterator<Part> keySetIterator = usedParts.keySet().iterator();
 		while(keySetIterator.hasNext()){
 			Part key = keySetIterator.next();
-			stock.usePart(key.getPartId(), usedParts.get(key), receipt);
+			double price = key.getSellPrice() * usedParts.get(key);
+			stock.usePart(key.getPartId(), usedParts.get(key));
+			receipt.addItem(price, key.getName()+ " - "+ usedParts.get(key)+ " - $"+price);
 		}
 	}
 }
