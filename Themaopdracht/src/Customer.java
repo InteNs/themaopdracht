@@ -18,6 +18,9 @@ public class Customer {
 	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
+	public String getPlace(){
+		return place;
+	}
 	public int getCustomerId() {
 		return customerId;
 	}
