@@ -1,7 +1,6 @@
 
 public class RefuelSession {
-	private Stock stock;
-	public RefuelSession(int amountTanked, Fuel typeTanked, Invoice receipt){
+	public RefuelSession(int amountTanked, Fuel typeTanked, Invoice receipt, Stock stock){
 		stock.useFuel(typeTanked.gettSIC(), amountTanked, receipt);
 	}
 }
