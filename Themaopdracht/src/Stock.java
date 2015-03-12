@@ -26,6 +26,7 @@ public class Stock {
 		for (Part partType : partTypes) {
 			if(partType.getPartId()==partId){
 				partType.setAmount(partType.getAmount() - amount);
+				if(partType.getAmount()<1) this.OrderPart(partId,partType.getOrderAmount());
 			}
 		}
 	}
@@ -33,6 +34,7 @@ public class Stock {
 		for (Fuel fuelType : fuelTypes){
 			if(fuelType.gettSIC() == tSIC){
 				fuelType.setLiters(fuelType.getLiters() - liters);
+				if(fuelType.getLiters()<1000)this.OrderFuel(tSIC, 5000);
 			}
 		}
 	}

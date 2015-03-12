@@ -31,6 +31,9 @@ public class Invoice {
 	public void bindToCustomer(Customer customer){
 		this.customer = customer;
 	}
+	public Customer getCustomer(){
+		return customer;
+	}
 	public String toString(){
 		String info = "", line = "", items = "";
 		if(customer !=null){

@@ -3,13 +3,12 @@ import java.time.LocalDate;
 
 public class Customer {
 	private String name, place;
-	private LocalDate dateOfBirth,lastVisit;
+	private LocalDate dateOfBirth,lastVisit, lastMaintenance;
 	private int customerId;
-	public Customer(String name, String place, LocalDate bornDate, LocalDate lastVisit, int customerId) {
+	public Customer(String name, String place, LocalDate bornDate, int customerId) {
 		this.name = name;
 		this.place = place;
 		this.dateOfBirth = bornDate;
-		this.lastVisit = lastVisit;
 		this.customerId = customerId;
 	}
 	public String getName() {
@@ -27,8 +26,16 @@ public class Customer {
 	public LocalDate getLastVisit() {
 		return lastVisit;
 	}
+	public LocalDate getLastMaintenance(){
+		return lastMaintenance;
+	}
 	public void setLastVisit(LocalDate lastVisit) {
 		this.lastVisit = lastVisit;
+	}
+	public void setLastMaintenance(LocalDate lastMaintenance){
+		this.lastMaintenance = lastMaintenance;
+		this.lastVisit = lastMaintenance;
+		
 	}
 	
 }

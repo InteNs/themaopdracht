@@ -2,6 +2,7 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -22,7 +23,7 @@ public class ATDProgram extends Application {
 		}
 		mechanics.add(new Mechanic(0, "harry jekkers", 15.0));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-		customers.add(new Customer("Paula Koe", "Breda",LocalDate.parse("1959-sep-24",formatter), LocalDate.parse("2014-dec-24",formatter), customers.size()+1));
+		customers.add(new Customer("Paula Koe", "Breda",LocalDate.parse("1959-sep-24",formatter), customers.size()+1));
 	}
 	public Customer findCustomer(String name){
 		for (Customer customer : customers) {
@@ -46,6 +47,24 @@ public class ATDProgram extends Application {
 		addContent();
 		// TODO Auto-generated method stub
 		
+	}
+	public List<Customer> getRemindList(){
+		ArrayList<Customer> remindables = new ArrayList<Customer>();
+		for (Customer customer : customers) {
+			if(customer.getLastVisit().isBefore(LocalDate.now().minusMonths(2))){
+				remindables.add(customer);
+			}
+		}
+		return remindables;
+	}
+	public List<Customer> getRemindMaintenanceList(){
+		ArrayList<Customer> remindables = new ArrayList<Customer>();
+		for (Customer customer : customers) {
+			if(customer.getLastMaintenance().isBefore(LocalDate.now().minusMonths(6))){
+				remindables.add(customer);
+			}
+		}
+		return remindables;	
 	}
 
 }

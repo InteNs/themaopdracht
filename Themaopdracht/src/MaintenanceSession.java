@@ -31,6 +31,7 @@ public class MaintenanceSession {
 		return this.mechanic;
 	}
 	public void endSession(int hours){
+		if(receipt.getCustomer() != null)receipt.getCustomer().setLastMaintenance(LocalDate.now());
 		receipt.addItem(hours * mechanic.getHourlyFee(),"hourlyfee", ""+hours);	
 		mechanic.setWorkedHours(mechanic.getWorkedHours()+hours);
 		Iterator<Part> keySetIterator = usedParts.keySet().iterator();
