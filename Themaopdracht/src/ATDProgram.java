@@ -2,6 +2,7 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javafx.application.Application;
@@ -15,6 +16,7 @@ public class ATDProgram extends Application {
 	private ArrayList<Reservation> reservations;
 	private ArrayList<ParkingSpace> parkingSpaces;
 	private Stock stock;
+	public enum visit{SERVICE, MAINTENANCE};
 	public static void main(String[] args) {launch();}
 	
 	private void addContent(){
@@ -48,23 +50,29 @@ public class ATDProgram extends Application {
 		// TODO Auto-generated method stub
 		
 	}
-	public List<Customer> getRemindList(){
+
+	public List<Customer> getRemindList(visit remindoption) {
 		ArrayList<Customer> remindables = new ArrayList<Customer>();
 		for (Customer customer : customers) {
-			if(customer.getLastVisit().isBefore(LocalDate.now().minusMonths(2))){
-				remindables.add(customer);
+			switch (remindoption) {
+			case SERVICE:
+				if (customer.getLastVisit().isBefore(
+						LocalDate.now().minusMonths(2))) {
+					remindables.add(customer);
+				}
+				break;
+			case MAINTENANCE:
+				if (customer.getLastMaintenance().isBefore(
+						LocalDate.now().minusMonths(6))) {
+					remindables.add(customer);
+				}
+				break;
+			default: return null;
 			}
+
 		}
 		return remindables;
 	}
-	public List<Customer> getRemindMaintenanceList(){
-		ArrayList<Customer> remindables = new ArrayList<Customer>();
-		for (Customer customer : customers) {
-			if(customer.getLastMaintenance().isBefore(LocalDate.now().minusMonths(6))){
-				remindables.add(customer);
-			}
-		}
-		return remindables;	
-	}
 
 }
+

@@ -8,5 +8,4 @@ public class Order {
 		this.orderId = orderId;
 		this.orderList = orderList;
 	}
-	
 }

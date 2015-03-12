@@ -51,4 +51,12 @@ public class Stock {
 		Order order = new Order(orderId, toOrder);
 		toOrder.clear();
 	}
+	public void fill(Object item, int amount){
+		if(item instanceof Part){
+			((Part) item).setAmount(((Part) item).getAmount()+amount);
+		}
+		if(item instanceof Fuel){
+			((Fuel) item).setLiters(((Fuel) item).getLiters()+amount);
+		}
+	}
 }
