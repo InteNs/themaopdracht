@@ -10,11 +10,20 @@ public class Mechanic {
 	public int getWorkedHours() {
 		return workedHours;
 	}
+	public void setWorkedHours(int workedHours) {
+		this.workedHours = workedHours;
+	}
 	public double getHourlyFee(){
 		return hourlyFee;
 	}
-	public void setWorkedHours(int workedHours) {
-		this.workedHours = workedHours;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setHourlyFee(double hourlyFee) {
+		this.hourlyFee = hourlyFee;
 	}
 	
 }

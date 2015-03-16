@@ -4,53 +4,33 @@ import java.util.List;
 
 
 public class Stock {
-	private ArrayList<Part> partTypes;
-	private ArrayList<Fuel> fuelTypes;
+	private ArrayList<Product> products;
 	private HashMap<Object, Integer> toOrder;
 	public Stock(){
-		partTypes = new ArrayList<Part>();
-		fuelTypes = new ArrayList<Fuel>();
+		products = new ArrayList<Product>();
 		toOrder = new HashMap<Object, Integer>(); // maybe Integer, Integer als Object, Integer niet lukt
 	}
-	public void OrderPart(Part part, int amount){
-		 toOrder.put(part, amount);
+	public void orderProduct(Product product, int amount){
+		 toOrder.put(product, amount);
 	}
-	public void OrderFuel(int tSIC, int liters){
-		for (Fuel fuelType : fuelTypes){
-			if(fuelType.gettSIC() == tSIC) toOrder.put(tSIC, liters);
-		}
+	public void useProduct(Product product, int amount){
+		product.setAmount(product.getAmount() - amount);
+		if(product.getAmount()<1) this.orderProduct(product,product.getOrderAmount());
 	}
-	public void usePart(Part part, int amount){
-		part.setAmount(part.getAmount() - amount);
-		if(part.getAmount()<1) this.OrderPart(part,part.getOrderAmount());
+	public void newProduct(Product product){
+		products.add(product);
 	}
-	public void useFuel(int tSIC, int liters){
-		for (Fuel fuelType : fuelTypes){
-			if(fuelType.gettSIC() == tSIC){
-				fuelType.setLiters(fuelType.getLiters() - liters);
-				if(fuelType.getLiters()<1000)this.OrderFuel(tSIC, 5000);
-			}
-		}
-	}
-	public List<Part> getAllParts(){
-		return partTypes;
-	}
-	public List<Fuel> getAllFuel(){
-		return fuelTypes;
+	public List<Product> getAllProducts(){
+		return products;
 	}
 	public HashMap<Object, Integer> getOrderedItems(){
 		return toOrder;
 	}
 	public void sendOrder(int orderId){
-		Order order = new Order(orderId, toOrder);
+		Order order = new Order(toOrder);
 		toOrder.clear();
 	}
-	public void fill(Object item, int amount){
-		if(item instanceof Part){
-			((Part) item).setAmount(((Part) item).getAmount()+amount);
-		}
-		if(item instanceof Fuel){
-			((Fuel) item).setLiters(((Fuel) item).getLiters()+amount);
-		}
+	public void fill(Product product, int amount){
+		product.setAmount(product.getAmount()+amount);
 	}
 }
