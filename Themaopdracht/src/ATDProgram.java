@@ -28,6 +28,7 @@ public class ATDProgram extends Application {
 	private ArrayList<Mechanic> mechanics;
 	private ArrayList<Reservation> reservations;
 	private ArrayList<ParkingSpace> parkingSpaces;
+	Customer customer;
 	private TextField searchField;
 	ListView<Customer> customerList;
 	private Stock stock;
@@ -48,6 +49,8 @@ public class ATDProgram extends Application {
 		cancel.setOnAction(e ->{
 			stage.setScene(lastScene);
 		});
+		customer = new Customer("Jorrit Meulenbeld", "Utrecht", "NL35 INGB 0008 8953 57", null, "3552AZ", "3552AZ", "0636114939", "Omloop 48");
+		customer = new Customer("Mark Havekes", "Utrecht", "NL35 INGB 0008 8953 57", null, "3552AZ", "3552AZ", "0636114939", "Omloop 48");
 		customers = new ArrayList<Customer>();
 		mechanics = new ArrayList<Mechanic>();
 		reservations = new ArrayList<Reservation>();
@@ -89,7 +92,12 @@ public class ATDProgram extends Application {
 		Button search = new Button("Zoeken");
 		search.setMinSize(137, 40);
 		search.setOnAction(e->{
-			customerList.setItems(findCustomers(searchField.getText()));
+			if (findCustomers(searchField.getText()) != null) {
+				customerList.setItems(findCustomers(searchField.getText()));
+			}
+			else {
+				customerList.setItems(getAllCustomers());
+			}
 		});
 		searchField = new TextField("Zoek...");
 		searchField.setMinSize(350, 40);
@@ -102,12 +110,15 @@ public class ATDProgram extends Application {
 		customerList.setMinSize(492, 300);
 		customerList.setItems(getAllCustomers());
 		customerList.setOnMousePressed(e ->{
-			Customer customer = customerList.getSelectionModel().getSelectedItem();
+			customer = customerList.getSelectionModel().getSelectedItem();
+			System.out.println(customerList.getSelectionModel().getSelectedItem());
 			((Label)customerDetailsContent.getChildren().get(0)).setText(customer.getName());
+			
 			((Label)customerDetailsContent.getChildren().get(1)).setText(customer.getAdress());
 			((Label)customerDetailsContent.getChildren().get(2)).setText(customer.getPostal());
 			((Label)customerDetailsContent.getChildren().get(3)).setText(customer.getPlace());
-			((Label)customerDetailsContent.getChildren().get(4)).setText(customer.getDateOfBirth().toString());
+			if (customer.getDateOfBirth() != null) ((Label)customerDetailsContent.getChildren().get(4)).setText(customer.getDateOfBirth().toString());
+			else ((Label)customerDetailsContent.getChildren().get(4)).setText(" ");
 			((Label)customerDetailsContent.getChildren().get(5)).setText(customer.getEmail());
 			((Label)customerDetailsContent.getChildren().get(6)).setText(customer.getTel());
 			((Label)customerDetailsContent.getChildren().get(7)).setText(customer.getBankAccount());
@@ -136,7 +147,7 @@ public class ATDProgram extends Application {
 			stage.setScene(klantScene);
 		});
 		customerInput = new VBox();
-		customerInput.setSpacing(14);
+		customerInput.setSpacing(9);
 		for (int i = 0; i < 8; i++) {
 			if(i == 4){
 				DatePicker dp = new DatePicker();
@@ -150,7 +161,9 @@ public class ATDProgram extends Application {
 		HBox buttonBox1 = new HBox();
 		buttonBox1.getChildren().addAll(cancel,savenewCustomer);
 		VBox customerDetailsshort = new VBox(20,new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "));
-		VBox addCustomerBox = new VBox(new HBox(30,customerDetailsshort,customerInput),new HBox(40,cancel,back,savenewCustomer));
+		VBox addCustomerBox = new VBox(new HBox(30,customerDetailsshort,customerInput),new HBox(40,cancel,savenewCustomer));
+		addCustomerBox.setPadding(new Insets(20));
+		addCustomerBox.setSpacing(20);
 		newKlantScene = new Scene(addCustomerBox,1024,768);
 		
 		
