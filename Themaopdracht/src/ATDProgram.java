@@ -1,5 +1,6 @@
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class ATDProgram extends Application {
 	private ArrayList<Mechanic> mechanics;
 	private ArrayList<Reservation> reservations;
 	private ArrayList<ParkingSpace> parkingSpaces;
+	private TextField searchField;
+	ListView<Customer> customerList;
 	private Stock stock;
 	private Button back, cancel;
 	private VBox customerInput, customerDetails;
@@ -85,25 +88,31 @@ public class ATDProgram extends Application {
 		delete.setMinSize(160, 40);
 		Button search = new Button("Zoeken");
 		search.setMinSize(137, 40);
-		TextField searchField = new TextField("Zoek...");
+		search.setOnAction(e->{
+			customerList.setItems(findCustomers(searchField.getText()));
+		});
+		searchField = new TextField("Zoek...");
 		searchField.setMinSize(350, 40);
 			//customer details
 		VBox customerDetails = new VBox(20,new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "),new Label("Blacklist: "));
-		//customerDetails.getChildren().addAll(new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "),new Label("Blacklist: "));
-		VBox customerDetailsContent = new VBox(20);
-		customerDetailsContent.getChildren().addAll(new Label("Naam"),new Label("Adres"),new Label("Postcode"),new Label("Plaats"),new Label("geboortedatum"),new Label("Email"),new Label("Telefoonnummer"),new Label("Rekeningnummer"),new Label("Blacklist"));
+		VBox customerDetailsContent = new VBox(20,new Label("Naam"),new Label("Adres"),new Label("Postcode"),new Label("Plaats"),new Label("geboortedatum"),new Label("Email"),new Label("Telefoonnummer"),new Label("Rekeningnummer"),new Label("Blacklist"));
 		HBox customerInfo = new HBox(10,customerDetails,customerDetailsContent);
-		ListView<Customer> customerList = new ListView<Customer>();
+		customerList = new ListView<Customer>();
 		customerList.setOrientation(Orientation.VERTICAL);
 		customerList.setMinSize(492, 300);
 		customerList.setItems(getAllCustomers());
 		customerList.setOnMousePressed(e ->{
-			//((Label)customerDetailsContent.getChildren()
-			((Label)customerDetailsContent.getChildren().get(0)).setText(customerList.getSelectionModel().getSelectedItem().getName());
-			((Label)customerDetailsContent.getChildren().get(1)).setText(customerList.getSelectionModel().getSelectedItem().getAdress());
-			((Label)customerDetailsContent.getChildren().get(2)).setText(customerList.getSelectionModel().getSelectedItem().getPostal());
-			((Label)customerDetailsContent.getChildren().get(3)).setText(customerList.getSelectionModel().getSelectedItem().getPlace());
-			//((Label)customerDetailsContent.getChildren().get(0)).setText(customerList.getSelectionModel().getSelectedItem().getDateOfBirth());
+			Customer customer = customerList.getSelectionModel().getSelectedItem();
+			((Label)customerDetailsContent.getChildren().get(0)).setText(customer.getName());
+			((Label)customerDetailsContent.getChildren().get(1)).setText(customer.getAdress());
+			((Label)customerDetailsContent.getChildren().get(2)).setText(customer.getPostal());
+			((Label)customerDetailsContent.getChildren().get(3)).setText(customer.getPlace());
+			((Label)customerDetailsContent.getChildren().get(4)).setText(customer.getDateOfBirth().toString());
+			((Label)customerDetailsContent.getChildren().get(5)).setText(customer.getEmail());
+			((Label)customerDetailsContent.getChildren().get(6)).setText(customer.getTel());
+			((Label)customerDetailsContent.getChildren().get(7)).setText(customer.getBankAccount());
+			if(customer.isOnBlackList()) ((Label)customerDetailsContent.getChildren().get(8)).setText("Ja");
+			else ((Label)customerDetailsContent.getChildren().get(8)).setText("Nee");
 		});
 		VBox beheerBox = new VBox(20,new HBox(back),new HBox(20,customerList,customerInfo), new HBox(5,searchField,search), new HBox(6,newCustomer,change,delete));
 		beheerBox.setPadding(new Insets(20));
@@ -128,7 +137,7 @@ public class ATDProgram extends Application {
 		});
 		customerInput = new VBox();
 		customerInput.setSpacing(14);
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 8; i++) {
 			if(i == 4){
 				DatePicker dp = new DatePicker();
 				customerInput.getChildren().add(dp);
@@ -140,7 +149,8 @@ public class ATDProgram extends Application {
 		}
 		HBox buttonBox1 = new HBox();
 		buttonBox1.getChildren().addAll(cancel,savenewCustomer);
-		VBox addCustomerBox = new VBox(new HBox(30,customerDetails.,customerInput),new HBox(40,cancel,back,savenewCustomer));
+		VBox customerDetailsshort = new VBox(20,new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "));
+		VBox addCustomerBox = new VBox(new HBox(30,customerDetailsshort,customerInput),new HBox(40,cancel,back,savenewCustomer));
 		newKlantScene = new Scene(addCustomerBox,1024,768);
 		
 		
@@ -148,14 +158,14 @@ public class ATDProgram extends Application {
 	public ObservableList<Customer> getAllCustomers(){
 		return FXCollections.observableArrayList(customers);
 	}
-	public List<Customer> findCustomers(String input){
+	public ObservableList<Customer> findCustomers(String input){
 		ArrayList<Customer> list = new ArrayList<Customer>();
 		for (Customer customer : customers) {
 			if(customer.getEmail().equals(input) && !list.contains(customer)) list.add(customer);
 			if(customer.getPostal().equals(input) && !list.contains(customer)) list.add(customer);
 			if(customer.getName().equals(input) && !list.contains(customer)) list.add(customer);
 		}
-		return list;
+		return FXCollections.observableArrayList(list);
 	}
 	public List<Customer> getRemindList(visit remindoption) {
 		ArrayList<Customer> remindables = new ArrayList<Customer>();
