@@ -2,12 +2,11 @@ import java.time.LocalDate;
 
 
 public class Customer {
-	private String name, sirName, place, email, adress, postal,bankAccount, tel;
+	private String name, place, email, adress, postal,bankAccount, tel;
 	private LocalDate dateOfBirth,lastVisit, lastMaintenance;
 	private boolean isOnBlackList;
-	public Customer(String name,String sirName, String place,String bankAccount, LocalDate bornDate, String email, String postal, String tel, String adress) {
+	public Customer(String name, String place,String bankAccount, LocalDate bornDate, String email, String postal, String tel, String adress) {
 		this.name = name;
-		this.sirName = sirName;
 		this.place = place;
 		this.bankAccount = bankAccount;
 		this.email = email;
@@ -28,9 +27,6 @@ public class Customer {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public void setSirName(String sirName) {
-		this.sirName = sirName;
-	}
 	public void setPlace(String place) {
 		this.place = place;
 	}
@@ -48,9 +44,6 @@ public class Customer {
 	}
 	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
-	}
-	public String getSirName() {
-		return sirName;
 	}
 	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
@@ -90,5 +83,11 @@ public class Customer {
 		this.lastVisit = lastMaintenance;
 		
 	}
+	@Override
+	public String toString() {
+		return "Customer [name=" + name + ", postal=" + postal + ", email="
+				+ email + "]";
+	}
+	
 	
 }
