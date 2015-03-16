@@ -1,5 +1,5 @@
 
-public abstract class Product {
+public class Product {
 	private String name;
 	private int amount, orderAmount;
 	private double buyPrice, sellPrice;

@@ -8,17 +8,17 @@ public class MaintenanceSession {
 	private Invoice receipt;
 	private Stock stock;
 	private Mechanic mechanic;
-	private HashMap<Part, Integer> usedParts;
+	private HashMap<Product, Integer> usedParts;
 	public MaintenanceSession(Invoice receipt, Stock stock,LocalDate plannedDate) {
 
 		this.plannedDate = plannedDate;
 		this.stock = stock;
 		this.receipt = receipt;
-		usedParts = new HashMap<Part, Integer>();
+		usedParts = new HashMap<Product, Integer>();
 	}
-	public void usePart(Part part){
-		if(usedParts.containsKey(part)){
-			usedParts.put(part, usedParts.get(part)+1);
+	public void usePart(Product product){
+		if(usedParts.containsKey(product)){
+			usedParts.put(product, usedParts.get(product)+1);
 		}
 	}
 	public LocalDate getPlannedDate(){
@@ -34,9 +34,9 @@ public class MaintenanceSession {
 		if(receipt.getCustomer() != null)receipt.getCustomer().setLastMaintenance(LocalDate.now());
 		receipt.addItem(hours * mechanic.getHourlyFee(),"hourlyfee", ""+hours);	
 		mechanic.setWorkedHours(mechanic.getWorkedHours()+hours);
-		Iterator<Part> keySetIterator = usedParts.keySet().iterator();
+		Iterator<Product> keySetIterator = usedParts.keySet().iterator();
 		while(keySetIterator.hasNext()){
-			Part key = keySetIterator.next();
+			Product key = keySetIterator.next();
 			double price = key.getSellPrice() * usedParts.get(key);
 			stock.useProduct(key, usedParts.get(key));
 			receipt.addItem(price, key.getName(),""+usedParts.get(key));
