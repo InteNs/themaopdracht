@@ -1,12 +1,11 @@
 
 public class Part {
 	private String name;
-	private int partId, amount, orderAmount;
+	private int amount, orderAmount;
 	private double buyPrice, sellPrice;
 	private Supplier supplier;
 	public Part(String name, int partId, int amount, int orderAmount, double buyPrice,double sellPrice, Supplier supplier) {
 		this.name = name;
-		this.partId = partId;
 		this.amount = amount;
 		this.orderAmount = orderAmount;
 		this.buyPrice = buyPrice;
@@ -24,9 +23,6 @@ public class Part {
 	}
 	public String getName() {
 		return name;
-	}
-	public int getPartId() {
-		return partId;
 	}
 	public int getAmount() {
 		return amount;

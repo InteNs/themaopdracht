@@ -12,23 +12,17 @@ public class Stock {
 		fuelTypes = new ArrayList<Fuel>();
 		toOrder = new HashMap<Object, Integer>(); // maybe Integer, Integer als Object, Integer niet lukt
 	}
-	public void OrderPart(int partId, int amount){
-		for (Part partType : partTypes) {
-			if(partType.getPartId() == partId) toOrder.put(partId, amount);
-		}
+	public void OrderPart(Part part, int amount){
+		 toOrder.put(part, amount);
 	}
 	public void OrderFuel(int tSIC, int liters){
 		for (Fuel fuelType : fuelTypes){
 			if(fuelType.gettSIC() == tSIC) toOrder.put(tSIC, liters);
 		}
 	}
-	public void usePart(int partId, int amount){
-		for (Part partType : partTypes) {
-			if(partType.getPartId()==partId){
-				partType.setAmount(partType.getAmount() - amount);
-				if(partType.getAmount()<1) this.OrderPart(partId,partType.getOrderAmount());
-			}
-		}
+	public void usePart(Part part, int amount){
+		part.setAmount(part.getAmount() - amount);
+		if(part.getAmount()<1) this.OrderPart(part,part.getOrderAmount());
 	}
 	public void useFuel(int tSIC, int liters){
 		for (Fuel fuelType : fuelTypes){

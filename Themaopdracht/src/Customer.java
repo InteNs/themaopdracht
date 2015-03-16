@@ -2,17 +2,24 @@ import java.time.LocalDate;
 
 
 public class Customer {
-	private String name, place;
+	private String name, sirName, place, email, adress, postal, tel;
 	private LocalDate dateOfBirth,lastVisit, lastMaintenance;
-	private int customerId;
-	public Customer(String name, String place, LocalDate bornDate, int customerId) {
+	private boolean isOnBlackList;
+	public Customer(String name,String sirName, String place, LocalDate bornDate, String email, String postal, String tel, String adress) {
 		this.name = name;
+		this.sirName = sirName;
 		this.place = place;
+		this.email = email;
+		this.adress = adress;
+		this.postal = postal;
+		this.tel = tel;
 		this.dateOfBirth = bornDate;
-		this.customerId = customerId;
 	}
 	public String getName() {
 		return name;
+	}
+	public String getSirName() {
+		return sirName;
 	}
 	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
@@ -20,11 +27,27 @@ public class Customer {
 	public String getPlace(){
 		return place;
 	}
-	public int getCustomerId() {
-		return customerId;
+	public String getAdress() {
+		return adress;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public String getPostal() {
+		return postal;
+	}
+	public String getTel() {
+		return tel;
 	}
 	public LocalDate getLastVisit() {
 		return lastVisit;
+	}
+	
+	public boolean isOnBlackList() {
+		return isOnBlackList;
+	}
+	public void setOnBlackList(boolean isOnBlackList) {
+		this.isOnBlackList = isOnBlackList;
 	}
 	public LocalDate getLastMaintenance(){
 		return lastMaintenance;

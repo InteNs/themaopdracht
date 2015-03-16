@@ -38,7 +38,7 @@ public class MaintenanceSession {
 		while(keySetIterator.hasNext()){
 			Part key = keySetIterator.next();
 			double price = key.getSellPrice() * usedParts.get(key);
-			stock.usePart(key.getPartId(), usedParts.get(key));
+			stock.usePart(key, usedParts.get(key));
 			receipt.addItem(price, key.getName(),""+usedParts.get(key));
 		}
 	}
