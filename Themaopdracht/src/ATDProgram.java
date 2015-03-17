@@ -37,12 +37,12 @@ public class ATDProgram extends Application {
 	ListView<Customer> customerList;
 	private Popup popup;
 	private Stock stock;
-	private HBox buttonBox,customerInfo;
+	private HBox buttonBox;
 	private Stage mainStage;
 	private Customer selectedCustomer;
 	private Customer customer1,customer2;
 	private Button back,cancel,delete,change,newCustomer,savenewCustomer;
-	private VBox customerInput, customerDetails;
+	private VBox customerInput, customerDetails,customerInfo;
 	private Scene  lastScene, klantScene,newKlantScene;
 	private VBox customerDetailsshort,addCustomerBox,beheerBox,customerDetailsContent;
 	private DatePicker dp;
@@ -102,7 +102,7 @@ public class ATDProgram extends Application {
 		//customer details
 		customerDetails = new VBox(20,new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "),new Label("Blacklist: "));
 		  customerDetailsContent = new VBox(20,new Label("Naam"),new Label("Adres"),new Label("Postcode"),new Label("Plaats"),new Label("geboortedatum"),new Label("Email"),new Label("Telefoonnummer"),new Label("Rekeningnummer"),new Label("Blacklist"));
-		  customerInfo = new HBox(10,customerDetails,customerDetailsContent);
+		  customerInfo = new VBox(10,new HBox(10,customerDetails,customerDetailsContent));
 		  customerInfo.setPadding(new Insets(20));
 		  customerInfo.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
 		  customerInfo.setMinWidth(472);
@@ -195,7 +195,7 @@ public class ATDProgram extends Application {
 		
 		if(customerList.getSelectionModel().getSelectedItem() != null){
 			customerInfo.getChildren().clear();
-			customerInfo.getChildren().addAll(customerDetailsshort, customerInput, new HBox(20, savenewCustomer));
+			customerInfo.getChildren().addAll(new HBox(customerDetails, customerInput), new HBox(20,cancel, savenewCustomer));
 			selectedCustomer = customerList.getSelectionModel().getSelectedItem();
 			((TextField)customerInput.getChildren().get(0)).setText(selectedCustomer.getName());
 			((TextField)customerInput.getChildren().get(1)).setText(selectedCustomer.getAdress());
