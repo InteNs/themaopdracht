@@ -37,13 +37,13 @@ public class ATDProgram extends Application {
 	ListView<Customer> customerList;
 	private Popup popup;
 	private Stock stock;
-	private HBox buttonBox,buttonBox1,customerInfo;
+	private HBox buttonBox,customerInfo;
 	private Stage mainStage;
 	private Customer selectedCustomer;
 	private Customer customer1,customer2;
-	private Button back,cancel,delete,change,newCustomer,voorraadbeheer,klantbeheer,savenewCustomer;
+	private Button back,cancel,delete,change,newCustomer,savenewCustomer;
 	private VBox customerInput, customerDetails;
-	private Scene  lastScene,mainScene, klantScene,newKlantScene, voorraadScene;
+	private Scene  lastScene, klantScene,newKlantScene;
 	private VBox customerDetailsshort,addCustomerBox,beheerBox,customerDetailsContent;
 	private DatePicker dp;
 	private TabPane customerTabs;
@@ -54,12 +54,7 @@ public class ATDProgram extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		this.mainStage = stage;
-		back = new Button("Hoofdmenu");
-		back.setOnAction(e ->{
-			lastScene = stage.getScene();
-			stage.setScene(mainScene);
-		});
-		cancel = new Button("annuleren");
+		cancel = new Button("Annuleren");
 		cancel.setOnAction(e ->{
 			isChanging = false;
 			stage.setScene(lastScene);
@@ -71,28 +66,6 @@ public class ATDProgram extends Application {
 		stock = new Stock();
 		customer1 = new Customer("Jorrit Meulenbeld", "Utrecht", "NL35 INGB 0008 8953 57",null, "3552AZ", "3552AZ", "0636114939", "Omloop 48");customers.add(customer1);
 		customer2 = new Customer("Mark Havekes", "Utrecht", "NL35 INGB 0008 8953 57", null, "3552AZ", "3552AZ", "0636114939", "Omloop 48");customers.add(customer2);
-		//MAINSCENE
-		klantbeheer = new Button("Klantenbeheer");
-		klantbeheer.setMinSize(200, 200); 
-		klantbeheer.setOnAction(e->{
-			lastScene = stage.getScene();
-			stage.setScene(klantScene);
-		});
-		voorraadbeheer = new Button("Voorraadbeheer");
-		voorraadbeheer.setMinSize(200, 200);
-		voorraadbeheer.setOnAction(e->{
-			lastScene = stage.getScene();
-			stage.setScene(voorraadScene);
-		});
-		buttonBox = new HBox();
-		buttonBox.setAlignment(Pos.CENTER);
-		buttonBox.setSpacing(10);
-		buttonBox.getChildren().addAll(klantbeheer, voorraadbeheer);
-		mainScene = new Scene(buttonBox,1024,768);
-		stage.setScene(mainScene);
-		stage.setTitle("AutoTotaalDienst");
-		stage.setResizable(false);
-		stage.show();
 		//KLANTSCENE
 		newCustomer = new Button("Nieuwe Klant");
 		newCustomer.setMinSize(160, 40);
@@ -140,7 +113,7 @@ public class ATDProgram extends Application {
 		  customerList.setOnMousePressed(e ->{
 			  selectListEntry();
 		  });
-		  beheerBox = new VBox(20,new HBox(back),new HBox(20,customerList,customerInfo), new HBox(5,searchField), new HBox(6,newCustomer,change,delete));
+		  beheerBox = new VBox(20,new HBox(20,customerList,customerInfo), new HBox(5,searchField), new HBox(6,newCustomer,change,delete));
 		  beheerBox.setPadding(new Insets(20));
 		//tabs
 		customerTabs = new TabPane();
@@ -170,13 +143,19 @@ public class ATDProgram extends Application {
 				customerInput.getChildren().add(tf);
 			}
 		}
-		buttonBox1 = new HBox();
-		buttonBox1.getChildren().addAll(cancel,savenewCustomer);
+		buttonBox = new HBox();
+		buttonBox.getChildren().addAll(cancel,savenewCustomer);
 		customerDetailsshort = new VBox(20,new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "));
 		addCustomerBox = new VBox(new HBox(30,customerDetailsshort,customerInput),new HBox(40,cancel,savenewCustomer));
 		addCustomerBox.setPadding(new Insets(20));
 		addCustomerBox.setSpacing(20);
 		newKlantScene = new Scene(addCustomerBox,1024,768);	
+		
+		//Create Mainscreen
+		stage.setScene(klantScene);
+		stage.setTitle("AutoTotaalDienst");
+		stage.setResizable(false);
+		stage.show();
 	}
 	private void deleteCustomer() {
 		if(customerList.getSelectionModel().getSelectedItem() != null){
