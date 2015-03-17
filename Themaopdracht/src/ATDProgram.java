@@ -188,10 +188,14 @@ public class ATDProgram extends Application {
 		customer = new Customer(((TextField)customerInput.getChildren().get(0)).getText(), ((TextField)customerInput.getChildren().get(3)).getText(),((TextField)customerInput.getChildren().get(7)).getText(), ((DatePicker)customerInput.getChildren().get(4)).getValue(), ((TextField)customerInput.getChildren().get(5)).getText(),((TextField)customerInput.getChildren().get(2)).getText(), ((TextField)customerInput.getChildren().get(6)).getText(),((TextField)customerInput.getChildren().get(1)).getText());
 		customers.add(customer);
 		customerList.getItems().add(customer);
-		mainStage.setScene(klantScene);	
+		customerInfo.getChildren().clear();
+		customerInfo.getChildren().addAll(customerDetails, customerDetailsContent);
 	}
 	private void change() {
+		
 		if(customerList.getSelectionModel().getSelectedItem() != null){
+			customerInfo.getChildren().clear();
+			customerInfo.getChildren().addAll(customerDetailsshort, customerInput, new HBox(20, savenewCustomer));
 			selectedCustomer = customerList.getSelectionModel().getSelectedItem();
 			((TextField)customerInput.getChildren().get(0)).setText(selectedCustomer.getName());
 			((TextField)customerInput.getChildren().get(1)).setText(selectedCustomer.getAdress());
@@ -202,7 +206,6 @@ public class ATDProgram extends Application {
 			((TextField)customerInput.getChildren().get(6)).setText(selectedCustomer.getTel());
 			((TextField)customerInput.getChildren().get(7)).setText(selectedCustomer.getBankAccount());
 			isChanging = true;
-			mainStage.setScene(newKlantScene);
 		}	
 	}
 	public ObservableList<Customer> getAllCustomers(){
