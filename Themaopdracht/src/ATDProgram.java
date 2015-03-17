@@ -13,6 +13,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -47,6 +48,7 @@ public class ATDProgram extends Application {
 	private DatePicker dp;
 	private TabPane customerTabs;
 	private Tab reminders,beheer;
+	private CheckBox cb;
 	//1024x768
 	public enum visit{SERVICE, MAINTENANCE};
 	public static void main(String[] args) {launch();}
@@ -100,7 +102,10 @@ public class ATDProgram extends Application {
 		});
 		//customer details
 		customerDetails = new VBox(20,new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "),new Label("Blacklist: "));
-		  customerDetailsContent = new VBox(20,new Label("Naam"),new Label("Adres"),new Label("Postcode"),new Label("Plaats"),new Label("geboortedatum"),new Label("Email"),new Label("Telefoonnummer"),new Label("Rekeningnummer"),new Label("Blacklist"));
+		customerDetails.setPadding(new Insets(5,20,0,0));
+		
+		customerDetailsContent = new VBox(20,new Label("Naam"),new Label("Adres"),new Label("Postcode"),new Label("Plaats"),new Label("geboortedatum"),new Label("Email"),new Label("Telefoonnummer"),new Label("Rekeningnummer"),new Label("Blacklist"));
+		customerDetailsContent.setPadding(new Insets(5,20,0,0));
 		  customerInfo = new VBox(10,new HBox(10,customerDetails,customerDetailsContent));
 		  customerInfo.setPadding(new Insets(20));
 		  customerInfo.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
@@ -127,15 +132,20 @@ public class ATDProgram extends Application {
 		savenewCustomer = new Button("Opslaan");
 		savenewCustomer.setOnAction(e ->{
 			saveCustomer();
-			createPopup(new VBox(new Label("de klant is succesvol aangemaakt"), new HBox(new Button("OK"))));
-			popup.show(popup);
+			//createPopup(new VBox(new Label("de klant is succesvol aangemaakt"), new HBox(new Button("OK"))));
+			//popup.show(popup);
 		});
 		customerInput = new VBox();
-		customerInput.setSpacing(9);
+		customerInput.setSpacing(12.48);
 		for (int i = 0; i < 8; i++) {
 			if(i == 4){
 				dp = new DatePicker();
 				customerInput.getChildren().add(dp);
+			}
+			if(i == 7){
+				cb = new CheckBox();
+				cb.setMinSize(25, 25);
+				customerInput.getChildren().add(cb);
 			}
 			else{
 				tf = new TextField();
@@ -145,6 +155,7 @@ public class ATDProgram extends Application {
 		buttonBox = new HBox();
 		buttonBox.getChildren().addAll(cancel,savenewCustomer);
 		customerDetailsshort = new VBox(20,new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "));
+		customerDetailsshort.setPadding(new Insets(20));
 		addCustomerBox = new VBox(new HBox(30,customerDetailsshort,customerInput),new HBox(40,cancel,savenewCustomer));
 		addCustomerBox.setPadding(new Insets(20));
 		addCustomerBox.setSpacing(20);
@@ -188,7 +199,7 @@ public class ATDProgram extends Application {
 		customers.add(customer);
 		customerList.getItems().add(customer);
 		customerInfo.getChildren().clear();
-		customerInfo.getChildren().addAll(customerDetails, customerDetailsContent);
+		customerInfo.getChildren().addAll(new HBox(20,customerDetails, customerDetailsContent));
 	}
 	private void change() {
 		
@@ -204,6 +215,7 @@ public class ATDProgram extends Application {
 			((TextField)customerInput.getChildren().get(5)).setText(selectedCustomer.getEmail());
 			((TextField)customerInput.getChildren().get(6)).setText(selectedCustomer.getTel());
 			((TextField)customerInput.getChildren().get(7)).setText(selectedCustomer.getBankAccount());
+			((CheckBox)customerInput.getChildren().get(8)).setSelected(selectedCustomer.isOnBlackList());
 			isChanging = true;
 		}	
 	}
