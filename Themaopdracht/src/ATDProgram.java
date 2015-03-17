@@ -120,7 +120,10 @@ public class ATDProgram extends Application {
 		  customerList.setMinSize(492, 300);
 		  customerList.setItems(getAllCustomers());
 		  customerList.setOnMousePressed(e ->{
-			  selectListEntry();
+			  customerInfo.getChildren().clear();
+				customerInfo.getChildren().addAll(new HBox(20,customerDetails, customerDetailsContent));
+				selectListEntry();
+				isChanging = false;
 		  });
 		  leftBeheerBox = new VBox(20,customerList,searchField, new HBox(6,newCustomer,change,delete));
 		  rightBeheerBox = new VBox(20,customerInfo, notifications);
