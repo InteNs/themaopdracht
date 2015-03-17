@@ -5,8 +5,9 @@ public class Customer {
 	private String name, place, email, adress, postal,bankAccount, tel;
 	private LocalDate dateOfBirth,lastVisit, lastMaintenance;
 	private boolean isOnBlackList;
-	public Customer(String name, String place,String bankAccount, LocalDate bornDate, String email, String postal, String tel, String adress) {
+	public Customer(String name, String place,String bankAccount, LocalDate bornDate, String email, String postal, String tel, String adress, boolean isOnBlackList) {
 		this.name = name;
+		this.isOnBlackList = isOnBlackList;
 		this.place = place;
 		this.bankAccount = bankAccount;
 		this.email = email;
