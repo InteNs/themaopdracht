@@ -1,6 +1,5 @@
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -22,6 +22,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 
@@ -34,6 +35,7 @@ public class ATDProgram extends Application {
 	Customer customer;
 	private TextField searchField,tf;
 	ListView<Customer> customerList;
+	private Popup popup;
 	private Stock stock;
 	private HBox buttonBox,buttonBox1,customerInfo;
 	private Stage mainStage;
@@ -100,6 +102,7 @@ public class ATDProgram extends Application {
 		});
 		change = new Button("Aanpassen");
 		change.setOnAction(e->{
+			lastScene = stage.getScene();
 			change();
 		});
 		change.setMinSize(160, 40);
@@ -110,15 +113,20 @@ public class ATDProgram extends Application {
 		delete.setMinSize(160, 40);
 		searchField = new TextField("Zoek...");
 		searchField.setMinSize(492, 40);
+		searchField.setOnMouseClicked(e->{
+			if(searchField.getText().equals("Zoek...")){
+				searchField.clear();
+			}
+			else searchField.selectAll();
+		});
 		searchField.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable,
 		            String oldValue, String newValue) {
-
 		    	handleSearchByKey(oldValue,newValue);
 		    }
 		});
-			//customer details
+		//customer details
 		customerDetails = new VBox(20,new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "),new Label("Blacklist: "));
 		  customerDetailsContent = new VBox(20,new Label("Naam"),new Label("Adres"),new Label("Postcode"),new Label("Plaats"),new Label("geboortedatum"),new Label("Email"),new Label("Telefoonnummer"),new Label("Rekeningnummer"),new Label("Blacklist"));
 		  customerInfo = new HBox(10,customerDetails,customerDetailsContent);
@@ -126,7 +134,7 @@ public class ATDProgram extends Application {
 		  customerInfo.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
 		  customerInfo.setMinWidth(472);
 		  customerList = new ListView<Customer>();
-		  customerList.setOrientation(Orientation.VERTICAL);
+		  customerList.setOrientation(Orientation.VERTICAL); 
 		  customerList.setMinSize(492, 300);
 		  customerList.setItems(getAllCustomers());
 		  customerList.setOnMousePressed(e ->{
@@ -134,8 +142,7 @@ public class ATDProgram extends Application {
 		  });
 		  beheerBox = new VBox(20,new HBox(back),new HBox(20,customerList,customerInfo), new HBox(5,searchField), new HBox(6,newCustomer,change,delete));
 		  beheerBox.setPadding(new Insets(20));
-		
-			//tabs
+		//tabs
 		customerTabs = new TabPane();
 		beheer = new Tab("beheer");
 		beheer.setClosable(false);
@@ -148,6 +155,8 @@ public class ATDProgram extends Application {
 		savenewCustomer = new Button("Opslaan");
 		savenewCustomer.setOnAction(e ->{
 			saveCustomer();
+			createPopup(new VBox(new Label("de klant is succesvol aangemaakt"), new HBox(new Button("OK"))));
+			popup.show(popup);
 		});
 		customerInput = new VBox();
 		customerInput.setSpacing(9);
@@ -249,6 +258,11 @@ public class ATDProgram extends Application {
 		}
 		return remindables;
 	}
-
+	public void createPopup(Node children){
+		  popup = new Popup();
+	        popup.setX(300);
+	        popup.setY(200);
+	        popup.getContent().addAll(children);
+	}
 }
 
