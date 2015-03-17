@@ -42,14 +42,14 @@ public class ATDProgram extends Application {
 	private Customer selectedCustomer;
 	private Customer customer1,customer2;
 	private Button back,cancel,delete,change,newCustomer,savenewCustomer;
-	private VBox customerInput, customerDetails,customerInfo;
+	private VBox customerInput, customerDetails,customerInfo, notifications;
 	private Scene  lastScene, klantScene,newKlantScene;
-	private VBox customerDetailsshort,addCustomerBox,beheerBox,customerDetailsContent;
+	private VBox customerDetailsshort,addCustomerBox,leftBeheerBox,rightBeheerBox,customerDetailsContent;
 	private DatePicker dp;
 	private TabPane customerTabs;
 	private Tab reminders,beheer;
 	private CheckBox cb;
-	//1024x768
+	//1024x600
 	public enum visit{SERVICE, MAINTENANCE};
 	public static void main(String[] args) {launch();}
 	@Override
@@ -57,26 +57,28 @@ public class ATDProgram extends Application {
 		this.mainStage = stage;
 		cancel = new Button("Annuleren");
 		cancel.setOnAction(e ->{
+			customerInfo.getChildren().clear();
+			customerInfo.getChildren().addAll(new HBox(20,customerDetails, customerDetailsContent));
+			selectListEntry();
 			isChanging = false;
-			stage.setScene(lastScene);
 		});
 		customers = new ArrayList<Customer>();
 		mechanics = new ArrayList<Mechanic>();
 		reservations = new ArrayList<Reservation>();
 		parkingSpaces = new ArrayList<ParkingSpace>();	
 		stock = new Stock();
-		customer1 = new Customer("Jorrit Meulenbeld", "Utrecht", "NL35 INGB 0008 8953 57",null, "3552AZ", "3552AZ", "0636114939", "Omloop 48");customers.add(customer1);
-		customer2 = new Customer("Mark Havekes", "Utrecht", "NL35 INGB 0008 8953 57", null, "3552AZ", "3552AZ", "0636114939", "Omloop 48");customers.add(customer2);
+		customer1 = new Customer("Jorrit Meulenbeld", "Utrecht", "NL35 INGB 0008 8953 57",null,  "jorritmeulenbeld@icloud.com", "3552AZ","0636114939", "Omloop 48", false);customers.add(customer1);
+		customer2 = new Customer("Mark Havekes", "De Meern", "n.v.t.", null, "mark.havekes@gmail.com","3453MC",  "0302801265", "De Drecht 32", false);customers.add(customer2);
 		//KLANTSCENE
 		newCustomer = new Button("Nieuwe Klant");
 		newCustomer.setMinSize(160, 40);
 		newCustomer.setOnAction(e ->{
-			lastScene = stage.getScene();
-			stage.setScene(newKlantScene);
+			isChanging = false;
+			change();
 		});
 		change = new Button("Aanpassen");
 		change.setOnAction(e->{
-			lastScene = stage.getScene();
+			isChanging = true;
 			change();
 		});
 		change.setMinSize(160, 40);
@@ -109,7 +111,10 @@ public class ATDProgram extends Application {
 		  customerInfo = new VBox(10,new HBox(10,customerDetails,customerDetailsContent));
 		  customerInfo.setPadding(new Insets(20));
 		  customerInfo.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
-		  customerInfo.setMinWidth(472);
+		  customerInfo.setMinSize(472, 400);
+		  notifications = new VBox(10, new HBox());
+		  notifications.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
+		  notifications.setMinSize(472, 100);
 		  customerList = new ListView<Customer>();
 		  customerList.setOrientation(Orientation.VERTICAL); 
 		  customerList.setMinSize(492, 300);
@@ -117,26 +122,29 @@ public class ATDProgram extends Application {
 		  customerList.setOnMousePressed(e ->{
 			  selectListEntry();
 		  });
-		  beheerBox = new VBox(20,new HBox(20,customerList,customerInfo), new HBox(5,searchField), new HBox(6,newCustomer,change,delete));
-		  beheerBox.setPadding(new Insets(20));
+		  leftBeheerBox = new VBox(20,customerList,searchField, new HBox(6,newCustomer,change,delete));
+		  rightBeheerBox = new VBox(20,customerInfo, notifications);
+		  leftBeheerBox.setPadding(new Insets(20, 0 , 20, 20));
+		  rightBeheerBox.setPadding(new Insets(20, 20, 20, 0));
 		//tabs
 		customerTabs = new TabPane();
 		beheer = new Tab("beheer");
 		beheer.setClosable(false);
-		beheer.setContent(beheerBox);
+		beheer.setContent(new HBox(20, leftBeheerBox,rightBeheerBox));
 		reminders = new Tab("herinneringen");
 		reminders.setClosable(false);
 		customerTabs.getTabs().addAll(beheer,reminders);
-		klantScene = new Scene(customerTabs,1024,768);
+		klantScene = new Scene(customerTabs,1024,600);
 		//newKlant scene
 		savenewCustomer = new Button("Opslaan");
 		savenewCustomer.setOnAction(e ->{
 			saveCustomer();
+			selectListEntry();
 			//createPopup(new VBox(new Label("de klant is succesvol aangemaakt"), new HBox(new Button("OK"))));
 			//popup.show(popup);
 		});
 		customerInput = new VBox();
-		customerInput.setSpacing(12.48);
+		customerInput.setSpacing(10);
 		for (int i = 0; i < 8; i++) {
 			if(i == 4){
 				dp = new DatePicker();
@@ -159,7 +167,7 @@ public class ATDProgram extends Application {
 		addCustomerBox = new VBox(new HBox(30,customerDetailsshort,customerInput),new HBox(40,cancel,savenewCustomer));
 		addCustomerBox.setPadding(new Insets(20));
 		addCustomerBox.setSpacing(20);
-		newKlantScene = new Scene(addCustomerBox,1024,768);	
+		newKlantScene = new Scene(addCustomerBox,1024,600);	
 		
 		//Create Mainscreen
 		stage.setScene(klantScene);
@@ -195,17 +203,36 @@ public class ATDProgram extends Application {
 			customerList.getItems().remove(selectedCustomer);
 			isChanging = false;
 		}
-		customer = new Customer(((TextField)customerInput.getChildren().get(0)).getText(), ((TextField)customerInput.getChildren().get(3)).getText(),((TextField)customerInput.getChildren().get(7)).getText(), ((DatePicker)customerInput.getChildren().get(4)).getValue(), ((TextField)customerInput.getChildren().get(5)).getText(),((TextField)customerInput.getChildren().get(2)).getText(), ((TextField)customerInput.getChildren().get(6)).getText(),((TextField)customerInput.getChildren().get(1)).getText());
+		customer = new Customer(((TextField)customerInput.getChildren().get(0)).getText(), 
+				((TextField)customerInput.getChildren().get(3)).getText(),
+				((TextField)customerInput.getChildren().get(7)).getText(), 
+				((DatePicker)customerInput.getChildren().get(4)).getValue(), 
+				((TextField)customerInput.getChildren().get(5)).getText(),
+				((TextField)customerInput.getChildren().get(2)).getText(), 
+				((TextField)customerInput.getChildren().get(6)).getText(),
+				((TextField)customerInput.getChildren().get(1)).getText(), 
+				((CheckBox)customerInput.getChildren().get(8)).isSelected());
 		customers.add(customer);
 		customerList.getItems().add(customer);
 		customerInfo.getChildren().clear();
 		customerInfo.getChildren().addAll(new HBox(20,customerDetails, customerDetailsContent));
 	}
 	private void change() {
-		
-		if(customerList.getSelectionModel().getSelectedItem() != null){
-			customerInfo.getChildren().clear();
-			customerInfo.getChildren().addAll(new HBox(customerDetails, customerInput), new HBox(20,cancel, savenewCustomer));
+		customerInfo.getChildren().clear();
+		customerInfo.getChildren().addAll(new HBox(customerDetails, customerInput), new HBox(20,cancel, savenewCustomer));
+		if (!isChanging) {
+			for (int i = 0; i < 8; i++) {
+				if(customerInput.getChildren().get(i) instanceof TextField){
+					((TextField)customerInput.getChildren().get(i)).setText("");
+				}
+				if(customerInput.getChildren().get(i) instanceof CheckBox){
+					((CheckBox)customerInput.getChildren().get(i)).setSelected(false);;
+				}
+				if(customerInput.getChildren().get(i) instanceof DatePicker){
+					((DatePicker)customerInput.getChildren().get(i)).setValue(null);
+				}	
+			}
+		} else if (customerList.getSelectionModel().getSelectedItem() != null){
 			selectedCustomer = customerList.getSelectionModel().getSelectedItem();
 			((TextField)customerInput.getChildren().get(0)).setText(selectedCustomer.getName());
 			((TextField)customerInput.getChildren().get(1)).setText(selectedCustomer.getAdress());
@@ -216,7 +243,6 @@ public class ATDProgram extends Application {
 			((TextField)customerInput.getChildren().get(6)).setText(selectedCustomer.getTel());
 			((TextField)customerInput.getChildren().get(7)).setText(selectedCustomer.getBankAccount());
 			((CheckBox)customerInput.getChildren().get(8)).setSelected(selectedCustomer.isOnBlackList());
-			isChanging = true;
 		}	
 	}
 	public ObservableList<Customer> getAllCustomers(){
@@ -226,8 +252,11 @@ public class ATDProgram extends Application {
 	    if ( oldVal != null && (newVal.length() < oldVal.length()) ) {
 	        customerList.setItems(getAllCustomers());
 	    }
+	    customerList.getItems().clear();
 	    for ( Customer entry: getAllCustomers() ) {
-	        if ( !entry.getName().contains(newVal) ) {
+	        if ( entry.getName().contains(newVal) || entry.getPostal().contains(newVal) || entry.getEmail().contains(newVal)) {
+	        	customerList.getItems().add(entry);
+	        } else {
 	        	customerList.getItems().remove(entry);
 	        }
 	    }
