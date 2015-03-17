@@ -30,9 +30,7 @@ public class ATDProgram extends Application {
 	private ArrayList<Mechanic> mechanics;
 	private ArrayList<Reservation> reservations;
 	private ArrayList<ParkingSpace> parkingSpaces;
-	ObservableList<Customer> subentries = FXCollections.observableArrayList();
 	private boolean isChanging;
-	private ArrayList<Customer> foundCustomers;
 	Customer customer;
 	private TextField searchField,tf;
 	ListView<Customer> customerList;
@@ -48,8 +46,6 @@ public class ATDProgram extends Application {
 	private DatePicker dp;
 	private TabPane customerTabs;
 	private Tab reminders,beheer;
-
-
 	//1024x768
 	public enum visit{SERVICE, MAINTENANCE};
 	public static void main(String[] args) {launch();}
@@ -63,10 +59,10 @@ public class ATDProgram extends Application {
 		});
 		cancel = new Button("annuleren");
 		cancel.setOnAction(e ->{
+			isChanging = false;
 			stage.setScene(lastScene);
 		});
 		customers = new ArrayList<Customer>();
-		foundCustomers = new ArrayList<Customer>();
 		mechanics = new ArrayList<Mechanic>();
 		reservations = new ArrayList<Reservation>();
 		parkingSpaces = new ArrayList<ParkingSpace>();	
@@ -77,7 +73,6 @@ public class ATDProgram extends Application {
 		klantbeheer = new Button("Klantenbeheer");
 		klantbeheer.setMinSize(200, 200); 
 		klantbeheer.setOnAction(e->{
-			subentries.addAll(getAllCustomers());
 			lastScene = stage.getScene();
 			stage.setScene(klantScene);
 		});
@@ -112,8 +107,6 @@ public class ATDProgram extends Application {
 		delete.setOnAction(e->{
 			deleteCustomer();
 		});
-		
-		
 		delete.setMinSize(160, 40);
 		searchField = new TextField("Zoek...");
 		searchField.setMinSize(492, 40);
@@ -174,9 +167,7 @@ public class ATDProgram extends Application {
 		addCustomerBox = new VBox(new HBox(30,customerDetailsshort,customerInput),new HBox(40,cancel,savenewCustomer));
 		addCustomerBox.setPadding(new Insets(20));
 		addCustomerBox.setSpacing(20);
-		newKlantScene = new Scene(addCustomerBox,1024,768);
-		
-		
+		newKlantScene = new Scene(addCustomerBox,1024,768);	
 	}
 	private void deleteCustomer() {
 		if(customerList.getSelectionModel().getSelectedItem() != null){
@@ -184,7 +175,6 @@ public class ATDProgram extends Application {
 			customerList.getItems().remove(customerList.getSelectionModel().getSelectedItem());
 		}
 	}
-
 	private void selectListEntry() {
 		if(customerList.getSelectionModel().getSelectedItem() != null){
 			customer = customerList.getSelectionModel().selectedItemProperty().get();
@@ -200,18 +190,17 @@ public class ATDProgram extends Application {
 			if (customer.isOnBlackList())((Label) customerDetailsContent.getChildren().get(8)).setText("Ja");
 			else((Label) customerDetailsContent.getChildren().get(8)).setText("Nee");
 		}
-
 	}
 	private void saveCustomer() {
 		if(isChanging == true){
 			customers.remove(selectedCustomer);
+			customerList.getItems().remove(selectedCustomer);
 			isChanging = false;
 		}
 		customer = new Customer(((TextField)customerInput.getChildren().get(0)).getText(), ((TextField)customerInput.getChildren().get(3)).getText(),((TextField)customerInput.getChildren().get(7)).getText(), ((DatePicker)customerInput.getChildren().get(4)).getValue(), ((TextField)customerInput.getChildren().get(5)).getText(),((TextField)customerInput.getChildren().get(2)).getText(), ((TextField)customerInput.getChildren().get(6)).getText(),((TextField)customerInput.getChildren().get(1)).getText());
 		customers.add(customer);
-		customerList.setItems(getAllCustomers());
-		mainStage.setScene(klantScene);
-		
+		customerList.getItems().add(customer);
+		mainStage.setScene(klantScene);	
 	}
 	private void change() {
 		if(customerList.getSelectionModel().getSelectedItem() != null){
@@ -226,36 +215,18 @@ public class ATDProgram extends Application {
 			((TextField)customerInput.getChildren().get(7)).setText(selectedCustomer.getBankAccount());
 			isChanging = true;
 			mainStage.setScene(newKlantScene);
-		}
-		
+		}	
 	}
 	public ObservableList<Customer> getAllCustomers(){
 		return FXCollections.observableArrayList(customers);
 	}
-	public ObservableList<Customer> findCustomers(String input){
-		foundCustomers.clear();
-		for (Customer customer : customers) {
-			if(customer.getEmail().equals(input) && !foundCustomers.contains(customer)) foundCustomers.add(customer);
-			if(customer.getPostal().equals(input) && !foundCustomers.contains(customer)) foundCustomers.add(customer);
-			if(customer.getName().equals(input) && !foundCustomers.contains(customer)) foundCustomers.add(customer);
-		}
-		return FXCollections.observableArrayList(foundCustomers);
-	}
 	public void handleSearchByKey(String oldVal, String newVal) {
-	    // If the number of characters in the text box is less than last time
-	    // it must be because the user pressed delete
 	    if ( oldVal != null && (newVal.length() < oldVal.length()) ) {
-	        // Restore the lists original set of entries 
-	        // and start from the beginning
 	        customerList.setItems(getAllCustomers());
 	    }
-	     
-	    // Change to upper case so that case is not an issue
-	    //newVal = newVal.toUpperCase();
-	    // Filter out the entries that don't contain the entered text
 	    for ( Customer entry: getAllCustomers() ) {
 	        if ( !entry.getName().contains(newVal) ) {
-	        	customerList.getItems().remove(entry);;
+	        	customerList.getItems().remove(entry);
 	        }
 	    }
 	}
@@ -267,17 +238,14 @@ public class ATDProgram extends Application {
 				if (customer.getLastVisit().isBefore(
 						LocalDate.now().minusMonths(2))) {
 					remindables.add(customer);
-				}
-				break;
+				}break;
 			case MAINTENANCE:
 				if (customer.getLastMaintenance().isBefore(
 						LocalDate.now().minusMonths(6))) {
 					remindables.add(customer);
-				}
-				break;
+				}break;
 			default: return null;
 			}
-
 		}
 		return remindables;
 	}
