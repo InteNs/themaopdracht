@@ -116,7 +116,7 @@ public class ATDProgram extends Application {
 		
 		delete.setMinSize(160, 40);
 		searchField = new TextField("Zoek...");
-		searchField.setMinSize(350, 40);
+		searchField.setMinSize(492, 40);
 		searchField.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable,
@@ -129,6 +129,9 @@ public class ATDProgram extends Application {
 		customerDetails = new VBox(20,new Label("Naam: "),new Label("Adres: "),new Label("Postcode: "),new Label("Plaats: "),new Label("Geboortedatum: "),new Label("Email: "),new Label("Telefoonnummer: "),new Label("Rekeningnummer: "),new Label("Blacklist: "));
 		  customerDetailsContent = new VBox(20,new Label("Naam"),new Label("Adres"),new Label("Postcode"),new Label("Plaats"),new Label("geboortedatum"),new Label("Email"),new Label("Telefoonnummer"),new Label("Rekeningnummer"),new Label("Blacklist"));
 		  customerInfo = new HBox(10,customerDetails,customerDetailsContent);
+		  customerInfo.setPadding(new Insets(20));
+		  customerInfo.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
+		  customerInfo.setMinWidth(472);
 		  customerList = new ListView<Customer>();
 		  customerList.setOrientation(Orientation.VERTICAL);
 		  customerList.setMinSize(492, 300);
