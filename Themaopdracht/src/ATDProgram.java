@@ -39,14 +39,15 @@ public class ATDProgram extends Application {
 
 	// Objecten op de Scenes
 	private TabPane tabsScreen;
-	private Tab customerRelations, customerAdministration;
+	private Tab customerRelations, customerAdministration, stockAdministration;
 	// klantensysteem
-	private HBox createNewCustomerButtonBox, notificationLabelBox,
-			notificationButtonBox;
+	private HBox createNewCustomerButtonBox, customerNotificationLabelBox,
+			customerNotificationButtonBox;
 	private VBox customerDetails, customerDetailsShort, customerDetailsContent,
-			addCustomerBox, customerInput, leftBeheerBox, rightBeheerBox,
-			customerInfo, notifications;
-	private TextField searchField, textField, name, address, postal, email, place, phone, bank;
+			addCustomerBox, customerInput, leftCustomerAdministrationBox,
+			rightCustomerAdministrationBox, customerInfo, customerNotifications;
+	private TextField searchFieldCustomer, textField, name, address, postal, email,
+			place, phone, bank;
 	private DatePicker datePicker;
 	private CheckBox checkBox;
 	private Button cancelCustomer, deleteCustomer, changeCustomer,
@@ -54,17 +55,30 @@ public class ATDProgram extends Application {
 			cancelNotification = new Button(),
 			agreeNotification = new Button();
 	// voorraad systeem
+	private HBox createNewStockButtonBox, stockNotificationLabelBox,
+			stockNotificationButtonBox;
+	private VBox stockDetails, stockDetailsContent,
+			addStockBox, stockInput, leftStockBox,
+			rightStockBox, stockInfo, stockNotifications;
+	private TextField searchFieldStock, nameStock, amountStock, minAmountStock,
+			priceStock, buyPriceStock, nameSupplierStock, addressSupplierStock,
+			postalSupplierStock, placeSupplierStock, phoneSupplierStock;
+	private Button cancelStock, deleteStock, changeStock, createNewStock,
+			saveNewStock;
 	// onderhoud
 	// parkeergelegenheid
 
 	// Klassen
 	// klantensysteem
+	private Customer customer;
 	private Customer selectedCustomer;
 	private Customer customer1, customer2;
-	Customer customer;
 	ListView<Customer> customerList;
 	// voorraad systeem
 	private Stock stock;
+	private Stock selectedStock;
+	private Stock stock1, stock2;
+	ListView<Product> stockList;
 	// onderhoud
 	// parkeergelegenheid
 
@@ -78,15 +92,15 @@ public class ATDProgram extends Application {
 	public enum visit {
 		SERVICE, MAINTENANCE
 	};
+
 	public static final Pattern EMAILPATTERN = Pattern.compile(
 			"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
 	public static final Pattern NAMEPATTERN = Pattern.compile(
-			"^([ \\u00c0-\\u01ffa-zA-Z'\\-])+$",
-			Pattern.CASE_INSENSITIVE);
+			"^([ \\u00c0-\\u01ffa-zA-Z'\\-])+$", Pattern.CASE_INSENSITIVE);
 	public static final Pattern PHONEPATTERN = Pattern.compile(
-			"^[0-9+\\(\\)#\\.\\s\\/ext-]+$",
-			Pattern.CASE_INSENSITIVE);
+			"^[0-9+\\(\\)#\\.\\s\\/ext-]+$", Pattern.CASE_INSENSITIVE);
+
 	// voorraad systeem
 	// onderhoud
 	// parkeergelegenheid
@@ -140,6 +154,17 @@ public class ATDProgram extends Application {
 		saveNewCustomer.setMinSize(160, 40);
 
 		// voorraad systeem
+		createNewStock = new Button("Nieuw Artikel");
+		createNewStock.setMinSize(160, 40);
+		changeStock = new Button("Aanpassen");
+		changeStock.setMinSize(160, 40);
+		deleteStock = new Button("Verwijderen");
+		deleteStock.setMinSize(160, 40);
+
+		cancelStock = new Button("Annuleren");
+		cancelStock.setMinSize(160, 40);
+		saveNewStock = new Button("Opslaan");
+		saveNewStock.setMinSize(160, 40);
 		// onderhoud
 		// parkeergelegenheid
 
@@ -150,14 +175,20 @@ public class ATDProgram extends Application {
 		customerList.setMinSize(492, 300);
 		customerList.setItems(getAllCustomers());
 		// voorraad systeem
+		stockList = new ListView<Product>();
+		stockList.setOrientation(Orientation.VERTICAL);
+		stockList.setMinSize(492, 300);
+		stockList.setItems(getAllProducts());
 		// onderhoud
 		// parkeergelegenheid
 
 		// textfields
 		// klantensysteem
-		searchField = new TextField("Zoek...");
-		searchField.setMinSize(492, 40);
+		searchFieldCustomer = new TextField("Zoek...");
+		searchFieldCustomer.setMinSize(492, 40);
 		// voorraad systeem
+		searchFieldStock = new TextField("Zoek...");
+		searchFieldStock.setMinSize(492, 40);
 		// onderhoud
 		// parkeergelegenheid
 
@@ -228,29 +259,113 @@ public class ATDProgram extends Application {
 		addCustomerBox.setSpacing(20);
 
 		// rechter scherm meldingen
-		notifications = new VBox(10, notificationLabelBox = new HBox(
-				notificationLabel), notificationButtonBox = new HBox(20));
-		notificationLabelBox.setAlignment(Pos.CENTER);
-		notificationButtonBox.setAlignment(Pos.CENTER);
-		notifications
+		customerNotifications = new VBox(10, customerNotificationLabelBox = new HBox(
+				notificationLabel), customerNotificationButtonBox = new HBox(20));
+		customerNotificationLabelBox.setAlignment(Pos.CENTER);
+		customerNotificationButtonBox.setAlignment(Pos.CENTER);
+		customerNotifications
 				.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
-		notifications.setAlignment(Pos.CENTER);
-		notifications.setMinSize(472, 100);
+		customerNotifications.setAlignment(Pos.CENTER);
+		customerNotifications.setMinSize(472, 100);
 
 		// rechter en linker scherm plaatsen
-		leftBeheerBox = new VBox(20, customerList, searchField, new HBox(6,
-				createNewCustomer, changeCustomer, deleteCustomer));
-		rightBeheerBox = new VBox(20, customerInfo, notifications);
-		leftBeheerBox.setPadding(new Insets(20, 0, 20, 20));
-		rightBeheerBox.setPadding(new Insets(20, 20, 20, 0));
+		leftCustomerAdministrationBox = new VBox(20, customerList, searchFieldCustomer,
+				new HBox(6, createNewCustomer, changeCustomer, deleteCustomer));
+		rightCustomerAdministrationBox = new VBox(20, customerInfo,
+				customerNotifications);
+		leftCustomerAdministrationBox.setPadding(new Insets(20, 0, 20, 20));
+		rightCustomerAdministrationBox.setPadding(new Insets(20, 20, 20, 0));
 
 		// voorraad systeem
+		// rechter scherm info
+		// default
+		stockDetails = new VBox(20, new Label("Naam: "),
+				new Label("Adres: "), new Label("Postcode: "), new Label(
+						"Plaats: "), new Label("Geboortedatum: "), new Label(
+						"Email: "), new Label("Telefoonnummer: "), new Label(
+						"Rekeningnummer: "), new Label("Blacklist: "));
+		stockDetails.setPadding(new Insets(5, 20, 0, 0));
+		// waarden selected
+		stockDetailsContent = new VBox(20, new Label("Naam"), new Label(
+				"Adres"), new Label("Postcode"), new Label("Plaats"),
+				new Label("geboortedatum"), new Label("Email"), new Label(
+						"Telefoonnummer"), new Label("Rekeningnummer"),
+				new Label("Blacklist"));
+		stockDetailsContent.setPadding(new Insets(5, 20, 0, 0));
+		// samenvoegen
+		stockInfo = new VBox(10, new HBox(10, stockDetails,
+				stockDetailsContent));
+		stockInfo.setPadding(new Insets(20));
+		stockInfo
+				.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
+		stockInfo.setMinSize(472, 400);
+
+		// rechter scherm aanpassen/aanmaken
+		// default
+		stockDetails = new VBox(20, new Label("Naam: "), new Label(
+				"Adres: "), new Label("Postcode: "), new Label("Plaats: "),
+				new Label("Geboortedatum: "), new Label("Email: "), new Label(
+						"Telefoonnummer: "), new Label("Rekeningnummer: "));
+		stockDetails.setPadding(new Insets(20));
+		// Textfields, Datepicker en checkbox maken
+		stockInput = new VBox();
+		stockInput.setSpacing(10);
+		for (int i = 0; i < 8; i++) {
+			if (i == 4) {
+				datePicker = new DatePicker();
+				stockInput.getChildren().add(datePicker);
+			}
+			if (i == 7) {
+				checkBox = new CheckBox();
+				checkBox.setMinSize(25, 25);
+				stockInput.getChildren().add(checkBox);
+			} else {
+				textField = new TextField();
+				stockInput.getChildren().add(textField);
+			}
+		}
+		name = ((TextField) stockInput.getChildren().get(0));
+		place = ((TextField) stockInput.getChildren().get(3));
+		bank = ((TextField) stockInput.getChildren().get(7));
+		email = ((TextField) stockInput.getChildren().get(5));
+		postal = ((TextField) stockInput.getChildren().get(2));
+		phone = ((TextField) stockInput.getChildren().get(6));
+		address = ((TextField) stockInput.getChildren().get(1));
+		// knoppen
+		createNewStockButtonBox = new HBox();
+		createNewStockButtonBox.getChildren().addAll(cancelStock,
+				saveNewStock);
+		// samenvoegen
+		addStockBox = new VBox(new HBox(30, stockDetails,
+				stockInput), new HBox(40, cancelStock, saveNewStock));
+		addStockBox.setPadding(new Insets(20));
+		addStockBox.setSpacing(20);
+
+		// rechter scherm meldingen
+		stockNotifications = new VBox(10,
+				stockNotificationLabelBox = new HBox(/*notificationLabel*/),
+				stockNotificationButtonBox = new HBox(20));
+		stockNotificationLabelBox.setAlignment(Pos.CENTER);
+		stockNotificationButtonBox.setAlignment(Pos.CENTER);
+		stockNotifications
+				.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
+		stockNotifications.setAlignment(Pos.CENTER);
+		stockNotifications.setMinSize(472, 100);
+
+		// rechter en linker scherm plaatsen
+		leftStockBox = new VBox(20, stockList,
+				searchFieldStock, new HBox(6, createNewStock,
+						changeStock, deleteStock));
+		rightStockBox = new VBox(20, stockInfo,
+				stockNotifications);
+		leftStockBox.setPadding(new Insets(20, 0, 20, 20));
+		rightStockBox.setPadding(new Insets(20, 20, 20, 0));
 		// onderhoud
 		// parkeergelegenheid
 
 		// actions met inner class
 		// klantensysteem
-		searchField.textProperty().addListener(new ChangeListener<String>() {
+		searchFieldCustomer.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable,
 					String oldValue, String newValue) {
@@ -277,18 +392,19 @@ public class ATDProgram extends Application {
 				});
 
 		// opslaan of terug bij toevoegen of aanpassen klant
-		saveNewCustomer.setOnAction(e -> {
-			validateAllFields();
-			if(verifyFieldsGo){
-				saveCustomer();
-				selectListEntry();
-				notificationConfirmed("Klant is opgeslagen.");
-				resetTextFieldStyle();
-			} else {
-				notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.");
-			}
-			
-		});
+		saveNewCustomer
+				.setOnAction(e -> {
+					validateAllFields();
+					if (verifyFieldsGo) {
+						saveCustomer();
+						selectListEntry();
+						notificationConfirmed("Klant is opgeslagen.");
+						resetTextFieldStyle();
+					} else {
+						notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.");
+					}
+
+				});
 		cancelCustomer.setOnAction(e -> {
 			customerInfo.getChildren().clear();
 			customerInfo.getChildren().addAll(
@@ -298,11 +414,11 @@ public class ATDProgram extends Application {
 			resetTextFieldStyle();
 		});
 		// searchfield leegmaken of alle tekst selecteren
-		searchField.setOnMouseClicked(e -> {
-			if (searchField.getText().equals("Zoek...")) {
-				searchField.clear();
+		searchFieldCustomer.setOnMouseClicked(e -> {
+			if (searchFieldCustomer.getText().equals("Zoek...")) {
+				searchFieldCustomer.clear();
 			} else
-				searchField.selectAll();
+				searchFieldCustomer.selectAll();
 		});
 
 		customerList.setOnMousePressed(e -> {
@@ -313,21 +429,92 @@ public class ATDProgram extends Application {
 			isChanging = false;
 		});
 		// voorraad systeem
+		searchFieldCustomer.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				handleSearchByKey(oldValue, newValue);
+			}
+		});
+
+		// knoppen toevoegen, aanpassen en verwijderen.
+		createNewStock.setOnAction(e -> {
+			isChanging = false;
+			changeStock();
+		});
+		changeStock.setOnAction(e -> {
+			isChanging = true;
+			changeStock();
+		});
+		deleteStock
+				.setOnAction(e -> {
+					notificationConfirmAction("Weet u zeker dat u deze klant wilt verwijderen?");
+					agreeNotification.setOnAction(event -> {
+						deleteStock();
+						notificationConfirmed("Klant is verwijderd.");
+					});
+				});
+
+		// opslaan of terug bij toevoegen of aanpassen klant
+		saveNewStock
+				.setOnAction(e -> {
+					validateAllFields();
+					if (verifyFieldsGo) {
+						saveStock();
+						selectListEntry();
+						notificationConfirmed("Klant is opgeslagen.");
+						resetTextFieldStyle();
+					} else {
+						notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.");
+					}
+
+				});
+		cancelStock.setOnAction(e -> {
+			stockInfo.getChildren().clear();
+			stockInfo.getChildren().addAll(
+					new HBox(20, stockDetails, stockDetailsContent));
+			selectListEntry();
+			isChanging = false;
+			resetTextFieldStyle();
+		});
+		// searchfield leegmaken of alle tekst selecteren
+		searchFieldStock.setOnMouseClicked(e -> {
+			if (searchFieldStock.getText().equals("Zoek...")) {
+				searchFieldStock.clear();
+			} else
+				searchFieldStock.selectAll();
+		});
+
+		stockList.setOnMousePressed(e -> {
+			stockInfo.getChildren().clear();
+			stockInfo.getChildren().addAll(
+					new HBox(20, stockDetails, stockDetailsContent));
+			selectListEntry();
+			isChanging = false;
+		});
 		// onderhoud
 		// parkeergelegenheid
 
 		// tabs
 		tabsScreen = new TabPane();
 
-		customerAdministration = new Tab("beheer");
+		customerAdministration = new Tab("Klantenbestand");
 		customerAdministration.setClosable(false);
-		customerAdministration.setContent(new HBox(20, leftBeheerBox,
-				rightBeheerBox));
+		customerAdministration.setContent(new HBox(20,
+				leftCustomerAdministrationBox, rightCustomerAdministrationBox));
 
-		customerRelations = new Tab("herinneringen");
+		customerRelations = new Tab("Herinneringen");
 		customerRelations.setClosable(false);
 
-		tabsScreen.getTabs().addAll(customerAdministration, customerRelations);
+		stockAdministration = new Tab("Voorraadbeheer");
+		stockAdministration.setClosable(false);
+		stockAdministration.setContent(new HBox(20,
+				leftStockBox, rightStockBox));
+		
+		
+
+		tabsScreen.getTabs().addAll(customerAdministration, customerRelations,
+				stockAdministration);
 
 		// Create Mainscreen
 		klantScene = new Scene(tabsScreen, 1024, 600);
@@ -335,6 +522,21 @@ public class ATDProgram extends Application {
 		stage.setTitle("AutoTotaalDienst");
 		stage.setResizable(false);
 		stage.show();
+	}
+
+	private void saveStock() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void deleteStock() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void changeStock() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	// methoden
@@ -494,12 +696,12 @@ public class ATDProgram extends Application {
 
 	public void notificationConfirmed(String s) {
 		notificationLabel.setText(s);
-		notificationButtonBox.getChildren().clear();
-		notificationButtonBox.getChildren().add(agreeNotification);
+		customerNotificationButtonBox.getChildren().clear();
+		customerNotificationButtonBox.getChildren().add(agreeNotification);
 		agreeNotification.setText("OK");
 		agreeNotification.setOnAction(e -> {
 			notificationLabel.setText("");
-			notificationButtonBox.getChildren().clear();
+			customerNotificationButtonBox.getChildren().clear();
 		});
 	}
 
@@ -507,16 +709,16 @@ public class ATDProgram extends Application {
 		notificationLabel.setText(s);
 		cancelNotification.setText("Annuleren");
 		agreeNotification.setText("OK");
-		notificationButtonBox.getChildren().clear();
-		notificationButtonBox.getChildren().addAll(cancelNotification,
+		customerNotificationButtonBox.getChildren().clear();
+		customerNotificationButtonBox.getChildren().addAll(cancelNotification,
 				agreeNotification);
 		cancelNotification.setOnAction(e -> {
 			notificationLabel.setText("");
-			notificationButtonBox.getChildren().clear();
+			customerNotificationButtonBox.getChildren().clear();
 		});
 		agreeNotification.setOnAction(e -> {
 			notificationLabel.setText("");
-			notificationButtonBox.getChildren().clear();
+			customerNotificationButtonBox.getChildren().clear();
 		});
 	}
 
@@ -524,51 +726,51 @@ public class ATDProgram extends Application {
 		Matcher matcher = EMAILPATTERN.matcher(emailStr);
 		return matcher.find();
 	}
-	
+
 	public static boolean validateName(String nameStr) {
 		Matcher matcher = NAMEPATTERN.matcher(nameStr);
 		return matcher.find();
 	}
-	
+
 	public static boolean validatePhone(String nameStr) {
 		Matcher matcher = NAMEPATTERN.matcher(nameStr);
 		return matcher.find();
 	}
 
-	public void validateAllFields(){
+	public void validateAllFields() {
 		verifyFieldsGo = true;
-		if(name.getText().isEmpty()){
+		if (name.getText().isEmpty()) {
 			verifyFieldsGo = false;
 			name.setStyle("-fx-border-color: red;");
-		} 
-		if(!validateEmail(email.getText())){
+		}
+		if (!validateEmail(email.getText())) {
 			verifyFieldsGo = false;
 			email.setStyle("-fx-border-color: red;");
 		}
-		if(!validatePhone(phone.getText())){
+		if (!validatePhone(phone.getText())) {
 			verifyFieldsGo = false;
 			phone.setStyle("-fx-border-color: red;");
 		}
-		if(place.getText().isEmpty()){
+		if (place.getText().isEmpty()) {
 			verifyFieldsGo = false;
 			place.setStyle("-fx-border-color: red;");
-		} 
-		if(address.getText().isEmpty()){
+		}
+		if (address.getText().isEmpty()) {
 			verifyFieldsGo = false;
 			address.setStyle("-fx-border-color: red;");
-		} 
-		if(bank.getText().isEmpty()){
+		}
+		if (bank.getText().isEmpty()) {
 			verifyFieldsGo = false;
 			bank.setStyle("-fx-border-color: red;");
-		} 
-		if(postal.getText().isEmpty()){
+		}
+		if (postal.getText().isEmpty()) {
 			verifyFieldsGo = false;
 			postal.setStyle("-fx-border-color: red;");
-		} 
-		
+		}
+
 	}
 
-	public void resetTextFieldStyle(){
+	public void resetTextFieldStyle() {
 		name.setStyle("");
 		address.setStyle("");
 		postal.setStyle("");
@@ -578,6 +780,9 @@ public class ATDProgram extends Application {
 		bank.setStyle("");
 	}
 	// voorraad systeem
+	public ObservableList<Product> getAllProducts() {
+		return FXCollections.observableArrayList(stock.getAllProducts());
+	}
 	// onderhoud
 	// parkeergelegenheid
 }
