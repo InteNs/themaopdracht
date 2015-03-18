@@ -84,7 +84,8 @@ public class ATDProgram extends Application {
 
 	// Hulpmiddelen methoden
 	// klantensysteem
-	private Label notificationLabel = new Label();
+	private Label customerNotificationLabel = new Label();
+	private Label stockNotificationLabel = new Label();
 	private boolean isChanging;
 	private boolean verifyFieldsGo = true;
 	private String verifyFields = "";
@@ -104,7 +105,9 @@ public class ATDProgram extends Application {
 			"^([ \\u00c0-\\u01ffa-zA-Z'\\-])+$", Pattern.CASE_INSENSITIVE);
 	public static final Pattern PHONEPATTERN = Pattern.compile(
 			"^[0-9+\\(\\)#\\.\\s\\/ext-]+$", Pattern.CASE_INSENSITIVE);
-
+	public static final Pattern DOUBLE = Pattern.compile(
+			"[0-9]{1,13}(\\.[0-9]*)?", Pattern.CASE_INSENSITIVE);
+	
 	// voorraad systeem
 	// onderhoud
 	// parkeergelegenheid
@@ -272,7 +275,7 @@ public class ATDProgram extends Application {
 
 		// rechter scherm meldingen
 		customerNotifications = new VBox(10, customerNotificationLabelBox = new HBox(
-				notificationLabel), customerNotificationButtonBox = new HBox(20));
+				customerNotificationLabel), customerNotificationButtonBox = new HBox(20));
 		customerNotificationLabelBox.setAlignment(Pos.CENTER);
 		customerNotificationButtonBox.setAlignment(Pos.CENTER);
 		customerNotifications
@@ -327,13 +330,18 @@ public class ATDProgram extends Application {
 			textField = new TextField();
 			stockInput.getChildren().add(textField);
 		}
-		//name = ((TextField) stockInput.getChildren().get(0));
-		//place = ((TextField) stockInput.getChildren().get(3));
-		//bank = ((TextField) stockInput.getChildren().get(7));
-		//email = ((TextField) stockInput.getChildren().get(5));
-		//postal = ((TextField) stockInput.getChildren().get(2));
-		//phone = ((TextField) stockInput.getChildren().get(6));
-		//address = ((TextField) stockInput.getChildren().get(1));
+		
+		nameStock = ((TextField) stockInput.getChildren().get(0));
+		amountStock = ((TextField) stockInput.getChildren().get(1));
+		minAmountStock = ((TextField) stockInput.getChildren().get(2));
+		priceStock = ((TextField) stockInput.getChildren().get(3));
+		buyPriceStock = ((TextField) stockInput.getChildren().get(4));
+		nameSupplierStock = ((TextField) stockInput.getChildren().get(5));
+		addressSupplierStock = ((TextField) stockInput.getChildren().get(6));
+		postalSupplierStock = ((TextField) stockInput.getChildren().get(7));
+		placeSupplierStock = ((TextField) stockInput.getChildren().get(8));
+		phoneSupplierStock = ((TextField) stockInput.getChildren().get(9));
+		
 		// knoppen
 		createNewStockButtonBox = new HBox();
 		createNewStockButtonBox.getChildren().addAll(cancelStock,
@@ -346,7 +354,7 @@ public class ATDProgram extends Application {
 
 		// rechter scherm meldingen
 		stockNotifications = new VBox(10,
-				stockNotificationLabelBox = new HBox(/*notificationLabel*/),
+				stockNotificationLabelBox = new HBox(stockNotificationLabel),
 				stockNotificationButtonBox = new HBox(20));
 		stockNotificationLabelBox.setAlignment(Pos.CENTER);
 		stockNotificationButtonBox.setAlignment(Pos.CENTER);
@@ -387,24 +395,25 @@ public class ATDProgram extends Application {
 		});
 		deleteCustomer
 				.setOnAction(e -> {
-					notificationConfirmAction("Weet u zeker dat u deze klant wilt verwijderen?");
+					notificationConfirmAction("Weet u zeker dat u deze klant wilt verwijderen?", 0);
 					agreeNotification.setOnAction(event -> {
 						deleteCustomer();
-						notificationConfirmed("Klant is verwijderd.");
+						notificationConfirmed("Klant is verwijderd.", 0);
 					});
 				});
 
 		// opslaan of terug bij toevoegen of aanpassen klant
 		saveNewCustomer
 				.setOnAction(e -> {
-					validateAllFields();
+					resetTextFieldStyle();
+					validateAllFields(0);
 					if (verifyFieldsGo) {
 						saveCustomer();
 						selectListEntryCustomer();
-						notificationConfirmed("Klant is opgeslagen.");
+						notificationConfirmed("Klant is opgeslagen.", 0);
 						resetTextFieldStyle();
 					} else {
-						notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.");
+						notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.", 0);
 					}
 
 				});
@@ -451,25 +460,27 @@ public class ATDProgram extends Application {
 		});
 		deleteStock
 				.setOnAction(e -> {
-					//notificationConfirmAction("Weet u zeker dat u deze klant wilt verwijderen?");
-//					agreeNotification.setOnAction(event -> {
+					notificationConfirmAction("Weet u zeker dat u deze klant wilt verwijderen?", 1);
+					agreeNotification.setOnAction(event -> {
 						deleteStock();
-//						notificationConfirmed("Klant is verwijderd.");
-//					});
+						notificationConfirmed("Product is verwijderd.", 1);
+					});
 				});
 
 		// opslaan of terug bij toevoegen of aanpassen klant
 		saveNewStock
 				.setOnAction(e -> {
-					//validateAllFields();
-					//if (verifyFieldsGo) {
+					resetTextFieldStyle();
+					validateAllFields(1);
+					System.out.println(verifyFieldsGo);
+					if (verifyFieldsGo) {
 						saveStock();
 						selectListEntryStock();
-						//notificationConfirmed("Klant is opgeslagen.");
-						//resetTextFieldStyle();
-					//} else {
-					//	notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.");
-					//}
+						notificationConfirmed("Product is opgeslagen.", 1);
+						resetTextFieldStyle();
+					} else {
+						notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.", 1);
+					}
 
 				});
 		cancelStock.setOnAction(e -> {
@@ -681,32 +692,62 @@ public class ATDProgram extends Application {
 		return remindables;
 	}
 
-	public void notificationConfirmed(String s) {
-		notificationLabel.setText(s);
+	public void notificationConfirmed(String s, int i) {
+		if (i == 0) {
+		customerNotificationLabel.setText(s);
 		customerNotificationButtonBox.getChildren().clear();
 		customerNotificationButtonBox.getChildren().add(agreeNotification);
 		agreeNotification.setText("OK");
 		agreeNotification.setOnAction(e -> {
-			notificationLabel.setText("");
+			customerNotificationLabel.setText("");
 			customerNotificationButtonBox.getChildren().clear();
 		});
+		}
+		if (i == 1) {
+			stockNotificationLabel.setText(s);
+			stockNotificationButtonBox.getChildren().clear();
+			stockNotificationButtonBox.getChildren().add(agreeNotification);
+			agreeNotification.setText("OK");
+			agreeNotification.setOnAction(e -> {
+				stockNotificationLabel.setText("");
+				stockNotificationButtonBox.getChildren().clear();
+			});
+			}
 	}
 
-	public void notificationConfirmAction(String s) {
-		notificationLabel.setText(s);
+	public void notificationConfirmAction(String s, int i) {
+		if (i == 0) {
+		customerNotificationLabel.setText(s);
 		cancelNotification.setText("Annuleren");
 		agreeNotification.setText("OK");
 		customerNotificationButtonBox.getChildren().clear();
 		customerNotificationButtonBox.getChildren().addAll(cancelNotification,
 				agreeNotification);
 		cancelNotification.setOnAction(e -> {
-			notificationLabel.setText("");
+			customerNotificationLabel.setText("");
 			customerNotificationButtonBox.getChildren().clear();
 		});
 		agreeNotification.setOnAction(e -> {
-			notificationLabel.setText("");
+			customerNotificationLabel.setText("");
 			customerNotificationButtonBox.getChildren().clear();
 		});
+		}
+		if (i == 1) {
+		stockNotificationLabel.setText(s);
+		cancelNotification.setText("Annuleren");
+		agreeNotification.setText("OK");
+		stockNotificationButtonBox.getChildren().clear();
+		stockNotificationButtonBox.getChildren().addAll(cancelNotification,
+				agreeNotification);
+		cancelNotification.setOnAction(e -> {
+			stockNotificationLabel.setText("");
+			stockNotificationButtonBox.getChildren().clear();
+		});
+		agreeNotification.setOnAction(e -> {
+			stockNotificationLabel.setText("");
+			stockNotificationButtonBox.getChildren().clear();
+		});
+		}
 	}
 
 	public static boolean validateEmail(String emailStr) {
@@ -723,9 +764,16 @@ public class ATDProgram extends Application {
 		Matcher matcher = NAMEPATTERN.matcher(nameStr);
 		return matcher.find();
 	}
+	
+	public static boolean validateDouble(String nameStr) {
+		Matcher matcher = DOUBLE.matcher(nameStr);
+		return matcher.find();
+	}
 
-	public void validateAllFields() {
-		verifyFieldsGo = true;
+	public void validateAllFields(int i) {
+		
+		if (i == 0) {
+			verifyFieldsGo = true;
 		if (name.getText().isEmpty()) {
 			verifyFieldsGo = false;
 			name.setStyle("-fx-border-color: red;");
@@ -754,9 +802,51 @@ public class ATDProgram extends Application {
 			verifyFieldsGo = false;
 			postal.setStyle("-fx-border-color: red;");
 		}
-
-	}
-
+		}
+		if (i == 1) {
+			verifyFieldsGo = true;
+			if (nameStock.getText().isEmpty()) {
+				verifyFieldsGo = false;
+				nameStock.setStyle("-fx-border-color: red;");
+			}
+			if (amountStock.getText().isEmpty() || (!isInteger(amountStock.getText(), 10))) {
+				verifyFieldsGo = false;
+				amountStock.setStyle("-fx-border-color: red;");
+			}
+			if (minAmountStock.getText().isEmpty() || (!isInteger(minAmountStock.getText(), 10))) {
+				verifyFieldsGo = false;
+				minAmountStock.setStyle("-fx-border-color: red;");
+			}
+			if (!validateDouble(priceStock.getText())) {
+				verifyFieldsGo = false;
+				priceStock.setStyle("-fx-border-color: red;");
+				}
+			if (!validateDouble(buyPriceStock.getText())) {
+				verifyFieldsGo = false;
+				buyPriceStock.setStyle("-fx-border-color: red;");
+			}
+			if (nameSupplierStock.getText().isEmpty()) {
+				verifyFieldsGo = false;
+				nameSupplierStock.setStyle("-fx-border-color: red;");
+			}
+			if (addressSupplierStock.getText().isEmpty()) {
+				verifyFieldsGo = false;
+				addressSupplierStock.setStyle("-fx-border-color: red;");
+			}
+			if (postalSupplierStock.getText().isEmpty()) {
+				verifyFieldsGo = false;
+				postalSupplierStock.setStyle("-fx-border-color: red;");
+			}
+			if (placeSupplierStock.getText().isEmpty()) {
+				verifyFieldsGo = false;
+				placeSupplierStock.setStyle("-fx-border-color: red;");
+			}
+			if (phoneSupplierStock.getText().isEmpty()) {
+				verifyFieldsGo = false;
+				phoneSupplierStock.setStyle("-fx-border-color: red;");
+			}
+		}
+		}
 	public void resetTextFieldStyle() {
 		name.setStyle("");
 		address.setStyle("");
@@ -765,6 +855,18 @@ public class ATDProgram extends Application {
 		email.setStyle("");
 		phone.setStyle("");
 		bank.setStyle("");
+		
+		nameStock.setStyle("");
+		amountStock.setStyle("");
+		minAmountStock.setStyle("");
+		priceStock.setStyle("");
+		buyPriceStock.setStyle("");
+		nameSupplierStock.setStyle("");
+		addressSupplierStock.setStyle("");
+		postalSupplierStock.setStyle("");
+		placeSupplierStock.setStyle("");
+		phoneSupplierStock.setStyle("");
+
 	}
 	// voorraad systeem
 	public void searchProduct(String oldVal, String newVal) {
@@ -782,6 +884,8 @@ public class ATDProgram extends Application {
 			}
 		}
 	}
+	
+	
 	private void selectListEntryStock() {
 		if (stockList.getSelectionModel().getSelectedItem() != null) {
 			product = stockList.getSelectionModel().selectedItemProperty().get();
@@ -808,6 +912,7 @@ public class ATDProgram extends Application {
 			
 		}
 	}
+	
 	private void saveStock() {
 		if (isChanging == true) {
 			stock.removeProduct(selectedProduct);
@@ -880,4 +985,22 @@ public class ATDProgram extends Application {
 	}
 	// onderhoud
 	// parkeergelegenheid
+	
+	//overig
+	public void resetNotification(){
+		customerNotificationButtonBox.getChildren().clear();
+		stockNotificationButtonBox.getChildren().clear();
+	}
+	
+	public static boolean isInteger(String s, int radix) {
+	    if(s.isEmpty()) return false;
+	    for(int i = 0; i < s.length(); i++) {
+	        if(i == 0 && s.charAt(i) == '-') {
+	            if(s.length() == 1) return false;
+	            else continue;
+	        }
+	        if(Character.digit(s.charAt(i),radix) < 0) return false;
+	    }
+	    return true;
+	}
 }
