@@ -1,6 +1,8 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -36,18 +38,21 @@ public class ATDProgram extends Application {
 	private Scene klantScene;
 
 	// Objecten op de Scenes
-	// klantensysteem
 	private TabPane tabsScreen;
 	private Tab customerRelations, customerAdministration;
-	private HBox createNewCustomerButtonBox, notificationLabelBox, notificationButtonBox;
+	// klantensysteem
+	private HBox createNewCustomerButtonBox, notificationLabelBox,
+			notificationButtonBox;
 	private VBox customerDetails, customerDetailsShort, customerDetailsContent,
 			addCustomerBox, customerInput, leftBeheerBox, rightBeheerBox,
 			customerInfo, notifications;
-	private TextField searchField, textField;
+	private TextField searchField, textField, name, address, postal, email, place, phone, bank;
 	private DatePicker datePicker;
 	private CheckBox checkBox;
 	private Button cancelCustomer, deleteCustomer, changeCustomer,
-			createNewCustomer, saveNewCustomer, cancelNotification = new Button(), agreeNotification = new Button();
+			createNewCustomer, saveNewCustomer,
+			cancelNotification = new Button(),
+			agreeNotification = new Button();
 	// voorraad systeem
 	// onderhoud
 	// parkeergelegenheid
@@ -67,17 +72,24 @@ public class ATDProgram extends Application {
 	// klantensysteem
 	private Label notificationLabel = new Label();
 	private boolean isChanging;
+	private boolean verifyFieldsGo = true;
+	private String verifyFields = "";
 
 	public enum visit {
 		SERVICE, MAINTENANCE
 	};
-
+	public static final Pattern EMAILPATTERN = Pattern.compile(
+			"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+			Pattern.CASE_INSENSITIVE);
+	public static final Pattern NAMEPATTERN = Pattern.compile(
+			"^([ \\u00c0-\\u01ffa-zA-Z'\\-])+$",
+			Pattern.CASE_INSENSITIVE);
+	public static final Pattern PHONEPATTERN = Pattern.compile(
+			"^[0-9+\\(\\)#\\.\\s\\/ext-]+$",
+			Pattern.CASE_INSENSITIVE);
 	// voorraad systeem
 	// onderhoud
 	// parkeergelegenheid
-
-	// Popup?
-	private Popup popup;
 
 	// Start Methode
 	public static void main(String[] args) {
@@ -126,7 +138,7 @@ public class ATDProgram extends Application {
 		cancelCustomer.setMinSize(160, 40);
 		saveNewCustomer = new Button("Opslaan");
 		saveNewCustomer.setMinSize(160, 40);
-		
+
 		// voorraad systeem
 		// onderhoud
 		// parkeergelegenheid
@@ -198,6 +210,13 @@ public class ATDProgram extends Application {
 				customerInput.getChildren().add(textField);
 			}
 		}
+		name = ((TextField) customerInput.getChildren().get(0));
+		place = ((TextField) customerInput.getChildren().get(3));
+		bank = ((TextField) customerInput.getChildren().get(7));
+		email = ((TextField) customerInput.getChildren().get(5));
+		postal = ((TextField) customerInput.getChildren().get(2));
+		phone = ((TextField) customerInput.getChildren().get(6));
+		address = ((TextField) customerInput.getChildren().get(1));
 		// knoppen
 		createNewCustomerButtonBox = new HBox();
 		createNewCustomerButtonBox.getChildren().addAll(cancelCustomer,
@@ -209,7 +228,8 @@ public class ATDProgram extends Application {
 		addCustomerBox.setSpacing(20);
 
 		// rechter scherm meldingen
-		notifications = new VBox(10, notificationLabelBox = new HBox(notificationLabel), notificationButtonBox = new HBox(20));
+		notifications = new VBox(10, notificationLabelBox = new HBox(
+				notificationLabel), notificationButtonBox = new HBox(20));
 		notificationLabelBox.setAlignment(Pos.CENTER);
 		notificationButtonBox.setAlignment(Pos.CENTER);
 		notifications
@@ -247,26 +267,35 @@ public class ATDProgram extends Application {
 			isChanging = true;
 			changeCustomer();
 		});
-		deleteCustomer.setOnAction(e -> {
-				notificationConfirmAction("Weet u zeker dat u deze klant wilt verwijderen?");
-				agreeNotification.setOnAction(event -> {
-					deleteCustomer();
-					notificationConfirmed("Klant is verwijderd.");
+		deleteCustomer
+				.setOnAction(e -> {
+					notificationConfirmAction("Weet u zeker dat u deze klant wilt verwijderen?");
+					agreeNotification.setOnAction(event -> {
+						deleteCustomer();
+						notificationConfirmed("Klant is verwijderd.");
+					});
 				});
-		});
 
 		// opslaan of terug bij toevoegen of aanpassen klant
 		saveNewCustomer.setOnAction(e -> {
-			saveCustomer();
-			selectListEntry();
-			notificationConfirmed("Klant is opgeslagen.");
-			});
+			validateAllFields();
+			if(verifyFieldsGo){
+				saveCustomer();
+				selectListEntry();
+				notificationConfirmed("Klant is opgeslagen.");
+				resetTextFieldStyle();
+			} else {
+				notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.");
+			}
+			
+		});
 		cancelCustomer.setOnAction(e -> {
 			customerInfo.getChildren().clear();
 			customerInfo.getChildren().addAll(
 					new HBox(20, customerDetails, customerDetailsContent));
 			selectListEntry();
 			isChanging = false;
+			resetTextFieldStyle();
 		});
 		// searchfield leegmaken of alle tekst selecteren
 		searchField.setOnMouseClicked(e -> {
@@ -468,7 +497,7 @@ public class ATDProgram extends Application {
 		notificationButtonBox.getChildren().clear();
 		notificationButtonBox.getChildren().add(agreeNotification);
 		agreeNotification.setText("OK");
-		agreeNotification.setOnAction(e-> {
+		agreeNotification.setOnAction(e -> {
 			notificationLabel.setText("");
 			notificationButtonBox.getChildren().clear();
 		});
@@ -479,11 +508,74 @@ public class ATDProgram extends Application {
 		cancelNotification.setText("Annuleren");
 		agreeNotification.setText("OK");
 		notificationButtonBox.getChildren().clear();
-		notificationButtonBox.getChildren().addAll(cancelNotification, agreeNotification);
-		agreeNotification.setOnAction(e-> {
+		notificationButtonBox.getChildren().addAll(cancelNotification,
+				agreeNotification);
+		cancelNotification.setOnAction(e -> {
 			notificationLabel.setText("");
 			notificationButtonBox.getChildren().clear();
 		});
+		agreeNotification.setOnAction(e -> {
+			notificationLabel.setText("");
+			notificationButtonBox.getChildren().clear();
+		});
+	}
+
+	public static boolean validateEmail(String emailStr) {
+		Matcher matcher = EMAILPATTERN.matcher(emailStr);
+		return matcher.find();
+	}
+	
+	public static boolean validateName(String nameStr) {
+		Matcher matcher = NAMEPATTERN.matcher(nameStr);
+		return matcher.find();
+	}
+	
+	public static boolean validatePhone(String nameStr) {
+		Matcher matcher = NAMEPATTERN.matcher(nameStr);
+		return matcher.find();
+	}
+
+	public void validateAllFields(){
+		verifyFieldsGo = true;
+		if(name.getText().isEmpty()){
+			verifyFieldsGo = false;
+			name.setStyle("-fx-border-color: red;");
+		} 
+		if(!validateEmail(email.getText())){
+			verifyFieldsGo = false;
+			email.setStyle("-fx-border-color: red;");
+		}
+		if(!validatePhone(phone.getText())){
+			verifyFieldsGo = false;
+			phone.setStyle("-fx-border-color: red;");
+		}
+		if(place.getText().isEmpty()){
+			verifyFieldsGo = false;
+			place.setStyle("-fx-border-color: red;");
+		} 
+		if(address.getText().isEmpty()){
+			verifyFieldsGo = false;
+			address.setStyle("-fx-border-color: red;");
+		} 
+		if(bank.getText().isEmpty()){
+			verifyFieldsGo = false;
+			bank.setStyle("-fx-border-color: red;");
+		} 
+		if(postal.getText().isEmpty()){
+			verifyFieldsGo = false;
+			postal.setStyle("-fx-border-color: red;");
+		} 
+		
+	}
+
+	public void resetTextFieldStyle(){
+		name.setStyle("");
+		address.setStyle("");
+		postal.setStyle("");
+		place.setStyle("");
+		email.setStyle("");
+		phone.setStyle("");
+		bank.setStyle("");
 	}
 	// voorraad systeem
 	// onderhoud
