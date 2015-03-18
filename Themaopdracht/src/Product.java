@@ -1,13 +1,13 @@
 
 public class Product {
 	private String name;
-	private int amount, orderAmount;
+	private int amount, minAmount;
 	private double buyPrice, sellPrice;
-	private Supplier supplier;
-	public Product(String name, int amount, int orderAmount, double buyPrice,double sellPrice, Supplier supplier) {
+	private ProductSupplier supplier;
+	public Product(String name, int amount, int minAmount, double buyPrice,double sellPrice, ProductSupplier supplier) {
 		this.name = name;
 		this.amount = amount;
-		this.orderAmount = orderAmount;
+		this.minAmount = minAmount;
 		this.buyPrice = buyPrice;
 		this.sellPrice = sellPrice;
 		this.supplier = supplier;
@@ -24,11 +24,11 @@ public class Product {
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-	public int getOrderAmount() {
-		return orderAmount;
+	public int getMinAmount() {
+		return minAmount;
 	}
-	public void setOrderAmount(int orderAmount) {
-		this.orderAmount = orderAmount;
+	public void setMinAmount(int orderAmount) {
+		this.minAmount = orderAmount;
 	}
 	public double getBuyPrice() {
 		return buyPrice;
@@ -42,10 +42,16 @@ public class Product {
 	public void setSellPrice(double sellPrice) {
 		this.sellPrice = sellPrice;
 	}
-	public Supplier getSupplier() {
+	public ProductSupplier getSupplier() {
 		return supplier;
 	}
-	public void setSupplier(Supplier supplier) {
+	public void setSupplier(ProductSupplier supplier) {
 		this.supplier = supplier;
 	}
+	@Override
+	public String toString() {
+		return "Product [name=" + name + ", sellPrice=" + sellPrice
+				+ ", supplier=" + supplier.getName() + "]";
+	}
+	
 }

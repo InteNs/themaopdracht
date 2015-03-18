@@ -1,8 +1,8 @@
 
-public class Supplier {
+public class ProductSupplier {
 	private String name,phone, adress, postal, place;
 
-	public Supplier(String name, String phone, String adress, String postal, String place) {
+	public ProductSupplier(String name, String phone, String adress, String postal, String place) {
 		this.name = name;
 		this.phone = phone;
 		this.adress = adress;
@@ -49,5 +49,11 @@ public class Supplier {
 	public void setPlace(String place) {
 		this.place = place;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "ProductSupplier [name=" + name + ", phone=" + phone
+				+ ", adress=" + adress + ", postal=" + postal + ", place="
+				+ place + "]";
+	}
 }

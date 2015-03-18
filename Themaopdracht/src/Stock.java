@@ -15,10 +15,13 @@ public class Stock {
 	}
 	public void useProduct(Product product, int amount){
 		product.setAmount(product.getAmount() - amount);
-		if(product.getAmount()<1) this.orderProduct(product,product.getOrderAmount());
+			if(product.getAmount()<product.getMinAmount()) this.orderProduct(product,product.getMinAmount()-product.getAmount());
 	}
 	public void newProduct(Product product){
 		products.add(product);
+	}
+	public void removeProduct(Product product){
+		products.remove(product);
 	}
 	public List<Product> getAllProducts(){
 		return products;

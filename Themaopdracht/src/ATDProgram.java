@@ -88,6 +88,10 @@ public class ATDProgram extends Application {
 	private boolean isChanging;
 	private boolean verifyFieldsGo = true;
 	private String verifyFields = "";
+	private Product Product;
+	private Product product;
+	private Product selectedProduct;
+	private double listheight = 460;
 
 	public enum visit {
 		SERVICE, MAINTENANCE
@@ -122,6 +126,7 @@ public class ATDProgram extends Application {
 				"NL35 INGB 0008 8953 57", null, "jorritmeulenbeld@icloud.com",
 				"3552AZ", "0636114939", "Omloop 48", false);
 		customers.add(customer1);
+		
 		customer2 = new Customer("Mark Havekes", "De Meern", "n.v.t.", null,
 				"mark.havekes@gmail.com", "3453MC", "0302801265",
 				"De Drecht 32", false);
@@ -129,6 +134,13 @@ public class ATDProgram extends Application {
 
 		// voorraad systeem
 		stock = new Stock();
+		ProductSupplier supplier1 = new ProductSupplier("Cheapo BV", "1938572819", "Hoevelaan 2", "7853OQ", "Den Haag"); 
+		ProductSupplier supplier2 = new ProductSupplier("Banden BV", "8456297518", "Hamburgerstraat 10", "4198KW", "Utrecht");
+		Product product1 = new Product("Uitlaat", 5, 5, 20, 22,supplier1);
+		stock.newProduct(product1);
+		Product product2 = new Product("Band klein", 7, 10, 60, 100,supplier2);
+		stock.newProduct(product2);
+		
 
 		// onderhoud
 		mechanics = new ArrayList<Mechanic>();
@@ -172,12 +184,12 @@ public class ATDProgram extends Application {
 		// klantensysteem
 		customerList = new ListView<Customer>();
 		customerList.setOrientation(Orientation.VERTICAL);
-		customerList.setMinSize(492, 300);
+		customerList.setMinSize(492, listheight );
 		customerList.setItems(getAllCustomers());
 		// voorraad systeem
 		stockList = new ListView<Product>();
 		stockList.setOrientation(Orientation.VERTICAL);
-		stockList.setMinSize(492, 300);
+		stockList.setMinSize(492, listheight);
 		stockList.setItems(getAllProducts());
 		// onderhoud
 		// parkeergelegenheid
@@ -215,7 +227,7 @@ public class ATDProgram extends Application {
 		customerInfo.setPadding(new Insets(20));
 		customerInfo
 				.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
-		customerInfo.setMinSize(472, 400);
+		customerInfo.setMinSize(472, listheight);
 
 		// rechter scherm aanpassen/aanmaken
 		// default
@@ -280,17 +292,17 @@ public class ATDProgram extends Application {
 		// rechter scherm info
 		// default
 		stockDetails = new VBox(20, new Label("Naam: "),
-				new Label("Adres: "), new Label("Postcode: "), new Label(
-						"Plaats: "), new Label("Geboortedatum: "), new Label(
-						"Email: "), new Label("Telefoonnummer: "), new Label(
-						"Rekeningnummer: "), new Label("Blacklist: "));
+				new Label("Voorraad: "), new Label("Min. voorraad: "), new Label(
+						"Prijs: "), new Label("Inkoopprijs: "), new Label(
+						"Leverancier: "), new Label("Adres: "), new Label(
+						"Postcode: "), new Label("Plaats: "), new Label("Telefoon: "));
 		stockDetails.setPadding(new Insets(5, 20, 0, 0));
 		// waarden selected
-		stockDetailsContent = new VBox(20, new Label("Naam"), new Label(
-				"Adres"), new Label("Postcode"), new Label("Plaats"),
-				new Label("geboortedatum"), new Label("Email"), new Label(
-						"Telefoonnummer"), new Label("Rekeningnummer"),
-				new Label("Blacklist"));
+		stockDetailsContent = new VBox(20, new Label(""), new Label(
+				""), new Label(""), new Label(""),
+				new Label(""), new Label(
+						""), new Label(""),
+				new Label(""), new Label(""),new Label(""));
 		stockDetailsContent.setPadding(new Insets(5, 20, 0, 0));
 		// samenvoegen
 		stockInfo = new VBox(10, new HBox(10, stockDetails,
@@ -298,39 +310,30 @@ public class ATDProgram extends Application {
 		stockInfo.setPadding(new Insets(20));
 		stockInfo
 				.setStyle("-fx-background-color: white; -fx-border: solid; -fx-border-color: lightgray;");
-		stockInfo.setMinSize(472, 400);
+		stockInfo.setMinSize(472, listheight);
 
 		// rechter scherm aanpassen/aanmaken
 		// default
-		stockDetails = new VBox(20, new Label("Naam: "), new Label(
-				"Adres: "), new Label("Postcode: "), new Label("Plaats: "),
-				new Label("Geboortedatum: "), new Label("Email: "), new Label(
-						"Telefoonnummer: "), new Label("Rekeningnummer: "));
-		stockDetails.setPadding(new Insets(20));
+		stockDetails = new VBox(20, new Label("Naam: "),
+				new Label("Voorraad: "), new Label("Min. voorraad: "), new Label(
+						"Prijs: "), new Label("Inkoopprijs: "), new Label(
+						"Leverancier: "), new Label("Adres: "), new Label(
+						"Postcode: "), new Label("Plaats: "), new Label("Telefoon: "));
+		stockDetails.setPadding(new Insets(5, 20, 0, 0));
 		// Textfields, Datepicker en checkbox maken
 		stockInput = new VBox();
 		stockInput.setSpacing(10);
-		for (int i = 0; i < 8; i++) {
-			if (i == 4) {
-				datePicker = new DatePicker();
-				stockInput.getChildren().add(datePicker);
-			}
-			if (i == 7) {
-				checkBox = new CheckBox();
-				checkBox.setMinSize(25, 25);
-				stockInput.getChildren().add(checkBox);
-			} else {
-				textField = new TextField();
-				stockInput.getChildren().add(textField);
-			}
+		for (int i = 0; i < 10; i++) {
+			textField = new TextField();
+			stockInput.getChildren().add(textField);
 		}
-		name = ((TextField) stockInput.getChildren().get(0));
-		place = ((TextField) stockInput.getChildren().get(3));
-		bank = ((TextField) stockInput.getChildren().get(7));
-		email = ((TextField) stockInput.getChildren().get(5));
-		postal = ((TextField) stockInput.getChildren().get(2));
-		phone = ((TextField) stockInput.getChildren().get(6));
-		address = ((TextField) stockInput.getChildren().get(1));
+		//name = ((TextField) stockInput.getChildren().get(0));
+		//place = ((TextField) stockInput.getChildren().get(3));
+		//bank = ((TextField) stockInput.getChildren().get(7));
+		//email = ((TextField) stockInput.getChildren().get(5));
+		//postal = ((TextField) stockInput.getChildren().get(2));
+		//phone = ((TextField) stockInput.getChildren().get(6));
+		//address = ((TextField) stockInput.getChildren().get(1));
 		// knoppen
 		createNewStockButtonBox = new HBox();
 		createNewStockButtonBox.getChildren().addAll(cancelStock,
@@ -369,7 +372,7 @@ public class ATDProgram extends Application {
 			@Override
 			public void changed(ObservableValue<? extends String> observable,
 					String oldValue, String newValue) {
-				handleSearchByKey(oldValue, newValue);
+				searchCustomer(oldValue, newValue);
 			}
 		});
 
@@ -397,7 +400,7 @@ public class ATDProgram extends Application {
 					validateAllFields();
 					if (verifyFieldsGo) {
 						saveCustomer();
-						selectListEntry();
+						selectListEntryCustomer();
 						notificationConfirmed("Klant is opgeslagen.");
 						resetTextFieldStyle();
 					} else {
@@ -409,7 +412,7 @@ public class ATDProgram extends Application {
 			customerInfo.getChildren().clear();
 			customerInfo.getChildren().addAll(
 					new HBox(20, customerDetails, customerDetailsContent));
-			selectListEntry();
+			selectListEntryCustomer();
 			isChanging = false;
 			resetTextFieldStyle();
 		});
@@ -425,15 +428,15 @@ public class ATDProgram extends Application {
 			customerInfo.getChildren().clear();
 			customerInfo.getChildren().addAll(
 					new HBox(20, customerDetails, customerDetailsContent));
-			selectListEntry();
+			selectListEntryCustomer();
 			isChanging = false;
 		});
 		// voorraad systeem
-		searchFieldCustomer.textProperty().addListener(new ChangeListener<String>() {
+		searchFieldStock.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable,
 					String oldValue, String newValue) {
-				handleSearchByKey(oldValue, newValue);
+				searchProduct(oldValue, newValue);
 			}
 		});
 
@@ -448,32 +451,32 @@ public class ATDProgram extends Application {
 		});
 		deleteStock
 				.setOnAction(e -> {
-					notificationConfirmAction("Weet u zeker dat u deze klant wilt verwijderen?");
-					agreeNotification.setOnAction(event -> {
+					//notificationConfirmAction("Weet u zeker dat u deze klant wilt verwijderen?");
+//					agreeNotification.setOnAction(event -> {
 						deleteStock();
-						notificationConfirmed("Klant is verwijderd.");
-					});
+//						notificationConfirmed("Klant is verwijderd.");
+//					});
 				});
 
 		// opslaan of terug bij toevoegen of aanpassen klant
 		saveNewStock
 				.setOnAction(e -> {
-					validateAllFields();
-					if (verifyFieldsGo) {
+					//validateAllFields();
+					//if (verifyFieldsGo) {
 						saveStock();
-						selectListEntry();
-						notificationConfirmed("Klant is opgeslagen.");
-						resetTextFieldStyle();
-					} else {
-						notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.");
-					}
+						selectListEntryStock();
+						//notificationConfirmed("Klant is opgeslagen.");
+						//resetTextFieldStyle();
+					//} else {
+					//	notificationConfirmed("Niet alle velden zijn correct ingevuld.\nVul alle gemarkeerde velden in.");
+					//}
 
 				});
 		cancelStock.setOnAction(e -> {
 			stockInfo.getChildren().clear();
 			stockInfo.getChildren().addAll(
 					new HBox(20, stockDetails, stockDetailsContent));
-			selectListEntry();
+			selectListEntryCustomer();
 			isChanging = false;
 			resetTextFieldStyle();
 		});
@@ -489,7 +492,7 @@ public class ATDProgram extends Application {
 			stockInfo.getChildren().clear();
 			stockInfo.getChildren().addAll(
 					new HBox(20, stockDetails, stockDetailsContent));
-			selectListEntry();
+			selectListEntryStock();
 			isChanging = false;
 		});
 		// onderhoud
@@ -517,35 +520,19 @@ public class ATDProgram extends Application {
 				stockAdministration);
 
 		// Create Mainscreen
-		klantScene = new Scene(tabsScreen, 1024, 600);
+		klantScene = new Scene(tabsScreen, 1024, 655);
 		stage.setScene(klantScene);
 		stage.setTitle("AutoTotaalDienst");
 		stage.setResizable(false);
 		stage.show();
 	}
-
-	private void saveStock() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void deleteStock() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void changeStock() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	// methoden
 	// klantensysteem
 	public ObservableList<Customer> getAllCustomers() {
 		return FXCollections.observableArrayList(customers);
 	}
 
-	private void selectListEntry() {
+	private void selectListEntryCustomer() {
 		if (customerList.getSelectionModel().getSelectedItem() != null) {
 			customer = customerList.getSelectionModel().selectedItemProperty()
 					.get();
@@ -655,7 +642,7 @@ public class ATDProgram extends Application {
 		}
 	}
 
-	public void handleSearchByKey(String oldVal, String newVal) {
+	public void searchCustomer(String oldVal, String newVal) {
 		if (oldVal != null && (newVal.length() < oldVal.length())) {
 			customerList.setItems(getAllCustomers());
 		}
@@ -780,6 +767,114 @@ public class ATDProgram extends Application {
 		bank.setStyle("");
 	}
 	// voorraad systeem
+	public void searchProduct(String oldVal, String newVal) {
+		if (oldVal != null && (newVal.length() < oldVal.length())) {
+			stockList.setItems(getAllProducts());
+		}
+		stockList.getItems().clear();
+		for (Product entry : getAllProducts()) {
+			if (entry.getName().contains(newVal)
+					|| entry.getSupplier().getName().contains(newVal)
+					|| Double.toString(entry.getSellPrice()).contains(newVal)) {
+				stockList.getItems().add(entry);
+			} else {
+				stockList.getItems().remove(entry);
+			}
+		}
+	}
+	private void selectListEntryStock() {
+		if (stockList.getSelectionModel().getSelectedItem() != null) {
+			product = stockList.getSelectionModel().selectedItemProperty().get();
+			((Label) stockDetailsContent.getChildren().get(0))
+					.setText(product.getName());
+			((Label) stockDetailsContent.getChildren().get(1))
+					.setText(Integer.toString(product.getAmount()));
+			((Label) stockDetailsContent.getChildren().get(2))
+					.setText(Integer.toString(product.getMinAmount()));
+			((Label) stockDetailsContent.getChildren().get(3))
+					.setText(Double.toString(product.getSellPrice()));
+			((Label) stockDetailsContent.getChildren().get(4))
+					.setText(Double.toString(product.getBuyPrice()));
+			((Label) stockDetailsContent.getChildren().get(5))
+					.setText(product.getSupplier().getName());
+			((Label) stockDetailsContent.getChildren().get(6))
+					.setText(product.getSupplier().getAdress());
+			((Label) stockDetailsContent.getChildren().get(7))
+					.setText(product.getSupplier().getPostal());
+			((Label) stockDetailsContent.getChildren().get(8))
+					.setText(product.getSupplier().getPlace());
+			((Label) stockDetailsContent.getChildren().get(9))
+			.setText(product.getSupplier().getPhone());
+			
+		}
+	}
+	private void saveStock() {
+		if (isChanging == true) {
+			stock.removeProduct(selectedProduct);
+			selectedProduct.setSupplier(null);
+			stockList.getItems().remove(selectedProduct);
+			isChanging = false;
+		}
+		product = new Product(((TextField) stockInput.getChildren().get(0)).getText(), 
+				Integer.parseInt(((TextField) stockInput.getChildren().get(1)).getText()),
+				Integer.parseInt(((TextField) stockInput.getChildren().get(2)).getText()),
+				 Double.parseDouble(((TextField) stockInput.getChildren().get(3)).getText()), 
+				 Double.parseDouble(((TextField) stockInput.getChildren().get(4)).getText()), 
+				 new ProductSupplier(((TextField) stockInput.getChildren().get(5)).getText(), 
+						 ((TextField) stockInput.getChildren().get(9)).getText(), 
+						 ((TextField) stockInput.getChildren().get(6)).getText(), 
+						 ((TextField) stockInput.getChildren().get(7)).getText(), 
+						 ((TextField) stockInput.getChildren().get(8)).getText()));
+		stock.newProduct(product);
+		stockList.getItems().add(product);
+		stockInfo.getChildren().clear();
+		stockInfo.getChildren().addAll(
+				new HBox(20, stockDetails, stockDetailsContent));
+		
+	}
+
+	private void deleteStock() {
+		if (stockList.getSelectionModel().getSelectedItem() != null) {
+			stock.removeProduct((stockList.getSelectionModel().getSelectedItem()));
+			stockList.getItems().remove(stockList.getSelectionModel().getSelectedItem());
+		}
+		
+	}
+
+	private void changeStock() {
+		stockInfo.getChildren().clear();
+		stockInfo.getChildren().addAll(new HBox(stockDetails, stockInput),
+				new HBox(20, cancelStock, saveNewStock));
+		if (!isChanging) {
+			for (int i = 0; i < 10; i++) {
+					((TextField) stockInput.getChildren().get(i)).setText("");
+			}
+		} else if (stockList.getSelectionModel().getSelectedItem() != null) {
+			selectedProduct = stockList.getSelectionModel().getSelectedItem();
+			((TextField) stockInput.getChildren().get(0)).setText(product
+					.getName());
+			((TextField) stockInput.getChildren().get(1)).setText(Integer
+					.toString(product.getAmount()));
+			((TextField) stockInput.getChildren().get(2)).setText(Integer
+					.toString(product.getMinAmount()));
+			((TextField) stockInput.getChildren().get(3)).setText(Double
+					.toString(product.getSellPrice()));
+			((TextField) stockInput.getChildren().get(4)).setText(Double
+					.toString(product.getSellPrice()));
+			((TextField) stockInput.getChildren().get(5)).setText(product
+					.getSupplier().getName());
+			((TextField) stockInput.getChildren().get(6)).setText(product
+					.getSupplier().getAdress());
+			((TextField) stockInput.getChildren().get(7)).setText(product
+					.getSupplier().getPostal());
+			((TextField) stockInput.getChildren().get(8)).setText(product
+					.getSupplier().getPlace());
+			((TextField) stockInput.getChildren().get(9)).setText(product
+					.getSupplier().getPhone());
+		}
+
+	}
+
 	public ObservableList<Product> getAllProducts() {
 		return FXCollections.observableArrayList(stock.getAllProducts());
 	}
