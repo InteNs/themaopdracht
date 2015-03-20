@@ -1,6 +1,11 @@
 package Screens;
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -12,9 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class CustomerScreen extends Application {
-	private String 
-			b;
+public class CustomerScreen extends HBox {
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;
@@ -47,6 +50,8 @@ public class CustomerScreen extends Application {
 			bankContent = new Label("-"), 
 			blackList = new Label("Blacklist: "), 
 			blackListContent = new Label("-");
+	
+	
 	private TextField 
 			searchTextField = new TextField(), 
 			nameTextField = new TextField(), 
@@ -66,9 +71,8 @@ public class CustomerScreen extends Application {
 			mainButtonBox = new HBox(spacingBoxes), 
 			searchFieldBox = new HBox(spacingBoxes), 
 			mainBox = new HBox(spacingBoxes);
-
-	@Override
-	public void start(Stage stage) throws Exception {
+	private ArrayList<Node> nodes = new ArrayList<Node>();
+	public CustomerScreen() {
 		
 		//CustomerDetails
 		customerDetails.getChildren().addAll(
@@ -173,87 +177,78 @@ public class CustomerScreen extends Application {
 				rightBox);
 		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
-		
-		Scene mainScene = new Scene(mainBox, 1024, 655);
-		stage.setScene(mainScene);
-		stage.setTitle("Customer");
-		stage.setResizable(false);
-		stage.show();
+		getChildren().add(mainBox);
+		nodes.addAll(getAllNodes(this));
 
-	}
-
-	public String getString() {
-		return b;
 	}
 	
-	public void visability(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
-		nameTextField.setVisible(setTextFieldsVisible);
-		addressTextField.setVisible(setTextFieldsVisible);
-		postalTextField.setVisible(setTextFieldsVisible);
-		placeTextField.setVisible(setTextFieldsVisible);
-		dateOfBirthDatePicker.setVisible(setTextFieldsVisible);
-		emailTextField.setVisible(setTextFieldsVisible);
-		phoneTextField.setVisible(setTextFieldsVisible);
-		bankTextField.setVisible(setTextFieldsVisible);
-		blackListCheckBox.setVisible(setTextFieldsVisible);
-		
-		nameContent.setVisible(setDetailsVisible);
-		addressContent.setVisible(setDetailsVisible);
-		postalContent.setVisible(setDetailsVisible);
-		placeContent.setVisible(setDetailsVisible);
-		dateOfBirthContent.setVisible(setDetailsVisible);
-		emailContent.setVisible(setDetailsVisible);
-		phoneContent.setVisible(setDetailsVisible);
-		bankContent.setVisible(setDetailsVisible);
-		blackListContent.setVisible(setDetailsVisible);
-		
+	private void visability(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
+		for (Node node1 : ((VBox)customerDetails.getChildren().get(0)).getChildren()) {
+			HBox box = (HBox) node1;
+			if(box.getChildren().size()>2){
+				box.getChildren().get(2).setVisible(setTextFieldsVisible);
+				box.getChildren().get(1).setVisible(setDetailsVisible);
+				if(!setTextFieldsVisible){
+					if(box.getChildren().get(2) instanceof TextField)((TextField)box.getChildren().get(2)).setPrefWidth(0);
+					if(box.getChildren().get(2) instanceof DatePicker)((DatePicker)box.getChildren().get(2)).setPrefWidth(0);
+					if(box.getChildren().get(2) instanceof CheckBox)((CheckBox)box.getChildren().get(2)).setPrefSize(0,0);
+					((Label)box.getChildren().get(1)).setPrefWidth(widthLabels*2);
+				}
+				else if (!setDetailsVisible) {
+					if(box.getChildren().get(2) instanceof TextField)((TextField)box.getChildren().get(2)).setPrefWidth(widthLabels*2);
+					if(box.getChildren().get(2) instanceof DatePicker)((DatePicker)box.getChildren().get(2)).setPrefWidth(widthLabels*2);
+					if(box.getChildren().get(2) instanceof CheckBox)((CheckBox)box.getChildren().get(2)).setPrefSize(25,25);
+					((Label)box.getChildren().get(1)).setPrefWidth(0);
+				}			
+			}
+		}	
 		cancelCustomer.setVisible(setButtonsVisible);
 		saveCustomer.setVisible(setButtonsVisible);	
 		
 		if (!setTextFieldsVisible) {
-			nameTextField.setPrefWidth(0);
-			addressTextField.setPrefWidth(0);
-			postalTextField.setPrefWidth(0);
-			placeTextField.setPrefWidth(0);
-			blackListCheckBox.setPrefWidth(0);
-			emailTextField.setPrefWidth(0);
-			phoneTextField.setPrefWidth(0);
-			bankTextField.setPrefWidth(0);
-			blackListCheckBox.setPrefSize(0, 0);
+//			nameTextField.setPrefWidth(0);
+//			addressTextField.setPrefWidth(0);
+//			postalTextField.setPrefWidth(0);
+//			placeTextField.setPrefWidth(0);
+//			blackListCheckBox.setPrefWidth(0);
+//			emailTextField.setPrefWidth(0);
+//			phoneTextField.setPrefWidth(0);
+//			bankTextField.setPrefWidth(0);
+//			blackListCheckBox.setPrefSize(0, 0);
 			
 			email.setMinWidth(widthLabels);
 			
-			nameContent.setPrefWidth(widthLabels*2);
-			addressContent.setPrefWidth(widthLabels*2);
-			postalContent.setPrefWidth(widthLabels*2);
-			placeContent.setPrefWidth(widthLabels*2);
-			dateOfBirthContent.setPrefWidth(widthLabels*2);
-			emailContent.setPrefWidth(widthLabels*2);
-			phoneContent.setPrefWidth(widthLabels*2);
-			bankContent.setPrefWidth(widthLabels*2);
-			blackListContent.setPrefWidth(widthLabels*2);
+//			nameContent.setPrefWidth(widthLabels*2);
+//			addressContent.setPrefWidth(widthLabels*2);
+//			postalContent.setPrefWidth(widthLabels*2);
+//			placeContent.setPrefWidth(widthLabels*2);
+//			dateOfBirthContent.setPrefWidth(widthLabels*2);
+//			emailContent.setPrefWidth(widthLabels*2);
+//			phoneContent.setPrefWidth(widthLabels*2);
+//			bankContent.setPrefWidth(widthLabels*2);
+//			blackListContent.setPrefWidth(widthLabels*2);
 		} else if (!setDetailsVisible) {
-			nameTextField.setPrefWidth(widthLabels*2);
-			addressTextField.setPrefWidth(widthLabels*2);
-			postalTextField.setPrefWidth(widthLabels*2);
-			placeTextField.setPrefWidth(widthLabels*2);
-			dateOfBirthDatePicker.setPrefWidth(widthLabels*2);
-			emailTextField.setPrefWidth(widthLabels*2);
-			phoneTextField.setPrefWidth(widthLabels*2);
-			bankTextField.setPrefWidth(widthLabels*2);
-			blackListCheckBox.setPrefSize(25, 25);
+//			nameTextField.setPrefWidth(widthLabels*2);
+//			addressTextField.setPrefWidth(widthLabels*2);
+//			postalTextField.setPrefWidth(widthLabels*2);
+//			placeTextField.setPrefWidth(widthLabels*2);
+//			dateOfBirthDatePicker.setPrefWidth(widthLabels*2);
+//			emailTextField.setPrefWidth(widthLabels*2);
+//			phoneTextField.setPrefWidth(widthLabels*2);
+//			bankTextField.setPrefWidth(widthLabels*2);
+//			blackListCheckBox.setPrefSize(25, 25);
 			
 			email.setMinWidth(widthLabels-5);
 			
-			nameContent.setPrefWidth(0);
-			addressContent.setPrefWidth(0);
-			postalContent.setPrefWidth(0);
-			placeContent.setPrefWidth(0);
-			dateOfBirthContent.setPrefWidth(0);
-			emailContent.setPrefWidth(0);
-			phoneContent.setPrefWidth(0);
-			bankContent.setPrefWidth(0);
-			blackListContent.setPrefWidth(0);			
+//			nameContent.setPrefWidth(0);
+//			addressContent.setPrefWidth(0);
+//			postalContent.setPrefWidth(0);
+//			placeContent.setPrefWidth(0);
+//			dateOfBirthContent.setPrefWidth(0);
+//			emailContent.setPrefWidth(0);
+//			phoneContent.setPrefWidth(0);
+//			bankContent.setPrefWidth(0);
+//			blackListContent.setPrefWidth(0);			
 		} else if (setDetailsVisible || setTextFieldsVisible) {
 			nameTextField.setPrefWidth(widthLabels);
 			addressTextField.setPrefWidth(widthLabels);
@@ -278,9 +273,17 @@ public class CustomerScreen extends Application {
 			blackListContent.setPrefWidth(widthLabels);
 		}
 	}
-
-	public static void main(String[] args) {
-		launch(args);
+	private static ArrayList<Node> getAllNodes(Parent root) {
+	    ArrayList<Node> nodes = new ArrayList<Node>();
+	    addAllDescendents(root, nodes);
+	    return nodes;
+	}
+	private static void addAllDescendents(Parent parent, ArrayList<Node> nodes) {
+	    for (Node node : parent.getChildrenUnmodifiable()) {
+	        nodes.add(node);
+	        if (node instanceof Parent)
+	            addAllDescendents((Parent)node, nodes);
+	    }
 	}
 }
 	

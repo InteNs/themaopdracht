@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class StockScreen extends Application {
+public class StockScreen extends HBox {
 	private String 
 			b;
 	private double
@@ -70,8 +70,7 @@ public class StockScreen extends Application {
 			searchFieldBox = new HBox(spacingBoxes), 
 			mainBox = new HBox(spacingBoxes);
 
-	@Override
-	public void start(Stage stage) throws Exception {
+	public StockScreen() {
 		
 		//StockDetails
 		stockDetails.getChildren().addAll(
@@ -203,11 +202,8 @@ public class StockScreen extends Application {
 		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
 		
-		Scene mainScene = new Scene(mainBox, 1024, 655);
-		stage.setScene(mainScene);
-		stage.setTitle("Stock");
-		stage.setResizable(false);
-		stage.show();
+		getChildren().add(mainBox);
+
 
 	}
 
@@ -345,9 +341,6 @@ public class StockScreen extends Application {
 			newSupplierButton.setPrefWidth(25);
 		}
 		}
-	}
-	public static void main(String[] args) {
-		launch(args);
 	}
 }
 	
