@@ -908,7 +908,7 @@ public class ATDProgram extends Application {
 			((Label) stockDetailsContent.getChildren().get(8))
 					.setText(product.getSupplier().getPlace());
 			((Label) stockDetailsContent.getChildren().get(9))
-			.setText(product.getSupplier().getPhone());
+					.setText(product.getSupplier().getPhone());
 			
 		}
 	}
