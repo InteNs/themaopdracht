@@ -100,7 +100,8 @@ public class StockScreen extends Application {
 								supplier,
 								supplierContent,
 								pickSupplier,
-								newSupplierButton),
+								newSupplierButton,
+								supplierTextField),
 						new HBox(20,
 								address,
 								addressContent,
@@ -315,6 +316,7 @@ public class StockScreen extends Application {
 		minAmountTextField.setDisable(add);
 		sellPriceTextField.setDisable(add);
 		buyPriceTextField.setDisable(add);
+		supplierTextField.setVisible(add);
 		
 		pickSupplier.setVisible(!cancel);
 		newSupplierButton.setVisible(!cancel);
@@ -326,18 +328,15 @@ public class StockScreen extends Application {
 		if (add) {
 			pickSupplier.setPrefWidth(0);
 			newSupplierButton.setPrefWidth(0);
-			supplierTextField.setVisible(true);
 			supplierTextField.setPrefWidth(widthLabels);
 		} else {
 			if (cancel){
 				pickSupplier.setPrefWidth(0);
 				newSupplierButton.setPrefWidth(0);
 				supplierTextField.setPrefWidth(0);
-				supplierTextField.setVisible(false);
 		} else {
 			pickSupplier.setPrefWidth(widthLabels-45);
 			newSupplierButton.setPrefWidth(25);
-			supplierTextField.setVisible(false);
 		}
 		}
 	}
