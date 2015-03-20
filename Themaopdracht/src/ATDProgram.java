@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -23,7 +25,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class ATDProgram extends Application {
@@ -50,6 +51,7 @@ public class ATDProgram extends Application {
 			place, phone, bank;
 	private DatePicker datePicker;
 	private CheckBox checkBox;
+	private ComboBox<ProductSupplier> supplierSelector;
 	private Button cancelCustomer, deleteCustomer, changeCustomer,
 			createNewCustomer, saveNewCustomer,
 			cancelNotification = new Button(),
@@ -194,6 +196,8 @@ public class ATDProgram extends Application {
 		stockList.setOrientation(Orientation.VERTICAL);
 		stockList.setMinSize(492, listheight);
 		stockList.setItems(getAllProducts());
+		supplierSelector = new ComboBox<>();
+		supplierSelector.getItems().addAll(getAllSuppliers());
 		// onderhoud
 		// parkeergelegenheid
 
@@ -269,7 +273,7 @@ public class ATDProgram extends Application {
 				saveNewCustomer);
 		// samenvoegen
 		addCustomerBox = new VBox(new HBox(30, customerDetailsShort,
-				customerInput), new HBox(40, cancelCustomer, saveNewCustomer));
+				customerInput), createNewCustomerButtonBox);
 		addCustomerBox.setPadding(new Insets(20));
 		addCustomerBox.setSpacing(20);
 
@@ -327,16 +331,20 @@ public class ATDProgram extends Application {
 		stockInput = new VBox();
 		stockInput.setSpacing(10);
 		for (int i = 0; i < 10; i++) {
+			if(i == 6){
+				HBox hbox = new HBox(5,textField, supplierSelector);
+				stockInput.getChildren().add(hbox);
+			}
 			textField = new TextField();
 			stockInput.getChildren().add(textField);
 		}
-		
 		nameStock = ((TextField) stockInput.getChildren().get(0));
 		amountStock = ((TextField) stockInput.getChildren().get(1));
 		minAmountStock = ((TextField) stockInput.getChildren().get(2));
 		priceStock = ((TextField) stockInput.getChildren().get(3));
 		buyPriceStock = ((TextField) stockInput.getChildren().get(4));
-		nameSupplierStock = ((TextField) stockInput.getChildren().get(5));
+		HBox box = (HBox) stockInput.getChildren().get(5);
+		nameSupplierStock = (TextField) box.getChildren().get(0);
 		addressSupplierStock = ((TextField) stockInput.getChildren().get(6));
 		postalSupplierStock = ((TextField) stockInput.getChildren().get(7));
 		placeSupplierStock = ((TextField) stockInput.getChildren().get(8));
@@ -344,11 +352,9 @@ public class ATDProgram extends Application {
 		
 		// knoppen
 		createNewStockButtonBox = new HBox();
-		createNewStockButtonBox.getChildren().addAll(cancelStock,
-				saveNewStock);
+		createNewStockButtonBox.getChildren().addAll(cancelStock, saveNewStock);
 		// samenvoegen
-		addStockBox = new VBox(new HBox(30, stockDetails,
-				stockInput), new HBox(40, cancelStock, saveNewStock));
+		addStockBox = new VBox(new HBox(30, stockDetails, stockInput), createNewStockButtonBox);
 		addStockBox.setPadding(new Insets(20));
 		addStockBox.setSpacing(20);
 
@@ -952,7 +958,13 @@ public class ATDProgram extends Application {
 				new HBox(20, cancelStock, saveNewStock));
 		if (!isChanging) {
 			for (int i = 0; i < 10; i++) {
+				if(i == 6){
+					HBox box = (HBox) stockInput.getChildren().get(5);
+					((TextField) box.getChildren().get(0)).setText("");
+				}
+				else{
 					((TextField) stockInput.getChildren().get(i)).setText("");
+				}
 			}
 		} else if (stockList.getSelectionModel().getSelectedItem() != null) {
 			selectedProduct = stockList.getSelectionModel().getSelectedItem();
@@ -966,8 +978,8 @@ public class ATDProgram extends Application {
 					.toString(product.getSellPrice()));
 			((TextField) stockInput.getChildren().get(4)).setText(Double
 					.toString(product.getSellPrice()));
-			((TextField) stockInput.getChildren().get(5)).setText(product
-					.getSupplier().getName());
+			HBox box = (HBox) stockInput.getChildren().get(5);
+			((TextField) box.getChildren().get(0)).setText(product.getSupplier().getName());
 			((TextField) stockInput.getChildren().get(6)).setText(product
 					.getSupplier().getAdress());
 			((TextField) stockInput.getChildren().get(7)).setText(product
@@ -990,6 +1002,15 @@ public class ATDProgram extends Application {
 	public void resetNotification(){
 		customerNotificationButtonBox.getChildren().clear();
 		stockNotificationButtonBox.getChildren().clear();
+	}
+	public List<ProductSupplier> getAllSuppliers(){
+		ArrayList<ProductSupplier> list = new ArrayList<ProductSupplier>();
+		for (Product product : stock.getAllProducts()) {
+			if(!list.contains(product.getSupplier())){
+				list.add(product.getSupplier());
+			}
+		}
+		return FXCollections.observableArrayList(list);
 	}
 	
 	public static boolean isInteger(String s, int radix) {
