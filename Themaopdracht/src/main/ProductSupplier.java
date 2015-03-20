@@ -1,3 +1,4 @@
+package main;
 
 public class ProductSupplier {
 	private String name,phone, adress, postal, place;

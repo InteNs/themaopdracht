@@ -1,3 +1,5 @@
+package oldfiles;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -5,6 +7,13 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import main.Customer;
+import main.Mechanic;
+import main.ParkingSpace;
+import main.Product;
+import main.ProductSupplier;
+import main.Reservation;
+import main.Stock;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

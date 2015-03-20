@@ -1,13 +1,14 @@
+package main;
+import screens.CustomerScreen;
+import screens.StockScreen;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
-import Screens.CustomerScreen;
-import Screens.StockScreen;
 
 
-public class ATDProgramNew extends Application {
+public class ATDProgram extends Application {
 
 	private TabPane tabsScreen;
 	private Tab customerAdministration;

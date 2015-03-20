@@ -1,4 +1,4 @@
-package Screens;
+package oldfiles;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class StockScreen extends HBox {
+public class StockScreen extends Application {
 	private String 
 			b;
 	private double
@@ -70,7 +70,8 @@ public class StockScreen extends HBox {
 			searchFieldBox = new HBox(spacingBoxes), 
 			mainBox = new HBox(spacingBoxes);
 
-	public StockScreen() {
+	@Override
+	public void start(Stage stage) throws Exception {
 		
 		//StockDetails
 		stockDetails.getChildren().addAll(
@@ -97,15 +98,9 @@ public class StockScreen extends HBox {
 								buyPriceTextField),
 						new HBox(20,
 								supplier,
-								new HBox(supplierContent),
-								new HBox(
-										new HBox(20,
-												pickSupplier,
-												newSupplierButton
-												),
-										new HBox(
-								supplierTextField))
-						),
+								supplierContent,
+								pickSupplier,
+								newSupplierButton),
 						new HBox(20,
 								address,
 								addressContent,
@@ -147,8 +142,7 @@ public class StockScreen extends HBox {
 		
 		saveStock.setPrefSize(125, 50);
 		saveStock.setOnAction(e -> {
-			addNewSupplier(false, false);
-			visability(true, false, false);
+				addNewSupplier(false, true);
 			
 		});
 		
@@ -179,13 +173,11 @@ public class StockScreen extends HBox {
 			visability(false, true, true);	
 			addNewSupplier(false, false);
 			pickSupplier.setPrefWidth(widthLabels+75);
-			saveStock.setDisable(false);
 		});
 		changeStockButton.setPrefSize(150, 50);
 		changeStockButton.setOnAction(e -> {
 			visability(true, true, true);	
 			addNewSupplier(false, false);
-			saveStock.setDisable(false);
 		});
 		removeStockButton.setPrefSize(150, 50);
 		
@@ -202,8 +194,11 @@ public class StockScreen extends HBox {
 		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
 		
-		getChildren().add(mainBox);
-
+		Scene mainScene = new Scene(mainBox, 1024, 655);
+		stage.setScene(mainScene);
+		stage.setTitle("Stock");
+		stage.setResizable(false);
+		stage.show();
 
 	}
 
@@ -234,7 +229,6 @@ public class StockScreen extends HBox {
 		
 		cancelStock.setVisible(setButtonsVisible);
 		saveStock.setVisible(setButtonsVisible);
-		saveStock.setDisable(false);
 		saveSupplier.setVisible(false);
 		newSupplierButton.setVisible(false);
 
@@ -291,7 +285,7 @@ public class StockScreen extends HBox {
 			minAmountTextField.setPrefWidth(widthLabels);
 			sellPriceTextField.setPrefWidth(widthLabels);
 			buyPriceTextField.setPrefWidth(widthLabels);
-			pickSupplier.setPrefWidth(widthLabels);
+			pickSupplier.setPrefWidth(widthLabels-35);
 			addressTextField.setPrefWidth(widthLabels);
 			postalTextField.setPrefWidth(widthLabels);
 			placeTextField.setPrefWidth(widthLabels);
@@ -318,29 +312,29 @@ public class StockScreen extends HBox {
 		minAmountTextField.setDisable(add);
 		sellPriceTextField.setDisable(add);
 		buyPriceTextField.setDisable(add);
-		supplierTextField.setVisible(add);
 		
 		pickSupplier.setVisible(!cancel);
 		newSupplierButton.setVisible(!cancel);
 		saveSupplier.setVisible(add);
-		saveStock.setDisable(true);
 		
 		
 		
 		if (add) {
 			pickSupplier.setPrefWidth(0);
 			newSupplierButton.setPrefWidth(0);
-			supplierTextField.setPrefWidth(widthLabels*2);
 		} else {
 			if (cancel){
 				pickSupplier.setPrefWidth(0);
 				newSupplierButton.setPrefWidth(0);
-				supplierTextField.setPrefWidth(0);
+				//supplierTextField.setPrefWidth(0);
 		} else {
-			pickSupplier.setPrefWidth(widthLabels);
+			pickSupplier.setPrefWidth(widthLabels-45);
 			newSupplierButton.setPrefWidth(25);
 		}
 		}
+	}
+	public static void main(String[] args) {
+		launch(args);
 	}
 }
 	
