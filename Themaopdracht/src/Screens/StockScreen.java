@@ -173,11 +173,13 @@ public class StockScreen extends Application {
 			visability(false, true, true);	
 			addNewSupplier(false, false);
 			pickSupplier.setPrefWidth(widthLabels+75);
+			saveStock.setDisable(false);
 		});
 		changeStockButton.setPrefSize(150, 50);
 		changeStockButton.setOnAction(e -> {
 			visability(true, true, true);	
 			addNewSupplier(false, false);
+			saveStock.setDisable(false);
 		});
 		removeStockButton.setPrefSize(150, 50);
 		
@@ -229,6 +231,7 @@ public class StockScreen extends Application {
 		
 		cancelStock.setVisible(setButtonsVisible);
 		saveStock.setVisible(setButtonsVisible);
+		saveStock.setDisable(false);
 		saveSupplier.setVisible(false);
 		newSupplierButton.setVisible(false);
 
@@ -316,20 +319,25 @@ public class StockScreen extends Application {
 		pickSupplier.setVisible(!cancel);
 		newSupplierButton.setVisible(!cancel);
 		saveSupplier.setVisible(add);
+		saveStock.setDisable(true);
 		
 		
 		
 		if (add) {
 			pickSupplier.setPrefWidth(0);
 			newSupplierButton.setPrefWidth(0);
+			supplierTextField.setVisible(true);
+			supplierTextField.setPrefWidth(widthLabels);
 		} else {
 			if (cancel){
 				pickSupplier.setPrefWidth(0);
 				newSupplierButton.setPrefWidth(0);
-				//supplierTextField.setPrefWidth(0);
+				supplierTextField.setPrefWidth(0);
+				supplierTextField.setVisible(false);
 		} else {
 			pickSupplier.setPrefWidth(widthLabels-45);
 			newSupplierButton.setPrefWidth(25);
+			supplierTextField.setVisible(false);
 		}
 		}
 	}
