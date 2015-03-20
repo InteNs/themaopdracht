@@ -1,7 +1,9 @@
+package Screens;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
@@ -18,11 +20,13 @@ public class StockScreen extends Application {
 			spacingBoxes = 10,
 			widthLabels = 120;
 	private Button 
+			newSupplierButton = new Button("+"),
 			newStockButton = new Button("Nieuw"), 
 			changeStockButton = new Button("Aanpassen"), 
 			removeStockButton = new Button("Verwijderen"), 
 			cancelStock = new Button("Annuleren"),
-			saveStock = new Button("Opslaan");
+			saveStock = new Button("  Artikel\nOpslaan"),
+			saveSupplier = new Button("Leverancier\n   Opslaan");
 	private Label 
 			name = new Label("Naam: "),
 			nameContent = new Label("-"), 
@@ -55,6 +59,8 @@ public class StockScreen extends Application {
 			placeTextField = new TextField();
 	private ListView 
 			stocks = new ListView<>();
+	private ComboBox
+			pickSupplier = new ComboBox<>();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
@@ -93,7 +99,8 @@ public class StockScreen extends Application {
 						new HBox(20,
 								supplier,
 								supplierContent,
-								supplierTextField),
+								pickSupplier,
+								newSupplierButton),
 						new HBox(20,
 								address,
 								addressContent,
@@ -108,7 +115,8 @@ public class StockScreen extends Application {
 								placeTextField),	
 						new HBox(20,
 								cancelStock,
-								saveStock)
+								saveStock,
+								saveSupplier)
 						)
 				);
 		stockDetails.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
@@ -126,14 +134,26 @@ public class StockScreen extends Application {
 		postal.setMinWidth(widthLabels);
 		place.setMinWidth(widthLabels);
 		
-		cancelStock.setPrefSize(150, 50);
+		cancelStock.setPrefSize(125, 50);
 		cancelStock.setOnAction(e -> {
 				visability(true, false, false);
+				addNewSupplier(false, true);
 		});
 		
-		saveStock.setPrefSize(150, 50);
+		saveStock.setPrefSize(125, 50);
 		saveStock.setOnAction(e -> {
+				addNewSupplier(false, true);
 			
+		});
+		
+		saveSupplier.setPrefSize(125, 50);
+		saveSupplier.setOnAction(e -> {
+			addNewSupplier(false, false);
+			visability(true, false, false);
+		});
+		
+		newSupplierButton.setOnAction(e -> {
+			addNewSupplier(true, true);
 		});
 		
 		stocks.setPrefSize(450, 520);
@@ -151,10 +171,13 @@ public class StockScreen extends Application {
 		newStockButton.setPrefSize(150, 50);
 		newStockButton.setOnAction(e -> {
 			visability(false, true, true);	
+			addNewSupplier(false, false);
+			pickSupplier.setPrefWidth(widthLabels+75);
 		});
 		changeStockButton.setPrefSize(150, 50);
 		changeStockButton.setOnAction(e -> {
 			visability(true, true, true);	
+			addNewSupplier(false, false);
 		});
 		removeStockButton.setPrefSize(150, 50);
 		
@@ -189,7 +212,7 @@ public class StockScreen extends Application {
 		minAmountTextField.setVisible(setTextFieldsVisible);
 		sellPriceTextField.setVisible(setTextFieldsVisible);
 		buyPriceTextField.setVisible(setTextFieldsVisible);
-		supplierTextField.setVisible(setTextFieldsVisible);
+		pickSupplier.setVisible(setTextFieldsVisible);
 		addressTextField.setVisible(setTextFieldsVisible);
 		postalTextField.setVisible(setTextFieldsVisible);
 		placeTextField.setVisible(setTextFieldsVisible);
@@ -205,15 +228,18 @@ public class StockScreen extends Application {
 		placeContent.setVisible(setDetailsVisible);
 		
 		cancelStock.setVisible(setButtonsVisible);
-		saveStock.setVisible(setButtonsVisible);	
-		
+		saveStock.setVisible(setButtonsVisible);
+		saveSupplier.setVisible(false);
+		newSupplierButton.setVisible(false);
+
+		addNewSupplier(false, true);
 		if (!setTextFieldsVisible) {
 			nameTextField.setPrefWidth(0);
 			amountTextField.setPrefWidth(0);
 			minAmountTextField.setPrefWidth(0);
 			sellPriceTextField.setPrefWidth(0);
 			placeTextField.setPrefWidth(0);
-			supplierTextField.setPrefWidth(0);
+			pickSupplier.setPrefWidth(0);
 			addressTextField.setPrefWidth(0);
 			postalTextField.setPrefWidth(0);
 			placeTextField.setPrefWidth(0);
@@ -235,7 +261,7 @@ public class StockScreen extends Application {
 			minAmountTextField.setPrefWidth(widthLabels*2);
 			sellPriceTextField.setPrefWidth(widthLabels*2);
 			buyPriceTextField.setPrefWidth(widthLabels*2);
-			supplierTextField.setPrefWidth(widthLabels*2);
+			pickSupplier.setPrefWidth(widthLabels*2);
 			addressTextField.setPrefWidth(widthLabels*2);
 			postalTextField.setPrefWidth(widthLabels*2);
 			placeTextField.setPrefWidth(widthLabels*2);
@@ -250,14 +276,16 @@ public class StockScreen extends Application {
 			supplierContent.setPrefWidth(0);
 			addressContent.setPrefWidth(0);
 			postalContent.setPrefWidth(0);
-			placeContent.setPrefWidth(0);			
+			placeContent.setPrefWidth(0);
+			
+			newSupplierButton.setVisible(true);
 		} else if (setDetailsVisible || setTextFieldsVisible) {
 			nameTextField.setPrefWidth(widthLabels);
 			amountTextField.setPrefWidth(widthLabels);
 			minAmountTextField.setPrefWidth(widthLabels);
 			sellPriceTextField.setPrefWidth(widthLabels);
 			buyPriceTextField.setPrefWidth(widthLabels);
-			supplierTextField.setPrefWidth(widthLabels);
+			pickSupplier.setPrefWidth(widthLabels-35);
 			addressTextField.setPrefWidth(widthLabels);
 			postalTextField.setPrefWidth(widthLabels);
 			placeTextField.setPrefWidth(widthLabels);
@@ -273,9 +301,38 @@ public class StockScreen extends Application {
 			addressContent.setPrefWidth(widthLabels);
 			postalContent.setPrefWidth(widthLabels);
 			placeContent.setPrefWidth(widthLabels);
+			
+			newSupplierButton.setVisible(true);
 		}
 	}
 
+	public void addNewSupplier(boolean add, boolean cancel) {
+		nameTextField.setDisable(add);
+		amountTextField.setDisable(add);
+		minAmountTextField.setDisable(add);
+		sellPriceTextField.setDisable(add);
+		buyPriceTextField.setDisable(add);
+		
+		pickSupplier.setVisible(!cancel);
+		newSupplierButton.setVisible(!cancel);
+		saveSupplier.setVisible(add);
+		
+		
+		
+		if (add) {
+			pickSupplier.setPrefWidth(0);
+			newSupplierButton.setPrefWidth(0);
+		} else {
+			if (cancel){
+				pickSupplier.setPrefWidth(0);
+				newSupplierButton.setPrefWidth(0);
+				//supplierTextField.setPrefWidth(0);
+		} else {
+			pickSupplier.setPrefWidth(widthLabels-45);
+			newSupplierButton.setPrefWidth(25);
+		}
+		}
+	}
 	public static void main(String[] args) {
 		launch(args);
 	}
