@@ -1,7 +1,4 @@
 package screens;
-import java.time.LocalDate;
-
-import main.Customer;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -12,6 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import main.Customer;
 
 public class CustomerScreen extends HBox {
 	private double

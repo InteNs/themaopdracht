@@ -1,7 +1,11 @@
 package screens;
+import main.ProductSupplier;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -122,7 +126,7 @@ public class StockScreen extends HBox {
 		stockDetails.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
 		stockDetails.setPrefSize(450, 520-15);
 		stockDetails.setPadding(new Insets(20));
-		visability(true, false, false);
+		setVisibility(true, false, false);
 		
 		name.setMinWidth(widthLabels);
 		amount.setMinWidth(widthLabels);
@@ -136,21 +140,21 @@ public class StockScreen extends HBox {
 		
 		cancelStock.setPrefSize(125, 50);
 		cancelStock.setOnAction(e -> {
-				visability(true, false, false);
+			setVisibility(true, false, false);
 				addNewSupplier(false, true);
 		});
 		
 		saveStock.setPrefSize(125, 50);
 		saveStock.setOnAction(e -> {
 			addNewSupplier(false, false);
-			visability(true, false, false);
+			setVisibility(true, false, false);
 			
 		});
 		
 		saveSupplier.setPrefSize(125, 50);
 		saveSupplier.setOnAction(e -> {
 			addNewSupplier(false, false);
-			visability(true, false, false);
+			setVisibility(true, false, false);
 		});
 		
 		newSupplierButton.setOnAction(e -> {
@@ -171,14 +175,14 @@ public class StockScreen extends HBox {
 				);
 		newStockButton.setPrefSize(150, 50);
 		newStockButton.setOnAction(e -> {
-			visability(false, true, true);	
+			setVisibility(false, true, true);	
 			addNewSupplier(false, false);
 			pickSupplier.setPrefWidth(widthLabels+75);
 			saveStock.setDisable(false);
 		});
 		changeStockButton.setPrefSize(150, 50);
 		changeStockButton.setOnAction(e -> {
-			visability(true, true, true);	
+			setVisibility(true, true, true);	
 			addNewSupplier(false, false);
 			saveStock.setDisable(false);
 		});
@@ -205,108 +209,50 @@ public class StockScreen extends HBox {
 	public String getString() {
 		return b;
 	}
-	
-	public void visability(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
-		nameTextField.setVisible(setTextFieldsVisible);
-		amountTextField.setVisible(setTextFieldsVisible);
-		minAmountTextField.setVisible(setTextFieldsVisible);
-		sellPriceTextField.setVisible(setTextFieldsVisible);
-		buyPriceTextField.setVisible(setTextFieldsVisible);
-		pickSupplier.setVisible(setTextFieldsVisible);
-		addressTextField.setVisible(setTextFieldsVisible);
-		postalTextField.setVisible(setTextFieldsVisible);
-		placeTextField.setVisible(setTextFieldsVisible);
-		
-		nameContent.setVisible(setDetailsVisible);
-		amountContent.setVisible(setDetailsVisible);
-		minAmountContent.setVisible(setDetailsVisible);
-		sellPriceContent.setVisible(setDetailsVisible);
-		buyPriceContent.setVisible(setDetailsVisible);
-		supplierContent.setVisible(setDetailsVisible);
-		addressContent.setVisible(setDetailsVisible);
-		postalContent.setVisible(setDetailsVisible);
-		placeContent.setVisible(setDetailsVisible);
-		
+	@SuppressWarnings("unchecked")
+	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
 		cancelStock.setVisible(setButtonsVisible);
 		saveStock.setVisible(setButtonsVisible);
 		saveStock.setDisable(false);
 		saveSupplier.setVisible(false);
 		newSupplierButton.setVisible(false);
-
-		addNewSupplier(false, true);
-		if (!setTextFieldsVisible) {
-			nameTextField.setPrefWidth(0);
-			amountTextField.setPrefWidth(0);
-			minAmountTextField.setPrefWidth(0);
-			sellPriceTextField.setPrefWidth(0);
-			placeTextField.setPrefWidth(0);
-			pickSupplier.setPrefWidth(0);
-			addressTextField.setPrefWidth(0);
-			postalTextField.setPrefWidth(0);
-			placeTextField.setPrefWidth(0);
-			
-			supplier.setMinWidth(widthLabels);
-			
-			nameContent.setPrefWidth(widthLabels*2);
-			amountContent.setPrefWidth(widthLabels*2);
-			minAmountContent.setPrefWidth(widthLabels*2);
-			sellPriceContent.setPrefWidth(widthLabels*2);
-			buyPriceContent.setPrefWidth(widthLabels*2);
-			supplierContent.setPrefWidth(widthLabels*2);
-			addressContent.setPrefWidth(widthLabels*2);
-			postalContent.setPrefWidth(widthLabels*2);
-			placeContent.setPrefWidth(widthLabels*2);
-		} else if (!setDetailsVisible) {
-			nameTextField.setPrefWidth(widthLabels*2);
-			amountTextField.setPrefWidth(widthLabels*2);
-			minAmountTextField.setPrefWidth(widthLabels*2);
-			sellPriceTextField.setPrefWidth(widthLabels*2);
-			buyPriceTextField.setPrefWidth(widthLabels*2);
-			pickSupplier.setPrefWidth(widthLabels*2);
-			addressTextField.setPrefWidth(widthLabels*2);
-			postalTextField.setPrefWidth(widthLabels*2);
-			placeTextField.setPrefWidth(widthLabels*2);
-			
-			supplier.setMinWidth(widthLabels-5);
-			
-			nameContent.setPrefWidth(0);
-			amountContent.setPrefWidth(0);
-			minAmountContent.setPrefWidth(0);
-			sellPriceContent.setPrefWidth(0);
-			buyPriceContent.setPrefWidth(0);
-			supplierContent.setPrefWidth(0);
-			addressContent.setPrefWidth(0);
-			postalContent.setPrefWidth(0);
-			placeContent.setPrefWidth(0);
-			
-			newSupplierButton.setVisible(true);
-		} else if (setDetailsVisible || setTextFieldsVisible) {
-			nameTextField.setPrefWidth(widthLabels);
-			amountTextField.setPrefWidth(widthLabels);
-			minAmountTextField.setPrefWidth(widthLabels);
-			sellPriceTextField.setPrefWidth(widthLabels);
-			buyPriceTextField.setPrefWidth(widthLabels);
-			pickSupplier.setPrefWidth(widthLabels);
-			addressTextField.setPrefWidth(widthLabels);
-			postalTextField.setPrefWidth(widthLabels);
-			placeTextField.setPrefWidth(widthLabels);
-			
-			supplier.setMinWidth(widthLabels);
-			
-			nameContent.setPrefWidth(widthLabels);
-			amountContent.setPrefWidth(widthLabels);
-			minAmountContent.setPrefWidth(widthLabels);
-			sellPriceContent.setPrefWidth(widthLabels);
-			buyPriceContent.setPrefWidth(widthLabels);
-			supplierContent.setPrefWidth(widthLabels);
-			addressContent.setPrefWidth(widthLabels);
-			postalContent.setPrefWidth(widthLabels);
-			placeContent.setPrefWidth(widthLabels);
-			
-			newSupplierButton.setVisible(true);
-		}
+		addNewSupplier(false, true);	
+		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {
+			HBox box = (HBox) node1;
+			if(box.getChildren().size()>2){
+				Node input = box.getChildren().get(2);				//WERKT NIET HELP!!!!!!!!!!
+				Label content = ((Label)box.getChildren().get(1)); 	//WERKT NIET HELP!!!!!!!!!!
+				input.setVisible(setTextFieldsVisible);
+				content.setVisible(setDetailsVisible);
+				if(!setTextFieldsVisible){
+					if(input instanceof TextField){
+						((TextField)input).setPrefWidth(0);
+						((TextField)input).clear();
+					}
+					if(input instanceof ComboBox){
+						((ComboBox<ProductSupplier>)input).setPrefWidth(0);
+						((ComboBox<ProductSupplier>)input).setValue(null);
+					}
+					content.setPrefWidth(widthLabels*2);
+					supplier.setMinWidth(widthLabels);
+				}
+				else if (!setDetailsVisible) {
+					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels*2);
+					if(input instanceof ComboBox)	((ComboBox<ProductSupplier>)input).setPrefWidth(widthLabels*2);
+					content.setPrefWidth(0);
+					supplier.setMinWidth(widthLabels-5);
+				}			
+				else if (setDetailsVisible || setTextFieldsVisible) {
+					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels);
+					if(input instanceof ComboBox)	((ComboBox<ProductSupplier>)input).setPrefWidth(widthLabels);
+					
+					content.setPrefWidth(widthLabels);
+					supplier.setMinWidth(widthLabels);
+					newSupplierButton.setVisible(true);
+				}
+			}
+		}	
 	}
-
 	public void addNewSupplier(boolean add, boolean cancel) {
 		nameTextField.setDisable(add);
 		amountTextField.setDisable(add);
