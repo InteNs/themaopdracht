@@ -1,11 +1,13 @@
 package main;
-import screens.CustomerScreen;
-import screens.StockScreen;
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+import screens.CustomerScreen;
+import screens.StockScreen;
 
 
 public class ATDProgram extends Application {
@@ -15,6 +17,9 @@ public class ATDProgram extends Application {
 	private Tab customerRelations;
 	private Tab stockAdministration;
 	private Scene mainScene;
+	private ArrayList<Customer> customers = new ArrayList<Customer>();
+	private ArrayList<Product> products = new ArrayList<Product>();
+	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	@Override
 	public void start(Stage stage) throws Exception {
 		//create tabs and add content
@@ -22,7 +27,7 @@ public class ATDProgram extends Application {
 
 		customerAdministration = new Tab("Klantenbestand");
 		customerAdministration.setClosable(false);
-		customerAdministration.setContent(new CustomerScreen());
+		customerAdministration.setContent(new CustomerScreen(this));
 
 		customerRelations = new Tab("Herinneringen");
 		customerRelations.setClosable(false);
@@ -42,5 +47,31 @@ public class ATDProgram extends Application {
 		stage.setResizable(false);
 		stage.show();
 	}
-	public static void main(String[] args) {launch();}
+	
+	public ArrayList<Customer> getCustomers() {
+		return customers;
+	}
+	public void addorRemoveCustomer(Customer customer, boolean remove){
+		if(remove)customers.remove(customer);
+		else customers.add(customer);
+	}
+	public ArrayList<Product> getProducts() {
+		return products;
+	}
+	public void addorRemoveproduct(Product product, boolean remove){
+		if(remove)products.remove(product);
+		else products.add(product);
+	}
+	public ArrayList<ProductSupplier> getSuppliers() {
+		return suppliers;
+	}
+	public void addorRemoveSupplier(ProductSupplier supplier, boolean remove){
+		if(remove)suppliers.remove(supplier);
+		else suppliers.add(supplier);
+	}
+
+	public static void main(String[] args) {
+		launch();
+		}
+	
 }

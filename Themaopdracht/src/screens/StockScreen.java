@@ -1,227 +1,158 @@
 package screens;
-import main.ProductSupplier;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import main.Product;
+import main.ProductSupplier;
 
 public class StockScreen extends HBox {
-	private String 
-			b;
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;
+	private boolean isChanging = false;
 	private Button 
-			newSupplierButton = new Button("+"),
-			newStockButton = new Button("Nieuw"), 
-			changeStockButton = new Button("Aanpassen"), 
-			removeStockButton = new Button("Verwijderen"), 
-			cancelStock = new Button("Annuleren"),
-			saveStock = new Button("  Artikel\nOpslaan"),
-			saveSupplier = new Button("Leverancier\n   Opslaan");
+			newButton = new Button("Nieuw"), 
+			changeButton = new Button("Aanpassen"), 
+			removeButton = new Button("Verwijderen"), 
+			cancelButton = new Button("Annuleren"),
+			saveButton = new Button("Opslaan");
 	private Label 
 			name = new Label("Naam: "),
 			nameContent = new Label("-"), 
-			amount = new Label("Voorraad: "), 
+			amount = new Label("Aantal: "), 
 			amountContent = new Label("-"),
-			minAmount = new Label("Min. voorraad: "),
+			minAmount = new Label("Min. aantal: "),
 			minAmountContent = new Label("-"),
-			sellPrice = new Label("Prijs: "), 
-			sellPriceContent = new Label("-"),
-			buyPrice = new Label("Inkoop prijs: "), 
+			price = new Label("Prijs: "), 
+			priceContent = new Label("-"),
+			buyPrice = new Label("Inkoopprijs: "), 
 			buyPriceContent = new Label("-"),
 			supplier = new Label("Leverancier: "), 
-			supplierContent = new Label("jorritmeulenbeld@icloud.com"), 
+			supplierContent = new Label("-"), 
 			address = new Label("Adres: "), 
 			addressContent = new Label("-"), 
 			postal = new Label("Postcode: "), 
 			postalContent = new Label("-"), 
 			place = new Label("Plaats: "), 
 			placeContent = new Label("-");
+	
 	private TextField 
-			searchTextField = new TextField(), 
-			nameTextField = new TextField(), 
-			amountTextField = new TextField(),
-			minAmountTextField = new TextField(), 
-			sellPriceTextField = new TextField(),
-			buyPriceTextField = new TextField(),
-			supplierTextField = new TextField(), 
-			addressTextField = new TextField(),
-			postalTextField = new TextField(),
-			placeTextField = new TextField();
-	private ListView 
-			stocks = new ListView<>();
-	private ComboBox
-			pickSupplier = new ComboBox<>();
+			searchInput = new TextField(), 
+			nameInput = new TextField(), 
+			amountInput = new TextField(),
+			minAmountInput = new TextField(), 
+			priceInput = new TextField(), 
+			buyPriceInput = new TextField(), 
+			supplierInput = new TextField(),
+			addressInput = new TextField(),
+			postalInput = new TextField(),
+			placeInput = new TextField();
+	private ComboBox<ProductSupplier> supplierSelector = new ComboBox<ProductSupplier>();
+	private ListView<Product> 
+			listView = new ListView<Product>();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
 	private HBox 
-			stockDetails = new HBox(spacingBoxes), 
+			StockDetails = new HBox(spacingBoxes), 
 			mainButtonBox = new HBox(spacingBoxes), 
 			searchFieldBox = new HBox(spacingBoxes), 
 			mainBox = new HBox(spacingBoxes);
-
 	public StockScreen() {
 		
-		//StockDetails
-		stockDetails.getChildren().addAll(
-				new VBox(20,
-						new HBox(20,
-								name,
-								nameContent,
-								nameTextField),
-						new HBox(20,
-								amount,
-								amountContent,
-								amountTextField),
-						new HBox(20,
-								minAmount,
-								minAmountContent,
-								minAmountTextField),
-						new HBox(20,
-								sellPrice,
-								sellPriceContent,
-								sellPriceTextField),
-						new HBox(20,
-								buyPrice,
-								buyPriceContent,
-								buyPriceTextField),
-						new HBox(20,
-								supplier,
-								new HBox(supplierContent),
-								new HBox(
-										new HBox(20,
-												pickSupplier,
-												newSupplierButton
-												),
-										new HBox(
-								supplierTextField))
-						),
-						new HBox(20,
-								address,
-								addressContent,
-								addressTextField),
-						new HBox(20,
-								postal,
-								postalContent,
-								postalTextField),
-						new HBox(20,
-								place,
-								placeContent,
-								placeTextField),	
-						new HBox(20,
-								cancelStock,
-								saveStock,
-								saveSupplier)
-						)
-				);
-		stockDetails.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
-		stockDetails.setPrefSize(450, 520-15);
-		stockDetails.setPadding(new Insets(20));
-		setVisibility(true, false, false);
-		
-		name.setMinWidth(widthLabels);
-		amount.setMinWidth(widthLabels);
-		minAmount.setMinWidth(widthLabels);
-		sellPrice.setMinWidth(widthLabels);
-		buyPrice.setMinWidth(widthLabels);
-		supplier.setMinWidth(widthLabels);
-		address.setMinWidth(widthLabels);
-		postal.setMinWidth(widthLabels);
-		place.setMinWidth(widthLabels);
-		
-		cancelStock.setPrefSize(125, 50);
-		cancelStock.setOnAction(e -> {
-			setVisibility(true, false, false);
-				addNewSupplier(false, true);
-		});
-		
-		saveStock.setPrefSize(125, 50);
-		saveStock.setOnAction(e -> {
-			addNewSupplier(false, false);
-			setVisibility(true, false, false);
+		supplierSelector.getItems().addAll(new ProductSupplier(null, null, null, null, null), new ProductSupplier("rest", "54854", "DIEEW", "3435gf", "94545"));
+		supplierSelector.getSelectionModel().selectedItemProperty().addListener(e->{
 			
 		});
+		//StockDetails
+		StockDetails.getChildren().addAll(
+				new VBox(20,
+						new HBox(20,name,		nameContent,		nameInput),
+						new HBox(20,amount,		amountContent,		amountInput),
+						new HBox(20,minAmount,	minAmountContent,	minAmountInput),
+						new HBox(20,price,		priceContent,		priceInput),
+						new HBox(20,buyPrice,	buyPriceContent,	buyPriceInput),
+						new HBox(20,supplier,	supplierContent,	supplierSelector),
+						new HBox(20,address,	addressContent,		addressInput),
+						new HBox(20,postal,		postalContent,		postalInput),
+						new HBox(20,place,		placeContent,		placeInput),	
+						new HBox(20,cancelButton,saveButton)
+						));
+		StockDetails.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
+		StockDetails.setPrefSize(450, 520-15);
+		StockDetails.setPadding(new Insets(20));
+		setVisibility(true, false, false);
+		for (Node node1 : ((VBox)StockDetails.getChildren().get(0)).getChildren()) {
+			if(((HBox)node1).getChildren().size()>2)((Label)((HBox)node1).getChildren().get(0)).setMinWidth(widthLabels);
+		}
 		
-		saveSupplier.setPrefSize(125, 50);
-		saveSupplier.setOnAction(e -> {
-			addNewSupplier(false, false);
-			setVisibility(true, false, false);
+		cancelButton.setPrefSize(150, 50);
+		cancelButton.setOnAction(e -> {
+				setVisibility(true, false, false);
 		});
 		
-		newSupplierButton.setOnAction(e -> {
-			addNewSupplier(true, true);
+		saveButton.setPrefSize(150, 50);
+		saveButton.setOnAction(e -> {
+			if(isChanging){
+				setVisibility(true, false, false);
+			}
+			else{
+				
+				setVisibility(true, false, false);
+			}
 		});
 		
-		stocks.setPrefSize(450, 520);
-		
+		listView.setPrefSize(450, 520);
+		listView.getSelectionModel().selectedItemProperty().addListener(e->{
+			
+		});
 		//SearchField
-		searchFieldBox = new HBox(searchTextField = new TextField("Zoek..."));
-		searchTextField.setPrefSize(470, 50);
+		searchFieldBox = new HBox(searchInput = new TextField("Zoek..."));
+		searchInput.setPrefSize(470, 50);
 		
 		//Buttons Add, Change & Remove
 		mainButtonBox.getChildren().addAll(
-				newStockButton,
-				changeStockButton,
-				removeStockButton
+				newButton,
+				changeButton,
+				removeButton
 				);
-		newStockButton.setPrefSize(150, 50);
-		newStockButton.setOnAction(e -> {
-			setVisibility(false, true, true);	
-			addNewSupplier(false, false);
-			pickSupplier.setPrefWidth(widthLabels+75);
-			saveStock.setDisable(false);
+		newButton.setPrefSize(150, 50);
+		newButton.setOnAction(e -> {
+			setVisibility(false, true, true);
+			isChanging = false;
 		});
-		changeStockButton.setPrefSize(150, 50);
-		changeStockButton.setOnAction(e -> {
+		changeButton.setPrefSize(150, 50);
+		changeButton.setOnAction(e -> {
 			setVisibility(true, true, true);	
-			addNewSupplier(false, false);
-			saveStock.setDisable(false);
+			isChanging = true;
 		});
-		removeStockButton.setPrefSize(150, 50);
-		
+		removeButton.setPrefSize(150, 50);
+		removeButton.setOnAction(e->{
+			listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
+		});
 		//Make & merge left & right
-		leftBox.getChildren().addAll(
-				stocks,
-				searchFieldBox,
-				mainButtonBox);
-		rightBox.getChildren().add(
-				stockDetails);
-		mainBox.getChildren().addAll(
-				leftBox,
-				rightBox);
+		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
+		rightBox.getChildren().addAll(StockDetails);
+		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
-		
-		getChildren().add(mainBox);
-
-
-	}
-
-	public String getString() {
-		return b;
+		this.getChildren().add(mainBox);
 	}
 	@SuppressWarnings("unchecked")
 	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
-		cancelStock.setVisible(setButtonsVisible);
-		saveStock.setVisible(setButtonsVisible);
-		saveStock.setDisable(false);
-		saveSupplier.setVisible(false);
-		newSupplierButton.setVisible(false);
-		addNewSupplier(false, true);	
-		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {
+		cancelButton.setVisible(setButtonsVisible);
+		saveButton.setVisible(setButtonsVisible);	
+		for (Node node1 : ((VBox)StockDetails.getChildren().get(0)).getChildren()) {
 			HBox box = (HBox) node1;
 			if(box.getChildren().size()>2){
-				Node input = box.getChildren().get(2);				//WERKT NIET HELP!!!!!!!!!!
-				Label content = ((Label)box.getChildren().get(1)); 	//WERKT NIET HELP!!!!!!!!!!
+				Node input = box.getChildren().get(2);
+				Label content = ((Label)box.getChildren().get(1));
 				input.setVisible(setTextFieldsVisible);
 				content.setVisible(setDetailsVisible);
 				if(!setTextFieldsVisible){
@@ -233,6 +164,7 @@ public class StockScreen extends HBox {
 						((ComboBox<ProductSupplier>)input).setPrefWidth(0);
 						((ComboBox<ProductSupplier>)input).setValue(null);
 					}
+
 					content.setPrefWidth(widthLabels*2);
 					supplier.setMinWidth(widthLabels);
 				}
@@ -245,43 +177,11 @@ public class StockScreen extends HBox {
 				else if (setDetailsVisible || setTextFieldsVisible) {
 					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels);
 					if(input instanceof ComboBox)	((ComboBox<ProductSupplier>)input).setPrefWidth(widthLabels);
-					
 					content.setPrefWidth(widthLabels);
 					supplier.setMinWidth(widthLabels);
-					newSupplierButton.setVisible(true);
 				}
 			}
 		}	
-	}
-	public void addNewSupplier(boolean add, boolean cancel) {
-		nameTextField.setDisable(add);
-		amountTextField.setDisable(add);
-		minAmountTextField.setDisable(add);
-		sellPriceTextField.setDisable(add);
-		buyPriceTextField.setDisable(add);
-		supplierTextField.setVisible(add);
-		
-		pickSupplier.setVisible(!cancel);
-		newSupplierButton.setVisible(!cancel);
-		saveSupplier.setVisible(add);
-		saveStock.setDisable(true);
-		
-		
-		
-		if (add) {
-			pickSupplier.setPrefWidth(0);
-			newSupplierButton.setPrefWidth(0);
-			supplierTextField.setPrefWidth(widthLabels*2);
-		} else {
-			if (cancel){
-				pickSupplier.setPrefWidth(0);
-				newSupplierButton.setPrefWidth(0);
-				supplierTextField.setPrefWidth(0);
-		} else {
-			pickSupplier.setPrefWidth(widthLabels);
-			newSupplierButton.setPrefWidth(25);
-		}
-		}
 	}
 }
 	

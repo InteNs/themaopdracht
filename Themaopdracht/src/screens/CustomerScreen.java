@@ -9,23 +9,25 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import main.ATDProgram;
 import main.Customer;
 
 public class CustomerScreen extends HBox {
+	private ATDProgram controller;
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;
 	private boolean isChanging = false;
 	private Button 
-			newCustomerButton = new Button("Nieuw"), 
-			changeCustomerButton = new Button("Aanpassen"), 
-			removeCustomerButton = new Button("Verwijderen"), 
-			cancelCustomer = new Button("Annuleren"),
-			saveCustomer = new Button("Opslaan");
+			newButton = new Button("Nieuw"), 
+			changeButton = new Button("Aanpassen"), 
+			removeButton = new Button("Verwijderen"), 
+			cancelButton = new Button("Annuleren"),
+			saveButton = new Button("Opslaan");
 	private DatePicker 
-			dateOfBirthDatePicker = new DatePicker();
+			dateOfBirthInput = new DatePicker();
 	private CheckBox 
-			blackListCheckBox = new CheckBox();
+			blackListInput = new CheckBox();
 	private Label 
 			name = new Label("Naam: "),
 			nameContent = new Label("-"), 
@@ -47,144 +49,151 @@ public class CustomerScreen extends HBox {
 			blackListContent = new Label("-");
 	
 	private TextField 
-			searchTextField = new TextField(), 
-			nameTextField = new TextField(), 
-			addressTextField = new TextField(),
-			postalTextField = new TextField(), 
-			placeTextField = new TextField(), 
-			emailTextField = new TextField(), 
-			phoneTextField = new TextField(),
-			bankTextField = new TextField();
+			searchInput = new TextField(), 
+			nameInput = new TextField(), 
+			addressInput = new TextField(),
+			postalInput = new TextField(), 
+			placeInput = new TextField(), 
+			emailInput = new TextField(), 
+			phoneInput = new TextField(),
+			bankInput = new TextField();
 	private ListView<Customer> 
-			customers = new ListView<Customer>();
+			listView = new ListView<Customer>();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
 	private HBox 
-			customerDetails = new HBox(spacingBoxes), 
+			detailsBox = new HBox(spacingBoxes), 
 			mainButtonBox = new HBox(spacingBoxes), 
 			searchFieldBox = new HBox(spacingBoxes), 
 			mainBox = new HBox(spacingBoxes);
-	public CustomerScreen() {
-		
+	public CustomerScreen(ATDProgram controller) {
+		this.controller = controller;
 		//CustomerDetails
-		customerDetails.getChildren().addAll(
+		detailsBox.getChildren().addAll(
 				new VBox(20,
-						new HBox(20,name,		nameContent,		nameTextField),
-						new HBox(20,address,	addressContent,		addressTextField),
-						new HBox(20,postal,		postalContent,		postalTextField),
-						new HBox(20,place,		placeContent,		placeTextField),
-						new HBox(20,dateOfBirth,dateOfBirthContent,	dateOfBirthDatePicker),
-						new HBox(20,email,		emailContent,		emailTextField),
-						new HBox(20,phone,		phoneContent,		phoneTextField),
-						new HBox(20,bank,		bankContent,		bankTextField),
-						new HBox(20,blackList,	blackListContent,	blackListCheckBox),	
-						new HBox(20,cancelCustomer,saveCustomer)
+						new HBox(20,name,		nameContent,		nameInput),
+						new HBox(20,address,	addressContent,		addressInput),
+						new HBox(20,postal,		postalContent,		postalInput),
+						new HBox(20,place,		placeContent,		placeInput),
+						new HBox(20,dateOfBirth,dateOfBirthContent,	dateOfBirthInput),
+						new HBox(20,email,		emailContent,		emailInput),
+						new HBox(20,phone,		phoneContent,		phoneInput),
+						new HBox(20,bank,		bankContent,		bankInput),
+						new HBox(20,blackList,	blackListContent,	blackListInput),	
+						new HBox(20,cancelButton,saveButton)
 						));
-		customerDetails.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
-		customerDetails.setPrefSize(450, 520-15);
-		customerDetails.setPadding(new Insets(20));
+		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
+		detailsBox.setPrefSize(450, 520-15);
+		detailsBox.setPadding(new Insets(20));
 		setVisibility(true, false, false);
-		for (Node node1 : ((VBox)customerDetails.getChildren().get(0)).getChildren()) {
+		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			if(((HBox)node1).getChildren().size()>2)((Label)((HBox)node1).getChildren().get(0)).setMinWidth(widthLabels);
 		}
-		
-		cancelCustomer.setPrefSize(150, 50);
-		cancelCustomer.setOnAction(e -> {
+		cancelButton.setPrefSize(150, 50);
+		cancelButton.setOnAction(e -> {
 				setVisibility(true, false, false);
 		});
-		
-		saveCustomer.setPrefSize(150, 50);
-		saveCustomer.setOnAction(e -> {
-			if(isChanging){
-				Customer c  = customers.getSelectionModel().getSelectedItem();
-				c.setName(nameTextField.getText());
-				c.setPlace(placeTextField.getText());
-				c.setBankAccount(bankTextField.getText());
-				c.setDateOfBirth(dateOfBirthDatePicker.getValue());
-				c.setEmail(emailTextField.getText());
-				c.setPostal(postalTextField.getText());
-				c.setTel(phoneTextField.getText());
-				c.setAdress(addressTextField.getText());
-				c.setOnBlackList(blackListCheckBox.isSelected());
-				setVisibility(true, false, false);
-			}
-			else{
-				customers.getItems().add(new Customer(
-						nameTextField.getText(),
-						placeTextField.getText(),
-						bankTextField.getText(),
-						dateOfBirthDatePicker.getValue(),
-						emailTextField.getText(),
-						postalTextField.getText(),
-						phoneTextField.getText(),
-						addressTextField.getText(),
-						blackListCheckBox.isSelected()
-						));
-				setVisibility(true, false, false);
-			}
+		saveButton.setPrefSize(150, 50);
+		saveButton.setOnAction(e -> {
+			save();
 		});
-		
-		customers.setPrefSize(450, 520);
-		customers.getSelectionModel().selectedItemProperty().addListener(e->{
-			Customer c = customers.getSelectionModel().getSelectedItem();
-			nameContent.setText(c.getName());
-			placeContent.setText(c.getPlace());
-			bankContent.setText(c.getBankAccount());
-			dateOfBirthContent.setText(c.getDateOfBirth().toString());
-			emailContent.setText(c.getEmail());
-			postalContent.setText(c.getPostal());
-			phoneContent.setText(c.getTel());
-			addressContent.setText(c.getAdress());
-			if(c.isOnBlackList())blackListContent.setText("ja");
-			else blackListContent.setText("nee");
+		listView.setPrefSize(450, 520);
+		listView.getItems().addAll(controller.getCustomers());
+		listView.getSelectionModel().selectedItemProperty().addListener(e->{
+			selectedListEntry();
 		});
 		//SearchField
-		searchFieldBox = new HBox(searchTextField = new TextField("Zoek..."));
-		searchTextField.setPrefSize(470, 50);
+		searchFieldBox = new HBox(searchInput = new TextField("Zoek..."));
+		searchInput.setPrefSize(470, 50);
 		
 		//Buttons Add, Change & Remove
 		mainButtonBox.getChildren().addAll(
-				newCustomerButton,
-				changeCustomerButton,
-				removeCustomerButton
+				newButton,
+				changeButton,
+				removeButton
 				);
-		newCustomerButton.setPrefSize(150, 50);
-		newCustomerButton.setOnAction(e -> {
+		newButton.setPrefSize(150, 50);
+		newButton.setOnAction(e -> {
 			setVisibility(false, true, true);
 			isChanging = false;
 		});
-		changeCustomerButton.setPrefSize(150, 50);
-		changeCustomerButton.setOnAction(e -> {
-			Customer c = customers.getSelectionModel().getSelectedItem();
-			nameTextField.setText(c.getName());
-			placeTextField.setText(c.getPlace());
-			bankTextField.setText(c.getBankAccount());
-			dateOfBirthDatePicker.setValue(c.getDateOfBirth());
-			emailTextField.setText(c.getEmail());
-			postalTextField.setText(c.getPostal());
-			phoneTextField.setText(c.getTel());
-			addressTextField.setText(c.getAdress());
-			blackListCheckBox.setSelected(c.isOnBlackList());
-			setVisibility(true, true, true);	
-			isChanging = true;
+		changeButton.setPrefSize(150, 50);
+		changeButton.setOnAction(e -> {
+			change();
 		});
-		removeCustomerButton.setPrefSize(150, 50);
-		removeCustomerButton.setOnAction(e->{
-			customers.getItems().remove(customers.getSelectionModel().getSelectedItem());
+		removeButton.setPrefSize(150, 50);
+		removeButton.setOnAction(e->{
+			listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
 		});
 		//Make & merge left & right
-		leftBox.getChildren().addAll (customers,searchFieldBox,mainButtonBox);
-		rightBox.getChildren().addAll(customerDetails);
+		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
+		rightBox.getChildren().addAll(detailsBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
 	}
+	private void change(){
+		Customer c = listView.getSelectionModel().getSelectedItem();
+		nameInput.setText(c.getName());
+		placeInput.setText(c.getPlace());
+		bankInput.setText(c.getBankAccount());
+		dateOfBirthInput.setValue(c.getDateOfBirth());
+		emailInput.setText(c.getEmail());
+		postalInput.setText(c.getPostal());
+		phoneInput.setText(c.getTel());
+		addressInput.setText(c.getAdress());
+		blackListInput.setSelected(c.isOnBlackList());
+		setVisibility(true, true, true);	
+		isChanging = true;
+	}
+	private void save(){
+		if(isChanging){
+			Customer c  = listView.getSelectionModel().getSelectedItem();
+			c.setName(nameInput.getText());
+			c.setPlace(placeInput.getText());
+			c.setBankAccount(bankInput.getText());
+			c.setDateOfBirth(dateOfBirthInput.getValue());
+			c.setEmail(emailInput.getText());
+			c.setPostal(postalInput.getText());
+			c.setTel(phoneInput.getText());
+			c.setAdress(addressInput.getText());
+			c.setOnBlackList(blackListInput.isSelected());
+			setVisibility(true, false, false);
+		}
+		else{
+			listView.getItems().add(new Customer(
+					nameInput.getText(),
+					placeInput.getText(),
+					bankInput.getText(),
+					dateOfBirthInput.getValue(),
+					emailInput.getText(),
+					postalInput.getText(),
+					phoneInput.getText(),
+					addressInput.getText(),
+					blackListInput.isSelected()
+					));
+			setVisibility(true, false, false);
+		}
+	}
+	private void selectedListEntry(){
+		Customer c = listView.getSelectionModel().getSelectedItem();
+		nameContent.setText(c.getName());
+		placeContent.setText(c.getPlace());
+		bankContent.setText(c.getBankAccount());
+		dateOfBirthContent.setText(c.getDateOfBirth().toString());
+		emailContent.setText(c.getEmail());
+		postalContent.setText(c.getPostal());
+		phoneContent.setText(c.getTel());
+		addressContent.setText(c.getAdress());
+		if(c.isOnBlackList())blackListContent.setText("ja");
+		else blackListContent.setText("nee");
+	}
 	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
-		cancelCustomer.setVisible(setButtonsVisible);
-		saveCustomer.setVisible(setButtonsVisible);	
-		for (Node node1 : ((VBox)customerDetails.getChildren().get(0)).getChildren()) {
+		cancelButton.setVisible(setButtonsVisible);
+		saveButton.setVisible(setButtonsVisible);	
+		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			HBox box = (HBox) node1;
 			if(box.getChildren().size()>2){
 				Node input = box.getChildren().get(2);
