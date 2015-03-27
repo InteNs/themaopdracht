@@ -1,4 +1,7 @@
 package screens;
+import java.time.LocalDate;
+
+import main.Customer;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -14,6 +17,7 @@ public class CustomerScreen extends HBox {
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;
+	private boolean isChanging = false;
 	private Button 
 			newCustomerButton = new Button("Nieuw"), 
 			changeCustomerButton = new Button("Aanpassen"), 
@@ -53,8 +57,8 @@ public class CustomerScreen extends HBox {
 			emailTextField = new TextField(), 
 			phoneTextField = new TextField(),
 			bankTextField = new TextField();
-	private ListView 
-			customers = new ListView<>();
+	private ListView<Customer> 
+			customers = new ListView<Customer>();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
@@ -94,11 +98,49 @@ public class CustomerScreen extends HBox {
 		
 		saveCustomer.setPrefSize(150, 50);
 		saveCustomer.setOnAction(e -> {
-			//TODO
+			if(isChanging){
+				Customer c  = customers.getSelectionModel().getSelectedItem();
+				c.setName(nameTextField.getText());
+				c.setPlace(placeTextField.getText());
+				c.setBankAccount(bankTextField.getText());
+				c.setDateOfBirth(dateOfBirthDatePicker.getValue());
+				c.setEmail(emailTextField.getText());
+				c.setPostal(postalTextField.getText());
+				c.setTel(phoneTextField.getText());
+				c.setAdress(addressTextField.getText());
+				c.setOnBlackList(blackListCheckBox.isSelected());
+				setVisibility(true, false, false);
+			}
+			else{
+				customers.getItems().add(new Customer(
+						nameTextField.getText(),
+						placeTextField.getText(),
+						bankTextField.getText(),
+						dateOfBirthDatePicker.getValue(),
+						emailTextField.getText(),
+						postalTextField.getText(),
+						phoneTextField.getText(),
+						addressTextField.getText(),
+						blackListCheckBox.isSelected()
+						));
+				setVisibility(true, false, false);
+			}
 		});
 		
 		customers.setPrefSize(450, 520);
-		
+		customers.getSelectionModel().selectedItemProperty().addListener(e->{
+			Customer c = customers.getSelectionModel().getSelectedItem();
+			nameContent.setText(c.getName());
+			placeContent.setText(c.getPlace());
+			bankContent.setText(c.getBankAccount());
+			dateOfBirthContent.setText(c.getDateOfBirth().toString());
+			emailContent.setText(c.getEmail());
+			postalContent.setText(c.getPostal());
+			phoneContent.setText(c.getTel());
+			addressContent.setText(c.getAdress());
+			if(c.isOnBlackList())blackListContent.setText("ja");
+			else blackListContent.setText("nee");
+		});
 		//SearchField
 		searchFieldBox = new HBox(searchTextField = new TextField("Zoek..."));
 		searchTextField.setPrefSize(470, 50);
@@ -111,14 +153,28 @@ public class CustomerScreen extends HBox {
 				);
 		newCustomerButton.setPrefSize(150, 50);
 		newCustomerButton.setOnAction(e -> {
-			setVisibility(false, true, true);	
+			setVisibility(false, true, true);
+			isChanging = false;
 		});
 		changeCustomerButton.setPrefSize(150, 50);
 		changeCustomerButton.setOnAction(e -> {
+			Customer c = customers.getSelectionModel().getSelectedItem();
+			nameTextField.setText(c.getName());
+			placeTextField.setText(c.getPlace());
+			bankTextField.setText(c.getBankAccount());
+			dateOfBirthDatePicker.setValue(c.getDateOfBirth());
+			emailTextField.setText(c.getEmail());
+			postalTextField.setText(c.getPostal());
+			phoneTextField.setText(c.getTel());
+			addressTextField.setText(c.getAdress());
+			blackListCheckBox.setSelected(c.isOnBlackList());
 			setVisibility(true, true, true);	
+			isChanging = true;
 		});
 		removeCustomerButton.setPrefSize(150, 50);
-		
+		removeCustomerButton.setOnAction(e->{
+			customers.getItems().remove(customers.getSelectionModel().getSelectedItem());
+		});
 		//Make & merge left & right
 		leftBox.getChildren().addAll (customers,searchFieldBox,mainButtonBox);
 		rightBox.getChildren().addAll(customerDetails);
@@ -138,9 +194,18 @@ public class CustomerScreen extends HBox {
 				input.setVisible(setTextFieldsVisible);
 				content.setVisible(setDetailsVisible);
 				if(!setTextFieldsVisible){
-					if(input instanceof TextField)	((TextField)input).setPrefWidth(0);
-					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(0);
-					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(0,0);
+					if(input instanceof TextField){
+						((TextField)input).setPrefWidth(0);
+						((TextField)input).clear();
+					}
+					if(input instanceof DatePicker){
+						((DatePicker)input).setPrefWidth(0);
+						((DatePicker)input).setValue(null);
+					}
+					if(input instanceof CheckBox){
+						((CheckBox)input).setPrefSize(0,0);
+						((CheckBox)input).setSelected(false);
+					}
 					content.setPrefWidth(widthLabels*2);
 					email.setMinWidth(widthLabels);
 				}
