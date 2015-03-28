@@ -1,6 +1,7 @@
 package main;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -54,6 +55,24 @@ public class ATDProgram extends Application {
 	public ArrayList<Customer> getCustomers() {
 		return customers;
 	}
+	public List<Customer> getRemindList(boolean Maintenace) {
+		ArrayList<Customer> remindables = new ArrayList<Customer>();
+		for (Customer customer : customers) {
+			if(Maintenace){
+				if (customer.getLastMaintenance().isBefore(
+						LocalDate.now().minusMonths(6))) {
+					remindables.add(customer);
+				}
+			}
+			else{
+				if (customer.getLastVisit().isBefore(
+						LocalDate.now().minusMonths(2))) {
+					remindables.add(customer);
+				}
+			}
+		}
+		return remindables;
+	}
 	public void addorRemoveCustomer(Customer customer, boolean remove){
 		if(remove)customers.remove(customer);
 		else customers.add(customer);
@@ -79,6 +98,10 @@ public class ATDProgram extends Application {
 		addorRemoveCustomer(new Customer("Mark Havekes", "De Meern", "n.v.t.", LocalDate.parse("1990-05-31"),
 				"mark.havekes@gmail.com", "3453MC", "0302801265",
 				"De Drecht 32", false),false);
+		customers.get(0).setLastMaintenance(LocalDate.now().minusMonths(7));
+		customers.get(0).setLastVisit(		LocalDate.now().minusMonths(1));
+		customers.get(1).setLastMaintenance(LocalDate.now().minusMonths(4));
+		customers.get(1).setLastVisit(		LocalDate.now().minusMonths(3));
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "1938572819", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "8456297518", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);

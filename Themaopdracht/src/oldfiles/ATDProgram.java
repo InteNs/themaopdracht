@@ -684,24 +684,20 @@ public class ATDProgram extends Application {
 		}
 	}
 
-	public List<Customer> getRemindList(visit remindoption) {
+	public List<Customer> getRemindList(boolean includeMaintenace) {
 		ArrayList<Customer> remindables = new ArrayList<Customer>();
 		for (Customer customer : customers) {
-			switch (remindoption) {
-			case SERVICE:
+			if(includeMaintenace){
 				if (customer.getLastVisit().isBefore(
 						LocalDate.now().minusMonths(2))) {
 					remindables.add(customer);
 				}
-				break;
-			case MAINTENANCE:
+			}
+			else{
 				if (customer.getLastMaintenance().isBefore(
 						LocalDate.now().minusMonths(6))) {
 					remindables.add(customer);
 				}
-				break;
-			default:
-				return null;
 			}
 		}
 		return remindables;

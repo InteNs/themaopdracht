@@ -1,4 +1,6 @@
 package screens;
+import java.util.ArrayList;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -7,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -31,6 +34,9 @@ public class CustomerScreen extends HBox {
 			saveButton = new Button("Opslaan");
 	private DatePicker 
 			dateOfBirthInput = new DatePicker();
+	private ComboBox<String> 
+			filterSelector = new ComboBox<String>();
+	private ArrayList<Customer> content = new ArrayList<Customer>();
 	private CheckBox 
 			blackListInput = new CheckBox();
 	private Label 
@@ -105,14 +111,15 @@ public class CustomerScreen extends HBox {
 		});
 		listView.setPrefSize(450, 520);
 		listView.getItems().addAll(controller.getCustomers());
+		refreshList();
 		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if(newValue!=null)selectedCustomer = newValue;
 			else selectedCustomer = oldValue;
 			selectedListEntry();
 		});
 		//SearchField
-		searchFieldBox = new HBox(searchInput = new TextField("Zoek..."));
-		searchInput.setPrefSize(470, 50);
+		searchFieldBox = new HBox(10,searchInput = new TextField("Zoek..."),filterSelector);
+		searchInput.setPrefSize(310, 50);
 		searchInput.setOnMouseClicked(e -> {
 			if (searchInput.getText().equals("Zoek...")) {
 				searchInput.clear();
@@ -121,6 +128,17 @@ public class CustomerScreen extends HBox {
 		});
 		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
 				search(oldValue, newValue);
+		});
+		filterSelector.setPrefSize(150, 50);
+		filterSelector.getItems().addAll("Filter: Geen", "Filter: Service", "Filter: Onderhoud");
+		filterSelector.getSelectionModel().selectFirst();
+		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
+			listView.getItems().clear();
+			if(newValue.intValue()==0)listView.getItems().addAll(controller.getCustomers());
+			if(newValue.intValue()==1)listView.getItems().addAll(controller.getRemindList(false));
+			if(newValue.intValue()==2)listView.getItems().addAll(controller.getRemindList(true));
+			refreshList();
+			if (!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());
 		});
 		
 		
@@ -143,7 +161,9 @@ public class CustomerScreen extends HBox {
 		});
 		removeButton.setPrefSize(150, 50);
 		removeButton.setOnAction(e->{
-			listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
+			Customer c = listView.getSelectionModel().getSelectedItem();
+			listView.getItems().remove(c);
+			controller.addorRemoveCustomer(c, true);
 		});
 		//Make & merge left & right
 		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
@@ -163,8 +183,6 @@ public class CustomerScreen extends HBox {
 		phoneInput.setText(selectedCustomer.getTel());
 		addressInput.setText(selectedCustomer.getAdress());
 		blackListInput.setSelected(selectedCustomer.isOnBlackList());
-		listView.getItems().clear();
-		listView.getItems().addAll(controller.getCustomers());
 		setVisibility(true, true, true);	
 		isChanging = true;
 	}
@@ -179,7 +197,9 @@ public class CustomerScreen extends HBox {
 			selectedCustomer.setTel(phoneInput.getText());
 			selectedCustomer.setAdress(addressInput.getText());
 			selectedCustomer.setOnBlackList(blackListInput.isSelected());
+			refreshList();
 			setVisibility(true, false, false);
+			
 		}
 		else{
 			Customer newCustomer = new Customer(
@@ -197,6 +217,12 @@ public class CustomerScreen extends HBox {
 			listView.getItems().add(newCustomer);
 			setVisibility(true, false, false);
 		}
+	}
+	private void refreshList(){
+		content.clear();
+		content.addAll(listView.getItems());
+		listView.getItems().clear();
+		listView.getItems().addAll(content);
 	}
 	private void selectedListEntry(){
 		if(selectedCustomer.getName()!=null)nameContent.setText(selectedCustomer.getName());
@@ -256,10 +282,10 @@ public class CustomerScreen extends HBox {
 	public void search(String oldVal, String newVal) {
 		if (oldVal != null && (newVal.length() < oldVal.length())) {
 			listView.getItems().clear();
-			listView.getItems().addAll(controller.getCustomers());
+			listView.getItems().addAll(content);
 		}
 		listView.getItems().clear();
-		for (Customer entry : controller.getCustomers()) {
+		for (Customer entry : content) {
 			if (entry.getName().contains(newVal)
 					|| entry.getPostal().contains(newVal)
 					|| entry.getEmail().contains(newVal)) {
