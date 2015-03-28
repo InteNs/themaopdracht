@@ -138,6 +138,7 @@ public class CustomerScreen extends HBox {
 		});
 		changeButton.setPrefSize(150, 50);
 		changeButton.setOnAction(e -> {
+			isChanging = true;
 			change();
 		});
 		removeButton.setPrefSize(150, 50);
@@ -163,6 +164,8 @@ public class CustomerScreen extends HBox {
 		phoneInput.setText(c.getTel());
 		addressInput.setText(c.getAdress());
 		blackListInput.setSelected(c.isOnBlackList());
+		listView.getItems().clear();
+		listView.getItems().addAll(controller.getCustomers());
 		setVisibility(true, true, true);	
 		isChanging = true;
 	}
@@ -199,10 +202,11 @@ public class CustomerScreen extends HBox {
 	}
 	private void selectedListEntry(){
 		Customer c = listView.getSelectionModel().getSelectedItem();
+		// TODO LOOP null check
 		nameContent.setText(c.getName());
 		placeContent.setText(c.getPlace());
 		bankContent.setText(c.getBankAccount());
-		dateOfBirthContent.setText(c.getDateOfBirth().toString());
+		if(c.getDateOfBirth() != null) dateOfBirthContent.setText(c.getDateOfBirth().toString());
 		emailContent.setText(c.getEmail());
 		postalContent.setText(c.getPostal());
 		phoneContent.setText(c.getTel());
