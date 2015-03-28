@@ -28,6 +28,7 @@ public class ATDProgram extends Application {
 		customerAdministration = new Tab("Klantenbestand");
 		customerAdministration.setClosable(false);
 		customerAdministration.setContent(new CustomerScreen(this));
+		
 
 		customerRelations = new Tab("Herinneringen");
 		customerRelations.setClosable(false);

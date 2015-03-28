@@ -1,4 +1,8 @@
 package screens;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -106,6 +110,20 @@ public class CustomerScreen extends HBox {
 		//SearchField
 		searchFieldBox = new HBox(searchInput = new TextField("Zoek..."));
 		searchInput.setPrefSize(470, 50);
+		searchInput.setOnMouseClicked(e -> {
+			if (searchInput.getText().equals("Zoek...")) {
+				searchInput.clear();
+			} else
+				searchInput.selectAll();
+		});
+		searchInput.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				search(oldValue, newValue);
+			}
+		});
+		
 		
 		//Buttons Add, Change & Remove
 		mainButtonBox.getChildren().addAll(
@@ -163,7 +181,7 @@ public class CustomerScreen extends HBox {
 			setVisibility(true, false, false);
 		}
 		else{
-			listView.getItems().add(new Customer(
+			Customer newCustomer = new Customer(
 					nameInput.getText(),
 					placeInput.getText(),
 					bankInput.getText(),
@@ -173,7 +191,9 @@ public class CustomerScreen extends HBox {
 					phoneInput.getText(),
 					addressInput.getText(),
 					blackListInput.isSelected()
-					));
+					);
+			controller.addorRemoveCustomer(newCustomer, false);
+			listView.getItems().add(newCustomer);
 			setVisibility(true, false, false);
 		}
 	}
@@ -233,5 +253,28 @@ public class CustomerScreen extends HBox {
 			}
 		}	
 	}
+	
+	public ObservableList<Customer> getAllCustomers() {
+		return FXCollections.observableArrayList(controller.getCustomers());
+	}
+	
+	public void search(String oldVal, String newVal) {
+		System.out.println(newVal +"\n\n"+ getAllCustomers() +"\n\n"+ controller.getCustomers());
+		if (oldVal != null && (newVal.length() < oldVal.length())) {
+			listView.setItems(getAllCustomers());
+		}
+		listView.getItems().clear();
+		for (Customer entry : controller.getCustomers()) {
+			if (entry.getName().contains(newVal)
+					|| entry.getPostal().contains(newVal)
+					|| entry.getEmail().contains(newVal)) {
+				listView.getItems().add(entry);
+			} else {
+				listView.getItems().remove(entry);
+			}
+		}
+	}
+
 }
+
 	
