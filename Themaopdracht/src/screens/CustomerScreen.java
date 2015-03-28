@@ -18,6 +18,7 @@ import main.Customer;
 
 public class CustomerScreen extends HBox {
 	private ATDProgram controller;
+	private Customer selectedCustomer;
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;
@@ -104,7 +105,9 @@ public class CustomerScreen extends HBox {
 		});
 		listView.setPrefSize(450, 520);
 		listView.getItems().addAll(controller.getCustomers());
-		listView.getSelectionModel().selectedItemProperty().addListener(e->{
+		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if(newValue!=null)selectedCustomer = newValue;
+			else selectedCustomer = oldValue;
 			selectedListEntry();
 		});
 		//SearchField
@@ -116,12 +119,8 @@ public class CustomerScreen extends HBox {
 			} else
 				searchInput.selectAll();
 		});
-		searchInput.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable,
-					String oldValue, String newValue) {
+		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
 				search(oldValue, newValue);
-			}
 		});
 		
 		
@@ -133,6 +132,7 @@ public class CustomerScreen extends HBox {
 				);
 		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(e -> {
+			setVisibility(true, false, false);
 			setVisibility(false, true, true);
 			isChanging = false;
 		});
@@ -154,16 +154,15 @@ public class CustomerScreen extends HBox {
 		this.getChildren().add(mainBox);
 	}
 	private void change(){
-		Customer c = listView.getSelectionModel().getSelectedItem();
-		nameInput.setText(c.getName());
-		placeInput.setText(c.getPlace());
-		bankInput.setText(c.getBankAccount());
-		dateOfBirthInput.setValue(c.getDateOfBirth());
-		emailInput.setText(c.getEmail());
-		postalInput.setText(c.getPostal());
-		phoneInput.setText(c.getTel());
-		addressInput.setText(c.getAdress());
-		blackListInput.setSelected(c.isOnBlackList());
+		nameInput.setText(selectedCustomer.getName());
+		placeInput.setText(selectedCustomer.getPlace());
+		bankInput.setText(selectedCustomer.getBankAccount());
+		dateOfBirthInput.setValue(selectedCustomer.getDateOfBirth());
+		emailInput.setText(selectedCustomer.getEmail());
+		postalInput.setText(selectedCustomer.getPostal());
+		phoneInput.setText(selectedCustomer.getTel());
+		addressInput.setText(selectedCustomer.getAdress());
+		blackListInput.setSelected(selectedCustomer.isOnBlackList());
 		listView.getItems().clear();
 		listView.getItems().addAll(controller.getCustomers());
 		setVisibility(true, true, true);	
@@ -171,16 +170,15 @@ public class CustomerScreen extends HBox {
 	}
 	private void save(){
 		if(isChanging){
-			Customer c  = listView.getSelectionModel().getSelectedItem();
-			c.setName(nameInput.getText());
-			c.setPlace(placeInput.getText());
-			c.setBankAccount(bankInput.getText());
-			c.setDateOfBirth(dateOfBirthInput.getValue());
-			c.setEmail(emailInput.getText());
-			c.setPostal(postalInput.getText());
-			c.setTel(phoneInput.getText());
-			c.setAdress(addressInput.getText());
-			c.setOnBlackList(blackListInput.isSelected());
+			selectedCustomer.setName(nameInput.getText());
+			selectedCustomer.setPlace(placeInput.getText());
+			selectedCustomer.setBankAccount(bankInput.getText());
+			selectedCustomer.setDateOfBirth(dateOfBirthInput.getValue());
+			selectedCustomer.setEmail(emailInput.getText());
+			selectedCustomer.setPostal(postalInput.getText());
+			selectedCustomer.setTel(phoneInput.getText());
+			selectedCustomer.setAdress(addressInput.getText());
+			selectedCustomer.setOnBlackList(blackListInput.isSelected());
 			setVisibility(true, false, false);
 		}
 		else{
@@ -201,16 +199,15 @@ public class CustomerScreen extends HBox {
 		}
 	}
 	private void selectedListEntry(){
-		Customer c = listView.getSelectionModel().getSelectedItem();
-		if(c.getName()!=null)nameContent.setText(c.getName());
-		if(c.getPlace()!=null)placeContent.setText(c.getPlace());
-		if(c.getBankAccount()!=null)bankContent.setText(c.getBankAccount());
-		if(c.getDateOfBirth() != null) dateOfBirthContent.setText(c.getDateOfBirth().toString());
-		if(c.getEmail()!= null)emailContent.setText(c.getEmail());
-		if(c.getPostal()!=null)postalContent.setText(c.getPostal());
-		if(c.getTel()!=null)phoneContent.setText(c.getTel());
-		if(c.getAdress()!=null)addressContent.setText(c.getAdress());
-		if(c.isOnBlackList())blackListContent.setText("ja");
+		if(selectedCustomer.getName()!=null)nameContent.setText(selectedCustomer.getName());
+		if(selectedCustomer.getPlace()!=null)placeContent.setText(selectedCustomer.getPlace());
+		if(selectedCustomer.getBankAccount()!=null)bankContent.setText(selectedCustomer.getBankAccount());
+		if(selectedCustomer.getDateOfBirth() != null) dateOfBirthContent.setText(selectedCustomer.getDateOfBirth().toString());
+		if(selectedCustomer.getEmail()!= null)emailContent.setText(selectedCustomer.getEmail());
+		if(selectedCustomer.getPostal()!=null)postalContent.setText(selectedCustomer.getPostal());
+		if(selectedCustomer.getTel()!=null)phoneContent.setText(selectedCustomer.getTel());
+		if(selectedCustomer.getAdress()!=null)addressContent.setText(selectedCustomer.getAdress());
+		if(selectedCustomer.isOnBlackList())blackListContent.setText("ja");
 		else blackListContent.setText("nee");
 	}
 	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
@@ -256,15 +253,10 @@ public class CustomerScreen extends HBox {
 			}
 		}	
 	}
-	
-	public ObservableList<Customer> getAllCustomers() {
-		return FXCollections.observableArrayList(controller.getCustomers());
-	}
-	
 	public void search(String oldVal, String newVal) {
-		System.out.println(newVal +"\n\n"+ getAllCustomers() +"\n\n"+ controller.getCustomers());
 		if (oldVal != null && (newVal.length() < oldVal.length())) {
-			listView.setItems(getAllCustomers());
+			listView.getItems().clear();
+			listView.getItems().addAll(controller.getCustomers());
 		}
 		listView.getItems().clear();
 		for (Customer entry : controller.getCustomers()) {
@@ -272,8 +264,6 @@ public class CustomerScreen extends HBox {
 					|| entry.getPostal().contains(newVal)
 					|| entry.getEmail().contains(newVal)) {
 				listView.getItems().add(entry);
-			} else {
-				listView.getItems().remove(entry);
 			}
 		}
 	}
