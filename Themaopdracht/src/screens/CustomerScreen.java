@@ -98,17 +98,21 @@ public class CustomerScreen extends HBox {
 		detailsBox.setPrefSize(450, 520-15);
 		detailsBox.setPadding(new Insets(20));
 		setVisibility(true, false, false);
+		//geef alle labels een bepaalde grootte
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			if(((HBox)node1).getChildren().size()>2)((Label)((HBox)node1).getChildren().get(0)).setMinWidth(widthLabels);
 		}
+		//cancelbutton
 		cancelButton.setPrefSize(150, 50);
 		cancelButton.setOnAction(e -> {
 				setVisibility(true, false, false);
 		});
+		//savebutton
 		saveButton.setPrefSize(150, 50);
 		saveButton.setOnAction(e -> {
 			save();
 		});
+		//listview
 		listView.setPrefSize(450, 520);
 		listView.getItems().addAll(controller.getCustomers());
 		refreshList();
@@ -129,6 +133,7 @@ public class CustomerScreen extends HBox {
 		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
 				search(oldValue, newValue);
 		});
+		//filter
 		filterSelector.setPrefSize(150, 50);
 		filterSelector.getItems().addAll("Filter: Geen", "Filter: Service", "Filter: Onderhoud");
 		filterSelector.getSelectionModel().selectFirst();
@@ -142,23 +147,26 @@ public class CustomerScreen extends HBox {
 		});
 		
 		
-		//Buttons Add, Change & Remove
+		//main Buttons
 		mainButtonBox.getChildren().addAll(
 				newButton,
 				changeButton,
 				removeButton
 				);
+		//NewButton
 		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(e -> {
 			setVisibility(true, false, false);
 			setVisibility(false, true, true);
 			isChanging = false;
 		});
+		//ChangeButton
 		changeButton.setPrefSize(150, 50);
 		changeButton.setOnAction(e -> {
 			isChanging = true;
 			change();
 		});
+		//RemoveButton
 		removeButton.setPrefSize(150, 50);
 		removeButton.setOnAction(e->{
 			Customer c = listView.getSelectionModel().getSelectedItem();
@@ -173,6 +181,10 @@ public class CustomerScreen extends HBox {
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
 	}
+	 
+	/**
+	 * vult alle gegevens in de TextFields om aan te passen
+	 */
 	private void change(){
 		nameInput.setText(selectedCustomer.getName());
 		placeInput.setText(selectedCustomer.getPlace());
@@ -186,6 +198,9 @@ public class CustomerScreen extends HBox {
 		setVisibility(true, true, true);	
 		isChanging = true;
 	}
+	/**
+	 * slaat het nieuwe of aangepaste product op
+	 */
 	private void save(){
 		if(isChanging){
 			selectedCustomer.setName(nameInput.getText());
