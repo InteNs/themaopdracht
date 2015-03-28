@@ -1,4 +1,5 @@
 package main;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javafx.application.Application;
@@ -17,11 +18,12 @@ public class ATDProgram extends Application {
 	private Tab customerRelations;
 	private Tab stockAdministration;
 	private Scene mainScene;
+	private Stock stock = new Stock();
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
-	private ArrayList<Product> products = new ArrayList<Product>();
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	@Override
 	public void start(Stage stage) throws Exception {
+		addContent();
 		//create tabs and add content
 		tabsScreen = new TabPane();
 
@@ -57,11 +59,11 @@ public class ATDProgram extends Application {
 		else customers.add(customer);
 	}
 	public ArrayList<Product> getProducts() {
-		return products;
+		return stock.getAllProducts();
 	}
 	public void addorRemoveproduct(Product product, boolean remove){
-		if(remove)products.remove(product);
-		else products.add(product);
+		if(remove)stock.removeProduct(product);
+		else stock.newProduct(product);
 	}
 	public ArrayList<ProductSupplier> getSuppliers() {
 		return suppliers;
@@ -70,8 +72,20 @@ public class ATDProgram extends Application {
 		if(remove)suppliers.remove(supplier);
 		else suppliers.add(supplier);
 	}
+	private void addContent(){
+		addorRemoveCustomer(new Customer("Jorrit Meulenbeld", "Utrecht",
+				"NL35 INGB 0008 8953 57", LocalDate.parse("1990-08-25"), "jorritmeulenbeld@icloud.com",
+				"3552AZ", "0636114939", "Omloop 48", false), false);
+		addorRemoveCustomer(new Customer("Mark Havekes", "De Meern", "n.v.t.", LocalDate.parse("1990-05-31"),
+				"mark.havekes@gmail.com", "3453MC", "0302801265",
+				"De Drecht 32", false),false);
+		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "1938572819", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
+		addorRemoveSupplier(new ProductSupplier("Banden BV", "8456297518", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
+		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
+		addorRemoveproduct(new Product("Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
+	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {;
 		launch();
 		}
 	

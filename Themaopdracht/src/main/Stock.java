@@ -24,7 +24,7 @@ public class Stock {
 	public void removeProduct(Product product){
 		products.remove(product);
 	}
-	public List<Product> getAllProducts(){
+	public ArrayList<Product> getAllProducts(){
 		return products;
 	}
 	public HashMap<Object, Integer> getOrderedItems(){

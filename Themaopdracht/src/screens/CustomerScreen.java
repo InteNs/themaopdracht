@@ -202,15 +202,14 @@ public class CustomerScreen extends HBox {
 	}
 	private void selectedListEntry(){
 		Customer c = listView.getSelectionModel().getSelectedItem();
-		// TODO LOOP null check
-		nameContent.setText(c.getName());
-		placeContent.setText(c.getPlace());
-		bankContent.setText(c.getBankAccount());
+		if(c.getName()!=null)nameContent.setText(c.getName());
+		if(c.getPlace()!=null)placeContent.setText(c.getPlace());
+		if(c.getBankAccount()!=null)bankContent.setText(c.getBankAccount());
 		if(c.getDateOfBirth() != null) dateOfBirthContent.setText(c.getDateOfBirth().toString());
-		emailContent.setText(c.getEmail());
-		postalContent.setText(c.getPostal());
-		phoneContent.setText(c.getTel());
-		addressContent.setText(c.getAdress());
+		if(c.getEmail()!= null)emailContent.setText(c.getEmail());
+		if(c.getPostal()!=null)postalContent.setText(c.getPostal());
+		if(c.getTel()!=null)phoneContent.setText(c.getTel());
+		if(c.getAdress()!=null)addressContent.setText(c.getAdress());
 		if(c.isOnBlackList())blackListContent.setText("ja");
 		else blackListContent.setText("nee");
 	}
