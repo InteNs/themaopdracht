@@ -22,7 +22,9 @@ public class ATDProgram extends Application {
 	private Tab stockAdministration;
 	private Scene mainScene;
 	private Stock stock = new Stock();
+	private ArrayList<Invoice> receipts = new ArrayList<Invoice>();
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
+	private ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -88,6 +90,21 @@ public class ATDProgram extends Application {
 		if(remove)suppliers.remove(supplier);
 		else suppliers.add(supplier);
 	}
+	public ArrayList<Mechanic> getMechanics() {
+		return mechanics;
+	}
+	public void addorRemoveMechanic(Mechanic mechanic, boolean remove) {
+		if (remove)mechanics.remove(mechanic);
+		else mechanics.add(mechanic);
+	}
+	public ArrayList<Invoice> getInvoices() {
+		return receipts;
+	}
+	public void addorRemoveInvoice(Invoice receipt, boolean remove) {
+		if(remove)receipts.remove(receipt);
+		else receipts.add(receipt);
+	}
+	
 	private void addContent(){
 		addorRemoveCustomer(new Customer("Jorrit Meulenbeld", "Utrecht",
 				"NL35 INGB 0008 8953 57", LocalDate.parse("1990-08-25"), "jorritmeulenbeld@icloud.com",
@@ -99,6 +116,10 @@ public class ATDProgram extends Application {
 		customers.get(0).setLastVisit(		LocalDate.now().minusMonths(1));
 		customers.get(1).setLastMaintenance(LocalDate.now().minusMonths(4));
 		customers.get(1).setLastVisit(		LocalDate.now().minusMonths(3));
+		addorRemoveMechanic(new Mechanic(1, "Jaap", 15.0), false);
+		addorRemoveMechanic(new Mechanic(2, "Hans", 12.5), false);
+		addorRemoveMechanic(new Mechanic(3, "Sjaak", 10.0), false);
+		addorRemoveMechanic(new Mechanic(4, "Piet", 15.0), false);
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
