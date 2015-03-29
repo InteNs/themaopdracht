@@ -1,6 +1,7 @@
 package screens;
 import java.util.ArrayList;
 
+import notifications.Notification;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -110,7 +111,11 @@ public class CustomerScreen extends HBox {
 		//savebutton
 		saveButton.setPrefSize(150, 50);
 		saveButton.setOnAction(e -> {
+			Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?", ATDProgram.notificationStyle.CONFIRM);
+			changeConfirm.showAndWait();
 			save();
+			Notification changeNotify = new Notification(controller.getStage(), "Wijzigingen zijn doorgevoerd.", ATDProgram.notificationStyle.NOTIFY);
+			changeNotify.showAndWait();
 		});
 		//listview
 		listView.setPrefSize(450, 520);
@@ -169,9 +174,14 @@ public class CustomerScreen extends HBox {
 		//RemoveButton
 		removeButton.setPrefSize(150, 50);
 		removeButton.setOnAction(e->{
+			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			removeConfirm.showAndWait();
+			if (removeConfirm.getKeuze() == "ja"){
 			Customer c = listView.getSelectionModel().getSelectedItem();
 			listView.getItems().remove(c);
 			controller.addorRemoveCustomer(c, true);
+			Notification removeNotify = new Notification(controller.getStage(), "Klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+			removeNotify.showAndWait();}
 		});
 		//Make & merge left & right
 		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
@@ -308,7 +318,6 @@ public class CustomerScreen extends HBox {
 			}
 		}
 	}
-
 }
 
 	

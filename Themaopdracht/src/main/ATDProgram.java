@@ -3,6 +3,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import notifications.Notification;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -13,7 +14,8 @@ import screens.StockScreen;
 
 
 public class ATDProgram extends Application {
-
+	public enum notificationStyle {CONFIRM, NOTIFY}
+	private Stage mainStage;
 	private TabPane tabsScreen;
 	private Tab customerAdministration;
 	private Tab customerRelations;
@@ -24,6 +26,7 @@ public class ATDProgram extends Application {
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	@Override
 	public void start(Stage stage) throws Exception {
+		mainStage = stage;
 		addContent();
 		//create tabs and add content
 		tabsScreen = new TabPane();
@@ -111,5 +114,9 @@ public class ATDProgram extends Application {
 	public static void main(String[] args) {;
 		launch();
 		}
+	
+	public Stage getStage(){
+		return mainStage;
+	}
 	
 }

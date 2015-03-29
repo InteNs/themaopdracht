@@ -18,25 +18,24 @@ public class Notification extends Stage {
 	private String keuze;
 	private VBox notification;
 	private ATDProgram atdProgram;
-	private enum notificationStyle {CONFIRM, NOTIFY}
 	
-	public Notification(Stage currentStage, String bericht, notificationStyle stijl){
+	public Notification(Stage currentStage, String bericht, ATDProgram.notificationStyle stijl){
 		super(StageStyle.UTILITY);
 		initOwner(currentStage); 
 		initModality(Modality.WINDOW_MODAL); 
 		this.setResizable(false);
-		this.setTitle(bericht);
 		melding = new Label(bericht);
 		
 		
-		if(stijl == notificationStyle.CONFIRM){
+		if(stijl == ATDProgram.notificationStyle.CONFIRM){
+			this.setTitle("Bevestigen");
 			notification = new VBox(10,
 					new HBox(
 							new VBox(10,
 									melding,
 							new HBox(10, 
 									annuleren = new Button("Annuleren"),
-									ok = new Button("Ja") 
+									ok = new Button("OK") 
 									))));
 			annuleren.setPrefWidth(100);
 			annuleren.setOnAction(e -> {
@@ -44,13 +43,14 @@ public class Notification extends Stage {
 				this.hide();
 			});
 		}
-		if(stijl == notificationStyle.NOTIFY) {
+		if(stijl == ATDProgram.notificationStyle.NOTIFY) {
+			this.setTitle("Melding");
 			notification = new VBox(10,
 					new HBox(
 							new VBox(10,
 									melding,
 							new HBox(10, 
-									ok = new Button("Ja") 
+									ok = new Button("OK") 
 									))));
 		}
 		ok.setPrefWidth(100);
