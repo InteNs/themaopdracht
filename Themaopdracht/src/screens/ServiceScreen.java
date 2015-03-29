@@ -1,4 +1,5 @@
 package screens;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
@@ -14,13 +15,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
+import main.MaintenanceSession;
 import main.Product;
 import main.ProductSupplier;
+import main.RefuelSession;
+import main.Reservation;
 import notifications.Notification;
 
-public class StockScreen extends HBox {
+public class ServiceScreen extends HBox {
 	private ATDProgram controller;
-	private Product selectedProduct;
+	private ListRegel selectedProduct;
 	private ProductSupplier productSupplier;
 	private double
 			spacingBoxes = 10,
@@ -75,7 +79,7 @@ public class StockScreen extends HBox {
 			mainButtonBox = new HBox(spacingBoxes), 
 			searchFieldBox = new HBox(spacingBoxes), 
 			mainBox = new HBox(spacingBoxes);
-	public StockScreen(ATDProgram controller) {
+	public ServiceScreen(ATDProgram controller) {
 		this.controller = controller;
 		
 		supplierSelector.getItems().addAll(controller.getSuppliers());
@@ -249,9 +253,13 @@ public class StockScreen extends HBox {
 	}
 	public class ListRegel extends HBox{
 		private Product product;
+		private MaintenanceSession maintenanceSession;
+		private Reservation parkingSession;
 		private ComboBox<Product> productSelector = new ComboBox<Product>();
 		private TextField input = new TextField();
-		private Label itemPriceLabel = new Label(),itemNameLabel = new Label(),itemSupplierLabel = new Label();
+		private Label 	itemPriceLabel = new Label(),itemNameLabel = new Label(),itemSupplierLabel = new Label(),
+						mechanicLabel = new Label(),mDateLabel = new Label(),
+						customerLabel = new Label(), fromDateLabel = new Label(), toDateLabel = new Label();
 		public ListRegel(Product product){
 			//ALLE PRODUCTEN
 			this.product = product;
@@ -266,45 +274,57 @@ public class StockScreen extends HBox {
 				for (Node node : getChildren()) 
 					if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
-		public ListRegel(Product product, int amount){
-			//BESTELDE PRODUCTEN
-			this.product = product;
+		public ListRegel(MaintenanceSession mSession){
+			this.maintenanceSession = mSession;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
-					itemNameLabel,
+					mechanicLabel,
 					new Separator(Orientation.VERTICAL),
-					new Label(Integer.toString(amount)),
-					new Separator(Orientation.VERTICAL),
-					itemSupplierLabel);
-			for (Node node : getChildren())
-				if(node instanceof Label)((Label)node).setPrefWidth(100);
+					mDateLabel);
+				for (Node node : getChildren()) 
+					if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
-		public ListRegel(){
-			//OPBOEKEN
-			productSelector.getItems().addAll(controller.getProducts());
-			getChildren().addAll(productSelector, input);
-		}
-		public ListRegel(Button b,Button c){
+		
+		public ListRegel(Reservation pSession){
+			this.parkingSession = pSession;
+			refresh();
 			setSpacing(5);
 			getChildren().addAll(
-					new Label("+"),
-					b,c);
-			
+					customerLabel,
+					new Separator(Orientation.VERTICAL),
+					fromDateLabel,
+					new Separator(Orientation.VERTICAL),
+					toDateLabel);
+				for (Node node : getChildren()) 
+					if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
+		
 		public void refresh(){
-			itemNameLabel.setText(product.getName());
-			itemPriceLabel.setText(Double.toString(product.getSellPrice()));
-			itemSupplierLabel.setText(product.getSupplier().getName());
-		}
-		public Product getSelected(){
-			return productSelector.getSelectionModel().getSelectedItem();
-		}
-		public int getAmount(){
-			return Integer.parseInt(input.getText());
+			if(product!=null) {
+				itemNameLabel.setText(product.getName());
+				itemPriceLabel.setText(Double.toString(product.getSellPrice()));
+				itemSupplierLabel.setText(product.getSupplier().getName());
+			}
+			if(maintenanceSession!=null) {
+				mechanicLabel.setText(maintenanceSession.getMechanic().getName());
+				mDateLabel.setText(maintenanceSession.getPlannedDate().toString());
+			}
+			if(parkingSession!=null) {
+				if(parkingSession.getCustomer()!=null)customerLabel.setText(parkingSession.getCustomer().getName());
+				else customerLabel.setText("Geen klantgegevens");
+				fromDateLabel.setText(parkingSession.getFromDate().toString());
+				toDateLabel.setText(parkingSession.getToDate().toString());
+			}
 		}
 		public Product getProduct(){
 			return product;
+		}
+		public MaintenanceSession getMaintenanceSession() {
+			return maintenanceSession;
+		}
+		public Reservation getParkingSession() {
+			return parkingSession;
 		}
 	}
 
