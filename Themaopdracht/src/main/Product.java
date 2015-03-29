@@ -51,8 +51,7 @@ public class Product {
 	}
 	@Override
 	public String toString() {
-		return "Product [name=" + name + ", sellPrice=" + sellPrice
-				+ ", supplier=" + supplier.getName() + "]";
+		return name + " - €" + sellPrice + " - " + supplier.getName();
 	}
 	
 }

@@ -99,8 +99,8 @@ public class ATDProgram extends Application {
 		customers.get(0).setLastVisit(		LocalDate.now().minusMonths(1));
 		customers.get(1).setLastMaintenance(LocalDate.now().minusMonths(4));
 		customers.get(1).setLastVisit(		LocalDate.now().minusMonths(3));
-		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "1938572819", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
-		addorRemoveSupplier(new ProductSupplier("Banden BV", "8456297518", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
+		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
+		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
 		addorRemoveproduct(new Product("Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
 	}

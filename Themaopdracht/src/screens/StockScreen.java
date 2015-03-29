@@ -2,6 +2,7 @@ package screens;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
+import sun.security.jca.GetInstance.Instance;
 import notifications.Notification;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -78,9 +79,25 @@ public class StockScreen extends HBox {
 	public StockScreen(ATDProgram controller) {
 		this.controller = controller;
 		
-		supplierSelector.getItems().addAll(new ProductSupplier(null, null, null, null, null), new ProductSupplier("rest", "54854", "DIEEW", "3435gf", "94545"));
+		supplierSelector.getItems().addAll(controller.getSuppliers());
+		supplierSelector.setEditable(true);
 		supplierSelector.getSelectionModel().selectedItemProperty().addListener(e->{
-			
+			if(supplierSelector.getSelectionModel().getSelectedItem() instanceof ProductSupplier){
+				ProductSupplier supplier = supplierSelector.getSelectionModel().getSelectedItem();
+				addressInput.setDisable(true);
+				addressInput.setText(supplier.getAdress());
+				postalInput.setDisable(true);
+				postalInput.setText(supplier.getPostal());
+				placeInput.setDisable(true);
+				placeInput.setText(supplier.getPlace());
+			}else{
+				addressInput.setDisable(false);
+				addressInput.clear();
+				postalInput.setDisable(false);
+				postalInput.clear();
+				placeInput.setDisable(false);
+				placeInput.clear();
+			}
 		});
 		//StockDetails
 		StockDetails.getChildren().addAll(
@@ -204,31 +221,37 @@ public class StockScreen extends HBox {
 			selectedProduct.setMinAmount(Integer.parseInt(minAmountInput.getText()));
 			selectedProduct.setSellPrice(Double.parseDouble(priceInput.getText()));
 			selectedProduct.setSellPrice(Double.parseDouble(buyPriceInput.getText()));
-			selectedProduct.getSupplier().setName(supplierInput.getText());
-			selectedProduct.getSupplier().setAdress(addressInput.getText());
-			selectedProduct.getSupplier().setPostal(postalInput.getText());
-			selectedProduct.getSupplier().setPlace(placeInput.getText());
+			selectedProduct.setSupplier(readSupplier());
+			
 			refreshList();
 			setVisibility(true, false, false);
 		}
 		else {
-			ProductSupplier newProductSupplier = new ProductSupplier(
-					supplierInput.getText(), 
-					null, 
-					addressInput.getText(), 
-					postalInput.getText(), 
-					placeInput.getText());
-			controller.addorRemoveSupplier(newProductSupplier, false);
 			Product newProduct = new Product(
 					nameInput.getText(), 
 					Integer.parseInt(amountInput.getText()), 
 					Integer.parseInt(minAmountInput.getText()), 
 					Double.parseDouble(priceInput.getText()), 
 					Double.parseDouble(buyPriceInput.getText()), 
-					newProductSupplier);	
+					readSupplier());	
 			controller.addorRemoveproduct(newProduct, false);
 			listView.getItems().add(newProduct);
 			setVisibility(true, false, false);
+		}
+	}
+	private ProductSupplier readSupplier(){
+		if(supplierSelector.getSelectionModel().getSelectedItem()instanceof ProductSupplier) 
+			return supplierSelector.getSelectionModel().getSelectedItem();
+		else {
+			ProductSupplier newProductSupplier = new ProductSupplier(
+					supplierSelector.getEditor().getText(), 
+					addressInput.getText(), 
+					postalInput.getText(), 
+					placeInput.getText());
+			controller.addorRemoveSupplier(newProductSupplier, false);
+			supplierSelector.getItems().add(newProductSupplier);
+			selectedProduct.setSupplier(newProductSupplier);
+			return newProductSupplier;
 		}
 	}
 	

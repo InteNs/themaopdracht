@@ -148,12 +148,9 @@ public class ATDProgram extends Application {
 
 		// voorraad systeem
 		stock = new Stock();
-		ProductSupplier supplier1 = new ProductSupplier("Cheapo BV", "1938572819", "Hoevelaan 2", "7853OQ", "Den Haag"); 
-		ProductSupplier supplier2 = new ProductSupplier("Banden BV", "8456297518", "Hamburgerstraat 10", "4198KW", "Utrecht");
-		Product product1 = new Product("Uitlaat", 5, 5, 20, 22,supplier1);
-		stock.newProduct(product1);
-		Product product2 = new Product("Band klein", 7, 10, 60, 100,supplier2);
-		stock.newProduct(product2);
+
+	
+
 		
 
 		// onderhoud
@@ -918,8 +915,7 @@ public class ATDProgram extends Application {
 					.setText(product.getSupplier().getPostal());
 			((Label) stockDetailsContent.getChildren().get(8))
 					.setText(product.getSupplier().getPlace());
-			((Label) stockDetailsContent.getChildren().get(9))
-					.setText(product.getSupplier().getPhone());
+
 			
 		}
 	}
@@ -931,17 +927,7 @@ public class ATDProgram extends Application {
 			stockList.getItems().remove(selectedProduct);
 			isChanging = false;
 		}
-		product = new Product(((TextField) stockInput.getChildren().get(0)).getText(), 
-				Integer.parseInt(((TextField) stockInput.getChildren().get(1)).getText()),
-				Integer.parseInt(((TextField) stockInput.getChildren().get(2)).getText()),
-				 Double.parseDouble(((TextField) stockInput.getChildren().get(3)).getText()), 
-				 Double.parseDouble(((TextField) stockInput.getChildren().get(4)).getText()), 
-				 new ProductSupplier(((TextField) stockInput.getChildren().get(5)).getText(), 
-						 ((TextField) stockInput.getChildren().get(9)).getText(), 
-						 ((TextField) stockInput.getChildren().get(6)).getText(), 
-						 ((TextField) stockInput.getChildren().get(7)).getText(), 
-						 ((TextField) stockInput.getChildren().get(8)).getText()));
-		stock.newProduct(product);
+
 		stockList.getItems().add(product);
 		stockInfo.getChildren().clear();
 		stockInfo.getChildren().addAll(
@@ -991,8 +977,7 @@ public class ATDProgram extends Application {
 					.getSupplier().getPostal());
 			((TextField) stockInput.getChildren().get(8)).setText(product
 					.getSupplier().getPlace());
-			((TextField) stockInput.getChildren().get(9)).setText(product
-					.getSupplier().getPhone());
+
 		}
 
 	}

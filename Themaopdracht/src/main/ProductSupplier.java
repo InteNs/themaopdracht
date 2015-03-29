@@ -1,11 +1,11 @@
 package main;
 
 public class ProductSupplier {
-	private String name,phone, adress, postal, place;
+	private String name, adress, postal, place;
 
-	public ProductSupplier(String name, String phone, String adress, String postal, String place) {
+	public ProductSupplier(String name, String adress, String postal, String place) {
 		this.name = name;
-		this.phone = phone;
+
 		this.adress = adress;
 		this.postal = postal;
 		this.place = place;
@@ -17,14 +17,6 @@ public class ProductSupplier {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 
 	public String getAdress() {
@@ -53,8 +45,6 @@ public class ProductSupplier {
 
 	@Override
 	public String toString() {
-		return "ProductSupplier [name=" + name + ", phone=" + phone
-				+ ", adress=" + adress + ", postal=" + postal + ", place="
-				+ place + "]";
+		return name;
 	}
 }
