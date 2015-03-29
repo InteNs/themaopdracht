@@ -1,27 +1,26 @@
 package screens;
 import java.util.ArrayList;
-import java.util.function.Supplier;
+import java.util.Map.Entry;
 
-import sun.security.jca.GetInstance.Instance;
-import notifications.Notification;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
-import main.Customer;
 import main.Product;
 import main.ProductSupplier;
-import main.Stock;
+import notifications.Notification;
 
 public class StockScreen extends HBox {
 	private ATDProgram controller;
-	private Product selectedProduct;
+	private ListRegel selectedProduct;
 	private ProductSupplier productSupplier;
 	private double
 			spacingBoxes = 10,
@@ -65,9 +64,9 @@ public class StockScreen extends HBox {
 			postalInput = new TextField(),
 			placeInput = new TextField();
 	private ComboBox<ProductSupplier> supplierSelector = new ComboBox<ProductSupplier>();
-	private ArrayList<Product> content = new ArrayList<Product>();
-	private ListView<Product> 
-			listView = new ListView<Product>();
+	private ComboBox<String> filterSelector = new ComboBox<String>();
+	private ArrayList<ListRegel> content = new ArrayList<ListRegel>();
+	private ListView<ListRegel> boxView = new ListView<ListRegel>();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
@@ -142,17 +141,22 @@ public class StockScreen extends HBox {
 			}
 		});
 		//Listview
-		listView.setPrefSize(450, 520);
-		listView.getItems().addAll(controller.getProducts());
-		refreshList();
-		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if(newValue!=null)selectedProduct = newValue;
-			else selectedProduct = oldValue;
+		boxView.setPrefSize(450, 520);
+		for (Product product : controller.getStock().getAllProducts()) 
+			boxView.getItems().add(new ListRegel(product));
+		refreshList(null);
+		boxView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if(newValue!=null){
+				if(newValue instanceof ListRegel) selectedProduct = newValue;
+			}
+			else{
+				if(newValue instanceof ListRegel) selectedProduct = oldValue;
+			}
 			selectedListEntry();
 		});
 		//SearchField
-		searchFieldBox = new HBox(searchInput = new TextField("Zoek..."));
-		searchInput.setPrefSize(470, 50);
+		searchFieldBox = new HBox(10,searchInput = new TextField("Zoek..."),filterSelector);
+		searchInput.setPrefSize(310, 50);
 		searchInput.setOnMouseClicked(e -> {
 			if (searchInput.getText().equals("Zoek...")) {
 				searchInput.clear();
@@ -184,46 +188,116 @@ public class StockScreen extends HBox {
 			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit product wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze() == "ja"){
-			Product p = listView.getSelectionModel().getSelectedItem();
-			listView.getItems().remove(p);
-			controller.addorRemoveproduct(p, true);
+			boxView.getItems().remove(selectedProduct);
+			controller.addorRemoveproduct(selectedProduct.getProduct(), true);
 			Notification removeNotify = new Notification(controller.getStage(), "Het product is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 			removeNotify.showAndWait();}
 			
 		});
+		filterSelector.setPrefSize(150, 50);
+		filterSelector.getItems().addAll("Mode: Voorraad", "Mode: Bestellijst", "Mode: Opboeken");
+		filterSelector.getSelectionModel().selectFirst();
+		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
+			if(newValue.intValue()==0){
+				boxView.getItems().clear();
+				for (Product product : controller.getStock().getAllProducts())
+					boxView.getItems().add(new ListRegel(product));
+			}
+			if(newValue.intValue()==1){
+				boxView.getItems().clear();
+				for(Entry<Object, Integer> entry : controller.getStock().getOrderedItems().entrySet()) 
+				    boxView.getItems().add(new ListRegel((Product)entry.getKey(), entry.getValue()));
+			}
+			if(newValue.intValue()==2){
+
+				
+			}
+
+
+
+			//if (!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());
+		});
 		//Make & merge left & right
-		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
+		leftBox.getChildren().addAll (boxView, searchFieldBox,mainButtonBox);
 		rightBox.getChildren().addAll(StockDetails);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
 	}
-	
+	public class ListRegel extends HBox{
+		private Product product;
+		private ComboBox<Product> productSelector = new ComboBox<Product>();
+		private TextField amount = new TextField();
+		private Label itemPriceLabel = new Label(),itemNameLabel = new Label(),itemSupplierLabel = new Label();
+		public ListRegel(Product product){
+				this.product = product;
+				refresh();
+				setSpacing(5);
+				getChildren().addAll(
+						itemNameLabel,
+						new Separator(Orientation.VERTICAL),
+						itemPriceLabel,
+						new Separator(Orientation.VERTICAL),
+						itemSupplierLabel);
+				for (Node node : getChildren()) 
+					if(node instanceof Label)((Label)node).setPrefWidth(100);
+		}
+		public ListRegel(Product product, int amount){
+			setSpacing(5);
+			getChildren().addAll(
+					itemNameLabel,
+					new Separator(Orientation.VERTICAL),
+					new Label(Integer.toString(amount)),
+					new Separator(Orientation.VERTICAL),
+					itemSupplierLabel);
+			for (Node node : getChildren())
+				if(node instanceof Label)((Label)node).setPrefWidth(100);
+		}
+		public ListRegel(){
+			productSelector.getItems().addAll(controller.getProducts());
+			getChildren().addAll(productSelector, amount);
+		}
+		public void refresh(){
+			itemNameLabel.setText(product.getName());
+			itemPriceLabel.setText(Double.toString(product.getSellPrice()));
+			itemSupplierLabel.setText(product.getSupplier().getName());
+		}
+		public Product getSelected(){
+			return productSelector.getSelectionModel().getSelectedItem();
+		}
+		public int getAmount(){
+			return Integer.parseInt(amount.getText());
+		}
+		public Product getProduct(){
+			return product;
+		}
+	}
+
 	private void change(){
-		nameInput.setText(selectedProduct.getName());
-		amountInput.setText(Integer.toString(selectedProduct.getAmount()));
-		minAmountInput.setText(Integer.toString(selectedProduct.getMinAmount()));
-		priceInput.setText(Double.toString(selectedProduct.getSellPrice()));
-		buyPriceInput.setText(Double.toString(selectedProduct.getBuyPrice()));
-		supplierInput.setText(selectedProduct.getSupplier().getName());
-		addressInput.setText(selectedProduct.getSupplier().getAdress());
-		postalInput.setText(selectedProduct.getSupplier().getPostal());
-		placeInput.setText(selectedProduct.getSupplier().getPlace());
+		nameInput.setText(selectedProduct.getProduct().getName());
+		amountInput.setText(Integer.toString(selectedProduct.getProduct().getAmount()));
+		minAmountInput.setText(Integer.toString(selectedProduct.getProduct().getMinAmount()));
+		priceInput.setText(Double.toString(selectedProduct.getProduct().getSellPrice()));
+		buyPriceInput.setText(Double.toString(selectedProduct.getProduct().getBuyPrice()));
+		supplierSelector.setValue(selectedProduct.getProduct().getSupplier());
+		addressInput.setText(selectedProduct.getProduct().getSupplier().getAdress());
+		postalInput.setText(selectedProduct.getProduct().getSupplier().getPostal());
+		placeInput.setText(selectedProduct.getProduct().getSupplier().getPlace());
 		setVisibility(true, true, true);
 		isChanging = true;
 	}
 	
 	private void save(){
 		if(isChanging){
-			selectedProduct.setName(nameInput.getText());
-			selectedProduct.setAmount(Integer.parseInt(amountInput.getText()));
-			selectedProduct.setMinAmount(Integer.parseInt(minAmountInput.getText()));
-			selectedProduct.setSellPrice(Double.parseDouble(priceInput.getText()));
-			selectedProduct.setSellPrice(Double.parseDouble(buyPriceInput.getText()));
-			selectedProduct.setSupplier(readSupplier());
+			selectedProduct.getProduct().setName(nameInput.getText());
+			selectedProduct.getProduct().setAmount(Integer.parseInt(amountInput.getText()));
+			selectedProduct.getProduct().setMinAmount(Integer.parseInt(minAmountInput.getText()));
+			selectedProduct.getProduct().setSellPrice(Double.parseDouble(priceInput.getText()));
+			selectedProduct.getProduct().setSellPrice(Double.parseDouble(buyPriceInput.getText()));
+			selectedProduct.getProduct().setSupplier(readSupplier());
 			
-			refreshList();
+			refreshList(null);
 			setVisibility(true, false, false);
 		}
 		else {
@@ -235,7 +309,7 @@ public class StockScreen extends HBox {
 					Double.parseDouble(buyPriceInput.getText()), 
 					readSupplier());	
 			controller.addorRemoveproduct(newProduct, false);
-			listView.getItems().add(newProduct);
+			boxView.getItems().add(new ListRegel(newProduct));
 			setVisibility(true, false, false);
 		}
 	}
@@ -250,28 +324,41 @@ public class StockScreen extends HBox {
 					placeInput.getText());
 			controller.addorRemoveSupplier(newProductSupplier, false);
 			supplierSelector.getItems().add(newProductSupplier);
-			selectedProduct.setSupplier(newProductSupplier);
+			selectedProduct.getProduct().setSupplier(newProductSupplier);
 			return newProductSupplier;
 		}
 	}
 	
-	private void refreshList(){
-		content.clear();
-		content.addAll(listView.getItems());
-		listView.getItems().clear();
-		listView.getItems().addAll(content);
+	private void refreshList(ArrayList<ListRegel> newContent){
+		if(newContent == null){
+			content.clear();
+			content.addAll(boxView.getItems());
+			boxView.getItems().clear();
+			boxView.getItems().addAll(content);
+		}
+		else{
+			content.clear();
+			content.addAll(newContent);
+			boxView.getItems().clear();
+			boxView.getItems().addAll(content);
+		}
+		for (ListRegel listRegel : boxView.getItems()) {
+			listRegel.refresh();
+		}
 	}
 	
 	private void selectedListEntry(){
-		if(selectedProduct.getName()!=null)nameContent.setText(selectedProduct.getName());
-		if(Integer.toString(selectedProduct.getAmount())!=null)amountContent.setText(Integer.toString(selectedProduct.getAmount()));
-		if(Integer.toString(selectedProduct.getMinAmount())!=null)minAmountContent.setText(Integer.toString(selectedProduct.getMinAmount()));
-		if(Double.toString(selectedProduct.getSellPrice())!=null) priceContent.setText("€ " + Double.toString(selectedProduct.getSellPrice()));
-		if(Double.toString(selectedProduct.getBuyPrice())!=null)buyPriceContent.setText("€ " + Double.toString(selectedProduct.getBuyPrice()));
-		if(selectedProduct.getSupplier().getName()!=null)supplierContent.setText(selectedProduct.getSupplier().getName());
-		if(selectedProduct.getSupplier().getAdress()!=null)addressContent.setText(selectedProduct.getSupplier().getAdress());
-		if(selectedProduct.getSupplier().getPostal()!=null)postalContent.setText(selectedProduct.getSupplier().getPostal());
-		if(selectedProduct.getSupplier().getPlace()!=null)placeContent.setText(selectedProduct.getSupplier().getPlace());
+		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
+			if(selectedProduct.getProduct().getName()!=null)nameContent.setText(selectedProduct.getProduct().getName());
+			if(Integer.toString(selectedProduct.getProduct().getAmount())!=null)amountContent.setText(Integer.toString(selectedProduct.getProduct().getAmount()));
+			if(Integer.toString(selectedProduct.getProduct().getMinAmount())!=null)minAmountContent.setText(Integer.toString(selectedProduct.getProduct().getMinAmount()));
+			if(Double.toString(selectedProduct.getProduct().getSellPrice())!=null) priceContent.setText("€ " + Double.toString(selectedProduct.getProduct().getSellPrice()));
+			if(Double.toString(selectedProduct.getProduct().getBuyPrice())!=null)buyPriceContent.setText("€ " + Double.toString(selectedProduct.getProduct().getBuyPrice()));
+			if(selectedProduct.getProduct().getSupplier().getName()!=null)supplierContent.setText(selectedProduct.getProduct().getSupplier().getName());
+			if(selectedProduct.getProduct().getSupplier().getAdress()!=null)addressContent.setText(selectedProduct.getProduct().getSupplier().getAdress());
+			if(selectedProduct.getProduct().getSupplier().getPostal()!=null)postalContent.setText(selectedProduct.getProduct().getSupplier().getPostal());
+			if(selectedProduct.getProduct().getSupplier().getPlace()!=null)placeContent.setText(selectedProduct.getProduct().getSupplier().getPlace());
+		}
 	}
 	@SuppressWarnings("unchecked")
 	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
@@ -314,15 +401,15 @@ public class StockScreen extends HBox {
 	}
 	public void search(String oldVal, String newVal) {
 		if (oldVal != null && (newVal.length() < oldVal.length())) {
-			listView.getItems().clear();
-			listView.getItems().addAll(content);
+			boxView.getItems().clear();
+			boxView.getItems().addAll(content);
 		}
-		listView.getItems().clear();
-		for (Product entry : content) {
-			if (entry.getName().contains(newVal)
-					|| Double.toString(entry.getSellPrice()).contains(newVal)
-					|| entry.getSupplier().getName().contains(newVal)) {
-				listView.getItems().add(entry);
+		boxView.getItems().clear();
+		for (ListRegel entry : content) {		
+			if (entry.getProduct().getName().contains(newVal)
+					|| Double.toString(entry.getProduct().getSellPrice()).contains(newVal)
+					|| entry.getProduct().getSupplier().getName().contains(newVal)) {
+				boxView.getItems().add(entry);
 			}
 		}
 	}

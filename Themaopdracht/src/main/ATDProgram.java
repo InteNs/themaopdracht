@@ -124,12 +124,15 @@ public class ATDProgram extends Application {
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
 		addorRemoveproduct(new Product("Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
+		stock.orderProduct(stock.getAllProducts().get(0), 7);
 	}
 
 	public static void main(String[] args) {;
 		launch();
 		}
-	
+	public Stock getStock(){
+		return stock;
+	}
 	public Stage getStage(){
 		return mainStage;
 	}
