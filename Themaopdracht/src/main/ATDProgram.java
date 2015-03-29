@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import notifications.Notification;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -27,6 +26,7 @@ public class ATDProgram extends Application {
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
 	private ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
+	private ArrayList<ParkingSpace> parkingSpaces = new ArrayList<ParkingSpace>();
 	@Override
 	public void start(Stage stage) throws Exception {
 		mainStage = stage;
@@ -114,6 +114,9 @@ public class ATDProgram extends Application {
 	}
 	
 	private void addContent(){
+		for (int i = 0; i < 20; i++) {
+			parkingSpaces.add(new ParkingSpace(i));
+		}
 		addorRemoveCustomer(new Customer("Jorrit Meulenbeld", "Utrecht",
 				"NL35 INGB 0008 8953 57", LocalDate.parse("1990-08-25"), "jorritmeulenbeld@icloud.com",
 				"3552AZ", "0636114939", "Omloop 48", false), false);
@@ -128,7 +131,7 @@ public class ATDProgram extends Application {
 		addorRemoveMechanic(new Mechanic(2, "Hans", 12.5), false);
 		addorRemoveMechanic(new Mechanic(3, "Sjaak", 10.0), false);
 		addorRemoveMechanic(new Mechanic(4, "Piet", 15.0), false);
-		// constructor fixen addorRemoveMaintenanceSessions(new MaintenanceSession(receipt, stock, plannedDate), false);
+		addorRemoveMaintenanceSessions(new MaintenanceSession(new Invoice(0), stock, LocalDate.now()), false);
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
