@@ -1,12 +1,14 @@
 package screens;
 import java.util.ArrayList;
 
+import screens.StockScreen.ListRegel;
 import notifications.Notification;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -14,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -37,7 +40,7 @@ public class CustomerScreen extends HBox {
 			dateOfBirthInput = new DatePicker();
 	private ComboBox<String> 
 			filterSelector = new ComboBox<String>();
-	private ArrayList<Customer> content = new ArrayList<Customer>();
+	private ArrayList<ListItem> content = new ArrayList<ListItem>();
 	private CheckBox 
 			blackListInput = new CheckBox();
 	private Label 
@@ -69,8 +72,8 @@ public class CustomerScreen extends HBox {
 			emailInput = new TextField(), 
 			phoneInput = new TextField(),
 			bankInput = new TextField();
-	private ListView<Customer> 
-			listView = new ListView<Customer>();
+	private ListView<ListItem> 
+			listView = new ListView<ListItem>();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
@@ -119,11 +122,13 @@ public class CustomerScreen extends HBox {
 		});
 		//listview
 		listView.setPrefSize(450, 520);
-		listView.getItems().addAll(controller.getCustomers());
+		for (Customer customer : controller.getCustomers()) {
+			listView.getItems().add(new ListItem(customer));
+		}
 		refreshList();
 		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if(newValue!=null)selectedCustomer = newValue;
-			else selectedCustomer = oldValue;
+			if(newValue!=null)selectedCustomer = newValue.getCustomer();
+			else selectedCustomer = oldValue.getCustomer();
 			selectedListEntry();
 		});
 		//SearchField
@@ -144,9 +149,21 @@ public class CustomerScreen extends HBox {
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			listView.getItems().clear();
-			if(newValue.intValue()==0)listView.getItems().addAll(controller.getCustomers());
-			if(newValue.intValue()==1)listView.getItems().addAll(controller.getRemindList(false));
-			if(newValue.intValue()==2)listView.getItems().addAll(controller.getRemindList(true));
+			if(newValue.intValue()==0){
+				for (Customer customer : controller.getCustomers()) {
+					listView.getItems().add(new ListItem(customer));
+				}
+			}
+			if(newValue.intValue()==1){
+				for (Customer customer : controller.getRemindList(false)) {
+					listView.getItems().add(new ListItem(customer));
+				}
+			}
+			if(newValue.intValue()==2){
+				for (Customer customer : controller.getRemindList(true)) {
+					listView.getItems().add(new ListItem(customer));
+				}
+			}
 			refreshList();
 			if (!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());
 		});
@@ -177,9 +194,8 @@ public class CustomerScreen extends HBox {
 			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze() == "ja"){
-			Customer c = listView.getSelectionModel().getSelectedItem();
-			listView.getItems().remove(c);
-			controller.addorRemoveCustomer(c, true);
+			listView.getItems().remove(selectedCustomer);
+			controller.addorRemoveCustomer(selectedCustomer, true);
 			Notification removeNotify = new Notification(controller.getStage(), "Klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 			removeNotify.showAndWait();}
 		});
@@ -239,7 +255,7 @@ public class CustomerScreen extends HBox {
 					blackListInput.isSelected()
 					);
 			controller.addorRemoveCustomer(newCustomer, false);
-			listView.getItems().add(newCustomer);
+			listView.getItems().add(new ListItem(newCustomer));
 			setVisibility(true, false, false);
 		}
 	}
@@ -248,6 +264,9 @@ public class CustomerScreen extends HBox {
 		content.addAll(listView.getItems());
 		listView.getItems().clear();
 		listView.getItems().addAll(content);
+		for (ListItem listItem : listView.getItems()) {
+			listItem.refresh();
+		}
 	}
 	private void selectedListEntry(){
 		if(selectedCustomer.getName()!=null)nameContent.setText(selectedCustomer.getName());
@@ -310,12 +329,40 @@ public class CustomerScreen extends HBox {
 			listView.getItems().addAll(content);
 		}
 		listView.getItems().clear();
-		for (Customer entry : content) {
-			if (entry.getName().contains(newVal)
-					|| entry.getPostal().contains(newVal)
-					|| entry.getEmail().contains(newVal)) {
+		for (ListItem entry : content) {
+			if (entry.getCustomer().getName().contains(newVal)
+					|| entry.getCustomer().getPostal().contains(newVal)
+					|| entry.getCustomer().getEmail().contains(newVal)) {
 				listView.getItems().add(entry);
 			}
+		}
+	}
+	public class ListItem extends HBox{
+		private Label itemNameLabel = new Label(),itemPostalLabel = new Label(),itemEmailLabel = new Label();
+		private Customer customer;
+		public ListItem(Customer customer){
+			this.customer = customer;
+			refresh();
+			setSpacing(5);
+			getChildren().addAll(
+					itemNameLabel,
+					new Separator(Orientation.VERTICAL),
+					itemPostalLabel,
+					new Separator(Orientation.VERTICAL),
+					itemEmailLabel);
+			((Label)getChildren().get(0)).setPrefWidth(120);
+			((Label)getChildren().get(2)).setPrefWidth(100);
+			((Label)getChildren().get(4)).setPrefWidth(200);
+				
+			
+		}
+		public void refresh(){
+			itemNameLabel.setText(customer.getName());
+			itemPostalLabel.setText(customer.getPostal());
+			itemEmailLabel.setText(customer.getEmail());
+		}
+		public Customer getCustomer(){
+			return customer;
 		}
 	}
 }

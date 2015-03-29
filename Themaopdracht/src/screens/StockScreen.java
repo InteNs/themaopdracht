@@ -20,7 +20,7 @@ import notifications.Notification;
 
 public class StockScreen extends HBox {
 	private ATDProgram controller;
-	private ListRegel selectedProduct;
+	private Product selectedProduct;
 	private ProductSupplier productSupplier;
 	private double
 			spacingBoxes = 10,
@@ -150,10 +150,10 @@ public class StockScreen extends HBox {
 		refreshList(null);
 		boxView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if(newValue!=null){
-				if(newValue instanceof ListRegel) selectedProduct = newValue;
+				if(newValue instanceof ListRegel) selectedProduct = newValue.getProduct();
 			}
 			else{
-				if(newValue instanceof ListRegel) selectedProduct = oldValue;
+				if(newValue instanceof ListRegel) selectedProduct = oldValue.getProduct();
 			}
 			selectedListEntry();
 		});
@@ -192,7 +192,7 @@ public class StockScreen extends HBox {
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze().equals("confirm")){
 			boxView.getItems().remove(selectedProduct);
-			controller.addorRemoveproduct(selectedProduct.getProduct(), true);
+			controller.addorRemoveproduct(selectedProduct, true);
 			Notification removeNotify = new Notification(controller.getStage(), "Het product is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 			removeNotify.showAndWait();}
 			
@@ -229,7 +229,7 @@ public class StockScreen extends HBox {
 
 
 
-			//if (!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());
+			if(!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());
 		});
 		//Make & merge left & right
 		leftBox.getChildren().addAll (boxView, searchFieldBox,mainButtonBox);
@@ -240,6 +240,7 @@ public class StockScreen extends HBox {
 		this.getChildren().add(mainBox);
 	}
 	private void boekop() {
+		boxView.getItems().remove(boxView.getItems().size()-1);
 		for (ListRegel listRegel : boxView.getItems()) {
 			if(listRegel.getChildren().size()==2)
 				controller.getStock().fill(listRegel.getSelected(), listRegel.getAmount());
@@ -308,28 +309,28 @@ public class StockScreen extends HBox {
 	}
 
 	private void change(){
-		nameInput.setText(selectedProduct.getProduct().getName());
-		amountInput.setText(Integer.toString(selectedProduct.getProduct().getAmount()));
-		minAmountInput.setText(Integer.toString(selectedProduct.getProduct().getMinAmount()));
-		priceInput.setText(Double.toString(selectedProduct.getProduct().getSellPrice()));
-		buyPriceInput.setText(Double.toString(selectedProduct.getProduct().getBuyPrice()));
-		supplierSelector.setValue(selectedProduct.getProduct().getSupplier());
-		addressInput.setText(selectedProduct.getProduct().getSupplier().getAdress());
-		postalInput.setText(selectedProduct.getProduct().getSupplier().getPostal());
-		placeInput.setText(selectedProduct.getProduct().getSupplier().getPlace());
+		nameInput.setText(selectedProduct.getName());
+		amountInput.setText(Integer.toString(selectedProduct.getAmount()));
+		minAmountInput.setText(Integer.toString(selectedProduct.getMinAmount()));
+		priceInput.setText(Double.toString(selectedProduct.getSellPrice()));
+		buyPriceInput.setText(Double.toString(selectedProduct.getBuyPrice()));
+		supplierSelector.setValue(selectedProduct.getSupplier());
+		addressInput.setText(selectedProduct.getSupplier().getAdress());
+		postalInput.setText(selectedProduct.getSupplier().getPostal());
+		placeInput.setText(selectedProduct.getSupplier().getPlace());
 		setVisibility(true, true, true);
 		isChanging = true;
 	}
 	
 	private void save(){
 		if(isChanging){
-			selectedProduct.getProduct().setName(nameInput.getText());
-			selectedProduct.getProduct().setAmount(Integer.parseInt(amountInput.getText()));
-			selectedProduct.getProduct().setMinAmount(Integer.parseInt(minAmountInput.getText()));
-			selectedProduct.getProduct().setSellPrice(Double.parseDouble(priceInput.getText()));
-			selectedProduct.getProduct().setSellPrice(Double.parseDouble(buyPriceInput.getText()));
-			selectedProduct.getProduct().setSupplier(readSupplier());
-			System.out.println(selectedProduct.getProduct().getSupplier());
+			selectedProduct.setName(nameInput.getText());
+			selectedProduct.setAmount(Integer.parseInt(amountInput.getText()));
+			selectedProduct.setMinAmount(Integer.parseInt(minAmountInput.getText()));
+			selectedProduct.setSellPrice(Double.parseDouble(priceInput.getText()));
+			selectedProduct.setSellPrice(Double.parseDouble(buyPriceInput.getText()));
+			selectedProduct.setSupplier(readSupplier());
+			System.out.println(selectedProduct.getSupplier());
 			
 			refreshList(null);
 			setVisibility(true, false, false);
@@ -358,7 +359,7 @@ public class StockScreen extends HBox {
 					placeInput.getText());
 			controller.addorRemoveSupplier(newProductSupplier, false);
 			supplierSelector.getItems().add(newProductSupplier);
-			selectedProduct.getProduct().setSupplier(newProductSupplier);
+			selectedProduct.setSupplier(newProductSupplier);
 			return newProductSupplier;
 		}
 	}
@@ -383,15 +384,15 @@ public class StockScreen extends HBox {
 	
 	private void selectedListEntry(){
 		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
-			if(selectedProduct.getProduct().getName()!=null)nameContent.setText(selectedProduct.getProduct().getName());
-			if(Integer.toString(selectedProduct.getProduct().getAmount())!=null)amountContent.setText(Integer.toString(selectedProduct.getProduct().getAmount()));
-			if(Integer.toString(selectedProduct.getProduct().getMinAmount())!=null)minAmountContent.setText(Integer.toString(selectedProduct.getProduct().getMinAmount()));
-			if(Double.toString(selectedProduct.getProduct().getSellPrice())!=null) priceContent.setText("€ " + Double.toString(selectedProduct.getProduct().getSellPrice()));
-			if(Double.toString(selectedProduct.getProduct().getBuyPrice())!=null)buyPriceContent.setText("€ " + Double.toString(selectedProduct.getProduct().getBuyPrice()));
-			if(selectedProduct.getProduct().getSupplier().getName()!=null)supplierContent.setText(selectedProduct.getProduct().getSupplier().getName());
-			if(selectedProduct.getProduct().getSupplier().getAdress()!=null)addressContent.setText(selectedProduct.getProduct().getSupplier().getAdress());
-			if(selectedProduct.getProduct().getSupplier().getPostal()!=null)postalContent.setText(selectedProduct.getProduct().getSupplier().getPostal());
-			if(selectedProduct.getProduct().getSupplier().getPlace()!=null)placeContent.setText(selectedProduct.getProduct().getSupplier().getPlace());
+			if(selectedProduct.getName()!=null)nameContent.setText(selectedProduct.getName());
+			if(Integer.toString(selectedProduct.getAmount())!=null)amountContent.setText(Integer.toString(selectedProduct.getAmount()));
+			if(Integer.toString(selectedProduct.getMinAmount())!=null)minAmountContent.setText(Integer.toString(selectedProduct.getMinAmount()));
+			if(Double.toString(selectedProduct.getSellPrice())!=null) priceContent.setText("€ " + Double.toString(selectedProduct.getSellPrice()));
+			if(Double.toString(selectedProduct.getBuyPrice())!=null)buyPriceContent.setText("€ " + Double.toString(selectedProduct.getBuyPrice()));
+			if(selectedProduct.getSupplier().getName()!=null)supplierContent.setText(selectedProduct.getSupplier().getName());
+			if(selectedProduct.getSupplier().getAdress()!=null)addressContent.setText(selectedProduct.getSupplier().getAdress());
+			if(selectedProduct.getSupplier().getPostal()!=null)postalContent.setText(selectedProduct.getSupplier().getPostal());
+			if(selectedProduct.getSupplier().getPlace()!=null)placeContent.setText(selectedProduct.getSupplier().getPlace());
 		}
 	}
 	@SuppressWarnings("unchecked")
