@@ -19,7 +19,6 @@ public class ATDProgram extends Application {
 	private Stage mainStage;
 	private TabPane tabsScreen;
 	private Tab customerAdministration;
-	private Tab customerRelations;
 	private Tab stockAdministration;
 	private Scene mainScene;
 	private Stock stock = new Stock();
@@ -36,17 +35,11 @@ public class ATDProgram extends Application {
 		customerAdministration.setClosable(false);
 		customerAdministration.setContent(new CustomerScreen(this));
 		
-
-		customerRelations = new Tab("Herinneringen");
-		customerRelations.setClosable(false);
-		//TODO:customerRelations.setContent(arg0);
-
 		stockAdministration = new Tab("Voorraadbeheer");
 		stockAdministration.setClosable(false);
-		stockAdministration.setContent(new StockScreen());
+		stockAdministration.setContent(new StockScreen(this));
 		
-		tabsScreen.getTabs().addAll(customerAdministration, customerRelations,
-				stockAdministration);
+		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration);
 
 		// Create Mainscreen
 		mainScene = new Scene(tabsScreen, 1024, 655);
