@@ -22,6 +22,7 @@ public class ATDProgram extends Application {
 	private Tab stockAdministration;
 	private Scene mainScene;
 	private Stock stock = new Stock();
+	private ArrayList<MaintenanceSession> maintenanceSessions = new ArrayList<MaintenanceSession>();
 	private ArrayList<Invoice> receipts = new ArrayList<Invoice>();
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
 	private ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
@@ -104,6 +105,13 @@ public class ATDProgram extends Application {
 		if(remove)receipts.remove(receipt);
 		else receipts.add(receipt);
 	}
+	public ArrayList<MaintenanceSession> getMaintenanceSessions() {
+		return maintenanceSessions;
+	}
+	public void addorRemoveMaintenanceSessions(MaintenanceSession maintenanceSession, boolean remove) {
+		if(remove)maintenanceSessions.remove(maintenanceSession);
+		else maintenanceSessions.add(maintenanceSession);
+	}
 	
 	private void addContent(){
 		addorRemoveCustomer(new Customer("Jorrit Meulenbeld", "Utrecht",
@@ -120,6 +128,7 @@ public class ATDProgram extends Application {
 		addorRemoveMechanic(new Mechanic(2, "Hans", 12.5), false);
 		addorRemoveMechanic(new Mechanic(3, "Sjaak", 10.0), false);
 		addorRemoveMechanic(new Mechanic(4, "Piet", 15.0), false);
+		// constructor fixen addorRemoveMaintenanceSessions(new MaintenanceSession(receipt, stock, plannedDate), false);
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
