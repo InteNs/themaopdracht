@@ -39,7 +39,7 @@ public class Notification extends Stage {
 									))));
 			annuleren.setPrefWidth(100);
 			annuleren.setOnAction(e -> {
-				keuze = "annuleren";
+				keuze = "cancel";
 				this.hide();
 			});
 		}
@@ -55,7 +55,7 @@ public class Notification extends Stage {
 		}
 		ok.setPrefWidth(100);
 		ok.setOnAction(e -> {
-			keuze = "ja";
+			keuze = "confirm";
 			this.hide();
 		});
 		

@@ -80,22 +80,25 @@ public class StockScreen extends HBox {
 		
 		supplierSelector.getItems().addAll(controller.getSuppliers());
 		supplierSelector.setEditable(true);
-		supplierSelector.getSelectionModel().selectedItemProperty().addListener(e->{
-			if(supplierSelector.getSelectionModel().getSelectedItem() instanceof ProductSupplier){
-				ProductSupplier supplier = supplierSelector.getSelectionModel().getSelectedItem();
-				addressInput.setDisable(true);
-				addressInput.setText(supplier.getAdress());
-				postalInput.setDisable(true);
-				postalInput.setText(supplier.getPostal());
-				placeInput.setDisable(true);
-				placeInput.setText(supplier.getPlace());
-			}else{
-				addressInput.setDisable(false);
-				addressInput.clear();
-				postalInput.setDisable(false);
-				postalInput.clear();
-				placeInput.setDisable(false);
-				placeInput.clear();
+		supplierSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if(newValue != oldValue){
+				System.out.println("BOE!");
+				if(newValue instanceof ProductSupplier){
+					ProductSupplier supplier = supplierSelector.getSelectionModel().getSelectedItem();
+					addressInput.setDisable(true);
+					addressInput.setText(supplier.getAdress());
+					postalInput.setDisable(true);
+					postalInput.setText(supplier.getPostal());
+					placeInput.setDisable(true);
+					placeInput.setText(supplier.getPlace());
+				}else{
+					addressInput.setDisable(false);
+					addressInput.clear();
+					postalInput.setDisable(false);
+					postalInput.clear();
+					placeInput.setDisable(false);
+					placeInput.clear();
+				}
 			}
 		});
 		//StockDetails
@@ -127,18 +130,18 @@ public class StockScreen extends HBox {
 		
 		saveButton.setPrefSize(150, 50);
 		saveButton.setOnAction(e -> {
-			Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?", ATDProgram.notificationStyle.CONFIRM);
+			Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
 			changeConfirm.showAndWait();
-			save();
-			Notification changeNotify = new Notification(controller.getStage(), "Wijzigingen zijn doorgevoerd.", ATDProgram.notificationStyle.NOTIFY);
-			changeNotify.showAndWait();
-			if(isChanging){
-				setVisibility(true, false, false);
+			switch (changeConfirm.getKeuze()) {
+				case "confirm": {
+					save();
+					Notification changeNotify = new Notification(controller	.getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
+					changeNotify.showAndWait();
+					setVisibility(true, false, false);
+				}
+				case "cancel": setVisibility(true, false, false);
 			}
-			else{
-				
-				setVisibility(true, false, false);
-			}
+
 		});
 		//Listview
 		boxView.setPrefSize(450, 520);
@@ -187,7 +190,7 @@ public class StockScreen extends HBox {
 		removeButton.setOnAction(e->{
 			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit product wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			removeConfirm.showAndWait();
-			if (removeConfirm.getKeuze() == "ja"){
+			if (removeConfirm.getKeuze().equals("confirm")){
 			boxView.getItems().remove(selectedProduct);
 			controller.addorRemoveproduct(selectedProduct.getProduct(), true);
 			Notification removeNotify = new Notification(controller.getStage(), "Het product is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
@@ -209,8 +212,19 @@ public class StockScreen extends HBox {
 				    boxView.getItems().add(new ListRegel((Product)entry.getKey(), entry.getValue()));
 			}
 			if(newValue.intValue()==2){
-
-				
+				boxView.getItems().clear();
+				Button proceed = new Button("wijzigingen doorvoeren");
+				proceed.setOnAction(e->{
+					boekop();
+					filterSelector.getSelectionModel().selectFirst();
+				});
+				Button newRule = new Button("regel toevoegen");
+				newRule.setOnAction(e->{
+					boxView.getItems().remove(boxView.getItems().size()-1);
+					boxView.getItems().add(new ListRegel());
+					boxView.getItems().add(boxView.getItems().size(), new ListRegel(newRule, proceed));
+				});
+				boxView.getItems().add(boxView.getItems().size(), new ListRegel(newRule, proceed));
 			}
 
 
@@ -225,25 +239,36 @@ public class StockScreen extends HBox {
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
 	}
+	private void boekop() {
+		for (ListRegel listRegel : boxView.getItems()) {
+			if(listRegel.getChildren().size()==2)
+				controller.getStock().fill(listRegel.getSelected(), listRegel.getAmount());
+		}
+		
+	}
 	public class ListRegel extends HBox{
 		private Product product;
 		private ComboBox<Product> productSelector = new ComboBox<Product>();
-		private TextField amount = new TextField();
+		private TextField input = new TextField();
 		private Label itemPriceLabel = new Label(),itemNameLabel = new Label(),itemSupplierLabel = new Label();
 		public ListRegel(Product product){
-				this.product = product;
-				refresh();
-				setSpacing(5);
-				getChildren().addAll(
-						itemNameLabel,
-						new Separator(Orientation.VERTICAL),
-						itemPriceLabel,
-						new Separator(Orientation.VERTICAL),
-						itemSupplierLabel);
+			//ALLE PRODUCTEN
+			this.product = product;
+			refresh();
+			setSpacing(5);
+			getChildren().addAll(
+					itemNameLabel,
+					new Separator(Orientation.VERTICAL),
+					itemPriceLabel,
+					new Separator(Orientation.VERTICAL),
+					itemSupplierLabel);
 				for (Node node : getChildren()) 
 					if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
 		public ListRegel(Product product, int amount){
+			//BESTELDE PRODUCTEN
+			this.product = product;
+			refresh();
 			setSpacing(5);
 			getChildren().addAll(
 					itemNameLabel,
@@ -255,8 +280,16 @@ public class StockScreen extends HBox {
 				if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
 		public ListRegel(){
+			//OPBOEKEN
 			productSelector.getItems().addAll(controller.getProducts());
-			getChildren().addAll(productSelector, amount);
+			getChildren().addAll(productSelector, input);
+		}
+		public ListRegel(Button b,Button c){
+			setSpacing(5);
+			getChildren().addAll(
+					new Label("+"),
+					b,c);
+			
 		}
 		public void refresh(){
 			itemNameLabel.setText(product.getName());
@@ -267,7 +300,7 @@ public class StockScreen extends HBox {
 			return productSelector.getSelectionModel().getSelectedItem();
 		}
 		public int getAmount(){
-			return Integer.parseInt(amount.getText());
+			return Integer.parseInt(input.getText());
 		}
 		public Product getProduct(){
 			return product;
@@ -296,6 +329,7 @@ public class StockScreen extends HBox {
 			selectedProduct.getProduct().setSellPrice(Double.parseDouble(priceInput.getText()));
 			selectedProduct.getProduct().setSellPrice(Double.parseDouble(buyPriceInput.getText()));
 			selectedProduct.getProduct().setSupplier(readSupplier());
+			System.out.println(selectedProduct.getProduct().getSupplier());
 			
 			refreshList(null);
 			setVisibility(true, false, false);
@@ -378,7 +412,7 @@ public class StockScreen extends HBox {
 					}
 					if(input instanceof ComboBox){
 						((ComboBox<ProductSupplier>)input).setPrefWidth(0);
-						((ComboBox<ProductSupplier>)input).setValue(null);
+						((ComboBox<ProductSupplier>)input).getSelectionModel().clearSelection();
 					}
 
 					content.setPrefWidth(widthLabels*2);
