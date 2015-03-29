@@ -1,5 +1,6 @@
 package screens;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Supplier;
 
 import sun.security.jca.GetInstance.Instance;
@@ -65,9 +66,12 @@ public class StockScreen extends HBox {
 			postalInput = new TextField(),
 			placeInput = new TextField();
 	private ComboBox<ProductSupplier> supplierSelector = new ComboBox<ProductSupplier>();
+	private ComboBox<String> filterSelector = new ComboBox<String>();
 	private ArrayList<Product> content = new ArrayList<Product>();
 	private ListView<Product> 
 			listView = new ListView<Product>();
+	private ListView<HBox>
+			boxView = new ListView<HBox>();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
@@ -144,15 +148,18 @@ public class StockScreen extends HBox {
 		//Listview
 		listView.setPrefSize(450, 520);
 		listView.getItems().addAll(controller.getProducts());
-		refreshList();
+		refreshList(listView, null);
 		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if(newValue!=null)selectedProduct = newValue;
 			else selectedProduct = oldValue;
 			selectedListEntry();
 		});
+		//orderView
+		boxView.setPrefSize(450, 0);
+		boxView.setVisible(false);
 		//SearchField
-		searchFieldBox = new HBox(searchInput = new TextField("Zoek..."));
-		searchInput.setPrefSize(470, 50);
+		searchFieldBox = new HBox(10,searchInput = new TextField("Zoek..."),filterSelector);
+		searchInput.setPrefSize(310, 50);
 		searchInput.setOnMouseClicked(e -> {
 			if (searchInput.getText().equals("Zoek...")) {
 				searchInput.clear();
@@ -191,15 +198,70 @@ public class StockScreen extends HBox {
 			removeNotify.showAndWait();}
 			
 		});
+		filterSelector.setPrefSize(150, 50);
+		filterSelector.getItems().addAll("Mode: Voorraad", "Mode: Bestellijst", "Mode: Opboeken");
+		filterSelector.getSelectionModel().selectFirst();
+		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
+			if(newValue.intValue()==0){
+				listView.setVisible(true);
+				listView.setPrefSize(450, 520);
+				boxView.setVisible(false);
+				boxView.setPrefSize(450, 0);
+			}
+			if(newValue.intValue()==1){
+				listView.setVisible(false);
+				listView.setPrefSize(450, 0);
+				boxView.setVisible(true);
+				boxView.setPrefSize(450, 520);
+				//TODO maak orderregel aan voor iedere key in controller.getstock.getordereditems 
+			
+				
+			}
+			if(newValue.intValue()==2){
+				listView.setVisible(false);
+				listView.setPrefSize(450, 0);
+				boxView.setVisible(true);
+				boxView.setPrefSize(450, 520);
+				
+			}
+			System.out.println(content);
+//			refreshList(listView,content);
+//			refreshList(orderView,content);
+			System.out.println(listView.getItems());
+			//if (!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());
+		});
 		//Make & merge left & right
-		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
+		leftBox.getChildren().addAll (listView, boxView, searchFieldBox,mainButtonBox);
 		rightBox.getChildren().addAll(StockDetails);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
 	}
-	
+	public class OrderRegel extends HBox{
+		private Label nameL, amountL, suppliernameL;
+		public OrderRegel(Product product, int amount){
+			nameL.setText(product.getName());
+			amountL.setText(""+amount);
+			suppliernameL.setText(product.getSupplier().getName());
+			
+			getChildren().addAll(nameL,amountL,suppliernameL);
+		}
+	}
+	public class OpboekRegel extends HBox{
+		private ComboBox<Product> productSelector = new ComboBox<Product>();
+		private TextField amount = new TextField();
+		public OpboekRegel(){
+			productSelector.getItems().addAll(controller.getProducts());
+			getChildren().addAll(productSelector, amount);
+		}
+		public Product getSelected(){
+			return productSelector.getSelectionModel().getSelectedItem();
+		}
+		public int getAmount(){
+			return Integer.parseInt(amount.getText());
+		}
+	}
 	private void change(){
 		nameInput.setText(selectedProduct.getName());
 		amountInput.setText(Integer.toString(selectedProduct.getAmount()));
@@ -223,7 +285,7 @@ public class StockScreen extends HBox {
 			selectedProduct.setSellPrice(Double.parseDouble(buyPriceInput.getText()));
 			selectedProduct.setSupplier(readSupplier());
 			
-			refreshList();
+			refreshList(listView, null);
 			setVisibility(true, false, false);
 		}
 		else {
@@ -255,11 +317,20 @@ public class StockScreen extends HBox {
 		}
 	}
 	
-	private void refreshList(){
-		content.clear();
-		content.addAll(listView.getItems());
-		listView.getItems().clear();
-		listView.getItems().addAll(content);
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void refreshList(ListView list,ArrayList<Product> newContent){
+		if(newContent == null){
+			content.clear();
+			content.addAll(list.getItems());
+			list.getItems().clear();
+			list.getItems().addAll(content);
+		}
+		else{
+			content.clear();
+			content.addAll(newContent);
+			list.getItems().clear();
+			list.getItems().addAll(content);
+		}
 	}
 	
 	private void selectedListEntry(){
