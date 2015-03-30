@@ -26,5 +26,8 @@ public class Mechanic {
 	public void setHourlyFee(double hourlyFee) {
 		this.hourlyFee = hourlyFee;
 	}
+	public String toString(){
+		return name + " a € " + hourlyFee;
+	}
 	
 }

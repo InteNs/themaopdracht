@@ -74,7 +74,7 @@ public class MaintenanceScreen extends HBox {
 				new VBox(20,
 						new HBox(20,date,			dateContent,		dateInput),
 						new HBox(20,mechanic,		mechanicContent,	mechanicSelector),
-						new HBox(20,usedPartsAmount,usedPartsAmountContent),
+						new HBox(20,usedPartsAmount,usedPartsAmountContent, new Label()),
 						new HBox(20,newProductButton),
 						new HBox(20,cancelButton,	saveButton)
 						));
@@ -89,7 +89,9 @@ public class MaintenanceScreen extends HBox {
 		//cancelbutton
 		cancelButton.setPrefSize(150, 50);
 		cancelButton.setOnAction(e -> {
+			disableMainButtons(false);
 				setVisibility(true, false, false);
+					((VBox)detailsBox.getChildren().get(0)).getChildren().get(1).setVisible(true);
 		});
 		//savebutton
 		saveButton.setPrefSize(150, 50);
@@ -99,6 +101,7 @@ public class MaintenanceScreen extends HBox {
 			save();
 			Notification changeNotify = new Notification(controller.getStage(), "Wijzigingen zijn doorgevoerd.", ATDProgram.notificationStyle.NOTIFY);
 			changeNotify.showAndWait();
+			disableMainButtons(false);
 		});
 		//listview
 		listView.setPrefSize(450, 520);
@@ -163,6 +166,10 @@ public class MaintenanceScreen extends HBox {
 			setVisibility(true, false, false);
 			setVisibility(false, true, true);
 			isChanging = false;
+			if (!isChanging) {
+				((VBox)detailsBox.getChildren().get(0)).getChildren().get(1).setVisible(false);
+			}
+			disableMainButtons(true);
 		});
 		//addProductButton
 		newProductButton.setPrefSize(150, 50);
@@ -188,7 +195,11 @@ public class MaintenanceScreen extends HBox {
 		changeButton.setPrefSize(150, 50);
 		changeButton.setOnAction(e -> {
 			if(selectedMaintenanceSession!=null){
+				disableMainButtons(true);
 				isChanging = true;
+				if (isChanging) {
+					((VBox)detailsBox.getChildren().get(0)).getChildren().get(1).setVisible(true);
+				}
 				change();
 			}else{
 				Notification errorNotify = new Notification(controller.getStage(), "Niets geselecteerd!", ATDProgram.notificationStyle.NOTIFY);
@@ -266,6 +277,10 @@ public class MaintenanceScreen extends HBox {
 	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
 		cancelButton.setVisible(setButtonsVisible);
 		saveButton.setVisible(setButtonsVisible);	
+		if (!isChanging) {
+			newProductButton.setVisible(!setButtonsVisible);
+		}
+		else newProductButton.setVisible(true);
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			HBox box = (HBox) node1;
 			if(box.getChildren().size()>2){
@@ -282,21 +297,23 @@ public class MaintenanceScreen extends HBox {
 						((DatePicker)input).setPrefWidth(0);
 						((DatePicker)input).setValue(null);
 					}
-					if(input instanceof CheckBox){
-						((CheckBox)input).setPrefSize(0,0);
-						((CheckBox)input).setSelected(false);
+					if(input instanceof ComboBox){
+						((ComboBox)input).setPrefWidth(0);
+						((ComboBox)input).getSelectionModel().select(null);
 					}
 					content.setPrefWidth(widthLabels*2);
 				}
 				else if (!setDetailsVisible) {
 					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels*2);
 					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels*2);
+					if(input instanceof ComboBox)	((ComboBox)input).setPrefWidth(widthLabels);
 					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
 					content.setPrefWidth(0);
 				}			
 				else if (setDetailsVisible || setTextFieldsVisible) {
 					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels);
 					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels);
+					if(input instanceof ComboBox)	((ComboBox)input).setPrefWidth(widthLabels);
 					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
 					content.setPrefWidth(widthLabels);
 				}
@@ -344,6 +361,11 @@ public class MaintenanceScreen extends HBox {
 		public MaintenanceSession getMaintenanceSession(){
 			return session;
 		}
+	}
+	public void disableMainButtons(boolean disable) {
+		newButton.setDisable(disable);
+		changeButton.setDisable(disable);
+		removeButton.setDisable(disable);
 	}
 }
 
