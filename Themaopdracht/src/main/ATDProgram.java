@@ -10,7 +10,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import screens.CustomerScreen;
-import screens.ServiceScreen;
+import screens.MaintenanceScreen;
 import screens.StockScreen;
 
 
@@ -46,7 +46,7 @@ public class ATDProgram extends Application {
 		
 		serviceScreen = new Tab("Service");
 		serviceScreen.setClosable(false);
-		serviceScreen.setContent(new ServiceScreen(this));
+		serviceScreen.setContent(new MaintenanceScreen(this));
 		
 		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration,serviceScreen);
 
