@@ -22,7 +22,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
+import main.Invoice;
 import main.MaintenanceSession;
+import main.Mechanic;
 
 public class MaintenanceScreen extends HBox {
 	private ATDProgram controller;
@@ -38,29 +40,25 @@ public class MaintenanceScreen extends HBox {
 			cancelButton = new Button("Annuleren"),
 			saveButton = new Button("Opslaan");
 	private DatePicker 
-			dateOfBirthInput = new DatePicker();
+			dateInput = new DatePicker();
 	private ComboBox<String> 
 			filterSelector = new ComboBox<String>();
+	private ComboBox<Mechanic>
+			mechanicSelector = new ComboBox<Mechanic>();
 	private ArrayList<ListItem> content = new ArrayList<ListItem>();
 	private CheckBox 
 			blackListInput = new CheckBox();
 	private Label 
-			date = new Label("Naam: "),
+			date = new Label("Geplande datum: "),
 			dateContent = new Label("-"), 
-			mechanic = new Label("Adres: "), 
+			mechanic = new Label("Monteur: "), 
 			mechanicContent = new Label("-"),
-			usedPartsAmount = new Label("Postcode: "),
+			usedPartsAmount = new Label("aantal onderdelen: "),
 			usedPartsAmountContent = new Label("-");
-	
+
 	private TextField 
-			searchInput = new TextField(), 
-			DateInput = new TextField(), 
-			addressInput = new TextField(),
-			postalInput = new TextField(), 
-			placeInput = new TextField(), 
-			emailInput = new TextField(), 
-			phoneInput = new TextField(),
-			bankInput = new TextField();
+			searchInput = new TextField();
+			
 	private ListView<ListItem> 
 			listView = new ListView<ListItem>();
 	private VBox
@@ -76,16 +74,10 @@ public class MaintenanceScreen extends HBox {
 		//MaintenanceSessionDetails
 		detailsBox.getChildren().addAll(
 				new VBox(20,
-						new HBox(20,date,		dateContent,		DateInput),
-						new HBox(20,mechanic,	mechanicContent,		addressInput),
-						new HBox(20,usedPartsAmount,		usedPartsAmountContent,		postalInput),
-						new HBox(20,place,		placeContent,		placeInput),
-						new HBox(20,dateOfBirth,dateOfBirthContent,	dateOfBirthInput),
-						new HBox(20,email,		emailContent,		emailInput),
-						new HBox(20,phone,		phoneContent,		phoneInput),
-						new HBox(20,bank,		bankContent,		bankInput),
-						new HBox(20,blackList,	blackListContent,	blackListInput),	
-						new HBox(20,cancelButton,saveButton)
+						new HBox(20,date,			dateContent,		dateInput),
+						new HBox(20,mechanic,		mechanicContent,	mechanicSelector),
+						new HBox(20,usedPartsAmount,usedPartsAmountContent),	
+						new HBox(20,cancelButton,	saveButton)
 						));
 		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
 		detailsBox.setPrefSize(450, 520-15);
@@ -203,15 +195,9 @@ public class MaintenanceScreen extends HBox {
 	 * vult alle gegevens in de TextFields om aan te passen
 	 */
 	private void change(){
-		DateInput.setText(selectedMaintenanceSession.getName());
-		placeInput.setText(selectedMaintenanceSession.getPlace());
-		bankInput.setText(selectedMaintenanceSession.getBankAccount());
-		dateOfBirthInput.setValue(selectedMaintenanceSession.getDateOfBirth());
-		emailInput.setText(selectedMaintenanceSession.getEmail());
-		postalInput.setText(selectedMaintenanceSession.getPostal());
-		phoneInput.setText(selectedMaintenanceSession.getTel());
-		addressInput.setText(selectedMaintenanceSession.getAdress());
-		blackListInput.setSelected(selectedMaintenanceSession.isOnBlackList());
+		dateInput.setValue(selectedMaintenanceSession.getPlannedDate());
+		if(selectedMaintenanceSession.getMechanic()==null)mechanicSelector.getSelectionModel().select(null);
+		mechanicSelector.getSelectionModel().select(selectedMaintenanceSession.getMechanic());
 		setVisibility(true, true, true);	
 		isChanging = true;
 	}
@@ -220,30 +206,17 @@ public class MaintenanceScreen extends HBox {
 	 */
 	private void save(){
 		if(isChanging){
-			selectedMaintenanceSession.setName(DateInput.getText());
-			selectedMaintenanceSession.setPlace(placeInput.getText());
-			selectedMaintenanceSession.setBankAccount(bankInput.getText());
-			selectedMaintenanceSession.setDateOfBirth(dateOfBirthInput.getValue());
-			selectedMaintenanceSession.setEmail(emailInput.getText());
-			selectedMaintenanceSession.setPostal(postalInput.getText());
-			selectedMaintenanceSession.setTel(phoneInput.getText());
-			selectedMaintenanceSession.setAdress(addressInput.getText());
-			selectedMaintenanceSession.setOnBlackList(blackListInput.isSelected());
+			selectedMaintenanceSession.setPlannedDate(dateInput.getValue());
+			selectedMaintenanceSession.setMechanic(mechanicSelector.getValue());
 			refreshList();
 			setVisibility(true, false, false);
 			
 		}
 		else{
 			MaintenanceSession newMaintenanceSession = new MaintenanceSession(
-					DateInput.getText(),
-					placeInput.getText(),
-					bankInput.getText(),
-					dateOfBirthInput.getValue(),
-					emailInput.getText(),
-					postalInput.getText(),
-					phoneInput.getText(),
-					addressInput.getText(),
-					blackListInput.isSelected()
+					new Invoice(0),
+					controller.getStock(),
+					dateInput.getValue()
 					);
 			controller.addorRemoveMaintenanceSessions(newMaintenanceSession, false);
 			listView.getItems().add(new ListItem(newMaintenanceSession));
@@ -260,16 +233,10 @@ public class MaintenanceScreen extends HBox {
 		}
 	}
 	private void selectedListEntry(){
-		if(selectedMaintenanceSession.getName()!=null)dateContent.setText(selectedMaintenanceSession.getName());
-		if(selectedMaintenanceSession.getPlace()!=null)placeContent.setText(selectedMaintenanceSession.getPlace());
-		if(selectedMaintenanceSession.getBankAccount()!=null)bankContent.setText(selectedMaintenanceSession.getBankAccount());
-		if(selectedMaintenanceSession.getDateOfBirth() != null) dateOfBirthContent.setText(selectedMaintenanceSession.getDateOfBirth().toString());
-		if(selectedMaintenanceSession.getEmail()!= null)emailContent.setText(selectedMaintenanceSession.getEmail());
-		if(selectedMaintenanceSession.getPostal()!=null)usedPartsAmountContent.setText(selectedMaintenanceSession.getPostal());
-		if(selectedMaintenanceSession.getTel()!=null)phoneContent.setText(selectedMaintenanceSession.getTel());
-		if(selectedMaintenanceSession.getAdress()!=null)mechanicContent.setText(selectedMaintenanceSession.getAdress());
-		if(selectedMaintenanceSession.isOnBlackList())blackListContent.setText("ja");
-		else blackListContent.setText("nee");
+		if(selectedMaintenanceSession.getPlannedDate()!=null)
+			dateContent.setText(selectedMaintenanceSession.getPlannedDate().toString());
+		if(selectedMaintenanceSession.getMechanic()!=null)
+			mechanicContent.setText(selectedMaintenanceSession.getMechanic().getName());
 	}
 	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
 		cancelButton.setVisible(setButtonsVisible);
@@ -295,21 +262,18 @@ public class MaintenanceScreen extends HBox {
 						((CheckBox)input).setSelected(false);
 					}
 					content.setPrefWidth(widthLabels*2);
-					email.setMinWidth(widthLabels);
 				}
 				else if (!setDetailsVisible) {
 					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels*2);
 					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels*2);
 					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
 					content.setPrefWidth(0);
-					email.setMinWidth(widthLabels-5);
 				}			
 				else if (setDetailsVisible || setTextFieldsVisible) {
 					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels);
 					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels);
 					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
 					content.setPrefWidth(widthLabels);
-					email.setMinWidth(widthLabels);
 				}
 			}
 		}	
@@ -321,26 +285,24 @@ public class MaintenanceScreen extends HBox {
 		}
 		listView.getItems().clear();
 		for (ListItem entry : content) {
-			if (entry.getMaintenanceSession().getName().contains(newVal)
-					|| entry.getMaintenanceSession().getPostal().contains(newVal)
-					|| entry.getMaintenanceSession().getEmail().contains(newVal)) {
+			if (entry.getMaintenanceSession().getMechanic().getName().equals(newVal)) {
 				listView.getItems().add(entry);
 			}
 		}
 	}
 	public class ListItem extends HBox{
-		private Label itemNameLabel = new Label(),itemPostalLabel = new Label(),itemEmailLabel = new Label();
-		private MaintenanceSession customer;
-		public ListItem(MaintenanceSession customer){
-			this.customer = customer;
+		private Label itemDate = new Label(),itemMechanic = new Label(),itemAmount = new Label();
+		private MaintenanceSession session;
+		public ListItem(MaintenanceSession session){
+			this.session = session;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
-					itemNameLabel,
+					itemDate,
 					new Separator(Orientation.VERTICAL),
-					itemPostalLabel,
+					itemMechanic,
 					new Separator(Orientation.VERTICAL),
-					itemEmailLabel);
+					itemAmount);
 			((Label)getChildren().get(0)).setPrefWidth(120);
 			((Label)getChildren().get(2)).setPrefWidth(100);
 			((Label)getChildren().get(4)).setPrefWidth(200);
@@ -348,12 +310,14 @@ public class MaintenanceScreen extends HBox {
 			
 		}
 		public void refresh(){
-			itemNameLabel.setText(customer.getName());
-			itemPostalLabel.setText(customer.getPostal());
-			itemEmailLabel.setText(customer.getEmail());
+			itemDate.setText(session.getPlannedDate().toString());
+			if(session.getMechanic()!=null)
+				itemMechanic.setText(session.getMechanic().getName());
+			itemAmount.setText(Integer.toString(session.getUsedParts().size()));
 		}
+		
 		public MaintenanceSession getMaintenanceSession(){
-			return customer;
+			return session;
 		}
 	}
 }

@@ -25,6 +25,9 @@ public class MaintenanceSession {
 	public LocalDate getPlannedDate(){
 		return plannedDate;
 	}
+	public void setPlannedDate(LocalDate date){
+		plannedDate = date;
+	}
 	public void setMechanic(Mechanic mechanic){
 		this.mechanic = mechanic;
 	}
@@ -42,5 +45,9 @@ public class MaintenanceSession {
 			stock.useProduct(key, usedParts.get(key));
 			receipt.addItem(price, key.getName(),""+usedParts.get(key));
 		}
+	}
+	public HashMap<Product, Integer> getUsedParts(){
+		return usedParts;
+		
 	}
 }
