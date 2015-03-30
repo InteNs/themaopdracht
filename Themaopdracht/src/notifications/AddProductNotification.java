@@ -25,10 +25,11 @@ public class AddProductNotification extends Stage {
 	private VBox notification;
 	private ATDProgram controller;
 	
-	public AddProductNotification(Stage currentStage, String bericht){
+	public AddProductNotification(Stage currentStage, String bericht, ATDProgram controller){
 		super(StageStyle.UTILITY);
 		initOwner(currentStage); 
 		initModality(Modality.WINDOW_MODAL); 
+		this.controller = controller;
 		this.setResizable(false);
 		melding = new Label(bericht);
 		
@@ -49,10 +50,10 @@ public class AddProductNotification extends Stage {
 				this.hide();
 		});
 			ok.setPrefWidth(100);
-			ok.setOnAction(e -> {
-				keuze = "confirm";
-				this.hide();
-			});
+			   ok.setOnAction(e -> {
+			    keuze = "confirm";
+			    this.hide();
+			   });
 		notification.setAlignment(Pos.CENTER);
 		notification.setPadding(new Insets(20));
 		
@@ -63,5 +64,8 @@ public class AddProductNotification extends Stage {
 	
 	public String getKeuze(){
 		return keuze;
+	}
+	public Product getSelected(){
+		return productSelector.getSelectionModel().getSelectedItem();
 	}
 }

@@ -2,12 +2,6 @@ package screens;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import screens.StockScreen.ListRegel;
-import notifications.Notification;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -25,6 +19,8 @@ import main.ATDProgram;
 import main.Invoice;
 import main.MaintenanceSession;
 import main.Mechanic;
+import notifications.AddProductNotification;
+import notifications.Notification;
 
 public class MaintenanceScreen extends HBox {
 	private ATDProgram controller;
@@ -38,7 +34,9 @@ public class MaintenanceScreen extends HBox {
 			changeButton = new Button("Aanpassen"), 
 			removeButton = new Button("Verwijderen"), 
 			cancelButton = new Button("Annuleren"),
+			newProductButton = new Button("product toevoegen"),
 			saveButton = new Button("Opslaan");
+		
 	private DatePicker 
 			dateInput = new DatePicker();
 	private ComboBox<String> 
@@ -46,8 +44,7 @@ public class MaintenanceScreen extends HBox {
 	private ComboBox<Mechanic>
 			mechanicSelector = new ComboBox<Mechanic>();
 	private ArrayList<ListItem> content = new ArrayList<ListItem>();
-	private CheckBox 
-			blackListInput = new CheckBox();
+
 	private Label 
 			date = new Label("Geplande datum: "),
 			dateContent = new Label("-"), 
@@ -72,11 +69,13 @@ public class MaintenanceScreen extends HBox {
 	public MaintenanceScreen(ATDProgram controller) {
 		this.controller = controller;
 		//MaintenanceSessionDetails
+		mechanicSelector.getItems().addAll(controller.getMechanics());
 		detailsBox.getChildren().addAll(
 				new VBox(20,
 						new HBox(20,date,			dateContent,		dateInput),
 						new HBox(20,mechanic,		mechanicContent,	mechanicSelector),
-						new HBox(20,usedPartsAmount,usedPartsAmountContent),	
+						new HBox(20,usedPartsAmount,usedPartsAmountContent),
+						new HBox(20,newProductButton),
 						new HBox(20,cancelButton,	saveButton)
 						));
 		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
@@ -165,11 +164,36 @@ public class MaintenanceScreen extends HBox {
 			setVisibility(false, true, true);
 			isChanging = false;
 		});
+		//addProductButton
+		newProductButton.setPrefSize(150, 50);
+		newProductButton.setOnAction(e->{
+			AddProductNotification addProductConfirm = new AddProductNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller);
+			addProductConfirm.showAndWait();
+			if(addProductConfirm.getKeuze().equals("confirm")){
+				selectedMaintenanceSession.usePart(addProductConfirm.getSelected());
+				System.out.println(addProductConfirm.getSelected());
+				System.out.println(selectedMaintenanceSession.getUsedParts());
+			 	System.out.println(Integer.toString(selectedMaintenanceSession.getTotalParts()));
+			 	Notification changeNotify = new Notification(controller .getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
+			 	changeNotify.showAndWait();
+			 	refreshList();
+			 	selectedListEntry();
+			}
+			
+			
+			     
+			    
+		});
 		//ChangeButton
 		changeButton.setPrefSize(150, 50);
 		changeButton.setOnAction(e -> {
-			isChanging = true;
-			change();
+			if(selectedMaintenanceSession!=null){
+				isChanging = true;
+				change();
+			}else{
+				Notification errorNotify = new Notification(controller.getStage(), "Niets geselecteerd!", ATDProgram.notificationStyle.NOTIFY);
+				errorNotify.showAndWait();
+			}
 		});
 		//RemoveButton
 		removeButton.setPrefSize(150, 50);
@@ -237,6 +261,7 @@ public class MaintenanceScreen extends HBox {
 			dateContent.setText(selectedMaintenanceSession.getPlannedDate().toString());
 		if(selectedMaintenanceSession.getMechanic()!=null)
 			mechanicContent.setText(selectedMaintenanceSession.getMechanic().getName());
+		usedPartsAmountContent.setText(Integer.toString(selectedMaintenanceSession.getTotalParts()));
 	}
 	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
 		cancelButton.setVisible(setButtonsVisible);
@@ -311,8 +336,8 @@ public class MaintenanceScreen extends HBox {
 		}
 		public void refresh(){
 			itemDate.setText(session.getPlannedDate().toString());
-			if(session.getMechanic()!=null)
-				itemMechanic.setText(session.getMechanic().getName());
+			if(session.getMechanic()!=null)itemMechanic.setText(session.getMechanic().getName());
+			else itemMechanic.setText("Geen Mechanic");
 			itemAmount.setText(Integer.toString(session.getUsedParts().size()));
 		}
 		

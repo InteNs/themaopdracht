@@ -44,7 +44,7 @@ public class ATDProgram extends Application {
 		stockAdministration.setClosable(false);
 		stockAdministration.setContent(new StockScreen(this));
 		
-		serviceScreen = new Tab("Service");
+		serviceScreen = new Tab("Onderhoud");
 		serviceScreen.setClosable(false);
 		serviceScreen.setContent(new MaintenanceScreen(this));
 		

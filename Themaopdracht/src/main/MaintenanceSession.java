@@ -9,6 +9,8 @@ public class MaintenanceSession {
 	private Invoice receipt;
 	private Stock stock;
 	private Mechanic mechanic;
+	private int totalParts = 0;;
+	
 	private HashMap<Product, Integer> usedParts;
 	public MaintenanceSession(Invoice receipt, Stock stock,LocalDate plannedDate) {
 
@@ -20,6 +22,11 @@ public class MaintenanceSession {
 	public void usePart(Product product){
 		if(usedParts.containsKey(product)){
 			usedParts.put(product, usedParts.get(product)+1);
+			totalParts++;
+		}
+		else {
+			usedParts.put(product, 1);
+			totalParts++;
 		}
 	}
 	public LocalDate getPlannedDate(){
@@ -49,5 +56,8 @@ public class MaintenanceSession {
 	public HashMap<Product, Integer> getUsedParts(){
 		return usedParts;
 		
+	}
+	public int getTotalParts() {
+		return totalParts;
 	}
 }
