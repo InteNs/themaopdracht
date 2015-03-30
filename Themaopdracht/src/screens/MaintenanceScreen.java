@@ -35,7 +35,8 @@ public class MaintenanceScreen extends HBox {
 			removeButton = new Button("Verwijderen"), 
 			cancelButton = new Button("Annuleren"),
 			newProductButton = new Button("product toevoegen"),
-			saveButton = new Button("Opslaan");
+			saveButton = new Button("Opslaan"),
+			endSession = new Button("Afronden");
 		
 	private DatePicker 
 			dateInput = new DatePicker();
@@ -75,7 +76,7 @@ public class MaintenanceScreen extends HBox {
 						new HBox(20,date,			dateContent,		dateInput),
 						new HBox(20,mechanic,		mechanicContent,	mechanicSelector),
 						new HBox(20,usedPartsAmount,usedPartsAmountContent, new Label()),
-						new HBox(20,newProductButton),
+						new HBox(20,endSession ,newProductButton),
 						new HBox(20,cancelButton,	saveButton)
 						));
 		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
@@ -174,23 +175,30 @@ public class MaintenanceScreen extends HBox {
 		//addProductButton
 		newProductButton.setPrefSize(150, 50);
 		newProductButton.setOnAction(e->{
-			AddProductNotification addProductConfirm = new AddProductNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller);
-			addProductConfirm.showAndWait();
-			if(addProductConfirm.getKeuze().equals("confirm")){
-				selectedMaintenanceSession.usePart(addProductConfirm.getSelected());
-				System.out.println(addProductConfirm.getSelected());
+			AddProductNotification addProductNormal = new AddProductNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.NORMAL);
+			addProductNormal.showAndWait();
+			if(addProductNormal.getKeuze().equals("confirm")){
+				selectedMaintenanceSession.usePart(addProductNormal.getSelected());
+				System.out.println(addProductNormal.getSelected());
 				System.out.println(selectedMaintenanceSession.getUsedParts());
 			 	System.out.println(Integer.toString(selectedMaintenanceSession.getTotalParts()));
 			 	Notification changeNotify = new Notification(controller .getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
 			 	changeNotify.showAndWait();
 			 	refreshList();
 			 	selectedListEntry();
-			}
-			
-			
-			     
-			    
+			} 
 		});
+		//endSession button
+				endSession.setPrefSize(150, 50);
+				endSession.setOnAction(e -> {
+					AddProductNotification addProductEndSession = new AddProductNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.ENDSESSION);
+					addProductEndSession.showAndWait();
+					selectedMaintenanceSession.endSession(addProductEndSession.getHours());
+					Notification changeNotify = new Notification(controller .getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
+				 	changeNotify.showAndWait();
+				 	refreshList();
+				 	selectedListEntry();
+				});
 		//ChangeButton
 		changeButton.setPrefSize(150, 50);
 		changeButton.setOnAction(e -> {
@@ -217,6 +225,7 @@ public class MaintenanceScreen extends HBox {
 			Notification removeNotify = new Notification(controller.getStage(), "Klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 			removeNotify.showAndWait();}
 		});
+		
 		//Make & merge left & right
 		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
 		rightBox.getChildren().addAll(detailsBox);
