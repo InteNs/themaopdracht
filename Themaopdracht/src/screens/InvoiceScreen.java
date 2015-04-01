@@ -24,6 +24,7 @@ import javafx.scene.layout.VBox;
 import main.ATDProgram;
 import main.Customer;
 import main.Invoice;
+import main.Invoice.InvoiceItem;
 
 public class InvoiceScreen extends HBox {
 	private ATDProgram controller;
@@ -31,20 +32,16 @@ public class InvoiceScreen extends HBox {
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;
-	private boolean isChanging = false;
 	private Button 
 			newButton = new Button("Nieuw"), 
-			changeButton = new Button("Aanpassen"), 
+			bindButton = new Button("Klant binden"), 
 			removeButton = new Button("Verwijderen"), 
-			cancelButton = new Button("Annuleren"),
-			saveButton = new Button("Opslaan");
+			addMaintenance = new Button("+Onderhoud"),
+			addRefuel = new Button("+Tanksessie"),
+			addParking = new Button("+reservering");
 	private ComboBox<String> 
 			filterSelector = new ComboBox<String>();
-	private ComboBox<Customer>
-			customerSelector = new ComboBox<Customer>();
 	private ArrayList<ListItem> content = new ArrayList<ListItem>();
-	private CheckBox 
-			blackListInput = new CheckBox();
 	private Label 
 			date = new Label("Datum: "),
 			dateContent = new Label("-"), 
@@ -54,27 +51,26 @@ public class InvoiceScreen extends HBox {
 			isBetaaltContent = new Label("-"),
 			customer = new Label("Klant: "), 
 			customerContent = new Label("-");
-	private TextField searchInput = new TextField("Zoek...");
 	private ListView<ListItem> 
 			listView = new ListView<ListItem>();
+	private ListView<InvoiceItem>
+			contentView = new ListView<InvoiceItem>();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
 	private HBox 
 			detailsBox = new HBox(spacingBoxes), 
 			mainButtonBox = new HBox(spacingBoxes), 
-			searchFieldBox = new HBox(spacingBoxes), 
+			SecButtonBox = new HBox(6), 
 			mainBox = new HBox(spacingBoxes);
 	public InvoiceScreen(ATDProgram controller) {
 		this.controller = controller;
 		//CustomerDetails
-		customerSelector.getItems().addAll(controller.getCustomers());
 		detailsBox.getChildren().addAll(
 				new VBox(20,
-						new HBox(20,date,dateContent,price,priceContent),
-						new HBox(20,isBetaalt,	isBetaaltContent),
-						new HBox(20,customer,	customerContent,	customerSelector),
-						new HBox(20,cancelButton,saveButton)
+						new HBox(20,date     ,dateContent	  ,price   ,priceContent),
+						new HBox(20,isBetaalt,isBetaaltContent,customer,customerContent),
+						contentView
 						));
 		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
 		detailsBox.setPrefSize(450, 520-15);
@@ -82,22 +78,14 @@ public class InvoiceScreen extends HBox {
 //		setVisibility(true, false, false);
 		//geef alle labels een bepaalde grootte
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
-			if(((HBox)node1).getChildren().size()>2)((Label)((HBox)node1).getChildren().get(0)).setMinWidth(widthLabels);
+			if(node1 instanceof HBox&&((HBox)node1).getChildren().get(0)instanceof Label){
+				((Label)((HBox)node1).getChildren().get(0)).setMinWidth(100);
+				((Label)((HBox)node1).getChildren().get(1)).setMinWidth(widthLabels);
+				((Label)((HBox)node1).getChildren().get(2)).setMinWidth(100);
+				((Label)((HBox)node1).getChildren().get(3)).setMinWidth(widthLabels);
+			}
 		}
-		//cancelbutton
-		cancelButton.setPrefSize(150, 50);
-		cancelButton.setOnAction(e -> {
-//				setVisibility(true, false, false);
-		});
-		//savebutton
-		saveButton.setPrefSize(150, 50);
-		saveButton.setOnAction(e -> {
-			Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?", ATDProgram.notificationStyle.CONFIRM);
-			changeConfirm.showAndWait();
-			save();
-			Notification changeNotify = new Notification(controller.getStage(), "Wijzigingen zijn doorgevoerd.", ATDProgram.notificationStyle.NOTIFY);
-			changeNotify.showAndWait();
-		});
+		
 		//listview
 		listView.setPrefSize(450, 520);
 		for (Invoice invoice : controller.getInvoices()) {
@@ -109,21 +97,22 @@ public class InvoiceScreen extends HBox {
 			else selectedInvoice = oldValue.getContent();
 			selectedListEntry();
 		});
-		//SearchField
-		searchFieldBox = new HBox(10,searchInput,filterSelector);
-		searchInput.setPrefSize(310, 50);
-		searchInput.setDisable(true);
-		searchInput.setOnMouseClicked(e -> {
-			if (searchInput.getText().equals("Zoek...")) {
-				searchInput.clear();
-			} else
-				searchInput.selectAll();
+		//contentView
+		contentView.setPrefSize(410, 370);
+		//filter & buttons
+		SecButtonBox.getChildren().addAll(addMaintenance,addRefuel,addParking,filterSelector);
+		//maintenance
+		addMaintenance.setPrefSize(112.5, 50);
+		addMaintenance.setOnAction(e -> {
+			
 		});
-//		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
-//				search(oldValue, newValue);
-//		});
-		//filter
-		filterSelector.setPrefSize(150, 50);
+		//fuel
+		addRefuel.setPrefSize(112.5, 50);
+		addRefuel.setOnAction(e -> {
+
+		});
+		addParking.setPrefSize(112.5, 50);
+		filterSelector.setPrefSize(112.5, 50);
 		filterSelector.getItems().addAll("Filter: Geen", "Filter: Achterstand", "Filter: Huidig anoniem");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
@@ -153,7 +142,7 @@ public class InvoiceScreen extends HBox {
 		//main Buttons
 		mainButtonBox.getChildren().addAll(
 				newButton,
-				changeButton,
+				bindButton,
 				removeButton
 				);
 		//NewButton
@@ -163,9 +152,9 @@ public class InvoiceScreen extends HBox {
 //			setVisibility(false, true, true);
 //			isChanging = false;
 		});
-		//ChangeButton
-		changeButton.setPrefSize(150, 50);
-		changeButton.setOnAction(e -> {
+		//bindButton
+		bindButton.setPrefSize(150, 50);
+		bindButton.setOnAction(e -> {
 //			isChanging = true;
 //			change();
 		});
@@ -181,7 +170,7 @@ public class InvoiceScreen extends HBox {
 			removeNotify.showAndWait();}
 		});
 		//Make & merge left & right
-		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
+		leftBox.getChildren().addAll (listView,SecButtonBox,mainButtonBox);
 		rightBox.getChildren().addAll(detailsBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setSpacing(20);
@@ -329,30 +318,7 @@ public class InvoiceScreen extends HBox {
 			return invoice;
 		}
 	}
-	public class invoiceItem extends HBox{
-		private int price, amount;
-		private Label description = new Label(),amountL = new Label(),priceL = new Label();;
-		public invoiceItem(String desc, int price, int amount){
-			description.setText(desc);
-			this.price = price;
-			priceL.setText( Double.toString(price));
-			this.amount = amount;
-			amountL.setText( Integer.toString(amount));
-			setSpacing(5);
-			getChildren().addAll(
-					amountL,
-					new Separator(Orientation.VERTICAL),
-					description,
-					new Separator(Orientation.VERTICAL),
-					priceL);
-			((Label)getChildren().get(0)).setPrefWidth(80);
-			((Label)getChildren().get(2)).setPrefWidth(150);
-			((Label)getChildren().get(4)).setPrefWidth(80);
-		}
-		public double getTotal(){
-			return price * amount;
-		}
-	}
+	
 }
 
 	

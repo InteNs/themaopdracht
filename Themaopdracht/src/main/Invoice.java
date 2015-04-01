@@ -2,6 +2,11 @@ package main;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javafx.geometry.Orientation;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.HBox;
+
 
 
 public class Invoice {
@@ -9,22 +14,22 @@ public class Invoice {
 	private double totalPrice;
 	private boolean isPayed;
 	private Customer customer;
-	private ArrayList<String> InvoiceItems;
+	private ArrayList<InvoiceItem> items = new ArrayList<InvoiceItem>();
 	public enum PayMethod{CASH,PIN,CREDIT};
 	public Invoice(){
-		InvoiceItems = new ArrayList<String>();
 		invoiceDate = LocalDate.now();
 	}
 	public double getTotalPrice() {
 		return totalPrice;
 	}
-	/**
-	 * @param price
-	 * @param description "name - amount - totalPrice"
-	 */
-	public void addItem(double price, String description, String amount) {
-		this.totalPrice += price;
-		InvoiceItems.add(description+"\tX"+amount+"\t$"+price+"\n");
+
+	public boolean add(InvoiceItem e) {
+		totalPrice += e.getTotal();
+		return items.add(e);	
+	}
+	
+	public ArrayList<InvoiceItem> getItems() {
+		return items;
 	}
 	public boolean isPayed() {
 		return isPayed;
@@ -42,22 +47,35 @@ public class Invoice {
 	public LocalDate getInvoiceDate() {
 		return invoiceDate;
 	}
-	public ArrayList<String> getInvoiceItems() {
-		return InvoiceItems;
-	}
 	public void setPayed(boolean isPayed) {
 		this.isPayed = isPayed;
 	}
 	public String toString(){
-		String info = "", line = "", items = "";
-		if(customer !=null){
-			info = "customer: "+customer+"\n";
+		return "";
+	}
+	public class InvoiceItem extends HBox{
+		private int price, amount;
+		private Label description = new Label(),amountL = new Label(),priceL = new Label();;
+		public InvoiceItem(String desc, int price, int amount){
+			description.setText(desc);
+			this.price = price;
+			priceL.setText( Double.toString(price));
+			this.amount = amount;
+			amountL.setText( Integer.toString(amount));
+			setSpacing(5);
+			getChildren().addAll(
+					amountL,
+					new Separator(Orientation.VERTICAL),
+					description,
+					new Separator(Orientation.VERTICAL),
+					priceL);
+			((Label)getChildren().get(0)).setPrefWidth(80);
+			((Label)getChildren().get(2)).setPrefWidth(150);
+			((Label)getChildren().get(4)).setPrefWidth(80);
 		}
-		line = "-------------------------------\n";
-		for (String string : InvoiceItems) {
-			items = items + string;
+		public double getTotal(){
+			return price * amount;
 		}
-		return info + line + items;
 	}
 }
 
