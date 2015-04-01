@@ -1,30 +1,26 @@
 package screens;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 
-import screens.StockScreen.ListRegel;
-import notifications.Notification;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
-import main.Customer;
 import main.Invoice;
 import main.Invoice.InvoiceItem;
+import main.MaintenanceSession;
+import main.Product;
+import notifications.GetInfoNotification;
+import notifications.Notification;
+
 
 public class InvoiceScreen extends HBox {
 	private ATDProgram controller;
@@ -104,7 +100,20 @@ public class InvoiceScreen extends HBox {
 		//maintenance
 		addMaintenance.setPrefSize(112.5, 50);
 		addMaintenance.setOnAction(e -> {
-			
+			GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller.getStage(), "selecteer een onderhoudssessie", controller, ATDProgram.notificationStyle.MAINTENANCE);
+			addMaintenanceNotification.showAndWait();
+			if(addMaintenanceNotification.getKeuze().equals("confirm")){
+				MaintenanceSession selection = (MaintenanceSession)addMaintenanceNotification.getSelected();
+				selectedInvoice.add(selectedInvoice.new InvoiceItem("Uurloon", selection.getMechanic().getHourlyFee(), selection.getMechanic().getWorkedHours()));
+				Iterator<Product> keySetIterator = selection.getUsedParts().keySet().iterator();
+				while(keySetIterator.hasNext()){
+					Product key = keySetIterator.next();
+					double price = key.getSellPrice() * selection.getUsedParts().get(key);
+					controller.getStock().useProduct(key, selection.getUsedParts().get(key));
+					selectedInvoice.add(selectedInvoice.new InvoiceItem(key.getName(),price,selection.getUsedParts().get(key)));
+					selectedListEntry();
+				}
+			}	
 		});
 		//fuel
 		addRefuel.setPrefSize(112.5, 50);
@@ -194,7 +203,7 @@ public class InvoiceScreen extends HBox {
 	/**
 	 * slaat het nieuwe of aangepaste product op
 	 */
-	private void save(){
+//	private void save(){
 //		if(isChanging){
 //			selectedInvoice.setName(nameInput.getText());
 //			selectedInvoice.setPlace(placeInput.getText());
@@ -217,7 +226,7 @@ public class InvoiceScreen extends HBox {
 //			listView.getItems().add(new ListItem(newInvoice));
 //			setVisibility(true, false, false);
 //		}
-	}
+//	}
 	private void refreshList(){
 		content.clear();
 		content.addAll(listView.getItems());
@@ -234,6 +243,10 @@ public class InvoiceScreen extends HBox {
 		else isBetaaltContent.setText("Nee");
 		if(selectedInvoice.getCustomer()!=null)customerContent.setText(selectedInvoice.getCustomer().getName());
 		else customerContent.setText("Anoniem");
+		contentView.getItems().clear();
+		for (InvoiceItem item : selectedInvoice.getItems()) {
+			contentView.getItems().add(item);
+		}
 		
 	}
 //	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {

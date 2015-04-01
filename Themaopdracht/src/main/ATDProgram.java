@@ -16,7 +16,7 @@ import screens.StockScreen;
 
 
 public class ATDProgram extends Application {
-	public enum notificationStyle {CONFIRM, NOTIFY, PRODUCT, ENDSESSION}
+	public enum notificationStyle {CONFIRM, NOTIFY, ENDSESSION, PRODUCTS, CUSTOMER, TANK, PARKING, MAINTENANCE}
 	private Stage mainStage;
 	private TabPane tabsScreen;
 	private Tab customerAdministration;
@@ -31,6 +31,8 @@ public class ATDProgram extends Application {
 	private ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	private ArrayList<ParkingSpace> parkingSpaces = new ArrayList<ParkingSpace>();
+	private ArrayList<RefuelSession> refuelSessions = new ArrayList<RefuelSession>();
+	private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
 	@Override
 	public void start(Stage stage) throws Exception {
 		mainStage = stage;
@@ -83,6 +85,17 @@ public class ATDProgram extends Application {
 			}
 		}
 		return remindables;
+	}
+	public void addorRemoveRefuelSessions(RefuelSession refuelSession,boolean remove) {
+		if (remove)refuelSessions.remove(refuelSession);
+		else refuelSessions.add(refuelSession);
+	}
+	public ArrayList<Reservation> getReservations() {
+		return reservations;
+	}
+	public void addorRemoveReservations(Reservation reservation, boolean remove) {
+		if (remove)reservations.remove(reservation);
+		else reservations.add(reservation);
 	}
 	public void addorRemoveCustomer(Customer customer, boolean remove){
 		if(remove)customers.remove(customer);

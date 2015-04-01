@@ -19,6 +19,7 @@ import main.ATDProgram;
 import main.Invoice;
 import main.MaintenanceSession;
 import main.Mechanic;
+import main.Product;
 import notifications.GetInfoNotification;
 import notifications.Notification;
 
@@ -176,15 +177,13 @@ public class MaintenanceScreen extends HBox {
 		//addProductButton
 		newProductButton.setPrefSize(150, 50);
 		newProductButton.setOnAction(e->{
-			GetInfoNotification addProductNormal = new GetInfoNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.PRODUCT);
+			GetInfoNotification addProductNormal = new GetInfoNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.PRODUCTS);
 			addProductNormal.showAndWait();
 			if(addProductNormal.getKeuze().equals("confirm")){
-				selectedMaintenanceSession.usePart(addProductNormal.getSelected());
+				selectedMaintenanceSession.usePart((Product)addProductNormal.getSelected());
 				System.out.println(addProductNormal.getSelected());
 				System.out.println(selectedMaintenanceSession.getUsedParts());
 			 	System.out.println(Integer.toString(selectedMaintenanceSession.getTotalParts()));
-			 	Notification changeNotify = new Notification(controller .getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
-			 	changeNotify.showAndWait();
 			 	refreshList();
 			 	selectedListEntry();
 			} 

@@ -54,21 +54,25 @@ public class Invoice {
 		return "";
 	}
 	public class InvoiceItem extends HBox{
-		private int price, amount;
-		private Label description = new Label(),amountL = new Label(),priceL = new Label();;
-		public InvoiceItem(String desc, int price, int amount){
+		private int amount;
+		private double price, totalPrice;
+		private Label description = new Label(),amountL = new Label(),priceL = new Label(),totalPriceL = new Label();;
+		public InvoiceItem(String desc, double price, int amount){
 			description.setText(desc);
 			this.price = price;
 			priceL.setText( Double.toString(price));
 			this.amount = amount;
 			amountL.setText( Integer.toString(amount));
+			
 			setSpacing(5);
 			getChildren().addAll(
 					amountL,
 					new Separator(Orientation.VERTICAL),
 					description,
 					new Separator(Orientation.VERTICAL),
-					priceL);
+					priceL,
+					new Separator(Orientation.VERTICAL),
+					totalPriceL);
 			((Label)getChildren().get(0)).setPrefWidth(80);
 			((Label)getChildren().get(2)).setPrefWidth(150);
 			((Label)getChildren().get(4)).setPrefWidth(80);
