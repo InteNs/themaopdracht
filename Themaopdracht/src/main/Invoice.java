@@ -1,9 +1,11 @@
 package main;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 
 
 public class Invoice {
+	private LocalDate invoiceDate;
 	private double totalPrice;
 	private boolean isPayed;
 	private Customer customer;
