@@ -172,13 +172,14 @@ public class InvoiceScreen extends HBox {
 		//RemoveButton
 		removeButton.setPrefSize(150, 50);
 		removeButton.setOnAction(e->{
-			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze factuur wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze() == "confirm"){
-			listView.getItems().remove(selectedInvoice);
+			listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
 			controller.addorRemoveInvoice(selectedInvoice, true);
-			Notification removeNotify = new Notification(controller.getStage(), "Klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+			Notification removeNotify = new Notification(controller.getStage(), "factuur is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 			removeNotify.showAndWait();}
+			refreshList();
 		});
 		//Make & merge left & right
 		leftBox.getChildren().addAll (listView,SecButtonBox,mainButtonBox);

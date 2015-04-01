@@ -50,22 +50,20 @@ public class Invoice {
 		this.isPayed = isPayed;
 	}
 	public String toString(){
-		return "";
+		return "invoice";
 	}
 	public class InvoiceItem extends HBox{
 		private int amount;
 		private double price, semiTotalPrice;
 		private Label description = new Label(),amountL = new Label(),priceL = new Label(),totalPriceL = new Label();;
 		public InvoiceItem(String desc, double price, int amount){
-			description.setText(desc);
 			this.price = price;
-			priceL.setText( Double.toString(price));
 			this.amount = amount;
+			this.semiTotalPrice = price*amount;
+			description.setText(desc);
+			priceL.setText( Double.toString(price));
 			amountL.setText( Integer.toString(amount));
-			semiTotalPrice = price*amount;
-			totalPrice += semiTotalPrice;
 			totalPriceL.setText(Double.toString(semiTotalPrice));
-			
 			setSpacing(5);
 			getChildren().addAll(
 					amountL,
@@ -78,6 +76,7 @@ public class Invoice {
 			((Label)getChildren().get(0)).setPrefWidth(80);
 			((Label)getChildren().get(2)).setPrefWidth(150);
 			((Label)getChildren().get(4)).setPrefWidth(80);
+			((Label)getChildren().get(6)).setPrefWidth(80);
 		}
 		public double getTotal(){
 			return price * amount;

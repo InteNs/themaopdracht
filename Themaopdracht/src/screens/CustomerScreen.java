@@ -188,11 +188,13 @@ public class CustomerScreen extends HBox {
 		removeButton.setOnAction(e->{
 			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			removeConfirm.showAndWait();
-			if (removeConfirm.getKeuze() == "ja"){
-			listView.getItems().remove(selectedCustomer);
-			controller.addorRemoveCustomer(selectedCustomer, true);
-			Notification removeNotify = new Notification(controller.getStage(), "Klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
-			removeNotify.showAndWait();}
+			if (removeConfirm.getKeuze() == "confirm"){
+				listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
+				controller.addorRemoveCustomer(selectedCustomer, true);
+				Notification removeNotify = new Notification(controller.getStage(), "Klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				removeNotify.showAndWait();
+				selectedCustomer = null;
+			}
 		});
 		//Make & merge left & right
 		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
