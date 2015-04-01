@@ -20,7 +20,7 @@ import javafx.stage.StageStyle;
 
 public class AddProductNotification extends Stage {
 	private ComboBox<Product> productSelector = new ComboBox<Product>();
-	private TextField hoursMechanic;
+	private TextField hoursMechanic = new TextField();
 	private Button annuleren, ok;
 	private Label melding;
 	private String keuze;
