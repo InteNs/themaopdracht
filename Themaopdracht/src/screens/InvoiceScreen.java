@@ -37,8 +37,6 @@ public class InvoiceScreen extends HBox {
 			removeButton = new Button("Verwijderen"), 
 			cancelButton = new Button("Annuleren"),
 			saveButton = new Button("Opslaan");
-	private DatePicker 
-			dateInput = new DatePicker();
 	private ComboBox<String> 
 			filterSelector = new ComboBox<String>();
 	private ComboBox<Customer>
@@ -55,6 +53,7 @@ public class InvoiceScreen extends HBox {
 			isBetaaltContent = new Label("-"),
 			customer = new Label("Klant: "), 
 			customerContent = new Label("-");
+	private TextField searchInput = new TextField("Zoek...");
 	private ListView<ListItem> 
 			listView = new ListView<ListItem>();
 	private VBox
@@ -68,17 +67,13 @@ public class InvoiceScreen extends HBox {
 	public InvoiceScreen(ATDProgram controller) {
 		this.controller = controller;
 		//CustomerDetails
+		customerSelector.getItems().addAll(controller.getCustomers());
 		detailsBox.getChildren().addAll(
 				new VBox(20,
-						new HBox(20,date,		dateContent,		nameInput),
-						new HBox(20,price,	priceContent,		addressInput),
-						new HBox(20,isBetaalt,		isBetaaltContent,		postalInput),
-						new HBox(20,customer,		customerContent,		placeInput),
-						new HBox(20,dateOfBirth,dateOfBirthContent,	dateInput),
-						new HBox(20,email,		emailContent,		emailInput),
-						new HBox(20,phone,		phoneContent,		phoneInput),
-						new HBox(20,bank,		bankContent,		bankInput),
-						new HBox(20,blackList,	blackListContent,	blackListInput),	
+						new HBox(20,date,		dateContent),
+						new HBox(20,price,		priceContent),
+						new HBox(20,isBetaalt,	isBetaaltContent),
+						new HBox(20,customer,	customerContent,	customerSelector),
 						new HBox(20,cancelButton,saveButton)
 						));
 		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
@@ -110,13 +105,14 @@ public class InvoiceScreen extends HBox {
 		}
 		refreshList();
 		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if(newValue!=null)selectedInvoice = newValue.getCustomer();
-			else selectedInvoice = oldValue.getCustomer();
+			if(newValue!=null)selectedInvoice = newValue.getContent();
+			else selectedInvoice = oldValue.getContent();
 			selectedListEntry();
 		});
 		//SearchField
-		searchFieldBox = new HBox(10,searchInput = new TextField("Zoek..."),filterSelector);
+		searchFieldBox = new HBox(10,searchInput,filterSelector);
 		searchInput.setPrefSize(310, 50);
+		searchInput.setDisable(true);
 		searchInput.setOnMouseClicked(e -> {
 			if (searchInput.getText().equals("Zoek...")) {
 				searchInput.clear();
@@ -128,23 +124,25 @@ public class InvoiceScreen extends HBox {
 		});
 		//filter
 		filterSelector.setPrefSize(150, 50);
-		filterSelector.getItems().addAll("Filter: Geen", "Filter: Service", "Filter: Onderhoud");
+		filterSelector.getItems().addAll("Filter: Geen", "Filter: Niet betaald", "Filter: Anoniem");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			listView.getItems().clear();
 			if(newValue.intValue()==0){
-				for (Invoice customer : controller.getInvoices()) {
-					listView.getItems().add(new ListItem(customer));
+				for (Invoice invoice : controller.getInvoices()) {
+					listView.getItems().add(new ListItem(invoice));
 				}
 			}
 			if(newValue.intValue()==1){
-				for (Invoice customer : controller.getRemindList(false)) {
-					listView.getItems().add(new ListItem(customer));
+				for (Invoice invoice : controller.getInvoices()) {
+					if(!invoice.isPayed())
+						listView.getItems().add(new ListItem(invoice));
 				}
 			}
 			if(newValue.intValue()==2){
-				for (Invoice customer : controller.getRemindList(true)) {
-					listView.getItems().add(new ListItem(customer));
+				for (Invoice invoice : controller.getInvoices()) {
+					if(invoice.getCustomer()==null)
+						listView.getItems().add(new ListItem(invoice));
 				}
 			}
 			refreshList();
@@ -195,15 +193,12 @@ public class InvoiceScreen extends HBox {
 	 * vult alle gegevens in de TextFields om aan te passen
 	 */
 	private void change(){
-		nameInput.setText(selectedInvoice.getName());
-		placeInput.setText(selectedInvoice.getPlace());
-		bankInput.setText(selectedInvoice.getBankAccount());
-		dateInput.setValue(selectedInvoice.getDateOfBirth());
-		emailInput.setText(selectedInvoice.getEmail());
-		postalInput.setText(selectedInvoice.getPostal());
-		phoneInput.setText(selectedInvoice.getTel());
-		addressInput.setText(selectedInvoice.getAdress());
-		blackListInput.setSelected(selectedInvoice.isOnBlackList());
+		//dateContent.setText(selectedInvoice.getInvoiceDate().toString());
+		//priceContent.setText(Double.toString(selectedInvoice.getTotalPrice()));
+		//if(selectedInvoice.isPayed())isBetaaltContent.setText("Ja");
+		//else isBetaaltContent.setText("Nee");
+		//if(selectedInvoice.getCustomer()!=null)customerContent.setText(selectedInvoice.getCustomer().getName());
+		//else customerContent.setText("Anoniem");
 		setVisibility(true, true, true);	
 		isChanging = true;
 	}
@@ -211,34 +206,26 @@ public class InvoiceScreen extends HBox {
 	 * slaat het nieuwe of aangepaste product op
 	 */
 	private void save(){
-		if(isChanging){
-			selectedInvoice.setName(nameInput.getText());
-			selectedInvoice.setPlace(placeInput.getText());
-			selectedInvoice.setBankAccount(bankInput.getText());
-			selectedInvoice.setDateOfBirth(dateInput.getValue());
-			selectedInvoice.setEmail(emailInput.getText());
-			selectedInvoice.setPostal(postalInput.getText());
-			selectedInvoice.setTel(phoneInput.getText());
-			selectedInvoice.setAdress(addressInput.getText());
-			selectedInvoice.setOnBlackList(blackListInput.isSelected());
-			refreshList();
-			setVisibility(true, false, false);
-			
-		}
-		else{
-			Invoice newCustomer = new Invoice(
-					nameInput.getText(),
-					placeInput.getText(),
-					bankInput.getText(),
-					dateInput.getValue(),
-					emailInput.getText(),
-					postalInput.getText(),
-					phoneInput.getText(),
-					addressInput.getText(),
-					blackListInput.isSelected()
-					);
-			controller.addorRemoveInvoice(newCustomer, false);
-			listView.getItems().add(new ListItem(newCustomer));
+//		if(isChanging){
+//			selectedInvoice.setName(nameInput.getText());
+//			selectedInvoice.setPlace(placeInput.getText());
+//			selectedInvoice.setBankAccount(bankInput.getText());
+//			selectedInvoice.setDateOfBirth(dateInput.getValue());
+//			selectedInvoice.setEmail(emailInput.getText());
+//			selectedInvoice.setPostal(postalInput.getText());
+//			selectedInvoice.setTel(phoneInput.getText());
+//			selectedInvoice.setAdress(addressInput.getText());
+//			selectedInvoice.setOnBlackList(blackListInput.isSelected());
+//			refreshList();
+//			setVisibility(true, false, false);
+//			
+//		}
+		if(!isChanging){
+			Invoice newInvoice = new Invoice();
+			if(customerSelector.getSelectionModel().getSelectedItem()!=null)
+				newInvoice.bindToCustomer(customerSelector.getSelectionModel().getSelectedItem());
+			controller.addorRemoveInvoice(newInvoice, false);
+			listView.getItems().add(new ListItem(newInvoice));
 			setVisibility(true, false, false);
 		}
 	}
@@ -252,16 +239,13 @@ public class InvoiceScreen extends HBox {
 		}
 	}
 	private void selectedListEntry(){
-		if(selectedInvoice.getName()!=null)dateContent.setText(selectedInvoice.getName());
-		if(selectedInvoice.getPlace()!=null)customerContent.setText(selectedInvoice.getPlace());
-		if(selectedInvoice.getBankAccount()!=null)bankContent.setText(selectedInvoice.getBankAccount());
-		if(selectedInvoice.getDateOfBirth() != null) dateOfBirthContent.setText(selectedInvoice.getDateOfBirth().toString());
-		if(selectedInvoice.getEmail()!= null)emailContent.setText(selectedInvoice.getEmail());
-		if(selectedInvoice.getPostal()!=null)isBetaaltContent.setText(selectedInvoice.getPostal());
-		if(selectedInvoice.getTel()!=null)phoneContent.setText(selectedInvoice.getTel());
-		if(selectedInvoice.getAdress()!=null)priceContent.setText(selectedInvoice.getAdress());
-		if(selectedInvoice.isOnBlackList())blackListContent.setText("ja");
-		else blackListContent.setText("nee");
+		dateContent.setText(selectedInvoice.getInvoiceDate().toString());
+		priceContent.setText(Double.toString(selectedInvoice.getTotalPrice()));
+		if(selectedInvoice.isPayed())isBetaaltContent.setText("Ja");
+		else isBetaaltContent.setText("Nee");
+		if(selectedInvoice.getCustomer()!=null)customerContent.setText(selectedInvoice.getCustomer().getName());
+		else customerContent.setText("Anoniem");
+		
 	}
 	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
 		cancelButton.setVisible(setButtonsVisible);
@@ -287,21 +271,18 @@ public class InvoiceScreen extends HBox {
 						((CheckBox)input).setSelected(false);
 					}
 					content.setPrefWidth(widthLabels*2);
-					email.setMinWidth(widthLabels);
 				}
 				else if (!setDetailsVisible) {
 					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels*2);
 					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels*2);
 					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
 					content.setPrefWidth(0);
-					email.setMinWidth(widthLabels-5);
 				}			
 				else if (setDetailsVisible || setTextFieldsVisible) {
 					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels);
 					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels);
 					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
 					content.setPrefWidth(widthLabels);
-					email.setMinWidth(widthLabels);
 				}
 			}
 		}	
@@ -313,26 +294,25 @@ public class InvoiceScreen extends HBox {
 		}
 		listView.getItems().clear();
 		for (ListItem entry : content) {
-			if (entry.getCustomer().getName().contains(newVal)
-					|| entry.getCustomer().getPostal().contains(newVal)
-					|| entry.getCustomer().getEmail().contains(newVal)) {
-				listView.getItems().add(entry);
-			}
+			try{
+				if (entry.getContent().getTotalPrice() == Double.parseDouble(newVal)) 
+					listView.getItems().add(entry);
+			}catch(NumberFormatException e){}
 		}
 	}
 	public class ListItem extends HBox{
-		private Label itemNameLabel = new Label(),itemPostalLabel = new Label(),itemEmailLabel = new Label();
-		private Invoice customer;
-		public ListItem(Invoice customer){
-			this.customer = customer;
+		private Label contentDate = new Label(),contentIsPayed = new Label(),contentPrice = new Label();
+		private Invoice invoice;
+		public ListItem(Invoice invoice){
+			this.invoice = invoice;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
-					itemNameLabel,
+					contentDate,
 					new Separator(Orientation.VERTICAL),
-					itemPostalLabel,
+					contentIsPayed,
 					new Separator(Orientation.VERTICAL),
-					itemEmailLabel);
+					contentPrice);
 			((Label)getChildren().get(0)).setPrefWidth(120);
 			((Label)getChildren().get(2)).setPrefWidth(100);
 			((Label)getChildren().get(4)).setPrefWidth(200);
@@ -340,12 +320,13 @@ public class InvoiceScreen extends HBox {
 			
 		}
 		public void refresh(){
-			itemNameLabel.setText(customer.getName());
-			itemPostalLabel.setText(customer.getPostal());
-			itemEmailLabel.setText(customer.getEmail());
+			contentDate.setText(invoice.getInvoiceDate().toString());
+			if(invoice.isPayed())contentIsPayed.setText("Betaald");
+			else contentIsPayed.setText("Niet betaald");
+			contentPrice.setText("$"+invoice.getTotalPrice());
 		}
-		public Invoice getCustomer(){
-			return customer;
+		public Invoice getContent(){
+			return invoice;
 		}
 	}
 }

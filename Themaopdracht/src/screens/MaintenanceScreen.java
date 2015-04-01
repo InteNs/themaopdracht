@@ -118,6 +118,7 @@ public class MaintenanceScreen extends HBox {
 		//SearchField
 		searchFieldBox = new HBox(10,searchInput = new TextField("Zoek..."),filterSelector);
 		searchInput.setPrefSize(310, 50);
+		searchInput.setDisable(true);
 		searchInput.setOnMouseClicked(e -> {
 			if (searchInput.getText().equals("Zoek...")) {
 				searchInput.clear();
@@ -258,7 +259,7 @@ public class MaintenanceScreen extends HBox {
 		}
 		else{
 			MaintenanceSession newMaintenanceSession = new MaintenanceSession(
-					new Invoice(0),
+					new Invoice(),
 					controller.getStock(),
 					dateInput.getValue()
 					);

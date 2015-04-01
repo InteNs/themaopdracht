@@ -11,9 +11,9 @@ public class Invoice {
 	private Customer customer;
 	private ArrayList<String> InvoiceItems;
 	public enum PayMethod{CASH,PIN,CREDIT};
-	public Invoice(double amount){
-		this.totalPrice = amount;
+	public Invoice(){
 		InvoiceItems = new ArrayList<String>();
+		invoiceDate = LocalDate.now();
 	}
 	public double getTotalPrice() {
 		return totalPrice;
@@ -37,6 +37,16 @@ public class Invoice {
 	}
 	public Customer getCustomer(){
 		return customer;
+	}
+	
+	public LocalDate getInvoiceDate() {
+		return invoiceDate;
+	}
+	public ArrayList<String> getInvoiceItems() {
+		return InvoiceItems;
+	}
+	public void setPayed(boolean isPayed) {
+		this.isPayed = isPayed;
 	}
 	public String toString(){
 		String info = "", line = "", items = "";

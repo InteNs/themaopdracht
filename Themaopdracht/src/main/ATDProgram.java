@@ -10,6 +10,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import screens.CustomerScreen;
+import screens.InvoiceScreen;
 import screens.MaintenanceScreen;
 import screens.StockScreen;
 
@@ -21,6 +22,7 @@ public class ATDProgram extends Application {
 	private Tab customerAdministration;
 	private Tab stockAdministration;
 	private Tab serviceScreen;
+	private Tab invoiceScreen;
 	private Scene mainScene;
 	private Stock stock = new Stock();
 	private ArrayList<MaintenanceSession> maintenanceSessions = new ArrayList<MaintenanceSession>();
@@ -48,7 +50,10 @@ public class ATDProgram extends Application {
 		serviceScreen.setClosable(false);
 		serviceScreen.setContent(new MaintenanceScreen(this));
 		
-		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration,serviceScreen);
+		invoiceScreen = new Tab("Facturen");
+		invoiceScreen.setClosable(false);
+		invoiceScreen.setContent(new InvoiceScreen(this));
+		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration,serviceScreen,invoiceScreen);
 
 		// Create Mainscreen
 		mainScene = new Scene(tabsScreen, 1024, 655);
@@ -137,7 +142,8 @@ public class ATDProgram extends Application {
 		addorRemoveMechanic(new Mechanic(2, "Hans", 12.5), false);
 		addorRemoveMechanic(new Mechanic(3, "Sjaak", 10.0), false);
 		addorRemoveMechanic(new Mechanic(4, "Piet", 15.0), false);
-		addorRemoveMaintenanceSessions(new MaintenanceSession(new Invoice(0), stock, LocalDate.now()), false);
+		addorRemoveInvoice(new Invoice(), false);
+		addorRemoveMaintenanceSessions(new MaintenanceSession(receipts.get(0), stock, LocalDate.now()), false);
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
