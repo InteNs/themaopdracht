@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
+import main.Customer;
 import main.Invoice;
 
 public class InvoiceScreen extends HBox {
@@ -37,41 +38,23 @@ public class InvoiceScreen extends HBox {
 			cancelButton = new Button("Annuleren"),
 			saveButton = new Button("Opslaan");
 	private DatePicker 
-			dateOfBirthInput = new DatePicker();
+			dateInput = new DatePicker();
 	private ComboBox<String> 
 			filterSelector = new ComboBox<String>();
+	private ComboBox<Customer>
+			customerSelector = new ComboBox<Customer>();
 	private ArrayList<ListItem> content = new ArrayList<ListItem>();
 	private CheckBox 
 			blackListInput = new CheckBox();
 	private Label 
-			name = new Label("Naam: "),
-			nameContent = new Label("-"), 
-			address = new Label("Adres: "), 
-			addressContent = new Label("-"),
-			postal = new Label("Postcode: "),
-			postalContent = new Label("-"),
-			place = new Label("Plaats: "), 
-			placeContent = new Label("-"),
-			dateOfBirth = new Label("Geboortedatum: "), 
-			dateOfBirthContent = new Label("-"),
-			email = new Label("Email: "), 
-			emailContent = new Label("-"), 
-			phone = new Label("Telefoonnummer: "), 
-			phoneContent = new Label("-"), 
-			bank = new Label("Rekeningnummer: "), 
-			bankContent = new Label("-"), 
-			blackList = new Label("Blacklist: "), 
-			blackListContent = new Label("-");
-	
-	private TextField 
-			searchInput = new TextField(), 
-			nameInput = new TextField(), 
-			addressInput = new TextField(),
-			postalInput = new TextField(), 
-			placeInput = new TextField(), 
-			emailInput = new TextField(), 
-			phoneInput = new TextField(),
-			bankInput = new TextField();
+			date = new Label("Datum: "),
+			dateContent = new Label("-"), 
+			price = new Label("Prijs: "), 
+			priceContent = new Label("-"),
+			isBetaalt = new Label("Is betaalt: "),
+			isBetaaltContent = new Label("-"),
+			customer = new Label("Klant: "), 
+			customerContent = new Label("-");
 	private ListView<ListItem> 
 			listView = new ListView<ListItem>();
 	private VBox
@@ -87,11 +70,11 @@ public class InvoiceScreen extends HBox {
 		//CustomerDetails
 		detailsBox.getChildren().addAll(
 				new VBox(20,
-						new HBox(20,name,		nameContent,		nameInput),
-						new HBox(20,address,	addressContent,		addressInput),
-						new HBox(20,postal,		postalContent,		postalInput),
-						new HBox(20,place,		placeContent,		placeInput),
-						new HBox(20,dateOfBirth,dateOfBirthContent,	dateOfBirthInput),
+						new HBox(20,date,		dateContent,		nameInput),
+						new HBox(20,price,	priceContent,		addressInput),
+						new HBox(20,isBetaalt,		isBetaaltContent,		postalInput),
+						new HBox(20,customer,		customerContent,		placeInput),
+						new HBox(20,dateOfBirth,dateOfBirthContent,	dateInput),
 						new HBox(20,email,		emailContent,		emailInput),
 						new HBox(20,phone,		phoneContent,		phoneInput),
 						new HBox(20,bank,		bankContent,		bankInput),
@@ -215,7 +198,7 @@ public class InvoiceScreen extends HBox {
 		nameInput.setText(selectedInvoice.getName());
 		placeInput.setText(selectedInvoice.getPlace());
 		bankInput.setText(selectedInvoice.getBankAccount());
-		dateOfBirthInput.setValue(selectedInvoice.getDateOfBirth());
+		dateInput.setValue(selectedInvoice.getDateOfBirth());
 		emailInput.setText(selectedInvoice.getEmail());
 		postalInput.setText(selectedInvoice.getPostal());
 		phoneInput.setText(selectedInvoice.getTel());
@@ -232,7 +215,7 @@ public class InvoiceScreen extends HBox {
 			selectedInvoice.setName(nameInput.getText());
 			selectedInvoice.setPlace(placeInput.getText());
 			selectedInvoice.setBankAccount(bankInput.getText());
-			selectedInvoice.setDateOfBirth(dateOfBirthInput.getValue());
+			selectedInvoice.setDateOfBirth(dateInput.getValue());
 			selectedInvoice.setEmail(emailInput.getText());
 			selectedInvoice.setPostal(postalInput.getText());
 			selectedInvoice.setTel(phoneInput.getText());
@@ -247,7 +230,7 @@ public class InvoiceScreen extends HBox {
 					nameInput.getText(),
 					placeInput.getText(),
 					bankInput.getText(),
-					dateOfBirthInput.getValue(),
+					dateInput.getValue(),
 					emailInput.getText(),
 					postalInput.getText(),
 					phoneInput.getText(),
@@ -269,14 +252,14 @@ public class InvoiceScreen extends HBox {
 		}
 	}
 	private void selectedListEntry(){
-		if(selectedInvoice.getName()!=null)nameContent.setText(selectedInvoice.getName());
-		if(selectedInvoice.getPlace()!=null)placeContent.setText(selectedInvoice.getPlace());
+		if(selectedInvoice.getName()!=null)dateContent.setText(selectedInvoice.getName());
+		if(selectedInvoice.getPlace()!=null)customerContent.setText(selectedInvoice.getPlace());
 		if(selectedInvoice.getBankAccount()!=null)bankContent.setText(selectedInvoice.getBankAccount());
 		if(selectedInvoice.getDateOfBirth() != null) dateOfBirthContent.setText(selectedInvoice.getDateOfBirth().toString());
 		if(selectedInvoice.getEmail()!= null)emailContent.setText(selectedInvoice.getEmail());
-		if(selectedInvoice.getPostal()!=null)postalContent.setText(selectedInvoice.getPostal());
+		if(selectedInvoice.getPostal()!=null)isBetaaltContent.setText(selectedInvoice.getPostal());
 		if(selectedInvoice.getTel()!=null)phoneContent.setText(selectedInvoice.getTel());
-		if(selectedInvoice.getAdress()!=null)addressContent.setText(selectedInvoice.getAdress());
+		if(selectedInvoice.getAdress()!=null)priceContent.setText(selectedInvoice.getAdress());
 		if(selectedInvoice.isOnBlackList())blackListContent.setText("ja");
 		else blackListContent.setText("nee");
 	}

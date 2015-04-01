@@ -30,6 +30,7 @@ public class Invoice {
 		return isPayed;
 	}
 	public void payNow(PayMethod payMethod){
+		isPayed = true;
 	}
 	public void bindToCustomer(Customer customer){
 		this.customer = customer;
