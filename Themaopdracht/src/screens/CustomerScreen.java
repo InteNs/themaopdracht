@@ -1,12 +1,6 @@
 package screens;
 import java.util.ArrayList;
 
-import screens.StockScreen.ListRegel;
-import notifications.Notification;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -22,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
 import main.Customer;
+import notifications.Notification;
 
 public class CustomerScreen extends HBox {
 	private ATDProgram controller;

@@ -43,7 +43,6 @@ public class Invoice {
 	public Customer getCustomer(){
 		return customer;
 	}
-	
 	public LocalDate getInvoiceDate() {
 		return invoiceDate;
 	}
@@ -55,7 +54,7 @@ public class Invoice {
 	}
 	public class InvoiceItem extends HBox{
 		private int amount;
-		private double price, totalPrice;
+		private double price, semiTotalPrice;
 		private Label description = new Label(),amountL = new Label(),priceL = new Label(),totalPriceL = new Label();;
 		public InvoiceItem(String desc, double price, int amount){
 			description.setText(desc);
@@ -63,6 +62,9 @@ public class Invoice {
 			priceL.setText( Double.toString(price));
 			this.amount = amount;
 			amountL.setText( Integer.toString(amount));
+			semiTotalPrice = price*amount;
+			totalPrice += semiTotalPrice;
+			totalPriceL.setText(Double.toString(semiTotalPrice));
 			
 			setSpacing(5);
 			getChildren().addAll(
@@ -79,6 +81,9 @@ public class Invoice {
 		}
 		public double getTotal(){
 			return price * amount;
+		}
+		public void refresh(){
+			totalPriceL.setText(Double.toString(price * amount));
 		}
 	}
 }
