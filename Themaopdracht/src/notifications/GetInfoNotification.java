@@ -18,7 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class AddProductNotification extends Stage {
+public class GetInfoNotification extends Stage {
 	private ComboBox<Product> productSelector = new ComboBox<Product>();
 	private TextField hoursMechanic = new TextField();
 	private Button annuleren, ok;
@@ -27,7 +27,7 @@ public class AddProductNotification extends Stage {
 	private VBox notification;
 	private ATDProgram controller;
 	
-	public AddProductNotification(Stage currentStage, String bericht, ATDProgram controller, ATDProgram.notificationStyle stijl){
+	public GetInfoNotification(Stage currentStage, String bericht, ATDProgram controller, ATDProgram.notificationStyle stijl){
 		super(StageStyle.UTILITY);
 		initOwner(currentStage); 
 		initModality(Modality.WINDOW_MODAL); 
@@ -37,7 +37,7 @@ public class AddProductNotification extends Stage {
 		
 		productSelector.getItems().addAll(controller.getProducts());
 		
-		if(stijl == ATDProgram.notificationStyle.NORMAL){
+		if(stijl == ATDProgram.notificationStyle.PRODUCT){
 			this.setTitle("Product toevoegen aan klus.");
 			notification = 	new VBox(10,
 							new HBox(

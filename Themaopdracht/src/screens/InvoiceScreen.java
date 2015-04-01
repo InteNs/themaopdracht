@@ -1,4 +1,5 @@
 package screens;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import screens.StockScreen.ListRegel;
@@ -70,8 +71,7 @@ public class InvoiceScreen extends HBox {
 		customerSelector.getItems().addAll(controller.getCustomers());
 		detailsBox.getChildren().addAll(
 				new VBox(20,
-						new HBox(20,date,		dateContent),
-						new HBox(20,price,		priceContent),
+						new HBox(20,date,dateContent,price,priceContent),
 						new HBox(20,isBetaalt,	isBetaaltContent),
 						new HBox(20,customer,	customerContent,	customerSelector),
 						new HBox(20,cancelButton,saveButton)
@@ -79,7 +79,7 @@ public class InvoiceScreen extends HBox {
 		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
 		detailsBox.setPrefSize(450, 520-15);
 		detailsBox.setPadding(new Insets(20));
-		setVisibility(true, false, false);
+//		setVisibility(true, false, false);
 		//geef alle labels een bepaalde grootte
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			if(((HBox)node1).getChildren().size()>2)((Label)((HBox)node1).getChildren().get(0)).setMinWidth(widthLabels);
@@ -87,7 +87,7 @@ public class InvoiceScreen extends HBox {
 		//cancelbutton
 		cancelButton.setPrefSize(150, 50);
 		cancelButton.setOnAction(e -> {
-				setVisibility(true, false, false);
+//				setVisibility(true, false, false);
 		});
 		//savebutton
 		saveButton.setPrefSize(150, 50);
@@ -119,12 +119,12 @@ public class InvoiceScreen extends HBox {
 			} else
 				searchInput.selectAll();
 		});
-		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
-				search(oldValue, newValue);
-		});
+//		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
+//				search(oldValue, newValue);
+//		});
 		//filter
 		filterSelector.setPrefSize(150, 50);
-		filterSelector.getItems().addAll("Filter: Geen", "Filter: Niet betaald", "Filter: Anoniem");
+		filterSelector.getItems().addAll("Filter: Geen", "Filter: Achterstand", "Filter: Huidig anoniem");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			listView.getItems().clear();
@@ -135,18 +135,18 @@ public class InvoiceScreen extends HBox {
 			}
 			if(newValue.intValue()==1){
 				for (Invoice invoice : controller.getInvoices()) {
-					if(!invoice.isPayed())
+					if(!invoice.isPayed() && invoice.getInvoiceDate().isBefore(LocalDate.now().minusMonths(3)))
 						listView.getItems().add(new ListItem(invoice));
 				}
 			}
 			if(newValue.intValue()==2){
 				for (Invoice invoice : controller.getInvoices()) {
-					if(invoice.getCustomer()==null)
+					if(invoice.getCustomer()==null && !invoice.isPayed())
 						listView.getItems().add(new ListItem(invoice));
 				}
 			}
 			refreshList();
-			if (!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());
+//			if (!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());
 		});
 		
 		
@@ -159,15 +159,15 @@ public class InvoiceScreen extends HBox {
 		//NewButton
 		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(e -> {
-			setVisibility(true, false, false);
-			setVisibility(false, true, true);
-			isChanging = false;
+//			setVisibility(true, false, false);
+//			setVisibility(false, true, true);
+//			isChanging = false;
 		});
 		//ChangeButton
 		changeButton.setPrefSize(150, 50);
 		changeButton.setOnAction(e -> {
-			isChanging = true;
-			change();
+//			isChanging = true;
+//			change();
 		});
 		//RemoveButton
 		removeButton.setPrefSize(150, 50);
@@ -192,16 +192,16 @@ public class InvoiceScreen extends HBox {
 	/**
 	 * vult alle gegevens in de TextFields om aan te passen
 	 */
-	private void change(){
-		//dateContent.setText(selectedInvoice.getInvoiceDate().toString());
-		//priceContent.setText(Double.toString(selectedInvoice.getTotalPrice()));
-		//if(selectedInvoice.isPayed())isBetaaltContent.setText("Ja");
-		//else isBetaaltContent.setText("Nee");
-		//if(selectedInvoice.getCustomer()!=null)customerContent.setText(selectedInvoice.getCustomer().getName());
-		//else customerContent.setText("Anoniem");
-		setVisibility(true, true, true);	
-		isChanging = true;
-	}
+//	private void change(){
+//		dateContent.setText(selectedInvoice.getInvoiceDate().toString());
+//		priceContent.setText(Double.toString(selectedInvoice.getTotalPrice()));
+//		if(selectedInvoice.isPayed())isBetaaltContent.setText("Ja");
+//		else isBetaaltContent.setText("Nee");
+//		if(selectedInvoice.getCustomer()!=null)customerContent.setText(selectedInvoice.getCustomer().getName());
+//		else customerContent.setText("Anoniem");
+//		setVisibility(true, true, true);	
+//		isChanging = true;
+//	}
 	/**
 	 * slaat het nieuwe of aangepaste product op
 	 */
@@ -220,14 +220,14 @@ public class InvoiceScreen extends HBox {
 //			setVisibility(true, false, false);
 //			
 //		}
-		if(!isChanging){
-			Invoice newInvoice = new Invoice();
-			if(customerSelector.getSelectionModel().getSelectedItem()!=null)
-				newInvoice.bindToCustomer(customerSelector.getSelectionModel().getSelectedItem());
-			controller.addorRemoveInvoice(newInvoice, false);
-			listView.getItems().add(new ListItem(newInvoice));
-			setVisibility(true, false, false);
-		}
+//		if(!isChanging){
+//			Invoice newInvoice = new Invoice();
+//			if(customerSelector.getSelectionModel().getSelectedItem()!=null)
+//				newInvoice.bindToCustomer(customerSelector.getSelectionModel().getSelectedItem());
+//			controller.addorRemoveInvoice(newInvoice, false);
+//			listView.getItems().add(new ListItem(newInvoice));
+//			setVisibility(true, false, false);
+//		}
 	}
 	private void refreshList(){
 		content.clear();
@@ -247,59 +247,59 @@ public class InvoiceScreen extends HBox {
 		else customerContent.setText("Anoniem");
 		
 	}
-	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
-		cancelButton.setVisible(setButtonsVisible);
-		saveButton.setVisible(setButtonsVisible);	
-		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
-			HBox box = (HBox) node1;
-			if(box.getChildren().size()>2){
-				Node input = box.getChildren().get(2);
-				Label content = ((Label)box.getChildren().get(1));
-				input.setVisible(setTextFieldsVisible);
-				content.setVisible(setDetailsVisible);
-				if(!setTextFieldsVisible){
-					if(input instanceof TextField){
-						((TextField)input).setPrefWidth(0);
-						((TextField)input).clear();
-					}
-					if(input instanceof DatePicker){
-						((DatePicker)input).setPrefWidth(0);
-						((DatePicker)input).setValue(null);
-					}
-					if(input instanceof CheckBox){
-						((CheckBox)input).setPrefSize(0,0);
-						((CheckBox)input).setSelected(false);
-					}
-					content.setPrefWidth(widthLabels*2);
-				}
-				else if (!setDetailsVisible) {
-					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels*2);
-					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels*2);
-					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
-					content.setPrefWidth(0);
-				}			
-				else if (setDetailsVisible || setTextFieldsVisible) {
-					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels);
-					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels);
-					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
-					content.setPrefWidth(widthLabels);
-				}
-			}
-		}	
-	}
-	public void search(String oldVal, String newVal) {
-		if (oldVal != null && (newVal.length() < oldVal.length())) {
-			listView.getItems().clear();
-			listView.getItems().addAll(content);
-		}
-		listView.getItems().clear();
-		for (ListItem entry : content) {
-			try{
-				if (entry.getContent().getTotalPrice() == Double.parseDouble(newVal)) 
-					listView.getItems().add(entry);
-			}catch(NumberFormatException e){}
-		}
-	}
+//	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
+//		cancelButton.setVisible(setButtonsVisible);
+//		saveButton.setVisible(setButtonsVisible);	
+//		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
+//			HBox box = (HBox) node1;
+//			if(box.getChildren().size()>2){
+//				Node input = box.getChildren().get(2);
+//				Label content = ((Label)box.getChildren().get(1));
+//				input.setVisible(setTextFieldsVisible);
+//				content.setVisible(setDetailsVisible);
+//				if(!setTextFieldsVisible){
+//					if(input instanceof TextField){
+//						((TextField)input).setPrefWidth(0);
+//						((TextField)input).clear();
+//					}
+//					if(input instanceof DatePicker){
+//						((DatePicker)input).setPrefWidth(0);
+//						((DatePicker)input).setValue(null);
+//					}
+//					if(input instanceof CheckBox){
+//						((CheckBox)input).setPrefSize(0,0);
+//						((CheckBox)input).setSelected(false);
+//					}
+//					content.setPrefWidth(widthLabels*2);
+//				}
+//				else if (!setDetailsVisible) {
+//					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels*2);
+//					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels*2);
+//					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
+//					content.setPrefWidth(0);
+//				}			
+//				else if (setDetailsVisible || setTextFieldsVisible) {
+//					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels);
+//					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels);
+//					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
+//					content.setPrefWidth(widthLabels);
+//				}
+//			}
+//		}	
+//	}
+//	public void search(String oldVal, String newVal) {
+//		if (oldVal != null && (newVal.length() < oldVal.length())) {
+//			listView.getItems().clear();
+//			listView.getItems().addAll(content);
+//		}
+//		listView.getItems().clear();
+//		for (ListItem entry : content) {
+//			try{
+//				if (entry.getContent().getTotalPrice() == Double.parseDouble(newVal)) 
+//					listView.getItems().add(entry);
+//			}catch(NumberFormatException e){}
+//		}
+//	}
 	public class ListItem extends HBox{
 		private Label contentDate = new Label(),contentIsPayed = new Label(),contentPrice = new Label();
 		private Invoice invoice;
@@ -327,6 +327,30 @@ public class InvoiceScreen extends HBox {
 		}
 		public Invoice getContent(){
 			return invoice;
+		}
+	}
+	public class invoiceItem extends HBox{
+		private int price, amount;
+		private Label description = new Label(),amountL = new Label(),priceL = new Label();;
+		public invoiceItem(String desc, int price, int amount){
+			description.setText(desc);
+			this.price = price;
+			priceL.setText( Double.toString(price));
+			this.amount = amount;
+			amountL.setText( Integer.toString(amount));
+			setSpacing(5);
+			getChildren().addAll(
+					amountL,
+					new Separator(Orientation.VERTICAL),
+					description,
+					new Separator(Orientation.VERTICAL),
+					priceL);
+			((Label)getChildren().get(0)).setPrefWidth(80);
+			((Label)getChildren().get(2)).setPrefWidth(150);
+			((Label)getChildren().get(4)).setPrefWidth(80);
+		}
+		public double getTotal(){
+			return price * amount;
 		}
 	}
 }

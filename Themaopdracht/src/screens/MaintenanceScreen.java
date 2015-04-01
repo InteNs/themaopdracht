@@ -19,7 +19,7 @@ import main.ATDProgram;
 import main.Invoice;
 import main.MaintenanceSession;
 import main.Mechanic;
-import notifications.AddProductNotification;
+import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class MaintenanceScreen extends HBox {
@@ -176,7 +176,7 @@ public class MaintenanceScreen extends HBox {
 		//addProductButton
 		newProductButton.setPrefSize(150, 50);
 		newProductButton.setOnAction(e->{
-			AddProductNotification addProductNormal = new AddProductNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.NORMAL);
+			GetInfoNotification addProductNormal = new GetInfoNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.PRODUCT);
 			addProductNormal.showAndWait();
 			if(addProductNormal.getKeuze().equals("confirm")){
 				selectedMaintenanceSession.usePart(addProductNormal.getSelected());
@@ -192,7 +192,7 @@ public class MaintenanceScreen extends HBox {
 		//endSession button
 				endSession.setPrefSize(150, 50);
 				endSession.setOnAction(e -> {
-					AddProductNotification addProductEndSession = new AddProductNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.ENDSESSION);
+					GetInfoNotification addProductEndSession = new GetInfoNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.ENDSESSION);
 					addProductEndSession.showAndWait();
 					selectedMaintenanceSession.endSession(addProductEndSession.getHours());
 					Notification changeNotify = new Notification(controller .getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
@@ -259,7 +259,6 @@ public class MaintenanceScreen extends HBox {
 		}
 		else{
 			MaintenanceSession newMaintenanceSession = new MaintenanceSession(
-					new Invoice(),
 					controller.getStock(),
 					dateInput.getValue()
 					);

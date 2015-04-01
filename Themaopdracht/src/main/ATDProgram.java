@@ -16,7 +16,7 @@ import screens.StockScreen;
 
 
 public class ATDProgram extends Application {
-	public enum notificationStyle {CONFIRM, NOTIFY, NORMAL, ENDSESSION}
+	public enum notificationStyle {CONFIRM, NOTIFY, PRODUCT, ENDSESSION}
 	private Stage mainStage;
 	private TabPane tabsScreen;
 	private Tab customerAdministration;
@@ -143,7 +143,8 @@ public class ATDProgram extends Application {
 		addorRemoveMechanic(new Mechanic(3, "Sjaak", 10.0), false);
 		addorRemoveMechanic(new Mechanic(4, "Piet", 15.0), false);
 		addorRemoveInvoice(new Invoice(), false);
-		addorRemoveMaintenanceSessions(new MaintenanceSession(receipts.get(0), stock, LocalDate.now()), false);
+		addorRemoveInvoice(new Invoice(), false);
+		addorRemoveMaintenanceSessions(new MaintenanceSession(stock, LocalDate.now()), false);
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
