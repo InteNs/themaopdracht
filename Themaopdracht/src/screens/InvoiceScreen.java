@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
 import main.Customer;
+import main.Fuel;
 import main.Invoice;
 import main.Invoice.InvoiceItem;
 import main.MaintenanceSession;
@@ -126,8 +127,9 @@ public class InvoiceScreen extends HBox {
 			GetInfoNotification addFuelNotification = new GetInfoNotification(controller.getStage(), "selecteer een tanksessie", controller, ATDProgram.notificationStyle.TANK);
 			addFuelNotification.showAndWait();
 			if(addFuelNotification.getKeuze().equals("confirm")){
-				controller.getStock().useProduct((Product)addFuelNotification.getSelected(), addFuelNotification.getFuelAmount());;
-				selectedInvoice.add(selectedInvoice.new InvoiceItem(addFuelNotification.getSelected().get, 10, addFuelNotification.getFuelAmount()));
+				controller.getStock().useProduct((Fuel)addFuelNotification.getSelected(), addFuelNotification.getFuelAmount());;
+				
+				selectedInvoice.add(selectedInvoice.new InvoiceItem(((Fuel)addFuelNotification.getSelected()).getName(), ((Fuel)addFuelNotification.getSelected()).getSellPrice(), addFuelNotification.getFuelAmount()));
 				refreshList();
 			}
 			//TODO

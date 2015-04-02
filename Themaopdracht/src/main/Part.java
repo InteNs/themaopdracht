@@ -48,4 +48,5 @@ public class Part extends Product {
 		return name + " - �" + sellPrice + " - " + supplier.getName();
 	}
 
+
 }

@@ -33,6 +33,7 @@ public class GetInfoNotification extends Stage {
 	private ComboBox<MaintenanceSession> maintenanceSessionSelector = new ComboBox<MaintenanceSession>();
 	private ComboBox<RefuelSession> refuelSelector = new ComboBox<RefuelSession>();
 	private ComboBox<Reservation> reservationSelector = new ComboBox<Reservation>();
+	private ComboBox<String> typeSelector = new ComboBox<String>();
 	private TextField hoursMechanic = new TextField(), amountFuel = new TextField();
 	private Button annuleren, ok;
 	private Label melding;
@@ -61,6 +62,7 @@ public class GetInfoNotification extends Stage {
 		customerSelector.getItems().addAll(controller.getCustomers());
 		maintenanceSessionSelector.getItems().addAll(
 				controller.getMaintenanceSessions());
+		typeSelector.getItems().addAll("Benzine","Onderdeel");
 		// reservationSelector.getItems().addAll(controller.getReservations());
 		// refuelSelector.getItems().addAll(controller.getRefuels());
 
@@ -80,7 +82,22 @@ public class GetInfoNotification extends Stage {
 				this.hide();
 			});
 		}
-
+		if (stijl == ATDProgram.notificationStyle.TYPE) {
+			this.setTitle("ProductType selecteren");
+			notification = new VBox(10, new HBox(new VBox(10, melding,
+					typeSelector, new HBox(10, annuleren = new Button(
+							"Annuleren"), ok = new Button("Selecteren")))));
+			annuleren.setPrefWidth(100);
+			annuleren.setOnAction(e -> {
+				keuze = "cancel";
+				this.hide();
+			});
+			ok.setPrefWidth(100);
+			ok.setOnAction(e -> {
+				keuze = "confirm";
+				this.hide();
+			});
+		}
 		if (stijl == ATDProgram.notificationStyle.CUSTOMER) {
 			this.setTitle("Product toevoegen aan klus.");
 			notification = new VBox(10, new HBox(new VBox(10, melding,
@@ -188,6 +205,9 @@ public class GetInfoNotification extends Stage {
 		}
 		if(stijl == ATDProgram.notificationStyle.PARKING){
 			return reservationSelector.getSelectionModel().getSelectedItem();
+		}
+		if(stijl == ATDProgram.notificationStyle.TYPE){
+			return typeSelector.getSelectionModel().getSelectedItem();
 		}
 		return partSelector.getSelectionModel().getSelectedItem();
 	}

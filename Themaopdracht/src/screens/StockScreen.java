@@ -14,8 +14,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
+import main.Fuel;
+import main.Part;
 import main.Product;
 import main.ProductSupplier;
+import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class StockScreen extends HBox {
@@ -130,11 +133,11 @@ public class StockScreen extends HBox {
 		
 		saveButton.setPrefSize(150, 50);
 		saveButton.setOnAction(e -> {
-			Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+			GetInfoNotification changeConfirm = new GetInfoNotification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",controller, ATDProgram.notificationStyle.TYPE);
 			changeConfirm.showAndWait();
 			switch (changeConfirm.getKeuze()) {
 				case "confirm": {
-					save();
+					save((String)changeConfirm.getSelected());
 					Notification changeNotify = new Notification(controller	.getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
 					changeNotify.showAndWait();
 					setVisibility(true, false, false);
@@ -322,7 +325,7 @@ public class StockScreen extends HBox {
 		isChanging = true;
 	}
 	
-	private void save(){
+	private void save(String keuze){
 		if(isChanging){
 			selectedProduct.setName(nameInput.getText());
 			selectedProduct.setAmount(Integer.parseInt(amountInput.getText()));
@@ -335,8 +338,20 @@ public class StockScreen extends HBox {
 			refreshList(null);
 			setVisibility(true, false, false);
 		}
-		else {
-			Product newProduct = new Product(
+		else if(keuze.equals("Benzine")) {
+			Fuel newProduct = new Fuel(
+					nameInput.getText(), 
+					Integer.parseInt(amountInput.getText()), 
+					Integer.parseInt(minAmountInput.getText()), 
+					Double.parseDouble(priceInput.getText()), 
+					Double.parseDouble(buyPriceInput.getText()), 
+					readSupplier());	
+			controller.addorRemoveproduct(newProduct, false);
+			boxView.getItems().add(new ListRegel(newProduct));
+			setVisibility(true, false, false);
+		}
+		else if(keuze.equals("Onderdeel")) {
+			Part newProduct = new Part(
 					nameInput.getText(), 
 					Integer.parseInt(amountInput.getText()), 
 					Integer.parseInt(minAmountInput.getText()), 
@@ -349,8 +364,10 @@ public class StockScreen extends HBox {
 		}
 	}
 	private ProductSupplier readSupplier(){
-		if(supplierSelector.getSelectionModel().getSelectedItem()instanceof ProductSupplier) 
+		if(supplierSelector.getSelectionModel().getSelectedItem()instanceof ProductSupplier) {
+			System.out.println(supplierSelector.getEditor().getText());
 			return supplierSelector.getSelectionModel().getSelectedItem();
+		}
 		else {
 			ProductSupplier newProductSupplier = new ProductSupplier(
 					supplierSelector.getEditor().getText(), 
