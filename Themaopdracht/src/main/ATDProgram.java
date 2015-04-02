@@ -36,7 +36,7 @@ public class ATDProgram extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		mainStage = stage;
-		addContent();
+		//addContent();
 		//create tabs and add content
 		tabsScreen = new TabPane();
 
