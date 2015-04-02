@@ -348,8 +348,6 @@ public class MaintenanceScreen extends HBox {
 			((Label)getChildren().get(0)).setPrefWidth(120);
 			((Label)getChildren().get(2)).setPrefWidth(100);
 			((Label)getChildren().get(4)).setPrefWidth(200);
-				
-			
 		}
 		public void refresh(){
 			itemDate.setText(session.getPlannedDate().toString());

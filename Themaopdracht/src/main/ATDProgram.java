@@ -160,8 +160,11 @@ public class ATDProgram extends Application {
 		addorRemoveMaintenanceSessions(new MaintenanceSession(stock, LocalDate.now()), false);
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
-		addorRemoveproduct(new Product("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
-		addorRemoveproduct(new Product("Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
+		addorRemoveSupplier(new ProductSupplier("Shell", "Aarde", "1337AF", "De Maan"), false);
+		addorRemoveproduct(new Part("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
+		addorRemoveproduct(new Fuel("Diesel", 300, 200, 1, 1.19, suppliers.get(2)), false);
+		addorRemoveproduct(new Fuel("Euro95", 275, 150, 1.11, 1.52, suppliers.get(2)), false);
 		stock.orderProduct(stock.getAllProducts().get(0), 7);
 	}
 

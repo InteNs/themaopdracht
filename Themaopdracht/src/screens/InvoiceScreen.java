@@ -61,7 +61,6 @@ public class InvoiceScreen extends HBox {
 			SecButtonBox = new HBox(6), 
 			mainBox = new HBox(spacingBoxes);
 	public InvoiceScreen(ATDProgram controller) {
-		selectedInvoice.
 		this.controller = controller;
 		//CustomerDetails
 		detailsBox.getChildren().addAll(
