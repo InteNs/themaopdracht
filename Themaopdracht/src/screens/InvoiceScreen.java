@@ -121,10 +121,14 @@ public class InvoiceScreen extends HBox {
 		//fuel
 		addRefuel.setPrefSize(112.5, 50);
 		addRefuel.setOnAction(e -> {
+			GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller.getStage(), "selecteer een tanksessie", controller, ATDProgram.notificationStyle.TANK);
+			addMaintenanceNotification.showAndWait();
 			//TODO
 		});
 		addParking.setPrefSize(112.5, 50);
 		addParking.setOnAction(e->{
+			GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller.getStage(), "selecteer een parkeersessie", controller, ATDProgram.notificationStyle.PARKING);
+			addMaintenanceNotification.showAndWait();
 			//TODO
 		});
 		filterSelector.setPrefSize(112.5, 50);

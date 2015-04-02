@@ -173,6 +173,12 @@ public class GetInfoNotification extends Stage {
 		if(stijl == ATDProgram.notificationStyle.MAINTENANCE){
 			return maintenanceSessionSelector.getSelectionModel().getSelectedItem();
 		}
+		if(stijl == ATDProgram.notificationStyle.TANK){
+			return refuelSelector.getSelectionModel().getSelectedItem();
+		}
+		if(stijl == ATDProgram.notificationStyle.PARKING){
+			return reservationSelector.getSelectionModel().getSelectedItem();
+		}
 		return productSelector.getSelectionModel().getSelectedItem();
 	}
 
