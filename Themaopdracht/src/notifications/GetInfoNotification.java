@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import main.ATDProgram;
 import main.ATDProgram.notificationStyle;
 import main.Customer;
+import main.Fuel;
 import main.MaintenanceSession;
+import main.Part;
 import main.Product;
 import main.ProductSupplier;
 import main.RefuelSession;
 import main.Reservation;
+import main.Stock;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,17 +27,19 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class GetInfoNotification extends Stage {
-	private ComboBox<Product> productSelector = new ComboBox<Product>();
+	private ComboBox<Product> partSelector = new ComboBox<Product>();
+	private ComboBox<Product> fuelSelector = new ComboBox<Product>();
 	private ComboBox<Customer> customerSelector = new ComboBox<Customer>();
 	private ComboBox<MaintenanceSession> maintenanceSessionSelector = new ComboBox<MaintenanceSession>();
 	private ComboBox<RefuelSession> refuelSelector = new ComboBox<RefuelSession>();
 	private ComboBox<Reservation> reservationSelector = new ComboBox<Reservation>();
-	private TextField hoursMechanic = new TextField();
+	private TextField hoursMechanic = new TextField(), amountFuel = new TextField();
 	private Button annuleren, ok;
 	private Label melding;
 	private String keuze;
 	private VBox notification;
 	private ATDProgram controller;
+	private Stock stock;
 	private notificationStyle stijl;
 
 	public GetInfoNotification(Stage currentStage, String bericht,
@@ -46,8 +51,13 @@ public class GetInfoNotification extends Stage {
 		this.stijl = stijl;
 		this.setResizable(false);
 		melding = new Label(bericht);
-
-		productSelector.getItems().addAll(controller.getProducts());
+		for (Product product : controller.getProducts()){
+			if(product instanceof Part)	partSelector.getItems().addAll(product);
+		}
+		for (Product product : controller.getProducts()){
+			if(product instanceof Fuel)	fuelSelector.getItems().addAll(product);
+		}
+		//partSelector.getItems().addAll(controller.getProducts());
 		customerSelector.getItems().addAll(controller.getCustomers());
 		maintenanceSessionSelector.getItems().addAll(
 				controller.getMaintenanceSessions());
@@ -57,7 +67,7 @@ public class GetInfoNotification extends Stage {
 		if (stijl == ATDProgram.notificationStyle.PRODUCTS) {
 			this.setTitle("Product toevoegen aan klus.");
 			notification = new VBox(10, new HBox(new VBox(10, melding,
-					productSelector, new HBox(10, annuleren = new Button(
+					partSelector, new HBox(10, annuleren = new Button(
 							"Annuleren"), ok = new Button("Toevoegen")))));
 			annuleren.setPrefWidth(100);
 			annuleren.setOnAction(e -> {
@@ -90,8 +100,8 @@ public class GetInfoNotification extends Stage {
 
 		if (stijl == ATDProgram.notificationStyle.TANK) {
 			this.setTitle("Product toevoegen aan klus.");
-			notification = new VBox(10, new HBox(new VBox(10, melding,
-					refuelSelector, new HBox(10, annuleren = new Button(
+			notification = new VBox(10, new HBox(new VBox(10, melding, amountFuel,
+					fuelSelector, new HBox(10, annuleren = new Button(
 							"Annuleren"), ok = new Button("Toevoegen")))));
 			annuleren.setPrefWidth(100);
 			annuleren.setOnAction(e -> {
@@ -174,15 +184,18 @@ public class GetInfoNotification extends Stage {
 			return maintenanceSessionSelector.getSelectionModel().getSelectedItem();
 		}
 		if(stijl == ATDProgram.notificationStyle.TANK){
-			return refuelSelector.getSelectionModel().getSelectedItem();
+			return fuelSelector.getSelectionModel().getSelectedItem();
 		}
 		if(stijl == ATDProgram.notificationStyle.PARKING){
 			return reservationSelector.getSelectionModel().getSelectedItem();
 		}
-		return productSelector.getSelectionModel().getSelectedItem();
+		return partSelector.getSelectionModel().getSelectedItem();
 	}
 
 		public int getHours() {
 			return Integer.parseInt(hoursMechanic.getText());
+		}
+		public int getFuelAmount(){
+			return Integer.parseInt(amountFuel.getText());
 		}
 	}

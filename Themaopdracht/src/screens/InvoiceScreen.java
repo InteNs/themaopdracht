@@ -19,12 +19,14 @@ import main.Invoice;
 import main.Invoice.InvoiceItem;
 import main.MaintenanceSession;
 import main.Product;
+import main.Stock;
 import notifications.GetInfoNotification;
 import notifications.Notification;
 
 
 public class InvoiceScreen extends HBox {
 	private ATDProgram controller;
+	private Stock stock;
 	private Invoice selectedInvoice;
 	private double
 			spacingBoxes = 10,
@@ -121,8 +123,13 @@ public class InvoiceScreen extends HBox {
 		//fuel
 		addRefuel.setPrefSize(112.5, 50);
 		addRefuel.setOnAction(e -> {
-			GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller.getStage(), "selecteer een tanksessie", controller, ATDProgram.notificationStyle.TANK);
-			addMaintenanceNotification.showAndWait();
+			GetInfoNotification addFuelNotification = new GetInfoNotification(controller.getStage(), "selecteer een tanksessie", controller, ATDProgram.notificationStyle.TANK);
+			addFuelNotification.showAndWait();
+			if(addFuelNotification.getKeuze().equals("confirm")){
+				controller.getStock().useProduct((Product)addFuelNotification.getSelected(), addFuelNotification.getFuelAmount());;
+				selectedInvoice.add(selectedInvoice.new InvoiceItem(addFuelNotification.getSelected().get, 10, addFuelNotification.getFuelAmount()));
+				refreshList();
+			}
 			//TODO
 		});
 		addParking.setPrefSize(112.5, 50);

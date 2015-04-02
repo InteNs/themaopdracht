@@ -1,10 +1,10 @@
 package main;
 
-public class Product {
-	private String name;
-	private int amount, minAmount;
-	private double buyPrice, sellPrice;
-	private ProductSupplier supplier;
+public abstract class Product {
+	protected String name;
+	protected int amount, minAmount;
+	protected double buyPrice, sellPrice;
+	protected ProductSupplier supplier;
 	public Product(String name, int amount, int minAmount, double buyPrice,double sellPrice, ProductSupplier supplier) {
 		this.name = name;
 		this.amount = amount;
@@ -13,45 +13,19 @@ public class Product {
 		this.sellPrice = sellPrice;
 		this.supplier = supplier;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public int getAmount() {
-		return amount;
-	}
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
-	public int getMinAmount() {
-		return minAmount;
-	}
-	public void setMinAmount(int orderAmount) {
-		this.minAmount = orderAmount;
-	}
-	public double getBuyPrice() {
-		return buyPrice;
-	}
-	public void setBuyPrice(double buyPrice) {
-		this.buyPrice = buyPrice;
-	}
-	public double getSellPrice() {
-		return sellPrice;
-	}
-	public void setSellPrice(double sellPrice) {
-		this.sellPrice = sellPrice;
-	}
-	public ProductSupplier getSupplier() {
-		return supplier;
-	}
-	public void setSupplier(ProductSupplier supplier) {
-		this.supplier = supplier;
-	}
+	public abstract String getName();
+	public abstract void setName(String name);
+	public abstract int getAmount();
+	public abstract void setAmount(int amount);
+	public abstract int getMinAmount();
+	public abstract void setMinAmount(int orderAmount);
+	public abstract double getBuyPrice();
+	public abstract void setBuyPrice(double buyPrice);
+	public abstract double getSellPrice();
+	public abstract void setSellPrice(double sellPrice);
+	public abstract ProductSupplier getSupplier();
+	public abstract void setSupplier(ProductSupplier supplier);
 	@Override
-	public String toString() {
-		return name + " - €" + sellPrice + " - " + supplier.getName();
-	}
+	public abstract String toString();
 	
 }
