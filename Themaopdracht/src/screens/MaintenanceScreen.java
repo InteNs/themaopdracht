@@ -167,7 +167,7 @@ public class MaintenanceScreen extends HBox {
 		//addProductButton
 		newProductButton.setPrefSize(150, 50);
 		newProductButton.setOnAction(e->{
-			GetInfoNotification addProductNormal = new GetInfoNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.PRODUCTS);
+			GetInfoNotification addProductNormal = new GetInfoNotification(controller.getStage(), "Selecteer het gebruikte onderdeel.",controller, ATDProgram.notificationStyle.PRODUCTS);
 			addProductNormal.showAndWait();
 			if(addProductNormal.getKeuze().equals("confirm")){
 				selectedMaintenanceSession.usePart((Product)addProductNormal.getSelected());
@@ -181,7 +181,7 @@ public class MaintenanceScreen extends HBox {
 		//endSession button
 				endSession.setPrefSize(150, 50);
 				endSession.setOnAction(e -> {
-					GetInfoNotification addProductEndSession = new GetInfoNotification(controller.getStage(), "Weet u zeker dat u dit onderdeel wilt toevoegen?",controller, ATDProgram.notificationStyle.ENDSESSION);
+					GetInfoNotification addProductEndSession = new GetInfoNotification(controller.getStage(), "Vul het aantal gewerkte uren in.",controller, ATDProgram.notificationStyle.ENDSESSION);
 					addProductEndSession.showAndWait();
 					selectedMaintenanceSession.endSession(addProductEndSession.getHours());
 					Notification changeNotify = new Notification(controller .getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
@@ -207,12 +207,12 @@ public class MaintenanceScreen extends HBox {
 		//RemoveButton
 		removeButton.setPrefSize(150, 50);
 		removeButton.setOnAction(e->{
-			   Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			   Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze sessie wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			   removeConfirm.showAndWait();
-			   if (removeConfirm.getKeuze() == "ja"){
+			   if (removeConfirm.getKeuze() == "confirm"){
 			   listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
 			   controller.addorRemoveMaintenanceSessions(selectedMaintenanceSession, true);
-			   Notification removeNotify = new Notification(controller.getStage(), "Klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+			   Notification removeNotify = new Notification(controller.getStage(), "sessie is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 			   removeNotify.showAndWait();}
 			  });
 		

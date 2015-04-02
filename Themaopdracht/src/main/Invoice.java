@@ -46,9 +46,6 @@ public class Invoice {
 	public LocalDate getInvoiceDate() {
 		return invoiceDate;
 	}
-	public void setPayed(boolean isPayed) {
-		this.isPayed = isPayed;
-	}
 	public String toString(){
 		return "invoice";
 	}
