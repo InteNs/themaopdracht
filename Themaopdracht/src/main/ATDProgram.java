@@ -36,7 +36,7 @@ public class ATDProgram extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		mainStage = stage;
-		//addContent();
+		addContent();
 		//create tabs and add content
 		tabsScreen = new TabPane();
 
@@ -59,6 +59,7 @@ public class ATDProgram extends Application {
 
 		// Create Mainscreen
 		mainScene = new Scene(tabsScreen, 1024, 655);
+		mainScene.getStylesheets().add("application.css");
 		stage.setScene(mainScene);
 		stage.setTitle("AutoTotaalDienst");
 		stage.setResizable(false);
