@@ -167,13 +167,10 @@ public class MaintenanceScreen extends HBox {
 		//addProductButton
 		newProductButton.setPrefSize(150, 50);
 		newProductButton.setOnAction(e->{
-			GetInfoNotification addProductNormal = new GetInfoNotification(controller.getStage(), "Selecteer het gebruikte onderdeel.",controller, ATDProgram.notificationStyle.PRODUCTS);
+			GetInfoNotification addProductNormal = new GetInfoNotification(controller, ATDProgram.notificationStyle.PRODUCTS);
 			addProductNormal.showAndWait();
 			if(addProductNormal.getKeuze().equals("confirm")){
 				selectedMaintenanceSession.usePart((Product)addProductNormal.getSelected());
-				System.out.println(addProductNormal.getSelected());
-				System.out.println(selectedMaintenanceSession.getUsedParts());
-			 	System.out.println(Integer.toString(selectedMaintenanceSession.getTotalParts()));
 			 	refreshList();
 			 	selectedListEntry();
 			} 
@@ -181,9 +178,9 @@ public class MaintenanceScreen extends HBox {
 		//endSession button
 				endSession.setPrefSize(150, 50);
 				endSession.setOnAction(e -> {
-					GetInfoNotification addProductEndSession = new GetInfoNotification(controller.getStage(), "Vul het aantal gewerkte uren in.",controller, ATDProgram.notificationStyle.ENDSESSION);
+					GetInfoNotification addProductEndSession = new GetInfoNotification(controller, ATDProgram.notificationStyle.ENDSESSION);
 					addProductEndSession.showAndWait();
-					selectedMaintenanceSession.endSession(addProductEndSession.getHours());
+					selectedMaintenanceSession.endSession(addProductEndSession.getInput());
 					Notification changeNotify = new Notification(controller .getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
 				 	changeNotify.showAndWait();
 				 	refreshList();

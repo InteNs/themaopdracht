@@ -106,7 +106,7 @@ public class InvoiceScreen extends HBox {
 		//maintenance
 		addMaintenance.setPrefSize(112.5, 50);
 		addMaintenance.setOnAction(e -> {
-			GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller.getStage(), "selecteer een onderhoudssessie", controller, ATDProgram.notificationStyle.MAINTENANCE);
+			GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller, ATDProgram.notificationStyle.MAINTENANCE);
 			addMaintenanceNotification.showAndWait();
 			if(addMaintenanceNotification.getKeuze().equals("confirm")){
 				MaintenanceSession selection = (MaintenanceSession)addMaintenanceNotification.getSelected();
@@ -124,19 +124,18 @@ public class InvoiceScreen extends HBox {
 		//fuel
 		addRefuel.setPrefSize(112.5, 50);
 		addRefuel.setOnAction(e -> {
-			GetInfoNotification addFuelNotification = new GetInfoNotification(controller.getStage(), "selecteer een tanksessie", controller, ATDProgram.notificationStyle.TANK);
+			GetInfoNotification addFuelNotification = new GetInfoNotification(controller, ATDProgram.notificationStyle.TANK);
 			addFuelNotification.showAndWait();
 			if(addFuelNotification.getKeuze().equals("confirm")){
-				controller.getStock().useProduct((Fuel)addFuelNotification.getSelected(), addFuelNotification.getFuelAmount());;
+				controller.getStock().useProduct((Fuel)addFuelNotification.getSelected(), addFuelNotification.getInput());;
 				
-				selectedInvoice.add(selectedInvoice.new InvoiceItem(((Fuel)addFuelNotification.getSelected()).getName(), ((Fuel)addFuelNotification.getSelected()).getSellPrice(), addFuelNotification.getFuelAmount()));
+				selectedInvoice.add(selectedInvoice.new InvoiceItem(((Fuel)addFuelNotification.getSelected()).getName(), ((Fuel)addFuelNotification.getSelected()).getSellPrice(), addFuelNotification.getInput()));
 				refreshList();
 			}
-			//TODO
 		});
 		addParking.setPrefSize(112.5, 50);
 		addParking.setOnAction(e->{
-			GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller.getStage(), "selecteer een parkeersessie", controller, ATDProgram.notificationStyle.PARKING);
+			GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller, ATDProgram.notificationStyle.PARKING);
 			addMaintenanceNotification.showAndWait();
 			//TODO
 		});
@@ -177,7 +176,7 @@ public class InvoiceScreen extends HBox {
 		//bindButton
 		bindButton.setPrefSize(150, 50);
 		bindButton.setOnAction(e -> {
-			GetInfoNotification getCustomer = new GetInfoNotification(controller.getStage(), "selecteer een klant", controller, ATDProgram.notificationStyle.CUSTOMER);
+			GetInfoNotification getCustomer = new GetInfoNotification(controller, ATDProgram.notificationStyle.CUSTOMER);
 			getCustomer.showAndWait();
 			if(getCustomer.getKeuze().equals("confirm"))
 				selectedInvoice.bindToCustomer((Customer)getCustomer.getSelected());

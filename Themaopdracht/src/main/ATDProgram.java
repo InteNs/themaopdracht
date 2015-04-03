@@ -39,6 +39,7 @@ public class ATDProgram extends Application {
 		addContent();
 		//create tabs and add content
 		tabsScreen = new TabPane();
+		tabsScreen.getSelectionModel().selectedItemProperty().addListener(e->System.out.println("BOE"));
 
 		customerAdministration = new Tab("Klanten");
 		customerAdministration.setClosable(false);
@@ -58,10 +59,11 @@ public class ATDProgram extends Application {
 		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration,serviceScreen,invoiceScreen);
 
 		// Create Mainscreen
-		mainScene = new Scene(tabsScreen, 1024, 655);
+		mainScene = new Scene(tabsScreen);
 		mainScene.getStylesheets().add("application.css");
 		stage.setScene(mainScene);
 		stage.setTitle("AutoTotaalDienst");
+		stage.sizeToScene();
 		stage.setResizable(false);
 		stage.show();
 	}

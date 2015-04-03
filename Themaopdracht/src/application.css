@@ -1,3 +1,17 @@
 .combo-box-base:disabled .list-cell:disabled {
-    -fx-opacity: 1;
+    -fx-opacity: 1.0;
+}
+.txtarea .scroll-pane:disabled{
+  	-fx-opacity: 1.0;
+}
+.combo-box {
+	-fx-opacity: 1.0;
+}
+.stockDetails {
+	-fx-background-color: white; 
+	-fx-border-color: lightgray; 
+	-fx-border: solid;
+}
+.text-field{
+	-fx-opacity: 1.0;
 }

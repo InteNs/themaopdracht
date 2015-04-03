@@ -1,18 +1,5 @@
 package notifications;
 
-import java.util.ArrayList;
-
-import main.ATDProgram;
-import main.ATDProgram.notificationStyle;
-import main.Customer;
-import main.Fuel;
-import main.MaintenanceSession;
-import main.Part;
-import main.Product;
-import main.ProductSupplier;
-import main.RefuelSession;
-import main.Reservation;
-import main.Stock;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,6 +12,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.ATDProgram;
+import main.ATDProgram.notificationStyle;
+import main.Customer;
+import main.Fuel;
+import main.MaintenanceSession;
+import main.Part;
+import main.Product;
+import main.RefuelSession;
+import main.Reservation;
 
 public class GetInfoNotification extends Stage {
 	private ComboBox<Product> partSelector = new ComboBox<Product>();
@@ -34,188 +30,116 @@ public class GetInfoNotification extends Stage {
 	private ComboBox<RefuelSession> refuelSelector = new ComboBox<RefuelSession>();
 	private ComboBox<Reservation> reservationSelector = new ComboBox<Reservation>();
 	private ComboBox<String> typeSelector = new ComboBox<String>();
-	private TextField hoursMechanic = new TextField(), amountFuel = new TextField();
-	private Button annuleren, ok;
-	private Label melding;
+	private TextField input = new TextField();
+	private Button annuleren = new Button("annuleren"), ok = new Button("Opslaan");
+	private Label melding = new Label();
 	private String keuze;
-	private VBox notification;
-	private ATDProgram controller;
-	private Stock stock;
+	private VBox notification = new VBox(10,melding);
+	private HBox buttonBox = new HBox(10,ok,annuleren);
 	private notificationStyle stijl;
 
-	public GetInfoNotification(Stage currentStage, String bericht,
-			ATDProgram controller, ATDProgram.notificationStyle stijl) {
+	public GetInfoNotification(ATDProgram controller, ATDProgram.notificationStyle nwstijl) {
 		super(StageStyle.UTILITY);
-		initOwner(currentStage);
+		initOwner(controller.getStage());
 		initModality(Modality.WINDOW_MODAL);
-		this.controller = controller;
-		this.stijl = stijl;
+		this.stijl = nwstijl;
+		System.out.println(stijl);
 		this.setResizable(false);
-		melding = new Label(bericht);
-		for (Product product : controller.getProducts()){
-			if(product instanceof Part)	partSelector.getItems().addAll(product);
+		ok.setPrefWidth(100);
+		ok.setOnAction(e -> {
+			keuze = "confirm";
+			this.hide();
+		});
+		annuleren.setPrefWidth(100);
+		annuleren.setOnAction(e -> {
+			keuze = "cancel";
+			this.hide();
+		});
+		switch(stijl){
+			case PRODUCTS: {
+				setTitle("Product toevoegen");
+				melding.setText("Selecteer een product:");
+				ok.setText("Toevoegen");
+				for (Product product : controller.getProducts()){
+					if(product instanceof Part)	partSelector.getItems().addAll(product);
+				}
+				notification.getChildren().addAll(partSelector,buttonBox);
+				break;
+			}
+			case TYPE: {
+				setTitle("ProductType opslaan");
+				melding.setText("Selecteer het type product:");
+				typeSelector.getItems().addAll("Benzine","Onderdeel");
+				notification.getChildren().addAll(typeSelector,buttonBox);
+				break;
+			}
+			case CUSTOMER: {
+				setTitle("Klant toevoegen");
+				melding.setText("Selecteer een klant:");
+				ok.setText("Toevoegen");
+				customerSelector.getItems().addAll(controller.getCustomers());
+				notification.getChildren().addAll(customerSelector,buttonBox);
+				break;
+			}
+	
+			case TANK: {
+				setTitle("Tanksessie aanmaken");
+				melding.setText("Vul de gegevens in:");
+				ok.setText("Toevoegen");
+				for (Product product : controller.getProducts())
+					if(product instanceof Fuel)	fuelSelector.getItems().addAll(product);
+				notification.getChildren().addAll(input,fuelSelector,buttonBox);
+				break;
+			}
+	
+			case PARKING: {
+				setTitle("Reservering toevoegen");
+				melding.setText("Selecteer een reservering:");
+				ok.setText("Toevoegen");
+				reservationSelector.getItems().addAll(controller.getReservations());
+				notification.getChildren().addAll(reservationSelector,buttonBox);
+				break;
+			}
+	
+			case MAINTENANCE: {
+				setTitle("Klus toevoegen");
+				melding.setText("Selecteer een klus:");
+				ok.setText("Toevoegen");
+				
+				for (MaintenanceSession session : controller.getMaintenanceSessions())
+					if(session.isFinished()) maintenanceSessionSelector.getItems().add(session);
+				notification.getChildren().addAll(maintenanceSessionSelector,buttonBox);
+				break;
+			}
+			case ENDSESSION : {
+				setTitle("Klus afsluiten");
+				melding.setText("Vul aantal gewerkte uren in:");
+				ok.setText("Afsluiten");
+				notification.getChildren().addAll(input,buttonBox);
+				break;
+			}
+			default: ;
 		}
-		for (Product product : controller.getProducts()){
-			if(product instanceof Fuel)	fuelSelector.getItems().addAll(product);
-		}
-		//partSelector.getItems().addAll(controller.getProducts());
-		customerSelector.getItems().addAll(controller.getCustomers());
-		maintenanceSessionSelector.getItems().addAll(
-				controller.getMaintenanceSessions());
-		typeSelector.getItems().addAll("Benzine","Onderdeel");
-		// reservationSelector.getItems().addAll(controller.getReservations());
-		// refuelSelector.getItems().addAll(controller.getRefuels());
-
-		if (stijl == ATDProgram.notificationStyle.PRODUCTS) {
-			this.setTitle("Product toevoegen aan klus.");
-			notification = new VBox(10, new HBox(new VBox(10, melding,
-					partSelector, new HBox(10, annuleren = new Button(
-							"Annuleren"), ok = new Button("Toevoegen")))));
-			annuleren.setPrefWidth(100);
-			annuleren.setOnAction(e -> {
-				keuze = "cancel";
-				this.hide();
-			});
-			ok.setPrefWidth(100);
-			ok.setOnAction(e -> {
-				keuze = "confirm";
-				this.hide();
-			});
-		}
-		if (stijl == ATDProgram.notificationStyle.TYPE) {
-			this.setTitle("ProductType selecteren");
-			notification = new VBox(10, new HBox(new VBox(10, melding,
-					typeSelector, new HBox(10, annuleren = new Button(
-							"Annuleren"), ok = new Button("Selecteren")))));
-			annuleren.setPrefWidth(100);
-			annuleren.setOnAction(e -> {
-				keuze = "cancel";
-				this.hide();
-			});
-			ok.setPrefWidth(100);
-			ok.setOnAction(e -> {
-				keuze = "confirm";
-				this.hide();
-			});
-		}
-		if (stijl == ATDProgram.notificationStyle.CUSTOMER) {
-			this.setTitle("Product toevoegen aan klus.");
-			notification = new VBox(10, new HBox(new VBox(10, melding,
-					customerSelector, new HBox(10, annuleren = new Button(
-							"Annuleren"), ok = new Button("Toevoegen")))));
-			annuleren.setPrefWidth(100);
-			annuleren.setOnAction(e -> {
-				keuze = "cancel";
-				this.hide();
-			});
-			ok.setPrefWidth(100);
-			ok.setOnAction(e -> {
-				keuze = "confirm";
-				this.hide();
-			});
-		}
-
-		if (stijl == ATDProgram.notificationStyle.TANK) {
-			this.setTitle("Product toevoegen aan klus.");
-			notification = new VBox(10, new HBox(new VBox(10, melding, amountFuel,
-					fuelSelector, new HBox(10, annuleren = new Button(
-							"Annuleren"), ok = new Button("Toevoegen")))));
-			annuleren.setPrefWidth(100);
-			annuleren.setOnAction(e -> {
-				keuze = "cancel";
-				this.hide();
-			});
-			ok.setPrefWidth(100);
-			ok.setOnAction(e -> {
-				keuze = "confirm";
-				this.hide();
-			});
-		}
-
-		if (stijl == ATDProgram.notificationStyle.PARKING) {
-			this.setTitle("Product toevoegen aan klus.");
-			notification = new VBox(10, new HBox(new VBox(10, melding,
-					reservationSelector, new HBox(10, annuleren = new Button(
-							"Annuleren"), ok = new Button("Toevoegen")))));
-			annuleren.setPrefWidth(100);
-			annuleren.setOnAction(e -> {
-				keuze = "cancel";
-				this.hide();
-			});
-			ok.setPrefWidth(100);
-			ok.setOnAction(e -> {
-				keuze = "confirm";
-				this.hide();
-			});
-		}
-
-		if (stijl == ATDProgram.notificationStyle.MAINTENANCE) {
-			this.setTitle("Product toevoegen aan klus.");
-			notification = new VBox(10, new HBox(new VBox(10, melding,
-					maintenanceSessionSelector, new HBox(10,
-							annuleren = new Button("Annuleren"),
-							ok = new Button("Toevoegen")))));
-			annuleren.setPrefWidth(100);
-			annuleren.setOnAction(e -> {
-				keuze = "cancel";
-				this.hide();
-			});
-			ok.setPrefWidth(100);
-			ok.setOnAction(e -> {
-				keuze = "confirm";
-				this.hide();
-			});
-		}
-
-		if (stijl == ATDProgram.notificationStyle.ENDSESSION) {
-			this.setTitle("Product toevoegen aan klus.");
-			notification = new VBox(10, new HBox(new VBox(10, melding,
-					hoursMechanic, new HBox(10, annuleren = new Button(
-							"Annuleren"), ok = new Button("Toevoegen")))));
-			annuleren.setPrefWidth(100);
-			annuleren.setOnAction(e -> {
-				keuze = "cancel";
-				this.hide();
-			});
-			ok.setPrefWidth(100);
-			ok.setOnAction(e -> {
-				keuze = "confirm";
-				this.hide();
-			});
-		}
-
 		notification.setAlignment(Pos.CENTER);
 		notification.setPadding(new Insets(20));
-
 		Scene scene = new Scene(notification);
 		this.setScene(scene);
-
 	}
-
 	public String getKeuze() {
 		return keuze;
 	}
-
 	public Object getSelected(){
-		if(stijl == ATDProgram.notificationStyle.MAINTENANCE){
-			return maintenanceSessionSelector.getSelectionModel().getSelectedItem();
-		}
-		if(stijl == ATDProgram.notificationStyle.TANK){
-			return fuelSelector.getSelectionModel().getSelectedItem();
-		}
-		if(stijl == ATDProgram.notificationStyle.PARKING){
-			return reservationSelector.getSelectionModel().getSelectedItem();
-		}
-		if(stijl == ATDProgram.notificationStyle.TYPE){
-			return typeSelector.getSelectionModel().getSelectedItem();
-		}
-		return partSelector.getSelectionModel().getSelectedItem();
-	}
-
-		public int getHours() {
-			return Integer.parseInt(hoursMechanic.getText());
-		}
-		public int getFuelAmount(){
-			return Integer.parseInt(amountFuel.getText());
+		switch(stijl) {
+		case MAINTENANCE:	return maintenanceSessionSelector.getSelectionModel().getSelectedItem();
+		case TANK:			return fuelSelector.getSelectionModel().getSelectedItem();
+		case PARKING:		return reservationSelector.getSelectionModel().getSelectedItem();
+		case TYPE:			return typeSelector.getSelectionModel().getSelectedItem();
+		case CUSTOMER:		return customerSelector.getSelectionModel().getSelectedItem();
+		case PRODUCTS:		return partSelector.getSelectionModel().getSelectedItem();
+		default : return null;
 		}
 	}
+	public int getInput() {
+		return Integer.parseInt(input.getText());
+	}
+}

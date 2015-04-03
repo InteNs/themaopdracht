@@ -13,11 +13,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class Notification extends Stage {
-	private Button annuleren, ok;
+	private Button annuleren = new Button("Annuleren"), ok = new Button("OK");
 	private Label melding;
 	private String keuze;
-	private VBox notification;
-	private ATDProgram atdProgram;
+	private VBox notification = new VBox(10);
 	
 	public Notification(Stage currentStage, String bericht, ATDProgram.notificationStyle stijl){
 		super(StageStyle.UTILITY);
@@ -25,48 +24,40 @@ public class Notification extends Stage {
 		initModality(Modality.WINDOW_MODAL); 
 		this.setResizable(false);
 		melding = new Label(bericht);
-		
-		
-		if(stijl == ATDProgram.notificationStyle.CONFIRM){
-			this.setTitle("Bevestigen");
-			notification = new VBox(10,
-					new HBox(
-							new VBox(10,
-									melding,
-							new HBox(10, 
-									annuleren = new Button("Annuleren"),
-									ok = new Button("OK") 
-									))));
-			annuleren.setPrefWidth(100);
-			annuleren.setOnAction(e -> {
-				keuze = "cancel";
-				this.hide();
-			});
-		}
-		if(stijl == ATDProgram.notificationStyle.NOTIFY) {
-			this.setTitle("Melding");
-			notification = new VBox(10,
-					new HBox(
-							new VBox(10,
-									melding,
-							new HBox(10, 
-									ok = new Button("OK") 
-									))));
-		}
+		annuleren.setPrefWidth(100);
+		annuleren.setOnAction(e -> {
+			keuze = "cancel";
+			this.hide();
+		});
 		ok.setPrefWidth(100);
 		ok.setOnAction(e -> {
 			keuze = "confirm";
 			this.hide();
 		});
-		
+		switch(stijl){
+			case CONFIRM: {
+			this.setTitle("Bevestigen");
+			notification.getChildren().addAll(melding,new HBox(10,annuleren,ok));
+			((HBox)notification.getChildren().get(1)).setAlignment(Pos.CENTER);
+			break;
+			}
+			case NOTIFY: {
+			this.setTitle("Melding");
+			notification.getChildren().addAll(melding,ok);
+			break;
+			}
+		default:
+			break;
+		}
 		notification.setAlignment(Pos.CENTER);
 		notification.setPadding(new Insets(20));
-		
 		Scene scene = new Scene(notification);
 		this.setScene(scene);
-		
-		}	
-	
+	}	
+	/**
+	 * returns the option the actor has chosen
+	 * @return "confirm" or "cancel"
+	 */
 	public String getKeuze(){
 		return keuze;
 	}

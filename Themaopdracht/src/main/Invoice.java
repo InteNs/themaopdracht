@@ -56,7 +56,7 @@ public class Invoice {
 		public InvoiceItem(String desc, double price, int amount){
 			this.price = price;
 			this.amount = amount;
-			this.semiTotalPrice = price*amount;
+			this.semiTotalPrice = amount*price;
 			description.setText(desc);
 			priceL.setText( Double.toString(price));
 			amountL.setText( Integer.toString(amount));
