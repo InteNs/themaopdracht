@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sequence-diagram version="1.1.8" icons="true" automaticImage="PNG">  
-  <object id="1" language="java" name="screens.CustomerScreen.ListItem" project="Themaopdracht" 
-    file="/Themaopdracht/src/screens/CustomerScreen.java" binary="false" label="listItem" type="class" autoSize="true">    
+  <object id="1" language="java" name="oldfiles.CustomerScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/oldfiles/CustomerScreen.java" binary="false" label="listItem" type="class" autoSize="true">    
     <position height="-1" width="-1" x="131" y="0"/>  
   </object>  
-  <object id="2" language="java" name="screens.CustomerScreen" project="Themaopdracht" 
-    file="/Themaopdracht/src/screens/CustomerScreen.java" binary="false" label="customerScreen" type="class" 
+  <object id="2" language="java" name="oldfiles.CustomerScreen" project="Themaopdracht" 
+    file="/Themaopdracht/src/oldfiles/CustomerScreen.java" binary="false" label="customerScreen" type="class" 
     autoSize="true">    
     <position height="-1" width="-1" x="131" y="0"/>    
     <execution id="3">      
@@ -37,11 +37,11 @@
       <position height="21" width="0" x="0" y="211"/>    
     </execution>  
   </object>  
-  <message id="4" operation="MaintenanceSession(main.Invoice,main.Stock,java.time.LocalDate)">    
+  <message id="4">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="5"/>  
   </message>  
-  <message id="7" operation="setAdress(java.lang.String):void" x="146" y="320">    
+  <message id="7" operation="setAddress(java.lang.String):void" x="146" y="320">    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="8"/>  
   </message>  

@@ -16,11 +16,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
 import main.Customer;
+import main.Fuel;
+import main.Part;
+import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class CustomerScreen extends HBox {
 	private ATDProgram controller;
 	private Customer selectedCustomer;
+	private ComboBox<String> filterSelector = new ComboBox<String>();
+	private ArrayList<ListRegel> content = new ArrayList<ListRegel>();
+	private ListView<ListRegel> itemList = new ListView<ListRegel>();
+	private CheckBox blackListContent = new CheckBox();
+	private DatePicker datecontent = new DatePicker();
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;
@@ -31,337 +39,352 @@ public class CustomerScreen extends HBox {
 			removeButton = new Button("Verwijderen"), 
 			cancelButton = new Button("Annuleren"),
 			saveButton = new Button("Opslaan");
-	private DatePicker 
-			dateOfBirthInput = new DatePicker();
-	private ComboBox<String> 
-			filterSelector = new ComboBox<String>();
-	private ArrayList<ListItem> content = new ArrayList<ListItem>();
-	private CheckBox 
-			blackListInput = new CheckBox();
 	private Label 
-			name = new Label("Naam: "),
-			nameContent = new Label("-"), 
-			address = new Label("Adres: "), 
-			addressContent = new Label("-"),
-			postal = new Label("Postcode: "),
-			postalContent = new Label("-"),
-			place = new Label("Plaats: "), 
-			placeContent = new Label("-"),
-			dateOfBirth = new Label("Geboortedatum: "), 
-			dateOfBirthContent = new Label("-"),
-			email = new Label("Email: "), 
-			emailContent = new Label("-"), 
-			phone = new Label("Telefoonnummer: "), 
-			phoneContent = new Label("-"), 
-			bank = new Label("Rekeningnummer: "), 
-			bankContent = new Label("-"), 
-			blackList = new Label("Blacklist: "), 
-			blackListContent = new Label("-");
-	
+			nameLabel = new Label("Naam:"),
+			addressLabel = new Label("Adres:"),
+			postalLabel = new Label("Postcode:"),
+			placeLabel = new Label("Plaats:"),
+			dateLabel = new Label("Geboortedatum:"),
+			emailLabel = new Label("Email:"),
+			phoneLabel = new Label("Telefoonnummer:"),
+			bankLabel = new Label("Banknummer:"),
+			blackListLabel = new Label("Blacklist:");
 	private TextField 
-			searchInput = new TextField(), 
-			nameInput = new TextField(), 
-			addressInput = new TextField(),
-			postalInput = new TextField(), 
-			placeInput = new TextField(), 
-			emailInput = new TextField(), 
-			phoneInput = new TextField(),
-			bankInput = new TextField();
-	private ListView<ListItem> 
-			listView = new ListView<ListItem>();
+			searchContent = new TextField(),
+			nameContent = new TextField(),
+			addressContent = new TextField(),
+			postalContent = new TextField(),
+			placeContent = new TextField(),
+			emailContent = new TextField(),
+			phoneContent = new TextField(),
+			bankContent = new TextField();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
 	private HBox 
-			detailsBox = new HBox(spacingBoxes), 
+			stockDetails = new HBox(spacingBoxes), 
 			mainButtonBox = new HBox(spacingBoxes), 
 			searchFieldBox = new HBox(spacingBoxes), 
 			mainBox = new HBox(spacingBoxes);
 	public CustomerScreen(ATDProgram controller) {
 		this.controller = controller;
-		//CustomerDetails
-		detailsBox.getChildren().addAll(
+		//StockDetails
+		stockDetails.getChildren().addAll(
 				new VBox(20,
-						new HBox(20,name,		nameContent,		nameInput),
-						new HBox(20,address,	addressContent,		addressInput),
-						new HBox(20,postal,		postalContent,		postalInput),
-						new HBox(20,place,		placeContent,		placeInput),
-						new HBox(20,dateOfBirth,dateOfBirthContent,	dateOfBirthInput),
-						new HBox(20,email,		emailContent,		emailInput),
-						new HBox(20,phone,		phoneContent,		phoneInput),
-						new HBox(20,bank,		bankContent,		bankInput),
-						new HBox(20,blackList,	blackListContent,	blackListInput),	
-						new HBox(20,cancelButton,saveButton)
+						new HBox(20,nameLabel,		nameContent),
+						new HBox(20,addressLabel,	addressContent),
+						new HBox(20,postalLabel,	postalContent),
+						new HBox(20,placeLabel,		placeContent),
+						new HBox(20,dateLabel,		datecontent),
+						new HBox(20,emailLabel,		emailContent),
+						new HBox(20,phoneLabel,		phoneContent),
+						new HBox(20,bankLabel,		bankContent),	
+						new HBox(20,blackListLabel, blackListContent),
+						new HBox(20,cancelButton,	saveButton)
 						));
-		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
-		detailsBox.setPrefSize(450, 520-15);
-		detailsBox.setPadding(new Insets(20));
-		setVisibility(true, false, false);
-		//geef alle labels een bepaalde grootte
-		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
-			if(((HBox)node1).getChildren().size()>2)((Label)((HBox)node1).getChildren().get(0)).setMinWidth(widthLabels);
+		stockDetails.setPrefSize(450, 500);
+		stockDetails.getStyleClass().add("stockDetails");
+		stockDetails.setPadding(new Insets(20));
+		setEditable(false);
+		//set width for all detail labels and textfields
+		for (Node node : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {
+			if(((HBox)node).getChildren().get(0) instanceof Label)
+				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
+			if(((HBox)node).getChildren().get(1) instanceof TextField)
+				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(widthLabels*1.5);
 		}
-		//cancelbutton
 		cancelButton.setPrefSize(150, 50);
 		cancelButton.setOnAction(e -> {
-				setVisibility(true, false, false);
+			clearInput();
+			setEditable(false);
 		});
-		//savebutton
 		saveButton.setPrefSize(150, 50);
 		saveButton.setOnAction(e -> {
-			Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?", ATDProgram.notificationStyle.CONFIRM);
-			changeConfirm.showAndWait();
 			save();
-			Notification changeNotify = new Notification(controller.getStage(), "Wijzigingen zijn doorgevoerd.", ATDProgram.notificationStyle.NOTIFY);
-			changeNotify.showAndWait();
 		});
-		//listview
-		listView.setPrefSize(450, 520);
-		for (Customer customer : controller.getCustomers()) {
-			listView.getItems().add(new ListItem(customer));
-		}
+		//Listview
+		itemList.setPrefSize(450, 500);
+		for (Customer customer : controller.getCustomers()) 
+			itemList.getItems().add(new ListRegel(customer));
 		refreshList();
-		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if(newValue!=null)selectedCustomer = newValue.getCustomer();
-			else selectedCustomer = oldValue.getCustomer();
-			selectedListEntry();
+		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			select(newValue);
 		});
 		//SearchField
-		searchFieldBox = new HBox(10,searchInput = new TextField("Zoek..."),filterSelector);
-		searchInput.setPrefSize(310, 50);
-		searchInput.setOnMouseClicked(e -> {
-			if (searchInput.getText().equals("Zoek...")) {
-				searchInput.clear();
-			} else
-				searchInput.selectAll();
+		searchFieldBox = new HBox(10,searchContent = new TextField("Zoek..."),filterSelector);
+		searchContent.setPrefSize(310, 50);
+		searchContent.setOnMouseClicked(e -> {
+			if (searchContent.getText().equals("Zoek...")) {
+				searchContent.clear();
+			} else searchContent.selectAll();
 		});
-		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
+		searchContent.textProperty().addListener((observable, oldValue, newValue) -> {
 				search(oldValue, newValue);
 		});
-		//filter
-		filterSelector.setPrefSize(150, 50);
-		filterSelector.getItems().addAll("Filter: Geen", "Filter: Service", "Filter: Onderhoud");
-		filterSelector.getSelectionModel().selectFirst();
-		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
-			listView.getItems().clear();
-			if(newValue.intValue()==0){
-				for (Customer customer : controller.getCustomers()) {
-					listView.getItems().add(new ListItem(customer));
-				}
-			}
-			if(newValue.intValue()==1){
-				for (Customer customer : controller.getRemindList(false)) {
-					listView.getItems().add(new ListItem(customer));
-				}
-			}
-			if(newValue.intValue()==2){
-				for (Customer customer : controller.getRemindList(true)) {
-					listView.getItems().add(new ListItem(customer));
-				}
-			}
-			refreshList();
-			if (!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());
-		});
-		
-		
-		//main Buttons
+		//Main Buttons and filter
 		mainButtonBox.getChildren().addAll(
 				newButton,
 				changeButton,
 				removeButton
 				);
-		//NewButton
 		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(e -> {
-			setVisibility(true, false, false);
-			setVisibility(false, true, true);
+			clearInput();
+			setEditable(true);
 			isChanging = false;
 		});
-		//ChangeButton
 		changeButton.setPrefSize(150, 50);
 		changeButton.setOnAction(e -> {
-			isChanging = true;
-			change();
-		});
-		//RemoveButton
-		removeButton.setPrefSize(150, 50);
-		removeButton.setOnAction(e->{
-			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
-			removeConfirm.showAndWait();
-			if (removeConfirm.getKeuze() == "confirm"){
-				listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
-				controller.addorRemoveCustomer(selectedCustomer, true);
-				Notification removeNotify = new Notification(controller.getStage(), "Klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
-				removeNotify.showAndWait();
-				selectedCustomer = null;
+			if(checkSelected()){
+				setEditable(true);
+				isChanging = true;
 			}
 		});
+		removeButton.setPrefSize(150, 50);
+		removeButton.setOnAction(e->{
+			remove();
+		});
+		filterSelector.setPrefSize(150, 50);
+		filterSelector.getItems().addAll("Filter: Geen", "Filter: Service", "Filter: Onderhoud");
+		filterSelector.getSelectionModel().selectFirst();
+		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
+			changeFilter(newValue.intValue());
+		});
 		//Make & merge left & right
-		leftBox.getChildren().addAll (listView,searchFieldBox,mainButtonBox);
-		rightBox.getChildren().addAll(detailsBox);
+		leftBox.getChildren().addAll (itemList, searchFieldBox);
+		rightBox.getChildren().addAll(stockDetails,mainButtonBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
-		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
 	}
-	 
 	/**
-	 * vult alle gegevens in de TextFields om aan te passen
+	 * fills the list with items that fit with the given filter
+	 * @param newValue selected filter
 	 */
-	private void change(){
-		nameInput.setText(selectedCustomer.getName());
-		placeInput.setText(selectedCustomer.getPlace());
-		bankInput.setText(selectedCustomer.getBankAccount());
-		dateOfBirthInput.setValue(selectedCustomer.getDateOfBirth());
-		emailInput.setText(selectedCustomer.getEmail());
-		postalInput.setText(selectedCustomer.getPostal());
-		phoneInput.setText(selectedCustomer.getTel());
-		addressInput.setText(selectedCustomer.getAdress());
-		blackListInput.setSelected(selectedCustomer.isOnBlackList());
-		setVisibility(true, true, true);	
-		isChanging = true;
+	private void changeFilter(int newValue) {
+		switch(newValue){
+		case 0:{
+				itemList.getItems().clear();
+				for (Customer customer : controller.getCustomers())
+					itemList.getItems().add(new ListRegel(customer));
+				break;
+			}
+		case 1:{
+				itemList.getItems().clear();
+				for (Customer customer : controller.getRemindList(false))
+					itemList.getItems().add(new ListRegel(customer));
+				break;
+			}
+		case 2:{
+				itemList.getItems().clear();
+				for (Customer customer : controller.getRemindList(true))
+					itemList.getItems().add(new ListRegel(customer));
+				break;
+			}
+		}
+		if(!searchContent.getText().equals("Zoek..."))search(null, searchContent.getText());	
+	}
+	/*
+	 * removes the selected item
+	 */
+	private void remove(){
+		if(checkSelected()){
+			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit customer wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			removeConfirm.showAndWait();
+			if (removeConfirm.getKeuze().equals("confirm")){
+				itemList.getItems().remove(selectedCustomer);
+				controller.addorRemoveCustomer(selectedCustomer, true);
+				Notification removeNotify = new Notification(controller.getStage(), "Het customer is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				removeNotify.showAndWait();
+			}
+		}			
 	}
 	/**
-	 * slaat het nieuwe of aangepaste product op
+	 * saves the input in either a selected item or a new item
 	 */
 	private void save(){
-		if(isChanging){
-			selectedCustomer.setName(nameInput.getText());
-			selectedCustomer.setPlace(placeInput.getText());
-			selectedCustomer.setBankAccount(bankInput.getText());
-			selectedCustomer.setDateOfBirth(dateOfBirthInput.getValue());
-			selectedCustomer.setEmail(emailInput.getText());
-			selectedCustomer.setPostal(postalInput.getText());
-			selectedCustomer.setTel(phoneInput.getText());
-			selectedCustomer.setAdress(addressInput.getText());
-			selectedCustomer.setOnBlackList(blackListInput.isSelected());
+		if(checkInput()){
+			if(isChanging){
+				Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+				changeConfirm.showAndWait();
+				switch (changeConfirm.getKeuze()) {
+					case "confirm": {
+						selectedCustomer.setName(nameContent.getText());
+						selectedCustomer.setAddress(addressContent.getText());
+						selectedCustomer.setPostal(postalContent.getText());
+						selectedCustomer.setPlace(placeContent.getText());
+						selectedCustomer.setDateOfBirth(datecontent.getValue());
+						selectedCustomer.setEmail(emailContent.getText());
+						selectedCustomer.setTel(phoneContent.getText());
+						selectedCustomer.setBankAccount(bankContent.getText());
+						selectedCustomer.setOnBlackList(blackListContent.isSelected());
+						setEditable(false);
+						break;
+					}
+					case "cancel":
+						clearInput();
+						setEditable(false);
+						break;
+				}
+			}
+			else{	
+				Notification confirm = new Notification(controller.getStage(),"Deze klant aanmaken?",ATDProgram.notificationStyle.CONFIRM);
+				confirm.showAndWait();
+				switch (confirm.getKeuze()) {
+					case "confirm": {
+						 Customer newCustomer = new Customer(
+							nameContent.getText(), 
+							addressContent.getText(), 
+							postalContent.getText(), 
+							datecontent.getValue(), 
+							placeContent.getText(), 
+							emailContent.getText(),
+							phoneContent.getText(),
+							bankContent.getText(),
+							blackListContent.isSelected()
+						);		
+						 controller.addorRemoveCustomer(newCustomer, false);
+						 itemList.getItems().add(new ListRegel(newCustomer));
+						 setEditable(false);
+						 break;
+					}
+					case "cancel":	{
+						clearInput();
+						setEditable(false);
+						break;
+					}
+				}
+			}
 			refreshList();
-			setVisibility(true, false, false);
-			
 		}
 		else{
-			Customer newCustomer = new Customer(
-					nameInput.getText(),
-					placeInput.getText(),
-					bankInput.getText(),
-					dateOfBirthInput.getValue(),
-					emailInput.getText(),
-					postalInput.getText(),
-					phoneInput.getText(),
-					addressInput.getText(),
-					blackListInput.isSelected()
-					);
-			controller.addorRemoveCustomer(newCustomer, false);
-			listView.getItems().add(new ListItem(newCustomer));
-			setVisibility(true, false, false);
+			Notification notFilled = new Notification(controller.getStage(), "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			notFilled.showAndWait();
 		}
 	}
+	/**
+	 * refreshes the list and every item itself
+	 */
 	private void refreshList(){
 		content.clear();
-		content.addAll(listView.getItems());
-		listView.getItems().clear();
-		listView.getItems().addAll(content);
-		for (ListItem listItem : listView.getItems()) {
-			listItem.refresh();
-		}
+		content.addAll(itemList.getItems());
+		itemList.getItems().clear();
+		itemList.getItems().addAll(content);
+		for (ListRegel listRegel : itemList.getItems())
+			listRegel.refresh();
 	}
-	private void selectedListEntry(){
-		if(selectedCustomer.getName()!=null)nameContent.setText(selectedCustomer.getName());
-		if(selectedCustomer.getPlace()!=null)placeContent.setText(selectedCustomer.getPlace());
-		if(selectedCustomer.getBankAccount()!=null)bankContent.setText(selectedCustomer.getBankAccount());
-		if(selectedCustomer.getDateOfBirth() != null) dateOfBirthContent.setText(selectedCustomer.getDateOfBirth().toString());
-		if(selectedCustomer.getEmail()!= null)emailContent.setText(selectedCustomer.getEmail());
-		if(selectedCustomer.getPostal()!=null)postalContent.setText(selectedCustomer.getPostal());
-		if(selectedCustomer.getTel()!=null)phoneContent.setText(selectedCustomer.getTel());
-		if(selectedCustomer.getAdress()!=null)addressContent.setText(selectedCustomer.getAdress());
-		if(selectedCustomer.isOnBlackList())blackListContent.setText("ja");
-		else blackListContent.setText("nee");
+	/**
+	 * selects an item
+	 * @param selectedValue the item to be selected
+	 */
+	private void select(ListRegel selectedValue){
+		if(selectedValue!= null)selectedCustomer = selectedValue.getCustomer();
+		nameContent.setText(selectedCustomer.getName());
+		addressContent.setText(selectedCustomer.getAddress());
+		postalContent.setText(selectedCustomer.getPostal());
+		placeContent.setText(selectedCustomer.getPlace());
+		datecontent.setValue(selectedCustomer.getDateOfBirth());
+		emailContent.setText(selectedCustomer.getEmail());
+		phoneContent.setText(selectedCustomer.getTel());
+		bankContent.setText(selectedCustomer.getBankAccount());
+		blackListContent.setSelected(selectedCustomer.isOnBlackList());
 	}
-	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
-		cancelButton.setVisible(setButtonsVisible);
-		saveButton.setVisible(setButtonsVisible);	
-		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
-			HBox box = (HBox) node1;
-			if(box.getChildren().size()>2){
-				Node input = box.getChildren().get(2);
-				Label content = ((Label)box.getChildren().get(1));
-				input.setVisible(setTextFieldsVisible);
-				content.setVisible(setDetailsVisible);
-				if(!setTextFieldsVisible){
-					if(input instanceof TextField){
-						((TextField)input).setPrefWidth(0);
-						((TextField)input).clear();
-					}
-					if(input instanceof DatePicker){
-						((DatePicker)input).setPrefWidth(0);
-						((DatePicker)input).setValue(null);
-					}
-					if(input instanceof CheckBox){
-						((CheckBox)input).setPrefSize(0,0);
-						((CheckBox)input).setSelected(false);
-					}
-					content.setPrefWidth(widthLabels*2);
-					email.setMinWidth(widthLabels);
-				}
-				else if (!setDetailsVisible) {
-					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels*2);
-					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels*2);
-					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
-					content.setPrefWidth(0);
-					email.setMinWidth(widthLabels-5);
-				}			
-				else if (setDetailsVisible || setTextFieldsVisible) {
-					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels);
-					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels);
-					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
-					content.setPrefWidth(widthLabels);
-					email.setMinWidth(widthLabels);
+	/**
+	 * disables/enables the left or right side of the stage
+	 * @param enable
+	 */
+	private void setEditable(boolean enable){
+		cancelButton.setVisible(enable);
+		saveButton.setVisible(enable);
+		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
+			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).setDisable(!enable);
+		datecontent.setDisable(!enable);
+		blackListContent.setDisable(!enable);
+		leftBox.setDisable(enable);
+	}	
+	/**
+	 * clears all the inputfields
+	 */
+	private void clearInput(){
+		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
+			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).clear();
+		datecontent.setValue(null);
+		blackListContent.setSelected(false);
+	}
+	/**
+	 * checks if all the inputfields are filled in
+	 * @return false if one of the inputs is null
+	 */
+	private boolean checkInput(){
+		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
+			if(((HBox)node1).getChildren().get(1) instanceof TextField){
+				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty()){
+					return false;
 				}
 			}
-		}	
+		return true;
 	}
+	/**
+	 * checks if an item is selected in the list
+	 * @return false if nothing is selected
+	 */
+	private boolean checkSelected() {
+		if(selectedCustomer == null) return false;
+		return true;
+	}
+	/**
+	 * searches through all items in the list
+	 * @param oldVal the previous content of the searchfield
+	 * @param newVal the new content of the searchfield
+	 */
 	public void search(String oldVal, String newVal) {
 		if (oldVal != null && (newVal.length() < oldVal.length())) {
-			listView.getItems().clear();
-			listView.getItems().addAll(content);
+			//actor has deleted a character, so reset the search
+			itemList.getItems().clear();
+			itemList.getItems().addAll(content);
 		}
-		listView.getItems().clear();
-		for (ListItem entry : content) {
+		itemList.getItems().clear();
+		//add an item if any item that exists contains any value that has been searched for
+		for (ListRegel entry : content) {		
 			if (entry.getCustomer().getName().contains(newVal)
-					|| entry.getCustomer().getPostal().contains(newVal)
-					|| entry.getCustomer().getEmail().contains(newVal)) {
-				listView.getItems().add(entry);
+					|| entry.getCustomer().getEmail().contains(newVal)
+					|| entry.getCustomer().getName().contains(newVal)) {
+				itemList.getItems().add(entry);
 			}
 		}
 	}
-	public class ListItem extends HBox{
-		private Label itemNameLabel = new Label(),itemPostalLabel = new Label(),itemEmailLabel = new Label();
+	// this class represents every item in the list
+	public class ListRegel extends HBox{
 		private Customer customer;
-		public ListItem(Customer customer){
+		private Label itemPostalLabel = new Label(),itemNameLabel = new Label(),itemEmailLabel = new Label();
+		public ListRegel(Customer customer){
+			//no filter
 			this.customer = customer;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
-					itemNameLabel,
-					new Separator(Orientation.VERTICAL),
-					itemPostalLabel,
-					new Separator(Orientation.VERTICAL),
-					itemEmailLabel);
-			((Label)getChildren().get(0)).setPrefWidth(120);
-			((Label)getChildren().get(2)).setPrefWidth(100);
-			((Label)getChildren().get(4)).setPrefWidth(200);
-				
-			
+				itemNameLabel,
+				new Separator(Orientation.VERTICAL),
+				itemPostalLabel,
+				new Separator(Orientation.VERTICAL),
+				itemEmailLabel);
+				for (Node node : getChildren()) 
+					if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
+		/**
+		 * fills in all the labels with the latest values
+		 */
 		public void refresh(){
 			itemNameLabel.setText(customer.getName());
 			itemPostalLabel.setText(customer.getPostal());
 			itemEmailLabel.setText(customer.getEmail());
 		}
+		/**
+		 * @return the object this item represents
+		 */
 		public Customer getCustomer(){
 			return customer;
 		}
 	}
 }
-
 	

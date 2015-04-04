@@ -41,7 +41,6 @@ public class ATDProgram extends Application {
 		addContent();
 		//create tabs and add content
 		tabsScreen = new TabPane();
-		tabsScreen.getSelectionModel().selectedItemProperty().addListener(e->System.out.println("BOE"));
 
 		customerAdministration = new Tab("Klanten");
 		customerAdministration.setClosable(false);

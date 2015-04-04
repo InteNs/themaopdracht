@@ -3,7 +3,7 @@ import java.time.LocalDate;
 
 
 public class Customer {
-	private String name, place, email, adress, postal,bankAccount, tel;
+	private String name, place, email, address, postal,bankAccount, tel;
 	private LocalDate dateOfBirth,lastVisit, lastMaintenance;
 	private boolean isOnBlackList;
 	public Customer(String name, String place,String bankAccount, LocalDate bornDate, String email, String postal, String tel, String adress, boolean isOnBlackList) {
@@ -12,7 +12,7 @@ public class Customer {
 		this.place = place;
 		this.bankAccount = bankAccount;
 		this.email = email;
-		this.adress = adress;
+		this.address = adress;
 		this.postal = postal;
 		this.tel = tel;
 		this.dateOfBirth = bornDate;
@@ -35,8 +35,8 @@ public class Customer {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setAddress(String adress) {
+		this.address = adress;
 	}
 	public void setPostal(String postal) {
 		this.postal = postal;
@@ -53,8 +53,8 @@ public class Customer {
 	public String getPlace(){
 		return place;
 	}
-	public String getAdress() {
-		return adress;
+	public String getAddress() {
+		return address;
 	}
 	public String getEmail() {
 		return email;

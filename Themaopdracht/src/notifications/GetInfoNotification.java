@@ -81,7 +81,6 @@ public class GetInfoNotification extends Stage {
 				notification.getChildren().addAll(customerSelector,buttonBox);
 				break;
 			}
-	
 			case TANK: {
 				setTitle("Tanksessie aanmaken");
 				melding.setText("Vul de gegevens in:");
