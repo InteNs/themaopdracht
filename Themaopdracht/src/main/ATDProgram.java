@@ -10,6 +10,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import screens.CustomerScreen;
+import screens.FinancesScreen;
 import screens.InvoiceScreen;
 import screens.MaintenanceScreen;
 import screens.StockScreen;
@@ -23,6 +24,7 @@ public class ATDProgram extends Application {
 	private Tab stockAdministration;
 	private Tab serviceScreen;
 	private Tab invoiceScreen;
+	private Tab financesScreen;
 	private Scene mainScene;
 	private Stock stock = new Stock();
 	private ArrayList<MaintenanceSession> maintenanceSessions = new ArrayList<MaintenanceSession>();
@@ -56,7 +58,11 @@ public class ATDProgram extends Application {
 		invoiceScreen = new Tab("Facturen");
 		invoiceScreen.setClosable(false);
 		invoiceScreen.setContent(new InvoiceScreen(this));
-		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration,serviceScreen,invoiceScreen);
+		
+		financesScreen = new Tab("Financien");
+		financesScreen.setClosable(false);
+		financesScreen.setContent(new FinancesScreen(this));
+		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration,serviceScreen,invoiceScreen,financesScreen);
 
 		// Create Mainscreen
 		mainScene = new Scene(tabsScreen);
