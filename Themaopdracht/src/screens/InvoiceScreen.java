@@ -178,8 +178,8 @@ public class InvoiceScreen extends HBox {
 		bindButton.setOnAction(e -> {
 			GetInfoNotification getCustomer = new GetInfoNotification(controller, ATDProgram.notificationStyle.CUSTOMER);
 			getCustomer.showAndWait();
-			if(getCustomer.getKeuze().equals("confirm"))
-				selectedInvoice.bindToCustomer((Customer)getCustomer.getSelected());
+			if(getCustomer.getKeuze().equals("confirm")) selectedInvoice.bindToCustomer((Customer)getCustomer.getSelected());
+			else;
 		});
 		//RemoveButton
 		removeButton.setPrefSize(150, 50);
