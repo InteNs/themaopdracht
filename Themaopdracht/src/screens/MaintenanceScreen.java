@@ -84,7 +84,7 @@ public class MaintenanceScreen extends HBox {
 						new HBox(20,cancelButton,	saveButton)
 						));
 		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
-		detailsBox.setPrefSize(450, 520-15);
+		detailsBox.setPrefSize(450, 520);
 		detailsBox.setPadding(new Insets(20));
 		setVisibility(true, false, false);
 		//geef alle labels een bepaalde grootte
@@ -215,8 +215,8 @@ public class MaintenanceScreen extends HBox {
 			  });
 		
 		//Make & merge left & right
-		leftBox.getChildren().addAll (listView,secondButtonBox,mainButtonBox);
-		rightBox.getChildren().addAll(detailsBox);
+		leftBox.getChildren().addAll (listView,secondButtonBox);
+		rightBox.getChildren().addAll(detailsBox,mainButtonBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));

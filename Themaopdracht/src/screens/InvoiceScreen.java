@@ -38,7 +38,8 @@ public class InvoiceScreen extends HBox {
 			removeButton = new Button("Verwijderen"), 
 			addMaintenance = new Button("+Onderhoud"),
 			addRefuel = new Button("+Tanksessie"),
-			addParking = new Button("+reservering");
+			addParking = new Button("+reservering"),
+			payButton = new Button("Betalen");
 	private ComboBox<String> 
 			filterSelector = new ComboBox<String>();
 	private ArrayList<ListItem> content = new ArrayList<ListItem>();
@@ -73,7 +74,7 @@ public class InvoiceScreen extends HBox {
 						contentView
 						));
 		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
-		detailsBox.setPrefSize(450, 520-15);
+		detailsBox.setPrefSize(450, 520);
 		detailsBox.setPadding(new Insets(20));
 //		setVisibility(true, false, false);
 		//geef alle labels een bepaalde grootte
@@ -164,9 +165,10 @@ public class InvoiceScreen extends HBox {
 		mainButtonBox.getChildren().addAll(
 				newButton,
 				bindButton,
-				removeButton);
+				removeButton,
+				payButton);
 		//NewButton
-		newButton.setPrefSize(150, 50);
+		newButton.setPrefSize(130, 50);
 		newButton.setOnAction(e -> {
 			Invoice newInvoice = new Invoice();
 			controller.addorRemoveInvoice(newInvoice, false);
@@ -174,7 +176,7 @@ public class InvoiceScreen extends HBox {
 			refreshList();
 		});
 		//bindButton
-		bindButton.setPrefSize(150, 50);
+		bindButton.setPrefSize(130, 50);
 		bindButton.setOnAction(e -> {
 			GetInfoNotification getCustomer = new GetInfoNotification(controller, ATDProgram.notificationStyle.CUSTOMER);
 			getCustomer.showAndWait();
@@ -182,7 +184,7 @@ public class InvoiceScreen extends HBox {
 			else;
 		});
 		//RemoveButton
-		removeButton.setPrefSize(150, 50);
+		removeButton.setPrefSize(130, 50);
 		removeButton.setOnAction(e->{
 			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze factuur wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			removeConfirm.showAndWait();
@@ -193,9 +195,13 @@ public class InvoiceScreen extends HBox {
 			removeNotify.showAndWait();}
 			refreshList();
 		});
+		payButton.setPrefSize(130, 50);
+		payButton.setOnAction(e->{
+			
+		});
 		//Make & merge left & right
-		leftBox.getChildren().addAll (listView,SecButtonBox,mainButtonBox);
-		rightBox.getChildren().addAll(detailsBox);
+		leftBox.getChildren().addAll (listView,SecButtonBox);
+		rightBox.getChildren().addAll(detailsBox,mainButtonBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
