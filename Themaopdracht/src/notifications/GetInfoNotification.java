@@ -40,6 +40,7 @@ public class GetInfoNotification extends Stage {
 		super(StageStyle.UTILITY);
 		initOwner(controller.getStage());
 		initModality(Modality.WINDOW_MODAL);
+		initStyle(StageStyle.UNDECORATED);
 		this.stijl = nwstijl;
 		this.setResizable(false);
 		ok.setPrefWidth(100);
@@ -117,6 +118,7 @@ public class GetInfoNotification extends Stage {
 			default: ;
 		}
 		notification.setAlignment(Pos.CENTER);
+		notification.setStyle("-fx-background-color: #e6e6e6; -fx-border-color: lightgray;-fx-border: solid;");
 		notification.setPadding(new Insets(20));
 		Scene scene = new Scene(notification);
 		this.setScene(scene);

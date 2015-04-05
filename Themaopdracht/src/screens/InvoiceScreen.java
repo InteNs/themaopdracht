@@ -125,7 +125,7 @@ public class InvoiceScreen extends HBox {
 			addFuelNotification.showAndWait();
 			if(addFuelNotification.getKeuze().equals("confirm")){
 				controller.getStock().useProduct((Fuel)addFuelNotification.getSelected(), addFuelNotification.getInput());
-				
+				//VERGEET NIET TE CHECKEN OF ER GENOEG BENZINE IS
 				selectedInvoice.add(selectedInvoice.new InvoiceItem(((Fuel)addFuelNotification.getSelected()).getName(), ((Fuel)addFuelNotification.getSelected()).getSellPrice(), addFuelNotification.getInput()));
 				refreshList();
 			}

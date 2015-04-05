@@ -24,6 +24,7 @@ import notifications.Notification;
 public class StockScreen extends HBox {
 	private final ATDProgram controller;
 	private Product selectedProduct;
+	private ListRegel selectedItem;
 	private final ComboBox<ProductSupplier> supplierContent = new ComboBox<ProductSupplier>();
 	private final ComboBox<String> filterSelector = new ComboBox<String>();
 	private final ArrayList<ListRegel> content = new ArrayList<ListRegel>();
@@ -85,15 +86,10 @@ public class StockScreen extends HBox {
 						new HBox(space_big,placeLabel,		placeContent),	
 						new HBox(space_big,cancelButton,	saveButton)
 						));
-<<<<<<< HEAD
-		stockDetails.setPrefSize(450, 500);
 		stockDetails.getStyleClass().add("removeDisabledEffect");
-		stockDetails.setPadding(new Insets(space_big));
-=======
-		stockDetails.setPrefSize(555, 520);
 		stockDetails.getStyleClass().add("stockDetails");
-		stockDetails.setPadding(new Insets(20));
->>>>>>> e1edb204b58febb5649a5c10c149697d5aa18cb3
+		stockDetails.setPadding(new Insets(space_big));
+		stockDetails.setPrefSize(555, 520);
 		setEditable(false);
 		////set width for all detail labels and textfields
 		for (Node node : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {
@@ -117,12 +113,8 @@ public class StockScreen extends HBox {
 			}
 		});
 		//Listview
-<<<<<<< HEAD
-		itemList.setPrefSize(450, 500);
 		itemList.getStyleClass().add("removeDisabledEffect");
-=======
 		itemList.setPrefSize(450, 520);
->>>>>>> e1edb204b58febb5649a5c10c149697d5aa18cb3
 		for (Product product : controller.getStock().getAllProducts()) 
 			itemList.getItems().add(new ListRegel(product));
 		refreshList();
@@ -138,27 +130,17 @@ public class StockScreen extends HBox {
 		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
 				search(oldValue, newValue);
 		});
-<<<<<<< HEAD
 		//Buttons and filter
-		cancelButton.setPrefSize(150, 50);
+		cancelButton.setPrefSize(180, 50);
 		cancelButton.setOnAction(e -> {
 			clearInput();
 			setEditable(false);
 		});
-		saveButton.setPrefSize(150, 50);
+		saveButton.setPrefSize(180, 50);
 		saveButton.setOnAction(e -> {
 			save();
 		});
-		newButton.setPrefSize(150, 50);
-=======
-		//Main Buttons and filter
-		mainButtonBox.getChildren().addAll(
-				newButton,
-				changeButton,
-				removeButton
-				);
 		newButton.setPrefSize(180, 50);
->>>>>>> e1edb204b58febb5649a5c10c149697d5aa18cb3
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
@@ -249,10 +231,11 @@ public class StockScreen extends HBox {
 			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit product wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze().equals("confirm")){
-				itemList.getItems().remove(selectedProduct);
+				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveproduct(selectedProduct, true);
 				Notification removeNotify = new Notification(controller.getStage(), "Het product is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 				removeNotify.showAndWait();
+				refreshList();
 			}
 		}			
 	}
@@ -339,6 +322,7 @@ public class StockScreen extends HBox {
 	private void select(ListRegel selectedValue){
 //		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
 			if(selectedValue!=null)	{
+				selectedItem = selectedValue;
 				selectedProduct = selectedValue.getProduct();
 				nameContent.setText(selectedProduct.getName());
 				amountContent.setText(Integer.toString(selectedProduct.getAmount()));

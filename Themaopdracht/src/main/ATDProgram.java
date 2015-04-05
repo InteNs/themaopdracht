@@ -169,7 +169,6 @@ public class ATDProgram extends Application {
 		addorRemoveproduct(new Part("Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
 		addorRemoveproduct(new Fuel("Diesel", 300, 200, 1, 1.19, suppliers.get(2)), false);
 		addorRemoveproduct(new Fuel("Euro95", 275, 150, 1.11, 1.52, suppliers.get(2)), false);
-		stock.orderProduct(stock.getAllProducts().get(0), 7);
 	}
 
 	public static void main(String[] args) {;

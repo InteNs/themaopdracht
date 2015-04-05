@@ -8,6 +8,7 @@ public class MaintenanceSession {
 	private boolean isFinished;
 	private String numberPlate;
 	private Mechanic mechanic;
+	private Stock stock;
 	private int totalParts = 0;;
 	
 	private HashMap<Product, Integer> usedParts;
@@ -16,15 +17,18 @@ public class MaintenanceSession {
 		this.plannedDate = plannedDate;
 		usedParts = new HashMap<Product, Integer>();
 	}
-	public void usePart(Product product){
+	public boolean usePart(Product product){
+		if(product.getAmount()<=0) return false;
 		if(usedParts.containsKey(product)){
 			usedParts.put(product, usedParts.get(product)+1);
-			//controller.getStock().useProduct(key, selection.getUsedParts().get(key));
+			stock.useProduct(product, 1);
 			totalParts++;
+			return true;
 		}
 		else {
 			usedParts.put(product, 1);
 			totalParts++;
+			return true;
 		}
 	}
 	public void setNumberPlate(String numberPlate){

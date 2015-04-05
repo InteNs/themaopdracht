@@ -24,6 +24,7 @@ import notifications.Notification;
 public class MaintenanceScreen extends HBox {
 	private ATDProgram controller;
 	private MaintenanceSession selectedMaintenanceSession;
+	private ListRegel selectedItem;
 	private ComboBox<String> filterSelector = new ComboBox<String>();
 	private ComboBox<Mechanic> mechanicContent = new ComboBox<Mechanic>();
 	private ArrayList<ListRegel> content = new ArrayList<ListRegel>();
@@ -198,8 +199,13 @@ public class MaintenanceScreen extends HBox {
 			GetInfoNotification addProduct = new GetInfoNotification(controller, ATDProgram.notificationStyle.PRODUCTS);
 			addProduct.showAndWait();
 			if(addProduct.getKeuze().equals("confirm")){
-				selectedMaintenanceSession.usePart((Product)addProduct.getSelected());
-				refreshList();
+				if(selectedMaintenanceSession.usePart((Product)addProduct.getSelected())){
+					refreshList();
+				}
+				else {
+					Notification noPart  = new Notification(controller.getStage(), "Dat product is op!",ATDProgram.notificationStyle.NOTIFY);
+					noPart.showAndWait();
+				}
 			} 
 		}
 	}
@@ -224,7 +230,7 @@ public class MaintenanceScreen extends HBox {
 			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit session wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze().equals("confirm")){
-				itemList.getItems().remove(selectedMaintenanceSession);
+				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveMaintenanceSessions(selectedMaintenanceSession, true);
 				Notification removeNotify = new Notification(controller.getStage(), "Het session is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 				removeNotify.showAndWait();
@@ -296,6 +302,7 @@ public class MaintenanceScreen extends HBox {
 	private void select(ListRegel selectedValue){
 		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
 			if(selectedValue!=null)	{
+				selectedItem = selectedValue;
 				selectedMaintenanceSession = selectedValue.getMaintenanceSession();
 				dateContent.setValue(selectedMaintenanceSession.getPlannedDate());
 				mechanicContent.setValue(selectedMaintenanceSession.getMechanic());

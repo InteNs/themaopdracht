@@ -22,6 +22,7 @@ public class Notification extends Stage {
 		super(StageStyle.UTILITY);
 		initOwner(currentStage); 
 		initModality(Modality.WINDOW_MODAL); 
+		initStyle(StageStyle.UNDECORATED);
 		this.setResizable(false);
 		melding = new Label(bericht);
 		annuleren.setPrefWidth(100);
@@ -50,6 +51,7 @@ public class Notification extends Stage {
 			break;
 		}
 		notification.setAlignment(Pos.CENTER);
+		notification.setStyle("-fx-background-color: #e6e6e6; -fx-border-color: lightgray;-fx-border: solid;");
 		notification.setPadding(new Insets(20));
 		Scene scene = new Scene(notification);
 		this.setScene(scene);
