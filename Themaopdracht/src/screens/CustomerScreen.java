@@ -1,6 +1,8 @@
 package screens;
 import java.util.ArrayList;
 
+import com.sun.xml.internal.ws.policy.spi.PolicyAssertionValidator.Fitness;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -50,7 +52,7 @@ public class CustomerScreen extends HBox {
 			bankLabel = new Label("Banknummer:"),
 			blackListLabel = new Label("Blacklist:");
 	private TextField 
-			searchContent = new TextField(),
+			searchContent = new TextField("Zoek..."),
 			nameContent = new TextField(),
 			addressContent = new TextField(),
 			postalContent = new TextField(),
@@ -93,17 +95,7 @@ public class CustomerScreen extends HBox {
 			if(((HBox)node).getChildren().get(1) instanceof TextField)
 				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(widthLabels*1.5);
 		}
-		datecontent.setMinWidth(widthLabels*1.5);
-		//save/cancel buttons
-		cancelButton.setPrefSize(150, 50);
-		cancelButton.setOnAction(e -> {
-			clearInput();
-			setEditable(false);
-		});
-		saveButton.setPrefSize(150, 50);
-		saveButton.setOnAction(e -> {
-			save();
-		});
+		datecontent.setMinWidth(widthLabels*1.5);	
 		//Listview
 		itemList.setPrefSize(450, 500);
 		for (Customer customer : controller.getCustomers()) 
@@ -113,7 +105,6 @@ public class CustomerScreen extends HBox {
 			select(newValue);
 		});
 		//SearchField
-		searchFieldBox = new HBox(10,searchContent = new TextField("Zoek..."),filterSelector);
 		searchContent.setPrefSize(310, 50);
 		searchContent.setOnMouseClicked(e -> {
 			if (searchContent.getText().equals("Zoek...")) {
@@ -123,12 +114,17 @@ public class CustomerScreen extends HBox {
 		searchContent.textProperty().addListener((observable, oldValue, newValue) -> {
 				search(oldValue, newValue);
 		});
-		//Main Buttons and filter
-		mainButtonBox.getChildren().addAll(
-				newButton,
-				changeButton,
-				removeButton
-				);
+		//buttons and filter
+		
+		cancelButton.setPrefSize(150, 50);
+		cancelButton.setOnAction(e -> {
+			clearInput();
+			setEditable(false);
+		});
+		saveButton.setPrefSize(150, 50);
+		saveButton.setOnAction(e -> {
+			save();
+		});
 		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(e -> {
 			clearInput();
@@ -152,7 +148,9 @@ public class CustomerScreen extends HBox {
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
-		//Make & merge left & right
+		//put everything in the right places
+		mainButtonBox.getChildren().addAll(newButton,changeButton,removeButton);
+		searchFieldBox.getChildren().addAll(searchContent,filterSelector);
 		leftBox.getChildren().addAll (itemList, searchFieldBox);
 		rightBox.getChildren().addAll(stockDetails,mainButtonBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
@@ -280,16 +278,18 @@ public class CustomerScreen extends HBox {
 	 * @param selectedValue the item to be selected
 	 */
 	private void select(ListRegel selectedValue){
-		if(selectedValue!= null)selectedCustomer = selectedValue.getCustomer();
-		nameContent.setText(selectedCustomer.getName());
-		addressContent.setText(selectedCustomer.getAddress());
-		postalContent.setText(selectedCustomer.getPostal());
-		placeContent.setText(selectedCustomer.getPlace());
-		datecontent.setValue(selectedCustomer.getDateOfBirth());
-		emailContent.setText(selectedCustomer.getEmail());
-		phoneContent.setText(selectedCustomer.getTel());
-		bankContent.setText(selectedCustomer.getBankAccount());
-		blackListContent.setSelected(selectedCustomer.isOnBlackList());
+		if(selectedValue!= null){
+			selectedCustomer = selectedValue.getCustomer();
+			nameContent.setText(selectedCustomer.getName());
+			addressContent.setText(selectedCustomer.getAddress());
+			postalContent.setText(selectedCustomer.getPostal());
+			placeContent.setText(selectedCustomer.getPlace());
+			datecontent.setValue(selectedCustomer.getDateOfBirth());
+			emailContent.setText(selectedCustomer.getEmail());
+			phoneContent.setText(selectedCustomer.getTel());
+			bankContent.setText(selectedCustomer.getBankAccount());
+			blackListContent.setSelected(selectedCustomer.isOnBlackList());
+		}
 	}
 	/**
 	 * disables/enables the left or right side of the stage

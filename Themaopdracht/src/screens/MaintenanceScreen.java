@@ -99,7 +99,7 @@ public class MaintenanceScreen extends HBox {
 		//Listview
 		itemList.setPrefSize(450, 500);
 		for (MaintenanceSession session : controller.getMaintenanceSessions()) 
-			itemList.getItems().add(new ListRegel(session));
+			if(!session.isFinished())itemList.getItems().add(new ListRegel(session));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
@@ -146,7 +146,7 @@ public class MaintenanceScreen extends HBox {
 			addProduct();
 		});
 		filterSelector.setPrefSize(112.5, 50);
-		filterSelector.getItems().addAll("Filter: Geen", "Filter: Vandaag", "Filter: Niet aangewezen");
+		filterSelector.getItems().addAll("Filter: Geen", "Filter: Vandaag", "Filter: Niet aangewezen", "Filter: Afgesloten");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
@@ -168,22 +168,29 @@ public class MaintenanceScreen extends HBox {
 		case 0:{
 				itemList.getItems().clear();
 				for (MaintenanceSession session : controller.getMaintenanceSessions())
-					itemList.getItems().add(new ListRegel(session));
+					if(!session.isFinished())itemList.getItems().add(new ListRegel(session));
 				break;
 			}
 		case 1:{
 				itemList.getItems().clear();
 				for (MaintenanceSession session : controller.getMaintenanceSessions())
-					if(session.getPlannedDate().isEqual(LocalDate.now())) itemList.getItems().add(new ListRegel(session));
+					if(session.getPlannedDate().isEqual(LocalDate.now()) && !session.isFinished()) itemList.getItems().add(new ListRegel(session));
 				break;
 			}
 		case 2:{
 				itemList.getItems().clear();
 				for (MaintenanceSession session : controller.getMaintenanceSessions())
-					if(session.getMechanic()==null) itemList.getItems().add(new ListRegel(session));
+					if(session.getMechanic()==null && !session.isFinished()) itemList.getItems().add(new ListRegel(session));
 				break;
 			}
+		case 3:{
+			itemList.getItems().clear();
+			for (MaintenanceSession session : controller.getMaintenanceSessions())
+				if(session.isFinished())itemList.getItems().add(new ListRegel(session));
+			break;
 		}
+		}
+		
 		if(!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());	
 	}
 	/**
@@ -283,6 +290,7 @@ public class MaintenanceScreen extends HBox {
 		itemList.getItems().addAll(content);
 		for (ListRegel listRegel : itemList.getItems())
 			listRegel.refresh();
+		changeFilter(filterSelector.getSelectionModel().getSelectedIndex());
 	}
 	/**
 	 * selects an item and fills in the information
@@ -290,11 +298,13 @@ public class MaintenanceScreen extends HBox {
 	 */
 	private void select(ListRegel selectedValue){
 		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
-			if(selectedValue!=null)	selectedMaintenanceSession = selectedValue.getMaintenanceSession();
-			dateContent.setValue(selectedMaintenanceSession.getPlannedDate());
-			mechanicContent.setValue(selectedMaintenanceSession.getMechanic());
-			numberPlateContent.setText(selectedMaintenanceSession.getNumberPlate());
-			usedPartsContent.setText(Integer.toString(selectedMaintenanceSession.getTotalParts()));
+			if(selectedValue!=null)	{
+				selectedMaintenanceSession = selectedValue.getMaintenanceSession();
+				dateContent.setValue(selectedMaintenanceSession.getPlannedDate());
+				mechanicContent.setValue(selectedMaintenanceSession.getMechanic());
+				numberPlateContent.setText(selectedMaintenanceSession.getNumberPlate());
+				usedPartsContent.setText(Integer.toString(selectedMaintenanceSession.getTotalParts()));
+			}
 		}
 	}
 	/**

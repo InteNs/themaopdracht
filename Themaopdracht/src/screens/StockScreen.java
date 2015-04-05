@@ -159,7 +159,7 @@ public class StockScreen extends HBox {
 			remove();
 		});
 		filterSelector.setPrefSize(150, 50);
-		filterSelector.getItems().addAll("Mode: Voorraad", "Mode: Bestellijst", "Mode: Opboeken");
+		filterSelector.getItems().addAll("Mode: Voorraad", "Mode: Benzine", "Mode: Onderdelen", "Mode: Bestellijst", "Mode: Opboeken");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
@@ -178,25 +178,37 @@ public class StockScreen extends HBox {
 	private void changeFilter(int newValue) {
 		switch(newValue){
 		case 0:{
-				itemList.getItems().clear();
-				for (Product product : controller.getStock().getAllProducts())
-					itemList.getItems().add(new ListRegel(product));
-				break;
+			itemList.getItems().clear();
+			for (Product product : controller.getStock().getAllProducts())
+				itemList.getItems().add(new ListRegel(product));
+			break;
 			}
 		case 1:{
-				itemList.getItems().clear();
-				for(Entry<Object, Integer> entry : controller.getStock().getOrderedItems().entrySet()) 
-				    itemList.getItems().add(new ListRegel((Product)entry.getKey(), entry.getValue()));
-				break;
-			}
+			itemList.getItems().clear();
+			for (Product product : controller.getStock().getAllProducts())
+				if(product instanceof Fuel)itemList.getItems().add(new ListRegel(product));
+			break;
+		}
 		case 2:{
-				itemList.getItems().clear();
-				Button proceed = new Button("Opboeken");
-				Button newRule = new Button("regel toevoegen");
-				proceed.setOnAction(e-> boekop());
-				newRule.setOnAction(e->	itemList.getItems().add(itemList.getItems().size()-1,new ListRegel()));
-				itemList.getItems().add(new ListRegel(newRule, proceed));
-				break;
+			itemList.getItems().clear();
+			for (Product product : controller.getStock().getAllProducts())
+				if(product instanceof Part)itemList.getItems().add(new ListRegel(product));
+			break;
+		}
+		case 3:{
+			itemList.getItems().clear();
+			for(Entry<Object, Integer> entry : controller.getStock().getOrderedItems().entrySet()) 
+			    itemList.getItems().add(new ListRegel((Product)entry.getKey(), entry.getValue()));
+			break;
+			}
+		case 4:{
+			itemList.getItems().clear();
+			Button proceed = new Button("Opboeken");
+			Button newRule = new Button("regel toevoegen");
+			proceed.setOnAction(e-> boekop());
+			newRule.setOnAction(e->	itemList.getItems().add(itemList.getItems().size()-1,new ListRegel()));
+			itemList.getItems().add(new ListRegel(newRule, proceed));
+			break;
 			}
 		}
 		if(!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());	
@@ -307,13 +319,15 @@ public class StockScreen extends HBox {
 	 */
 	private void select(ListRegel selectedValue){
 		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
-			if(selectedValue!=null)	selectedProduct = selectedValue.getProduct();
-			if(selectedProduct.getName()!=null)nameContent.setText(selectedProduct.getName());
-			if(Integer.toString(selectedProduct.getAmount())!=null)amountContent.setText(Integer.toString(selectedProduct.getAmount()));
-			if(Integer.toString(selectedProduct.getMinAmount())!=null)minAmountContent.setText(Integer.toString(selectedProduct.getMinAmount()));
-			if(Double.toString(selectedProduct.getSellPrice())!=null) priceContent.setText(Double.toString(selectedProduct.getSellPrice()));
-			if(Double.toString(selectedProduct.getBuyPrice())!=null)buyPriceContent.setText(Double.toString(selectedProduct.getBuyPrice()));
-			if(selectedProduct.getSupplier().getName()!=null)supplierContent.setValue(selectedProduct.getSupplier());
+			if(selectedValue!=null)	{
+				selectedProduct = selectedValue.getProduct();
+				nameContent.setText(selectedProduct.getName());
+				amountContent.setText(Integer.toString(selectedProduct.getAmount()));
+				minAmountContent.setText(Integer.toString(selectedProduct.getMinAmount()));
+				priceContent.setText(Double.toString(selectedProduct.getSellPrice()));
+				buyPriceContent.setText(Double.toString(selectedProduct.getBuyPrice()));
+				supplierContent.setValue(selectedProduct.getSupplier());
+			}
 		}
 	}
 	/**
