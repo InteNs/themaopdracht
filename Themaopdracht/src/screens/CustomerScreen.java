@@ -1,8 +1,6 @@
 package screens;
 import java.util.ArrayList;
 
-import com.sun.xml.internal.ws.policy.spi.PolicyAssertionValidator.Fitness;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -18,9 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
 import main.Customer;
-import main.Fuel;
-import main.Part;
-import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class CustomerScreen extends HBox {

@@ -1,7 +1,6 @@
 package main;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 public class Stock {
@@ -30,6 +29,7 @@ public class Stock {
 	public HashMap<Object, Integer> getOrderedItems(){
 		return toOrder;
 	}
+	@SuppressWarnings("unused")
 	public void sendOrder(int orderId){
 		Order order = new Order(toOrder);
 		toOrder.clear();

@@ -33,7 +33,6 @@ public class ATDProgram extends Application {
 	private ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	private ArrayList<ParkingSpace> parkingSpaces = new ArrayList<ParkingSpace>();
-	private ArrayList<RefuelSession> refuelSessions = new ArrayList<RefuelSession>();
 	private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -93,10 +92,6 @@ public class ATDProgram extends Application {
 			}
 		}
 		return remindables;
-	}
-	public void addorRemoveRefuelSessions(RefuelSession refuelSession,boolean remove) {
-		if (remove)refuelSessions.remove(refuelSession);
-		else refuelSessions.add(refuelSession);
 	}
 	public ArrayList<Reservation> getReservations() {
 		return reservations;

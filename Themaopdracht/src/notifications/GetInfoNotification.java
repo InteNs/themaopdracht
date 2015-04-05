@@ -19,7 +19,6 @@ import main.Fuel;
 import main.MaintenanceSession;
 import main.Part;
 import main.Product;
-import main.RefuelSession;
 import main.Reservation;
 
 public class GetInfoNotification extends Stage {
@@ -27,7 +26,6 @@ public class GetInfoNotification extends Stage {
 	private ComboBox<Product> fuelSelector = new ComboBox<Product>();
 	private ComboBox<Customer> customerSelector = new ComboBox<Customer>();
 	private ComboBox<MaintenanceSession> maintenanceSessionSelector = new ComboBox<MaintenanceSession>();
-	private ComboBox<RefuelSession> refuelSelector = new ComboBox<RefuelSession>();
 	private ComboBox<Reservation> reservationSelector = new ComboBox<Reservation>();
 	private ComboBox<String> typeSelector = new ComboBox<String>();
 	private TextField input = new TextField();

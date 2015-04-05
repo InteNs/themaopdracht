@@ -1,34 +1,18 @@
 package screens;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Map.Entry;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
-import main.Fuel;
 import main.Invoice;
-import main.Part;
-import main.Product;
-import main.ProductSupplier;
-import notifications.GetInfoNotification;
-import notifications.Notification;
 
 public class FinancesScreen extends HBox {
 	private ATDProgram controller;
-	private Product selectedProduct;
-	private ComboBox<ProductSupplier> supplierContent = new ComboBox<ProductSupplier>();
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;

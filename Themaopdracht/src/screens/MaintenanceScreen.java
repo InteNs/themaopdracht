@@ -1,7 +1,6 @@
 package screens;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Map.Entry;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -16,10 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
-import main.Fuel;
 import main.MaintenanceSession;
 import main.Mechanic;
-import main.Part;
 import main.Product;
 import notifications.GetInfoNotification;
 import notifications.Notification;

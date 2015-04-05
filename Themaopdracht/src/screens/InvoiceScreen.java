@@ -20,14 +20,11 @@ import main.Invoice;
 import main.Invoice.InvoiceItem;
 import main.MaintenanceSession;
 import main.Product;
-import main.Stock;
 import notifications.GetInfoNotification;
 import notifications.Notification;
 
 
 public class InvoiceScreen extends HBox {
-	private ATDProgram controller;
-	private Stock stock;
 	private Invoice selectedInvoice;
 	private double
 			spacingBoxes = 10,
@@ -65,7 +62,6 @@ public class InvoiceScreen extends HBox {
 			SecButtonBox = new HBox(6), 
 			mainBox = new HBox(spacingBoxes);
 	public InvoiceScreen(ATDProgram controller) {
-		this.controller = controller;
 		//CustomerDetails
 		detailsBox.getChildren().addAll(
 				new VBox(20,

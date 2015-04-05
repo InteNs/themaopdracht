@@ -1,14 +1,12 @@
 package main;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Iterator;
 
 
 public class MaintenanceSession {
 	private LocalDate plannedDate;
 	private boolean isFinished;
 	private String numberPlate;
-	private Stock stock;
 	private Mechanic mechanic;
 	private int totalParts = 0;;
 	
@@ -16,7 +14,6 @@ public class MaintenanceSession {
 	public MaintenanceSession(String numberPlate, Stock stock,LocalDate plannedDate) {
 		this.numberPlate = numberPlate;
 		this.plannedDate = plannedDate;
-		this.stock = stock;
 		usedParts = new HashMap<Product, Integer>();
 	}
 	public void usePart(Product product){
