@@ -1,4 +1,6 @@
-
+.removeDisabledEffect{
+	-fx-opacity: 1.0;
+}
 .date-picker {
 	-fx-opacity: 1.0;
 }

@@ -19,24 +19,26 @@ import main.Customer;
 import notifications.Notification;
 
 public class CustomerScreen extends HBox {
-	private ATDProgram controller;
-	private Customer selectedCustomer;
-	private ComboBox<String> filterSelector = new ComboBox<String>();
-	private ArrayList<ListRegel> content = new ArrayList<ListRegel>();
-	private ListView<ListRegel> itemList = new ListView<ListRegel>();
-	private CheckBox blackListContent = new CheckBox();
-	private DatePicker datecontent = new DatePicker();
-	private double
-			spacingBoxes = 10,
-			widthLabels = 120;
+	private final ATDProgram controller;
+	
+	private final ComboBox<String> filterSelector = new ComboBox<String>();
+	private final ArrayList<ListRegel> content = new ArrayList<ListRegel>();
+	private final ListView<ListRegel> itemList = new ListView<ListRegel>();
+	private final CheckBox blackListContent = new CheckBox();
+	private final DatePicker datecontent = new DatePicker();
+	private Customer selectedCustomer = null;
 	private boolean isChanging = false;
-	private Button 
+	private static final double
+			space_Small = 10,
+			space_Big = 20,
+			widthLabels = 120;
+	private final Button 
 			newButton = new Button("Nieuw"), 
 			changeButton = new Button("Aanpassen"), 
 			removeButton = new Button("Verwijderen"), 
 			cancelButton = new Button("Annuleren"),
 			saveButton = new Button("Opslaan");
-	private Label 
+	private final Label 
 			nameLabel = new Label("Naam:"),
 			addressLabel = new Label("Adres:"),
 			postalLabel = new Label("Postcode:"),
@@ -46,7 +48,7 @@ public class CustomerScreen extends HBox {
 			phoneLabel = new Label("Telefoonnummer:"),
 			bankLabel = new Label("Banknummer:"),
 			blackListLabel = new Label("Blacklist:");
-	private TextField 
+	private final TextField 
 			searchContent = new TextField("Zoek..."),
 			nameContent = new TextField(),
 			addressContent = new TextField(),
@@ -55,33 +57,33 @@ public class CustomerScreen extends HBox {
 			emailContent = new TextField(),
 			phoneContent = new TextField(),
 			bankContent = new TextField();
-	private VBox
-			leftBox = new VBox(20),
-			rightBox = new VBox(20);
-	private HBox 
-			stockDetails = new HBox(spacingBoxes), 
-			mainButtonBox = new HBox(spacingBoxes), 
-			searchFieldBox = new HBox(spacingBoxes), 
-			mainBox = new HBox(spacingBoxes);
+	private  final VBox
+			leftBox = new VBox(space_Big),
+			rightBox = new VBox(space_Big);
+	private  final HBox 
+			stockDetails = new HBox(space_Small), 
+			mainButtonBox = new HBox(space_Small), 
+			searchFieldBox = new HBox(space_Small), 
+			mainBox = new HBox(space_Small);
 	public CustomerScreen(ATDProgram controller) {
 		this.controller = controller;
 		//StockDetails
 		stockDetails.getChildren().addAll(
-				new VBox(20,
-						new HBox(20,nameLabel,		nameContent),
-						new HBox(20,addressLabel,	addressContent),
-						new HBox(20,postalLabel,	postalContent),
-						new HBox(20,placeLabel,		placeContent),
-						new HBox(20,dateLabel,		datecontent),
-						new HBox(20,emailLabel,		emailContent),
-						new HBox(20,phoneLabel,		phoneContent),
-						new HBox(20,bankLabel,		bankContent),	
-						new HBox(20,blackListLabel, blackListContent),
-						new HBox(20,cancelButton,	saveButton)
+				new VBox(space_Big,
+						new HBox(space_Big,nameLabel,		nameContent),
+						new HBox(space_Big,addressLabel,	addressContent),
+						new HBox(space_Big,postalLabel,	postalContent),
+						new HBox(space_Big,placeLabel,		placeContent),
+						new HBox(space_Big,dateLabel,		datecontent),
+						new HBox(space_Big,emailLabel,		emailContent),
+						new HBox(space_Big,phoneLabel,		phoneContent),
+						new HBox(space_Big,bankLabel,		bankContent),	
+						new HBox(space_Big,blackListLabel, blackListContent),
+						new HBox(space_Big,cancelButton,	saveButton)
 						));
 		stockDetails.setPrefSize(450, 500);
 		stockDetails.getStyleClass().add("stockDetails");
-		stockDetails.setPadding(new Insets(20));
+		stockDetails.setPadding(new Insets(space_Big));
 		setEditable(false);
 		//set width for all detail labels and textfields
 		for (Node node : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {
@@ -93,6 +95,7 @@ public class CustomerScreen extends HBox {
 		datecontent.setMinWidth(widthLabels*1.5);	
 		//Listview
 		itemList.setPrefSize(450, 500);
+		itemList.getStyleClass().add("removeDisabledEffect");
 		for (Customer customer : controller.getCustomers()) 
 			itemList.getItems().add(new ListRegel(customer));
 		refreshList();
@@ -149,7 +152,8 @@ public class CustomerScreen extends HBox {
 		leftBox.getChildren().addAll (itemList, searchFieldBox);
 		rightBox.getChildren().addAll(stockDetails,mainButtonBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
-		mainBox.setPadding(new Insets(20));
+		mainBox.setPadding(new Insets(space_Big));
+		leftBox.getStyleClass().add("removeDisabledEffect");
 		this.getChildren().add(mainBox);
 	}
 	/**

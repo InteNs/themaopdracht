@@ -13,15 +13,23 @@ public class Stock {
 	public void orderProduct(Product product, int amount){
 		 toOrder.put(product, amount);
 	}
-	public void useProduct(Product product, int amount){
+	public boolean useProduct(Product product, int amount){
+		if(product.getAmount()<amount) return false;
 		product.setAmount(product.getAmount() - amount);
-			if(product.getAmount()<product.getMinAmount()) this.orderProduct(product,product.getMinAmount()-product.getAmount());
+		checkStock();
+		return true;
 	}
 	public void newProduct(Product product){
 		products.add(product);
+		checkStock();
 	}
 	public void removeProduct(Product product){
 		products.remove(product);
+	}
+	private void checkStock(){
+		for (Product product : products) {
+			if(product.getAmount()<product.getMinAmount()) this.orderProduct(product,product.getMinAmount()-product.getAmount());
+		}
 	}
 	public ArrayList<Product> getAllProducts(){
 		return products;

@@ -19,6 +19,7 @@ public class MaintenanceSession {
 	public void usePart(Product product){
 		if(usedParts.containsKey(product)){
 			usedParts.put(product, usedParts.get(product)+1);
+			//controller.getStock().useProduct(key, selection.getUsedParts().get(key));
 			totalParts++;
 		}
 		else {

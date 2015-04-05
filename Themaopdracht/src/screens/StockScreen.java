@@ -22,23 +22,26 @@ import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class StockScreen extends HBox {
-	private ATDProgram controller;
+	private final ATDProgram controller;
 	private Product selectedProduct;
-	private ComboBox<ProductSupplier> supplierContent = new ComboBox<ProductSupplier>();
-	private ComboBox<String> filterSelector = new ComboBox<String>();
-	private ArrayList<ListRegel> content = new ArrayList<ListRegel>();
-	private ListView<ListRegel> itemList = new ListView<ListRegel>();
-	private double
-			spacingBoxes = 10,
+	private final ComboBox<ProductSupplier> supplierContent = new ComboBox<ProductSupplier>();
+	private final ComboBox<String> filterSelector = new ComboBox<String>();
+	private final ArrayList<ListRegel> content = new ArrayList<ListRegel>();
+	private final ListView<ListRegel> itemList = new ListView<ListRegel>();
+	private static final double
+			space_small = 10,
+			space_big = 20,
 			widthLabels = 120;
 	private boolean isChanging = false;
-	private Button 
+	private final Button 
 			newButton = new Button("Nieuw"), 
 			changeButton = new Button("Aanpassen"), 
 			removeButton = new Button("Verwijderen"), 
 			cancelButton = new Button("Annuleren"),
 			saveButton = new Button("Opslaan");
-	private Label 
+			Button proceed = new Button("Opboeken");
+			Button newRule = new Button("regel toevoegen");
+	private final Label 
 			nameLabel = new Label("Naam: "),
 			amountLabel = new Label("Aantal: "), 
 			minAmountLabel = new Label("Min. aantal: "),
@@ -48,8 +51,8 @@ public class StockScreen extends HBox {
 			addressLabel = new Label("Adres: "), 
 			postalLabel = new Label("Postcode: "), 
 			placeLabel = new Label("Plaats: ");	
-	private TextField 
-			searchInput = new TextField(), 
+	private final TextField 
+			searchInput = new TextField("Zoek..."), 
 			nameContent = new TextField(), 
 			amountContent = new TextField(),
 			minAmountContent = new TextField(), 
@@ -58,35 +61,35 @@ public class StockScreen extends HBox {
 			addressContent = new TextField(),
 			postalContent = new TextField(),
 			placeContent = new TextField();
-	private VBox
-			leftBox = new VBox(20),
-			rightBox = new VBox(20);
-	private HBox 
-			stockDetails = new HBox(spacingBoxes), 
-			mainButtonBox = new HBox(spacingBoxes), 
-			searchFieldBox = new HBox(spacingBoxes), 
-			mainBox = new HBox(spacingBoxes);
+	private final VBox
+			leftBox = new VBox(space_big),
+			rightBox = new VBox(space_big);
+	private final HBox 
+			stockDetails = new HBox(space_small), 
+			mainButtonBox = new HBox(space_small), 
+			searchFieldBox = new HBox(space_small), 
+			mainBox = new HBox(space_small);
 	public StockScreen(ATDProgram controller) {
 		this.controller = controller;
 		//StockDetails
 		stockDetails.getChildren().addAll(
-				new VBox(20,
-						new HBox(20,nameLabel,		nameContent),
-						new HBox(20,amountLabel,	amountContent),
-						new HBox(20,minAmountLabel,	minAmountContent),
-						new HBox(20,priceLabel,		priceContent),
-						new HBox(20,buyPriceLabel,	buyPriceContent),
-						new HBox(20,supplierLabel,	supplierContent),
-						new HBox(20,addressLabel,	addressContent),
-						new HBox(20,postalLabel,	postalContent),
-						new HBox(20,placeLabel,		placeContent),	
-						new HBox(20,cancelButton,	saveButton)
+				new VBox(space_big,
+						new HBox(space_big,nameLabel,		nameContent),
+						new HBox(space_big,amountLabel,		amountContent),
+						new HBox(space_big,minAmountLabel,	minAmountContent),
+						new HBox(space_big,priceLabel,		priceContent),
+						new HBox(space_big,buyPriceLabel,	buyPriceContent),
+						new HBox(space_big,supplierLabel,	supplierContent),
+						new HBox(space_big,addressLabel,	addressContent),
+						new HBox(space_big,postalLabel,		postalContent),
+						new HBox(space_big,placeLabel,		placeContent),	
+						new HBox(space_big,cancelButton,	saveButton)
 						));
 		stockDetails.setPrefSize(450, 500);
-		stockDetails.getStyleClass().add("stockDetails");
-		stockDetails.setPadding(new Insets(20));
+		stockDetails.getStyleClass().add("removeDisabledEffect");
+		stockDetails.setPadding(new Insets(space_big));
 		setEditable(false);
-		//set width for all detail labels and textfields
+		////set width for all detail labels and textfields
 		for (Node node : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
 				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
@@ -96,7 +99,7 @@ public class StockScreen extends HBox {
 		supplierContent.setMinWidth(widthLabels*1.5);
 		supplierContent.getItems().addAll(controller.getSuppliers());
 		supplierContent.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			//fill in supplier details in corresponding textfields
+		////fill in supplier details in corresponding textfields
 			if(newValue != null){
 				ProductSupplier supplier = supplierContent.getSelectionModel().getSelectedItem();
 				addressContent.setEditable(false);
@@ -107,6 +110,25 @@ public class StockScreen extends HBox {
 				placeContent.setText(supplier.getPlace());
 			}
 		});
+		//Listview
+		itemList.setPrefSize(450, 500);
+		itemList.getStyleClass().add("removeDisabledEffect");
+		for (Product product : controller.getStock().getAllProducts()) 
+			itemList.getItems().add(new ListRegel(product));
+		refreshList();
+		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			select(newValue);
+		});
+		//SearchField
+		searchInput.setPrefSize(310, 50);
+		searchInput.setOnMouseClicked(e -> {
+			if (searchInput.getText().equals("Zoek...")) searchInput.clear();
+			else searchInput.selectAll();
+		});
+		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
+				search(oldValue, newValue);
+		});
+		//Buttons and filter
 		cancelButton.setPrefSize(150, 50);
 		cancelButton.setOnAction(e -> {
 			clearInput();
@@ -116,31 +138,6 @@ public class StockScreen extends HBox {
 		saveButton.setOnAction(e -> {
 			save();
 		});
-		//Listview
-		itemList.setPrefSize(450, 500);
-		for (Product product : controller.getStock().getAllProducts()) 
-			itemList.getItems().add(new ListRegel(product));
-		refreshList();
-		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			select(newValue);
-		});
-		//SearchField
-		searchFieldBox = new HBox(10,searchInput = new TextField("Zoek..."),filterSelector);
-		searchInput.setPrefSize(310, 50);
-		searchInput.setOnMouseClicked(e -> {
-			if (searchInput.getText().equals("Zoek...")) {
-				searchInput.clear();
-			} else searchInput.selectAll();
-		});
-		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
-				search(oldValue, newValue);
-		});
-		//Main Buttons and filter
-		mainButtonBox.getChildren().addAll(
-				newButton,
-				changeButton,
-				removeButton
-				);
 		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(e -> {
 			clearInput();
@@ -158,55 +155,57 @@ public class StockScreen extends HBox {
 		removeButton.setOnAction(e->{
 			remove();
 		});
+		proceed.setOnAction(e-> boekop());
+		newRule.setOnAction(e->	itemList.getItems().add(itemList.getItems().size()-1,new ListRegel()));
+		
 		filterSelector.setPrefSize(150, 50);
 		filterSelector.getItems().addAll("Mode: Voorraad", "Mode: Benzine", "Mode: Onderdelen", "Mode: Bestellijst", "Mode: Opboeken");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
-		//Make & merge left & right
+		//put everything in the right places
+		mainButtonBox.getChildren().addAll(newButton,changeButton,removeButton);
+		searchFieldBox.getChildren().addAll(searchInput,filterSelector);
 		leftBox.getChildren().addAll (itemList, searchFieldBox);
 		rightBox.getChildren().addAll(stockDetails,mainButtonBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
-		mainBox.setPadding(new Insets(20));
+		mainBox.setPadding(new Insets(space_big));
+		leftBox.getStyleClass().add("removeDisabledEffect");
 		this.getChildren().add(mainBox);
 	}
 	/**
-	 * fills the list with items that fit with the given filter
+	 * fills the list with items that fit with the given filter or mode
 	 * @param newValue selected filter
 	 */
 	private void changeFilter(int newValue) {
 		switch(newValue){
-		case 0:{
+		case 0: default:{//voorraad
 			itemList.getItems().clear();
 			for (Product product : controller.getStock().getAllProducts())
 				itemList.getItems().add(new ListRegel(product));
 			break;
 			}
-		case 1:{
+		case 1:{//Benzine
 			itemList.getItems().clear();
 			for (Product product : controller.getStock().getAllProducts())
 				if(product instanceof Fuel)itemList.getItems().add(new ListRegel(product));
 			break;
 		}
-		case 2:{
+		case 2:{//Onderdelen
 			itemList.getItems().clear();
 			for (Product product : controller.getStock().getAllProducts())
 				if(product instanceof Part)itemList.getItems().add(new ListRegel(product));
 			break;
 		}
-		case 3:{
+		case 3:{//Bestellijst
 			itemList.getItems().clear();
 			for(Entry<Object, Integer> entry : controller.getStock().getOrderedItems().entrySet()) 
 			    itemList.getItems().add(new ListRegel((Product)entry.getKey(), entry.getValue()));
 			break;
 			}
-		case 4:{
+		case 4:{//Opboeken
 			itemList.getItems().clear();
-			Button proceed = new Button("Opboeken");
-			Button newRule = new Button("regel toevoegen");
-			proceed.setOnAction(e-> boekop());
-			newRule.setOnAction(e->	itemList.getItems().add(itemList.getItems().size()-1,new ListRegel()));
 			itemList.getItems().add(new ListRegel(newRule, proceed));
 			break;
 			}
@@ -298,12 +297,12 @@ public class StockScreen extends HBox {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller.getStage(), "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller.getStage(), "Niet alle velden zijn juist ingevuld!",ATDProgram.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}
 	/**
-	 * refreshes the list and every item itself
+	 * refreshes the list and every item 
 	 */
 	private void refreshList(){
 		content.clear();
@@ -318,7 +317,7 @@ public class StockScreen extends HBox {
 	 * @param selectedValue the item to be selected
 	 */
 	private void select(ListRegel selectedValue){
-		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
+//		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
 			if(selectedValue!=null)	{
 				selectedProduct = selectedValue.getProduct();
 				nameContent.setText(selectedProduct.getName());
@@ -328,7 +327,7 @@ public class StockScreen extends HBox {
 				buyPriceContent.setText(Double.toString(selectedProduct.getBuyPrice()));
 				supplierContent.setValue(selectedProduct.getSupplier());
 			}
-		}
+//		}
 	}
 	/**
 	 * disables/enables the left or right side of the stage
@@ -337,9 +336,7 @@ public class StockScreen extends HBox {
 	private void setEditable(boolean enable){
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
-		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
-			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).setDisable(!enable);
-		supplierContent.setDisable(!enable);
+		stockDetails.setDisable(!enable);
 		leftBox.setDisable(enable);
 	}	
 	/**
@@ -356,11 +353,17 @@ public class StockScreen extends HBox {
 	 */
 	private boolean checkInput(){
 		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
-			if(((HBox)node1).getChildren().get(1) instanceof TextField){
-				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty()){
+			if(((HBox)node1).getChildren().get(1) instanceof TextField)
+				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty())
 					return false;
-				}
-			}
+		try {
+			Integer.parseInt(amountContent.getText());
+			Integer.parseInt(minAmountContent.getText());
+			Double.parseDouble(priceContent.getText());
+			Double.parseDouble(buyPriceContent.getText());
+		} catch (NumberFormatException e) {
+			return false;
+		}
 		return true;
 	}
 	/**
