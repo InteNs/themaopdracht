@@ -82,7 +82,7 @@ public class StockScreen extends HBox {
 						new HBox(20,placeLabel,		placeContent),	
 						new HBox(20,cancelButton,	saveButton)
 						));
-		stockDetails.setPrefSize(450, 500);
+		stockDetails.setPrefSize(555, 520);
 		stockDetails.getStyleClass().add("stockDetails");
 		stockDetails.setPadding(new Insets(20));
 		setEditable(false);
@@ -117,7 +117,7 @@ public class StockScreen extends HBox {
 			save();
 		});
 		//Listview
-		itemList.setPrefSize(450, 500);
+		itemList.setPrefSize(450, 520);
 		for (Product product : controller.getStock().getAllProducts()) 
 			itemList.getItems().add(new ListRegel(product));
 		refreshList();
@@ -141,20 +141,20 @@ public class StockScreen extends HBox {
 				changeButton,
 				removeButton
 				);
-		newButton.setPrefSize(150, 50);
+		newButton.setPrefSize(180, 50);
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
 			isChanging = false;
 		});
-		changeButton.setPrefSize(150, 50);
+		changeButton.setPrefSize(180, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(150, 50);
+		removeButton.setPrefSize(180, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});

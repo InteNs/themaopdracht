@@ -79,7 +79,7 @@ public class CustomerScreen extends HBox {
 						new HBox(20,blackListLabel, blackListContent),
 						new HBox(20,cancelButton,	saveButton)
 						));
-		stockDetails.setPrefSize(450, 500);
+		stockDetails.setPrefSize(555, 520);
 		stockDetails.getStyleClass().add("stockDetails");
 		stockDetails.setPadding(new Insets(20));
 		setEditable(false);
@@ -92,7 +92,7 @@ public class CustomerScreen extends HBox {
 		}
 		datecontent.setMinWidth(widthLabels*1.5);	
 		//Listview
-		itemList.setPrefSize(450, 500);
+		itemList.setPrefSize(450, 520);
 		for (Customer customer : controller.getCustomers()) 
 			itemList.getItems().add(new ListRegel(customer));
 		refreshList();
@@ -120,20 +120,20 @@ public class CustomerScreen extends HBox {
 		saveButton.setOnAction(e -> {
 			save();
 		});
-		newButton.setPrefSize(150, 50);
+		newButton.setPrefSize(180, 50);
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
 			isChanging = false;
 		});
-		changeButton.setPrefSize(150, 50);
+		changeButton.setPrefSize(180, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(150, 50);
+		removeButton.setPrefSize(180, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});
