@@ -18,6 +18,7 @@ import main.Customer;
 import main.Fuel;
 import main.Invoice;
 import main.Invoice.InvoiceItem;
+import main.Invoice.PayMethod;
 import main.MaintenanceSession;
 import main.Product;
 import notifications.GetInfoNotification;
@@ -193,7 +194,14 @@ public class InvoiceScreen extends HBox {
 		});
 		payButton.setPrefSize(130, 50);
 		payButton.setOnAction(e->{
-			
+			GetInfoNotification payConfirm = new GetInfoNotification(controller, ATDProgram.notificationStyle.PAY);
+			payConfirm.showAndWait();
+			if(payConfirm.getKeuze().equals("confirm")) {
+				System.out.println((PayMethod) payConfirm.getSelected());
+				selectedInvoice.payNow((PayMethod) payConfirm.getSelected());
+				Notification payNotify = new Notification(controller.getStage(), "factuur is betaald.", ATDProgram.notificationStyle.NOTIFY);
+				payNotify.showAndWait();}
+			refreshList();
 		});
 		//Make & merge left & right
 		leftBox.getChildren().addAll (listView,SecButtonBox);
