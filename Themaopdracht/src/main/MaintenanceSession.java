@@ -52,13 +52,7 @@ public class MaintenanceSession {
 	}
 	public void endSession(int hours){	
 		mechanic.setWorkedHours(mechanic.getWorkedHours()+hours);
-//		Iterator<Product> keySetIterator = usedParts.keySet().iterator();
-//		while(keySetIterator.hasNext()){
-//			Product key = keySetIterator.next();
-//			double price = key.getSellPrice() * usedParts.get(key);
-//			stock.useProduct(key, usedParts.get(key));
-//			receipt.addItem(price, key.getName(),""+usedParts.get(key));
-//		}
+		isFinished = true;
 	}
 	public HashMap<Product, Integer> getUsedParts(){
 		return usedParts;
@@ -66,5 +60,8 @@ public class MaintenanceSession {
 	}
 	public int getTotalParts() {
 		return totalParts;
+	}
+	public String toString(){
+		return numberPlate;
 	}
 }

@@ -186,24 +186,31 @@ public class MaintenanceScreen extends HBox {
 		}
 		if(!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());	
 	}
+	/**
+	 * adds a product to the session
+	 */
 	private void addProduct(){
-		GetInfoNotification addProduct = new GetInfoNotification(controller, ATDProgram.notificationStyle.PRODUCTS);
-		addProduct.showAndWait();
-		if(addProduct.getKeuze().equals("confirm")){
-			selectedMaintenanceSession.usePart((Product)addProduct.getSelected());
-		 	refreshList();
-		} 
+		if(checkSelected() && checkMechanic()){
+			GetInfoNotification addProduct = new GetInfoNotification(controller, ATDProgram.notificationStyle.PRODUCTS);
+			addProduct.showAndWait();
+			if(addProduct.getKeuze().equals("confirm")){
+				selectedMaintenanceSession.usePart((Product)addProduct.getSelected());
+				refreshList();
+			} 
+		}
 	}
 	/**
 	 * ends the selected session
 	 */
 	private void endSession(){
-		GetInfoNotification endSession = new GetInfoNotification(controller, ATDProgram.notificationStyle.ENDSESSION);
-		endSession.showAndWait();
-		selectedMaintenanceSession.endSession(endSession.getInput());
-		Notification changeNotify = new Notification(controller .getStage(), "Klus is afgesloten",ATDProgram.notificationStyle.NOTIFY);
-	 	changeNotify.showAndWait();
-	 	refreshList();
+		if(checkSelected() && checkMechanic()){
+			GetInfoNotification endSession = new GetInfoNotification(controller, ATDProgram.notificationStyle.ENDSESSION);
+			endSession.showAndWait();
+			selectedMaintenanceSession.endSession(endSession.getInput());
+			Notification changeNotify = new Notification(controller .getStage(), "Klus is afgesloten",ATDProgram.notificationStyle.NOTIFY);
+			changeNotify.showAndWait();
+			refreshList();
+		}
 	}
 	/*
 	 * removes the selected item
@@ -330,6 +337,18 @@ public class MaintenanceScreen extends HBox {
 	 */
 	private boolean checkSelected() {
 		if(selectedMaintenanceSession == null) return false;
+		return true;
+	}
+	/**
+	 * checks if the selected item has a mechanic bound to it and notifies the actor if it doesn't
+	 * @return true if a mechanic is found
+	 */
+	private boolean checkMechanic(){
+		if(selectedMaintenanceSession.getMechanic()==null){
+			Notification notification = new Notification(controller.getStage(), "Eerst een montuer toewijzen!", ATDProgram.notificationStyle.NOTIFY);
+			notification.showAndWait();
+			return false;
+		}
 		return true;
 	}
 	/**

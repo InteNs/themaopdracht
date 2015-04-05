@@ -43,7 +43,6 @@ public class GetInfoNotification extends Stage {
 		initOwner(controller.getStage());
 		initModality(Modality.WINDOW_MODAL);
 		this.stijl = nwstijl;
-		System.out.println(stijl);
 		this.setResizable(false);
 		ok.setPrefWidth(100);
 		ok.setOnAction(e -> {
