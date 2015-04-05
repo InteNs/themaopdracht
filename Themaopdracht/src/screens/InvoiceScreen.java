@@ -128,7 +128,7 @@ public class InvoiceScreen extends HBox {
 			GetInfoNotification addFuelNotification = new GetInfoNotification(controller, ATDProgram.notificationStyle.TANK);
 			addFuelNotification.showAndWait();
 			if(addFuelNotification.getKeuze().equals("confirm")){
-				controller.getStock().useProduct((Fuel)addFuelNotification.getSelected(), addFuelNotification.getInput());;
+				controller.getStock().useProduct((Fuel)addFuelNotification.getSelected(), addFuelNotification.getInput());
 				
 				selectedInvoice.add(selectedInvoice.new InvoiceItem(((Fuel)addFuelNotification.getSelected()).getName(), ((Fuel)addFuelNotification.getSelected()).getSellPrice(), addFuelNotification.getInput()));
 				refreshList();
