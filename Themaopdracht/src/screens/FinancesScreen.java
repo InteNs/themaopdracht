@@ -1,4 +1,5 @@
 package screens;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map.Entry;
@@ -74,12 +75,12 @@ public class FinancesScreen extends HBox {
 				toDate
 				);
 		fromDate.valueProperty().addListener((observable, oldValue, newValue)->{
-			if(newValue != null && oldValue != newValue && toDate.getValue() != null && toDate.getValue().isAfter(newValue)){
+			if(newValue != null && oldValue != newValue && toDate.getValue() != null && (toDate.getValue().isAfter(newValue) || toDate.getValue().isEqual(newValue))){
 				getFinanceData(newValue, toDate.getValue());
 			}
 		});
 		toDate.valueProperty().addListener((observable, oldValue, newValue)->{
-			if(newValue != null && oldValue != newValue && fromDate.getValue() != null && fromDate.getValue().isBefore(newValue)){
+			if(newValue != null && oldValue != newValue && fromDate.getValue() != null && (fromDate.getValue().isBefore(newValue) || fromDate.getValue().isEqual(newValue))){
 				getFinanceData(fromDate.getValue(), newValue);
 			}
 		});
@@ -102,9 +103,11 @@ public class FinancesScreen extends HBox {
 						aantal++;
 						omzet += invoice.getTotalPrice();
 			}
-			btw = (omzet/120)*20;
-			grossProfitLabelContent.setText(omzet+"");
-			taxLabelContent.setText(btw+"");
+			btw = (omzet/121)*21;
+			String grossProfitString = new DecimalFormat("€ ##.##").format(omzet);
+			grossProfitLabelContent.setText(grossProfitString);
+			String taxString = new DecimalFormat("€ ##.##").format(btw);
+			taxLabelContent.setText(taxString);
 			amountLabelContent.setText(aantal+"");
 		}
 	}
