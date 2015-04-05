@@ -1,389 +1,312 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.8" icons="false" always-add-relationships="false" generalizations="false" 
-  realizations="false" associations="true" dependencies="false" nesting-relationships="false">  
+<class-diagram version="1.1.8" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="main.Invoice.InvoiceItem" project="Themaopdracht" 
     file="/Themaopdracht/src/main/Invoice.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="192" width="116" x="967" y="869"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="243" width="164" x="-310" y="1098"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="2" language="java" name="main.ProductSupplier" project="Themaopdracht" 
     file="/Themaopdracht/src/main/ProductSupplier.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="256" width="100" x="1328" y="1877"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="315" width="231" x="776" y="1831"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="3" language="java" name="main.MaintenanceSession" project="Themaopdracht" 
     file="/Themaopdracht/src/main/MaintenanceSession.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="256" width="195" x="611" y="573"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="387" width="243" x="837" y="671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <enumeration id="4" language="java" name="main.ATDProgram.notificationStyle" project="Themaopdracht" 
     file="/Themaopdracht/src/main/ATDProgram.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="176" width="164" x="184" y="37"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="-1" width="-1" x="278" y="338"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
   <class id="5" language="java" name="main.Customer" project="Themaopdracht" 
     file="/Themaopdracht/src/main/Customer.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="592" width="142" x="1123" y="869"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="693" width="386" x="53" y="1098"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="6" language="java" name="main.ATDProgram" project="Themaopdracht" 
     file="/Themaopdracht/src/main/ATDProgram.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="496" width="191" x="1029" y="37"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="585" width="371" x="776" y="46"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="main.ParkingSpace" project="Themaopdracht" 
+  <class id="7" language="java" name="main.Fuel" project="Themaopdracht" file="/Themaopdracht/src/main/Fuel.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="315" width="259" x="179" y="1831"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="main.ParkingSpace" project="Themaopdracht" 
     file="/Themaopdracht/src/main/ParkingSpace.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="96" width="106" x="1368" y="869"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="8" language="java" name="main.Schedule" project="Themaopdracht" 
-    file="/Themaopdracht/src/main/Schedule.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="128" width="105" x="611" y="37"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="-1" width="-1" x="437" y="1017"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="9" language="java" name="main.Reservation" project="Themaopdracht" 
     file="/Themaopdracht/src/main/Reservation.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="176" width="108" x="1069" y="573"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="225" width="344" x="130" y="671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <enumeration id="10" language="java" name="main.Invoice.PayMethod" project="Themaopdracht" 
     file="/Themaopdracht/src/main/Invoice.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="96" width="103" x="41" y="37"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="135" width="119" x="-106" y="1098"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
   <class id="11" language="java" name="main.Invoice" project="Themaopdracht" file="/Themaopdracht/src/main/Invoice.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="256" width="120" x="888" y="573"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="297" width="187" x="-118" y="671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="12" language="java" name="main.Mechanic" project="Themaopdracht" 
     file="/Themaopdracht/src/main/Mechanic.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="208" width="99" x="828" y="869"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="261" width="157" x="1010" y="1098"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="13" language="java" name="main.Order" project="Themaopdracht" file="/Themaopdracht/src/main/Order.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="64" width="183" x="388" y="37"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="-1" width="-1" x="571" y="186"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="main.RefuelSession" project="Themaopdracht" 
-    file="/Themaopdracht/src/main/RefuelSession.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="48" width="90" x="1217" y="573"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+  <class id="14" language="java" name="main.Part" project="Themaopdracht" file="/Themaopdracht/src/main/Part.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="315" width="258" x="478" y="1831"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="15" language="java" name="main.Stock" project="Themaopdracht" file="/Themaopdracht/src/main/Stock.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="192" width="177" x="611" y="869"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="261" width="241" x="514" y="671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="16" language="java" name="main.Product" project="Themaopdracht" file="/Themaopdracht/src/main/Product.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="336" width="90" x="970" y="1501"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
+    <position height="405" width="276" x="479" y="1098"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <association id="17">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="18" name="dueTasks">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="19" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="18" name="stock"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="20">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="21" name="customer">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="22" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+    <bendpoint x="265" y="967"/>    
+    <bendpoint x="259" y="1005"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="21" name="customer"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
+    <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="23">    
+    <bendpoint x="431" y="613"/>    
     <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="24" name="refuelSessions">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="25" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="26">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="27" name="reservations">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="28" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+      <attribute id="24" name="reservations"/>      
+      <multiplicity id="25" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
+    <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="29">    
+  <nesting id="26">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <association id="27">    
+    <bendpoint x="785" y="671"/>    
+    <bendpoint x="785" y="1098"/>    
+    <bendpoint x="892" y="1465"/>    
     <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="30" name="receipts">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="31" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+      <attribute id="28" name="suppliers"/>      
+      <multiplicity id="29" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="32">    
-    <bendpoint x="1038" y="573"/>    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="33" name="customers">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="34" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="36" name="maintenanceSessions">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="37" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="38">    
-    <bendpoint x="836" y="573"/>    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="39" name="stock">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="40" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="41">    
+  <nesting id="30">    
+    <bendpoint x="-190" y="974"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="1"/>  
+  </nesting>  
+  <association id="31">    
+    <bendpoint x="273" y="1016"/>    
     <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="42" name="parkingSpace">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="43" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+      <attribute id="32" name="parkingSpace"/>      
+      <multiplicity id="33" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="44">    
+  <generalization id="34">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="16"/>  
+  </generalization>  
+  <generalization id="35">    
+    <bendpoint x="504" y="1746"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="16"/>  
+  </generalization>  
+  <association id="36">    
     <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="45" name="products">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="46" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+      <attribute id="37" name="products"/>      
+      <multiplicity id="38" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
+    <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="47">    
-    <bendpoint x="1337" y="573"/>    
-    <bendpoint x="1337" y="869"/>    
-    <bendpoint x="1337" y="1501"/>    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="48" name="suppliers">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="49" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="50">    
+  <association id="39">    
     <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="51" name="items">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="52" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="53">    
-    <end type="SOURCE" refId="16" navigable="false">      
-      <attribute id="54" name="supplier">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="55" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="56">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="57" name="stock">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="58" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="59">    
-    <bendpoint x="857" y="573"/>    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="60" name="mechanics">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="61" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="62">    
-    <bendpoint x="1358" y="573"/>    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="63" name="parkingSpaces">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="64" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="65">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="66" name="mechanic">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="67" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="68">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="69" name="customer">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="70" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+      <attribute id="40" name="customer"/>      
+      <multiplicity id="41" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
+    <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="71">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="72" name="plannedTasks">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="73" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+  <association id="42">    
+    <bendpoint x="1148" y="721"/>    
+    <bendpoint x="1151" y="1005"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="43" name="mechanics"/>      
+      <multiplicity id="44" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="45">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="46" name="items"/>      
+      <multiplicity id="47" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="48">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="49" name="mechanic"/>      
+      <multiplicity id="50" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="51">    
+    <bendpoint x="28" y="591"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="52" name="receipts"/>      
+      <multiplicity id="53" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="54">    
+    <bendpoint x="495" y="675"/>    
+    <bendpoint x="496" y="922"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="55" name="parkingSpaces"/>      
+      <multiplicity id="56" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="57">    
+    <bendpoint x="718" y="1692"/>    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="58" name="supplier"/>      
+      <multiplicity id="59" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="60">    
+    <bendpoint x="93" y="669"/>    
+    <bendpoint x="96" y="884"/>    
+    <bendpoint x="166" y="1045"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="61" name="customers"/>      
+      <multiplicity id="62" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="63">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="64" name="maintenanceSessions"/>      
+      <multiplicity id="65" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
+    <display labels="true" multiplicity="true"/>  
   </association>  
-  <classifier-display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-    sort-features="false" accessors="true" visibility="false">    
+  <nesting id="66">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="10"/>  
+  </nesting>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
     <operations public="true" package="true" protected="true" private="true" static="true"/>  
   </classifier-display>  
-  <association-display labels="false" multiplicity="false"/>
+  <association-display labels="true" multiplicity="true"/>
 </class-diagram>

@@ -43,7 +43,7 @@ public class FinancesScreen extends HBox {
 						new HBox(20,taxLabel,			taxLabelContent),
 						new HBox(20,amountLabel,		amountLabelContent)
 						));
-		stockDetails.setPrefSize(1000, 500);
+		stockDetails.setPrefSize(1050, 540);
 		stockDetails.getStyleClass().add("stockDetails");
 		stockDetails.setPadding(new Insets(20));
 		//set width for all detail labels and textfields

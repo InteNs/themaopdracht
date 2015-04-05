@@ -70,7 +70,7 @@ public class MaintenanceScreen extends HBox {
 						new HBox(20,numberPlateLabel,numberPlateContent),
 						new HBox(20,cancelButton,	 saveButton)
 						));
-		details.setPrefSize(450, 500);
+		details.setPrefSize(555, 520);
 		details.getStyleClass().add("stockDetails");
 		details.setPadding(new Insets(20));
 		setEditable(false);
@@ -94,7 +94,7 @@ public class MaintenanceScreen extends HBox {
 			save();
 		});
 		//Listview
-		itemList.setPrefSize(450, 500);
+		itemList.setPrefSize(450, 520);
 		for (MaintenanceSession session : controller.getMaintenanceSessions()) 
 			if(!session.isFinished())itemList.getItems().add(new ListRegel(session));
 		refreshList();
@@ -117,20 +117,20 @@ public class MaintenanceScreen extends HBox {
 				changeButton,
 				removeButton
 				);
-		newButton.setPrefSize(150, 50);
+		newButton.setPrefSize(180, 50);
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
 			isChanging = false;
 		});
-		changeButton.setPrefSize(150, 50);
+		changeButton.setPrefSize(180, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(150, 50);
+		removeButton.setPrefSize(180, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});

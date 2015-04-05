@@ -70,7 +70,7 @@ public class InvoiceScreen extends HBox {
 						contentView
 						));
 		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
-		detailsBox.setPrefSize(450, 520);
+		detailsBox.setPrefSize(555, 520);
 		detailsBox.setPadding(new Insets(20));
 //		setVisibility(true, false, false);
 		//geef alle labels een bepaalde grootte
