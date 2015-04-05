@@ -37,7 +37,7 @@ public class GetInfoNotification extends Stage {
 	private Label melding = new Label();
 	private String keuze;
 	private VBox notification = new VBox(10,melding);
-	private HBox buttonBox = new HBox(10,ok,annuleren);
+	private HBox buttonBox = new HBox(10,annuleren,ok);
 	private notificationStyle stijl;
 
 	public GetInfoNotification(ATDProgram controller, ATDProgram.notificationStyle nwstijl) {
