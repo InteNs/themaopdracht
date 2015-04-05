@@ -1,15 +1,4 @@
-.combo-box-base:disabled .list-cell:disabled {
-    -fx-opacity: 1.0;
-}
-.date-picker-base:disabled .list-cell:disabled {
-    -fx-opacity: 1.0;
-}
-.txtarea .scroll-pane:disabled{
-  	-fx-opacity: 1.0;
-}
-.combo-box {
-	-fx-opacity: 1.0;
-}
+
 .date-picker {
 	-fx-opacity: 1.0;
 }
@@ -38,6 +27,7 @@
 }
 
 .combo-box {
+	-fx-opacity: 1.0;
     -fx-background-color:
         linear-gradient(#1777A4, #1D95CD),
         radial-gradient(center 50% -40%, radius 200%, #E6E6E6 45%, #CCCCCC 50%);
@@ -45,4 +35,13 @@
     -fx-background-insets: 0, 1;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
     -fx-text-fill: #061E29;
+}
+.combo-box-base:disabled .list-cell:disabled {
+    -fx-opacity: 1.0;
+}
+.date-picker-base:disabled .list-cell:disabled {
+    -fx-opacity: 1.0;
+}
+.txtarea .scroll-pane:disabled{
+  	-fx-opacity: 1.0;
 }
