@@ -37,10 +37,9 @@ public class GetInfoNotification extends Stage {
 	private notificationStyle stijl;
 
 	public GetInfoNotification(ATDProgram controller, ATDProgram.notificationStyle nwstijl) {
-		super(StageStyle.UTILITY);
+		super(StageStyle.UNDECORATED);
 		initOwner(controller.getStage());
 		initModality(Modality.WINDOW_MODAL);
-		initStyle(StageStyle.UNDECORATED);
 		this.stijl = nwstijl;
 		this.setResizable(false);
 		ok.setPrefWidth(100);
