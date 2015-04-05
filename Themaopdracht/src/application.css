@@ -24,7 +24,9 @@
 .text-field{
 	-fx-opacity: 1.0;
 }
-
+.label{
+	-fx-opacity: 1.0;
+}
 .button {
     -fx-background-color:
         linear-gradient(#1777A4, #1D95CD),

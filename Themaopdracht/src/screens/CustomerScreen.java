@@ -93,6 +93,8 @@ public class CustomerScreen extends HBox {
 			if(((HBox)node).getChildren().get(1) instanceof TextField)
 				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(widthLabels*1.5);
 		}
+		datecontent.setMinWidth(widthLabels*1.5);
+		//save/cancel buttons
 		cancelButton.setPrefSize(150, 50);
 		cancelButton.setOnAction(e -> {
 			clearInput();

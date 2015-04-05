@@ -7,13 +7,14 @@ import java.util.Iterator;
 public class MaintenanceSession {
 	private LocalDate plannedDate;
 	private boolean isFinished;
+	private String numberPlate;
 	private Stock stock;
 	private Mechanic mechanic;
 	private int totalParts = 0;;
 	
 	private HashMap<Product, Integer> usedParts;
-	public MaintenanceSession(Stock stock,LocalDate plannedDate) {
-
+	public MaintenanceSession(String numberPlate, Stock stock,LocalDate plannedDate) {
+		this.numberPlate = numberPlate;
 		this.plannedDate = plannedDate;
 		this.stock = stock;
 		usedParts = new HashMap<Product, Integer>();
@@ -27,6 +28,12 @@ public class MaintenanceSession {
 			usedParts.put(product, 1);
 			totalParts++;
 		}
+	}
+	public void setNumberPlate(String numberPlate){
+		this.numberPlate = numberPlate;
+	}
+	public String getNumberPlate() {
+		return numberPlate;
 	}
 	public LocalDate getPlannedDate(){
 		return plannedDate;

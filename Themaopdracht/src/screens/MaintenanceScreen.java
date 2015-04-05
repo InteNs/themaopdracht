@@ -1,12 +1,12 @@
 package screens;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -16,17 +16,22 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
-import main.Invoice;
+import main.Fuel;
 import main.MaintenanceSession;
 import main.Mechanic;
+import main.Part;
 import main.Product;
 import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class MaintenanceScreen extends HBox {
-	//test
 	private ATDProgram controller;
 	private MaintenanceSession selectedMaintenanceSession;
+	private ComboBox<String> filterSelector = new ComboBox<String>();
+	private ComboBox<Mechanic> mechanicContent = new ComboBox<Mechanic>();
+	private ArrayList<ListRegel> content = new ArrayList<ListRegel>();
+	private ListView<ListRegel> itemList = new ListView<ListRegel>();
+	private DatePicker dateContent = new DatePicker();
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;
@@ -36,340 +41,348 @@ public class MaintenanceScreen extends HBox {
 			changeButton = new Button("Aanpassen"), 
 			removeButton = new Button("Verwijderen"), 
 			cancelButton = new Button("Annuleren"),
-			newProductButton = new Button("product toevoegen"),
 			saveButton = new Button("Opslaan"),
-			endSession = new Button("Afronden");
-		
-	private DatePicker 
-			dateInput = new DatePicker();
-	private ComboBox<String> 
-			filterSelector = new ComboBox<String>();
-	private ComboBox<Mechanic>
-			mechanicSelector = new ComboBox<Mechanic>();
-	private ArrayList<ListItem> content = new ArrayList<ListItem>();
-
+			addButton = new Button("+Product"),
+			endButton = new Button("Afronden");
 	private Label 
-			date = new Label("Geplande datum: "),
-			dateContent = new Label("-"), 
-			mechanic = new Label("Monteur: "), 
-			mechanicContent = new Label("-"),
-			usedPartsAmount = new Label("aantal onderdelen: "),
-			usedPartsAmountContent = new Label("-"),
-			totalPrice = new Label("Tot. onderdelen: "),
-			totalPriceContent = new Label("-");
-			
+			dateLabel = new Label("Datum: "),
+			mechanicLabel = new Label("Monteur: "), 
+			usedPartsLabel = new Label("Aantal onderdelen: "),
+			numberPlateLabel = new Label("Kenteken: ");
 	private TextField 
-			searchInput = new TextField();
-			
-	private ListView<ListItem> 
-			listView = new ListView<ListItem>();
+			searchInput = new TextField("Zoek..."), 
+			usedPartsContent = new TextField(),
+			numberPlateContent = new TextField();
 	private VBox
 			leftBox = new VBox(20),
 			rightBox = new VBox(20);
 	private HBox 
-			detailsBox = new HBox(spacingBoxes), 
+			details = new HBox(spacingBoxes), 
 			mainButtonBox = new HBox(spacingBoxes), 
-			secondButtonBox = new HBox(spacingBoxes), 
+			searchFieldBox = new HBox(6), 
 			mainBox = new HBox(spacingBoxes);
 	public MaintenanceScreen(ATDProgram controller) {
 		this.controller = controller;
-		//MaintenanceSessionDetails
-		mechanicSelector.getItems().addAll(controller.getMechanics());
-		detailsBox.getChildren().addAll(
+		//StockDetails
+		mechanicContent.getItems().addAll(controller.getMechanics());
+		details.getChildren().addAll(
 				new VBox(20,
-						new HBox(20,date,			dateContent,		dateInput),
-						new HBox(20,mechanic,		mechanicContent,	mechanicSelector),
-						new HBox(20,usedPartsAmount,usedPartsAmountContent, new Label()),
-						new HBox(20,totalPrice ,  	totalPriceContent, new Label()),
-						new HBox(20,cancelButton,	saveButton)
+						new HBox(20,dateLabel,		 dateContent),
+						new HBox(20,mechanicLabel,	 mechanicContent),
+						new HBox(20,usedPartsLabel,	 usedPartsContent),
+						new HBox(20,numberPlateLabel,numberPlateContent),
+						new HBox(20,cancelButton,	 saveButton)
 						));
-		detailsBox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border: solid;");
-		detailsBox.setPrefSize(450, 520);
-		detailsBox.setPadding(new Insets(20));
-		setVisibility(true, false, false);
-		//geef alle labels een bepaalde grootte
-		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
-			if(((HBox)node1).getChildren().size()>2)((Label)((HBox)node1).getChildren().get(0)).setMinWidth(widthLabels);
+		details.setPrefSize(450, 500);
+		details.getStyleClass().add("stockDetails");
+		details.setPadding(new Insets(20));
+		setEditable(false);
+		//set width for all detail labels and textfields
+		for (Node node : ((VBox)details.getChildren().get(0)).getChildren()) {
+			if(((HBox)node).getChildren().get(0) instanceof Label)
+				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
+			if(((HBox)node).getChildren().get(1) instanceof TextField)
+				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(widthLabels*1.5);
 		}
-		//cancelbutton
+		dateContent.setMinWidth(widthLabels*1.5);
+		mechanicContent.setMinWidth(widthLabels*1.5);
+		// save/cancel button
 		cancelButton.setPrefSize(150, 50);
 		cancelButton.setOnAction(e -> {
-			disableMainButtons(false);
-				setVisibility(true, false, false);
-					((VBox)detailsBox.getChildren().get(0)).getChildren().get(1).setVisible(true);
+			clearInput();
+			setEditable(false);
 		});
-		//savebutton
 		saveButton.setPrefSize(150, 50);
 		saveButton.setOnAction(e -> {
-			Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?", ATDProgram.notificationStyle.CONFIRM);
-			changeConfirm.showAndWait();
 			save();
-			Notification changeNotify = new Notification(controller.getStage(), "Wijzigingen zijn doorgevoerd.", ATDProgram.notificationStyle.NOTIFY);
-			changeNotify.showAndWait();
-			disableMainButtons(false);
 		});
-		//listview
-		listView.setPrefSize(450, 520);
-		for (MaintenanceSession customer : controller.getMaintenanceSessions()) {
-			listView.getItems().add(new ListItem(customer));
-		}
+		//Listview
+		itemList.setPrefSize(450, 500);
+		for (MaintenanceSession session : controller.getMaintenanceSessions()) 
+			itemList.getItems().add(new ListRegel(session));
 		refreshList();
-		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if(newValue!=null)selectedMaintenanceSession = newValue.getMaintenanceSession();
-			else selectedMaintenanceSession = oldValue.getMaintenanceSession();
-			selectedListEntry();
+		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			select(newValue);
 		});
-		// secondButtonBox
-		secondButtonBox = new HBox(10,endSession, newProductButton, filterSelector);
-		//filter
-		filterSelector.setPrefSize(150, 50);
-		filterSelector.getItems().addAll("Filter: Geen", "Filter: Vandaag", "Filter: niet aangewezen");
-		filterSelector.getSelectionModel().selectFirst();
-		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
-			listView.getItems().clear();
-			if(newValue.intValue()==0){
-				for (MaintenanceSession session : controller.getMaintenanceSessions()) {
-					listView.getItems().add(new ListItem(session));
-				}
-			}
-			if(newValue.intValue()==1){
-				for (MaintenanceSession session : controller.getMaintenanceSessions()) {
-					if(session.getPlannedDate().isEqual(LocalDate.now()))
-					listView.getItems().add(new ListItem(session));
-				}
-			}
-			if(newValue.intValue()==2){
-				for (MaintenanceSession session : controller.getMaintenanceSessions()) {
-					if(session.getMechanic()==null)
-					listView.getItems().add(new ListItem(session));
-				}
-			}
-			refreshList();
+		//SearchField
+		searchInput.setPrefSize(112.5, 50);
+		searchInput.setOnMouseClicked(e -> {
+			if (searchInput.getText().equals("Zoek...")) {
+				searchInput.clear();
+			} else searchInput.selectAll();
 		});
-		
-		
-		//main Buttons
+		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
+				search(oldValue, newValue);
+		});
+		//Main Buttons and filter
 		mainButtonBox.getChildren().addAll(
 				newButton,
 				changeButton,
 				removeButton
 				);
-		//NewButton
 		newButton.setPrefSize(150, 50);
 		newButton.setOnAction(e -> {
-			setVisibility(true, false, false);
-			setVisibility(false, true, true);
+			clearInput();
+			setEditable(true);
 			isChanging = false;
-			if (!isChanging) {
-				((VBox)detailsBox.getChildren().get(0)).getChildren().get(1).setVisible(false);
-			}
-			disableMainButtons(true);
 		});
-		//addProductButton
-		newProductButton.setPrefSize(150, 50);
-		newProductButton.setOnAction(e->{
-			GetInfoNotification addProductNormal = new GetInfoNotification(controller, ATDProgram.notificationStyle.PRODUCTS);
-			addProductNormal.showAndWait();
-			if(addProductNormal.getKeuze().equals("confirm")){
-				selectedMaintenanceSession.usePart((Product)addProductNormal.getSelected());
-			 	refreshList();
-			 	selectedListEntry();
-			} 
-		});
-		//endSession button
-				endSession.setPrefSize(150, 50);
-				endSession.setOnAction(e -> {
-					GetInfoNotification addProductEndSession = new GetInfoNotification(controller, ATDProgram.notificationStyle.ENDSESSION);
-					addProductEndSession.showAndWait();
-					selectedMaintenanceSession.endSession(addProductEndSession.getInput());
-					Notification changeNotify = new Notification(controller .getStage(), "Wijzigingen zijn doorgevoerd.",ATDProgram.notificationStyle.NOTIFY);
-				 	changeNotify.showAndWait();
-				 	refreshList();
-				 	selectedListEntry();
-				});
-		//ChangeButton
 		changeButton.setPrefSize(150, 50);
 		changeButton.setOnAction(e -> {
-			if(selectedMaintenanceSession!=null){
-				disableMainButtons(true);
+			if(checkSelected()){
+				setEditable(true);
 				isChanging = true;
-				if (isChanging) {
-					((VBox)detailsBox.getChildren().get(0)).getChildren().get(1).setVisible(true);
-				}
-				change();
-			}else{
-				Notification errorNotify = new Notification(controller.getStage(), "Niets geselecteerd!", ATDProgram.notificationStyle.NOTIFY);
-				errorNotify.showAndWait();
 			}
 		});
-		//RemoveButton
 		removeButton.setPrefSize(150, 50);
 		removeButton.setOnAction(e->{
-			   Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze sessie wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
-			   removeConfirm.showAndWait();
-			   if (removeConfirm.getKeuze() == "confirm"){
-			   listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
-			   controller.addorRemoveMaintenanceSessions(selectedMaintenanceSession, true);
-			   Notification removeNotify = new Notification(controller.getStage(), "sessie is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
-			   removeNotify.showAndWait();}
-			  });
-		
+			remove();
+		});
+		endButton.setPrefSize(112.5, 50);
+		endButton.setOnAction(e -> {
+			endSession();
+		});
+		addButton.setPrefSize(112.5, 50);
+		addButton.setOnAction(e->{
+			addProduct();
+		});
+		filterSelector.setPrefSize(112.5, 50);
+		filterSelector.getItems().addAll("Filter: Geen", "Filter: Vandaag", "Filter: Niet aangewezen");
+		filterSelector.getSelectionModel().selectFirst();
+		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
+			changeFilter(newValue.intValue());
+		});
 		//Make & merge left & right
-		leftBox.getChildren().addAll (listView,secondButtonBox);
-		rightBox.getChildren().addAll(detailsBox,mainButtonBox);
+		searchFieldBox.getChildren().addAll(searchInput,filterSelector,addButton,endButton);
+		leftBox.getChildren().addAll (itemList, searchFieldBox);
+		rightBox.getChildren().addAll(details,mainButtonBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
-		mainBox.setSpacing(20);
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
 	}
-	 
 	/**
-	 * vult alle gegevens in de TextFields om aan te passen
+	 * fills the list with items that fit with the given filter
+	 * @param newValue selected filter
 	 */
-	private void change(){
-		dateInput.setValue(selectedMaintenanceSession.getPlannedDate());
-		if(selectedMaintenanceSession.getMechanic()==null)mechanicSelector.getSelectionModel().select(null);
-		mechanicSelector.getSelectionModel().select(selectedMaintenanceSession.getMechanic());
-		setVisibility(true, true, true);	
-		isChanging = true;
+	private void changeFilter(int newValue) {
+		switch(newValue){
+		case 0:{
+				itemList.getItems().clear();
+				for (MaintenanceSession session : controller.getMaintenanceSessions())
+					itemList.getItems().add(new ListRegel(session));
+				break;
+			}
+		case 1:{
+				itemList.getItems().clear();
+				for (MaintenanceSession session : controller.getMaintenanceSessions())
+					if(session.getPlannedDate().isEqual(LocalDate.now())) itemList.getItems().add(new ListRegel(session));
+				break;
+			}
+		case 2:{
+				itemList.getItems().clear();
+				for (MaintenanceSession session : controller.getMaintenanceSessions())
+					if(session.getMechanic()==null) itemList.getItems().add(new ListRegel(session));
+				break;
+			}
+		}
+		if(!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());	
+	}
+	private void addProduct(){
+		GetInfoNotification addProduct = new GetInfoNotification(controller, ATDProgram.notificationStyle.PRODUCTS);
+		addProduct.showAndWait();
+		if(addProduct.getKeuze().equals("confirm")){
+			selectedMaintenanceSession.usePart((Product)addProduct.getSelected());
+		 	refreshList();
+		} 
 	}
 	/**
-	 * slaat het nieuwe of aangepaste product op
+	 * ends the selected session
+	 */
+	private void endSession(){
+		GetInfoNotification endSession = new GetInfoNotification(controller, ATDProgram.notificationStyle.ENDSESSION);
+		endSession.showAndWait();
+		selectedMaintenanceSession.endSession(endSession.getInput());
+		Notification changeNotify = new Notification(controller .getStage(), "Klus is afgesloten",ATDProgram.notificationStyle.NOTIFY);
+	 	changeNotify.showAndWait();
+	 	refreshList();
+	}
+	/*
+	 * removes the selected item
+	 */
+	private void remove(){
+		if(checkSelected()){
+			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit session wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			removeConfirm.showAndWait();
+			if (removeConfirm.getKeuze().equals("confirm")){
+				itemList.getItems().remove(selectedMaintenanceSession);
+				controller.addorRemoveMaintenanceSessions(selectedMaintenanceSession, true);
+				Notification removeNotify = new Notification(controller.getStage(), "Het session is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				removeNotify.showAndWait();
+			}
+		}			
+	}
+	/**
+	 * saves the input in either a selected item or a new item
 	 */
 	private void save(){
-		if(isChanging){
-			selectedMaintenanceSession.setPlannedDate(dateInput.getValue());
-			selectedMaintenanceSession.setMechanic(mechanicSelector.getValue());
-			refreshList();
-			setVisibility(true, false, false);
-			
+		if(checkInput()){
+			if(isChanging){
+				Notification confirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+				confirm.showAndWait();
+				switch (confirm.getKeuze()) {
+					case "confirm": {
+						selectedMaintenanceSession.setPlannedDate(dateContent.getValue());
+						selectedMaintenanceSession.setMechanic(mechanicContent.getValue());
+						selectedMaintenanceSession.setNumberPlate(numberPlateContent.getText());
+						mechanicContent.setDisable(true);
+						refreshList();
+					}
+					case "cancel":
+						clearInput();
+						setEditable(false);
+				}
+			}
+			else{	
+				Notification confirm = new Notification(controller.getStage(),"Deze klus aanmaken?",ATDProgram.notificationStyle.CONFIRM);
+				confirm.showAndWait();
+				switch (confirm.getKeuze()) {
+					case "confirm": {
+						MaintenanceSession newMaintenanceSession = new MaintenanceSession(
+								numberPlateContent.getText(), 
+								controller.getStock(), 
+								dateContent.getValue());
+						controller.addorRemoveMaintenanceSessions(newMaintenanceSession, false);
+						itemList.getItems().add(new ListRegel(newMaintenanceSession));
+						setEditable(false);
+					}
+					case "cancel":	{
+						clearInput();
+						setEditable(false);
+					}
+				}
+			}
 		}
 		else{
-			MaintenanceSession newMaintenanceSession = new MaintenanceSession(
-					controller.getStock(),
-					dateInput.getValue()
-					);
-			controller.addorRemoveMaintenanceSessions(newMaintenanceSession, false);
-			listView.getItems().add(new ListItem(newMaintenanceSession));
-			setVisibility(true, false, false);
+			Notification notFilled = new Notification(controller.getStage(), "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			notFilled.showAndWait();
 		}
 	}
+	/**
+	 * refreshes the list and every item itself
+	 */
 	private void refreshList(){
 		content.clear();
-		content.addAll(listView.getItems());
-		listView.getItems().clear();
-		listView.getItems().addAll(content);
-		for (ListItem listItem : listView.getItems()) {
-			listItem.refresh();
+		content.addAll(itemList.getItems());
+		itemList.getItems().clear();
+		itemList.getItems().addAll(content);
+		for (ListRegel listRegel : itemList.getItems())
+			listRegel.refresh();
+	}
+	/**
+	 * selects an item and fills in the information
+	 * @param selectedValue the item to be selected
+	 */
+	private void select(ListRegel selectedValue){
+		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
+			if(selectedValue!=null)	selectedMaintenanceSession = selectedValue.getMaintenanceSession();
+			dateContent.setValue(selectedMaintenanceSession.getPlannedDate());
+			mechanicContent.setValue(selectedMaintenanceSession.getMechanic());
+			numberPlateContent.setText(selectedMaintenanceSession.getNumberPlate());
+			usedPartsContent.setText(Integer.toString(selectedMaintenanceSession.getTotalParts()));
 		}
 	}
-	private void selectedListEntry(){
-		if(selectedMaintenanceSession.getPlannedDate()!=null)
-			dateContent.setText(selectedMaintenanceSession.getPlannedDate().toString());
-		if(selectedMaintenanceSession.getMechanic()!=null)
-			mechanicContent.setText(selectedMaintenanceSession.getMechanic().getName());
-		usedPartsAmountContent.setText(Integer.toString(selectedMaintenanceSession.getTotalParts()));
+	/**
+	 * disables/enables the left or right side of the stage
+	 * @param enable
+	 */
+	private void setEditable(boolean enable){
+		cancelButton.setVisible(enable);
+		saveButton.setVisible(enable);
+		details.setDisable(!enable);
+		leftBox.setDisable(enable);
+	}	
+	/**
+	 * clears all the inputfields
+	 */
+	private void clearInput(){
+		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
+			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).clear();
+		mechanicContent.getSelectionModel().clearSelection();
+		dateContent.setValue(null);
 	}
-	private void setVisibility(boolean setDetailsVisible, boolean setTextFieldsVisible, boolean setButtonsVisible) {
-		cancelButton.setVisible(setButtonsVisible);
-		saveButton.setVisible(setButtonsVisible);	
-		if (!isChanging) {
-			newProductButton.setVisible(!setButtonsVisible);
-		}
-		else newProductButton.setVisible(true);
-		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
-			HBox box = (HBox) node1;
-			if(box.getChildren().size()>2){
-				Node input = box.getChildren().get(2);
-				Label content = ((Label)box.getChildren().get(1));
-				input.setVisible(setTextFieldsVisible);
-				content.setVisible(setDetailsVisible);
-				if(!setTextFieldsVisible){
-					if(input instanceof TextField){
-						((TextField)input).setPrefWidth(0);
-						((TextField)input).clear();
-					}
-					if(input instanceof DatePicker){
-						((DatePicker)input).setPrefWidth(0);
-						((DatePicker)input).setValue(null);
-					}
-					if(input instanceof ComboBox){
-						((ComboBox)input).setPrefWidth(0);
-						((ComboBox)input).getSelectionModel().select(null);
-					}
-					content.setPrefWidth(widthLabels*2);
-				}
-				else if (!setDetailsVisible) {
-					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels*2);
-					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels*2);
-					if(input instanceof ComboBox)	((ComboBox)input).setPrefWidth(widthLabels);
-					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
-					content.setPrefWidth(0);
-				}			
-				else if (setDetailsVisible || setTextFieldsVisible) {
-					if(input instanceof TextField)	((TextField)input).setPrefWidth(widthLabels);
-					if(input instanceof DatePicker)	((DatePicker)input).setPrefWidth(widthLabels);
-					if(input instanceof ComboBox)	((ComboBox)input).setPrefWidth(widthLabels);
-					if(input instanceof CheckBox)	((CheckBox)input).setPrefSize(25,25);
-					content.setPrefWidth(widthLabels);
+	/**
+	 * checks if all the inputfields are filled in
+	 * @return false if one of the inputs is null
+	 */
+	private boolean checkInput(){
+		boolean result = true;
+		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
+			if(((HBox)node1).getChildren().get(1) instanceof TextField){
+				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty()){
+					result = false;
 				}
 			}
-		}	
+		if(dateContent.getValue()==null)result = false;
+		return result;
 	}
+	/**
+	 * checks if an item is selected in the list
+	 * @return false if nothing is selected
+	 */
+	private boolean checkSelected() {
+		if(selectedMaintenanceSession == null) return false;
+		return true;
+	}
+	/**
+	 * searches through all items in the list
+	 * @param oldVal the previous content of the searchfield
+	 * @param newVal the new content of the searchfield
+	 */
 	public void search(String oldVal, String newVal) {
 		if (oldVal != null && (newVal.length() < oldVal.length())) {
-			listView.getItems().clear();
-			listView.getItems().addAll(content);
+			//actor has deleted a character, so reset the search
+			itemList.getItems().clear();
+			itemList.getItems().addAll(content);
 		}
-		listView.getItems().clear();
-		for (ListItem entry : content) {
-			if (entry.getMaintenanceSession().getMechanic()!=null) {
-			if (entry.getMaintenanceSession().getMechanic().getName().equals(newVal)) {
-				listView.getItems().add(entry);
-			}
+		itemList.getItems().clear();
+		//add an item if any item that exists contains any value that has been searched for
+		for (ListRegel entry : content) {		
+			if (entry.getMaintenanceSession().getNumberPlate().contains(newVal)){
+				itemList.getItems().add(entry);
 			}
 		}
 	}
-	public class ListItem extends HBox{
-		private Label itemDate = new Label(),itemMechanic = new Label(),itemAmount = new Label();
+	// this represents every item in the list, it has different constructor for every filter option
+	public class ListRegel extends HBox{
 		private MaintenanceSession session;
-		public ListItem(MaintenanceSession session){
+		private Label itemPlateLabel = new Label(),itemMechLabel = new Label(),itemPartsLabel = new Label();
+		public ListRegel(MaintenanceSession session){
 			this.session = session;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
-					itemDate,
-					new Separator(Orientation.VERTICAL),
-					itemMechanic,
-					new Separator(Orientation.VERTICAL),
-					itemAmount);
-			((Label)getChildren().get(0)).setPrefWidth(120);
-			((Label)getChildren().get(2)).setPrefWidth(100);
-			((Label)getChildren().get(4)).setPrefWidth(200);
+				itemMechLabel,
+				new Separator(Orientation.VERTICAL),
+				itemPlateLabel,
+				new Separator(Orientation.VERTICAL),
+				itemPartsLabel);
+				for (Node node : getChildren()) 
+					if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
+		/**
+		 * fills in all the labels with the latest values
+		 */
 		public void refresh(){
-			itemDate.setText(session.getPlannedDate().toString());
-			if(session.getMechanic()!=null)itemMechanic.setText(session.getMechanic().getName());
-			else itemMechanic.setText("Geen Mechanic");
-			itemAmount.setText(Integer.toString(session.getUsedParts().size()));
-			if (session.getMechanic() == null) {
-				newProductButton.setDisable(true);
-				endSession.setDisable(true);
-			} else {
-				newProductButton.setDisable(false);
-				endSession.setDisable(false);
-			}
+			if(session.getMechanic()==null)itemMechLabel.setText("geen Monteur");
+			else itemMechLabel.setText(session.getMechanic().getName());
+			itemPlateLabel.setText(session.getNumberPlate());
+			itemPartsLabel.setText(Integer.toString(session.getTotalParts()));
 		}
-		
+		/**
+		 * @return the object this item represents
+		 */
 		public MaintenanceSession getMaintenanceSession(){
 			return session;
 		}
 	}
-	public void disableMainButtons(boolean disable) {
-		newButton.setDisable(disable);
-		changeButton.setDisable(disable);
-		removeButton.setDisable(disable);
-	}
 }
-
 	

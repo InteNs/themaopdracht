@@ -165,7 +165,8 @@ public class ATDProgram extends Application {
 		addorRemoveMechanic(new Mechanic(4, "Piet", 15.0), false);
 		addorRemoveInvoice(new Invoice(), false);
 		addorRemoveInvoice(new Invoice(), false);
-		addorRemoveMaintenanceSessions(new MaintenanceSession(stock, LocalDate.now()), false);
+		addorRemoveMaintenanceSessions(new MaintenanceSession("13-LOL-3",stock, LocalDate.now()), false);
+		addorRemoveMaintenanceSessions(new MaintenanceSession("65-RGB-1",stock, LocalDate.now().plusDays(4)), false);
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveSupplier(new ProductSupplier("Shell", "Aarde", "1337AF", "De Maan"), false);
