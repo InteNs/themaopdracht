@@ -21,143 +21,143 @@ import notifications.Notification;
 
 public class CustomerScreen extends HBox {
 	private final ATDProgram controller;
-	
-	private final ComboBox<String> filterSelector = new ComboBox<String>();
-	private final ArrayList<ListRegel> content = new ArrayList<ListRegel>();
-	private final ListView<ListRegel> itemList = new ListView<ListRegel>();
-	private final CheckBox blackListContent = new CheckBox();
-	private final DatePicker datecontent = new DatePicker();
-	private Customer selectedCustomer = null;
-	private ListRegel selectedItem = null;
-	private boolean isChanging = false;
+
+	private final ComboBox<String> filterSelector 	= new ComboBox<String>();
+	private final ArrayList<ListItem> content 		= new ArrayList<ListItem>();
+	private final ListView<ListItem> itemList 		= new ListView<ListItem>();
+	private final CheckBox blackListContent 		= new CheckBox();
+	private final DatePicker datecontent 			= new DatePicker();
+	private Customer selectedObject;
+	private ListItem selectedItem;
+	private boolean isChanging;
 	private static final double
-			space_Small = 10,
-			space_Big = 20,
-			space_3 = 15,
-			button_3 = 140,
-			widthLabels = 120;
+	space_Small = 10,
+	space_Big 	= 20,
+	space_3 	= 15,
+	button_3 	= 140,
+	label_Normal= 120;
 	private final Button 
-			newButton = new Button("Nieuw"), 
-			changeButton = new Button("Aanpassen"), 
-			removeButton = new Button("Verwijderen"), 
-			cancelButton = new Button("Annuleren"),
-			saveButton = new Button("Opslaan");
+	newButton 		= new Button("Nieuw"), 
+	changeButton 	= new Button("Aanpassen"), 
+	removeButton 	= new Button("Verwijderen"), 
+	cancelButton 	= new Button("Annuleren"),
+	saveButton 		= new Button("Opslaan");
 	private final Label 
-			nameLabel = new Label("Naam:"),
-			addressLabel = new Label("Adres:"),
-			postalLabel = new Label("Postcode:"),
-			placeLabel = new Label("Plaats:"),
-			dateLabel = new Label("Geboortedatum:"),
-			emailLabel = new Label("Email:"),
-			phoneLabel = new Label("Telefoonnummer:"),
-			bankLabel = new Label("Banknummer:"),
-			blackListLabel = new Label("Blacklist:");
+	nameLabel 		= new Label("Naam:"),
+	addressLabel 	= new Label("Adres:"),
+	postalLabel 	= new Label("Postcode:"),
+	placeLabel 		= new Label("Plaats:"),
+	dateLabel 		= new Label("Geboortedatum:"),
+	emailLabel 		= new Label("Email:"),
+	phoneLabel 		= new Label("Telefoonnummer:"),
+	bankLabel 		= new Label("Banknummer:"),
+	blackListLabel  = new Label("Blacklist:");
 	private final TextField 
-			searchContent = new TextField("Zoek..."),
-			nameContent = new TextField(),
-			addressContent = new TextField(),
-			postalContent = new TextField(),
-			placeContent = new TextField(),
-			emailContent = new TextField(),
-			phoneContent = new TextField(),
-			bankContent = new TextField();
+	searchContent 	= new TextField("Zoek..."),
+	nameContent 	= new TextField(),
+	addressContent  = new TextField(),
+	postalContent 	= new TextField(),
+	placeContent 	= new TextField(),
+	emailContent 	= new TextField(),
+	phoneContent 	= new TextField(),
+	bankContent 	= new TextField();
 	private  final VBox
-			leftBox = new VBox(space_Big),
-			rightBox = new VBox(space_Big);
+	leftBox 		= new VBox(space_Big),
+	rightBox 		= new VBox(space_Big);
 	private  final HBox 
-			details = new HBox(space_Small), 
-			mainButtonBox = new HBox(space_3), 
-			searchFieldBox = new HBox(space_Small), 
-			mainBox = new HBox(space_Small);
+	detailsBox 		= new HBox(space_Small), 
+	control_MainBox	= new HBox(space_3), 
+	control_secBox 	= new HBox(space_Small), 
+	mainBox 		= new HBox(space_Small);
 	public CustomerScreen(ATDProgram controller) {
 		this.controller = controller;
-		//StockDetails
-		details.getChildren().addAll(
-				new VBox(space_Big,
-						new HBox(space_Big,nameLabel,		nameContent),
-						new HBox(space_Big,addressLabel,	addressContent),
-						new HBox(space_Big,postalLabel,		postalContent),
-						new HBox(space_Big,placeLabel,		placeContent),
-						new HBox(space_Big,dateLabel,		datecontent),
-						new HBox(space_Big,emailLabel,		emailContent),
-						new HBox(space_Big,phoneLabel,		phoneContent),
-						new HBox(space_Big,bankLabel,		bankContent),	
-						new HBox(space_Big,blackListLabel, 	blackListContent),
-						new HBox(space_Big,cancelButton,	saveButton)
-						));
-		details.setPrefSize(450, 520);
-		details.getStyleClass().add("stockDetails");
-		details.setPadding(new Insets(space_Big));
-		setEditable(false);
-		//set width for all detail labels and textfields
-		for (Node node : ((VBox)details.getChildren().get(0)).getChildren()) {
+		//set styles and sizes
+		////set width for all detail labels and textfields
+		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
-				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
+				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
 			if(((HBox)node).getChildren().get(1) instanceof TextField)
-				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(widthLabels*1.5);
+				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(label_Normal*1.5);
 		}
-		datecontent.setMinWidth(widthLabels*1.5);	
+		datecontent.setMinWidth(label_Normal*1.5);
+		detailsBox.setPadding(new Insets(space_Big));
+		mainBox.setPadding(new Insets(space_Big));
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
+		leftBox.getStyleClass().add("removeDisabledEffect");
+		detailsBox.setPrefSize		(450	 , 520);
+		itemList.setPrefSize		(450	 , 520);
+		searchContent.setPrefSize	(290	 , 50);
+		filterSelector.setPrefSize	(150	 , 50);
+		cancelButton.setPrefSize	(150	 , 50);
+		saveButton.setPrefSize		(150	 , 50);
+		newButton.setPrefSize		(button_3, 50);
+		changeButton.setPrefSize	(button_3, 50);
+		removeButton.setPrefSize	(button_3, 50);
+		//details
+		detailsBox.getChildren().addAll(
+				new VBox(space_Big,
+						new HBox(space_Big,nameLabel	 , nameContent),
+						new HBox(space_Big,addressLabel	 , addressContent),
+						new HBox(space_Big,postalLabel	 , postalContent),
+						new HBox(space_Big,placeLabel	 , placeContent),
+						new HBox(space_Big,dateLabel	 , datecontent),
+						new HBox(space_Big,emailLabel	 , emailContent),
+						new HBox(space_Big,phoneLabel	 , phoneContent),
+						new HBox(space_Big,bankLabel	 , bankContent),	
+						new HBox(space_Big,blackListLabel, blackListContent),
+						new HBox(space_Big,cancelButton	 , saveButton)
+						)
+				);
+		setEditable(false);
 		//Listview
-		itemList.setPrefSize(450, 520);
-		itemList.getStyleClass().add("removeDisabledEffect");
 		for (Customer customer : controller.getCustomers()) 
-			itemList.getItems().add(new ListRegel(customer));
+			itemList.getItems().add(new ListItem(customer));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
 		});
 		//SearchField
-		searchContent.setPrefSize(290, 50);
 		searchContent.setOnMouseClicked(e -> {
 			if (searchContent.getText().equals("Zoek...")) {
 				searchContent.clear();
 			} else searchContent.selectAll();
 		});
 		searchContent.textProperty().addListener((observable, oldValue, newValue) -> {
-				search(oldValue, newValue);
+			search(oldValue, newValue);
 		});
 		//buttons and filter
-		
-		cancelButton.setPrefSize(150, 50);
 		cancelButton.setOnAction(e -> {
 			clearInput();
 			setEditable(false);
 		});
-		saveButton.setPrefSize(150, 50);
 		saveButton.setOnAction(e -> {
 			save();
 		});
-		newButton.setPrefSize(button_3, 50);
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
 			isChanging = false;
 		});
-		changeButton.setPrefSize(button_3, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(button_3, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});
-		filterSelector.setPrefSize(150, 50);
 		filterSelector.getItems().addAll("Filter: Geen", "Filter: Service", "Filter: Onderhoud");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
 		//put everything in the right places
-		mainButtonBox.getChildren().addAll(newButton,changeButton,removeButton);
-		searchFieldBox.getChildren().addAll(searchContent,filterSelector);
-		leftBox.getChildren().addAll (itemList, searchFieldBox);
-		rightBox.getChildren().addAll(details,mainButtonBox);
+		control_MainBox.getChildren().addAll(newButton,changeButton,removeButton);
+		control_secBox.getChildren().addAll(searchContent,filterSelector);
+		leftBox.getChildren().addAll (itemList, control_secBox);
+		rightBox.getChildren().addAll(detailsBox,control_MainBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
-		mainBox.setPadding(new Insets(space_Big));
-		leftBox.getStyleClass().add("removeDisabledEffect");
 		this.getChildren().add(mainBox);
 	}
 	/**
@@ -167,23 +167,23 @@ public class CustomerScreen extends HBox {
 	private void changeFilter(int newValue) {
 		switch(newValue){
 		case 0:{
-				itemList.getItems().clear();
-				for (Customer customer : controller.getCustomers())
-					itemList.getItems().add(new ListRegel(customer));
-				break;
-			}
+			itemList.getItems().clear();
+			for (Customer customer : controller.getCustomers())
+				itemList.getItems().add(new ListItem(customer));
+			break;
+		}
 		case 1:{
-				itemList.getItems().clear();
-				for (Customer customer : controller.getRemindList(false))
-					itemList.getItems().add(new ListRegel(customer));
-				break;
-			}
+			itemList.getItems().clear();
+			for (Customer customer : controller.getRemindList(false))
+				itemList.getItems().add(new ListItem(customer));
+			break;
+		}
 		case 2:{
-				itemList.getItems().clear();
-				for (Customer customer : controller.getRemindList(true))
-					itemList.getItems().add(new ListRegel(customer));
-				break;
-			}
+			itemList.getItems().clear();
+			for (Customer customer : controller.getRemindList(true))
+				itemList.getItems().add(new ListItem(customer));
+			break;
+		}
 		}
 		if(!searchContent.getText().equals("Zoek..."))search(null, searchContent.getText());	
 	}
@@ -196,7 +196,7 @@ public class CustomerScreen extends HBox {
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
-				controller.addorRemoveCustomer(selectedCustomer, true);
+				controller.addorRemoveCustomer(selectedObject, true);
 				Notification removeNotify = new Notification(controller.getStage(), "Het customer is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 				removeNotify.showAndWait();
 				refreshList();
@@ -212,31 +212,31 @@ public class CustomerScreen extends HBox {
 				Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
 				changeConfirm.showAndWait();
 				switch (changeConfirm.getKeuze()) {
-					case "confirm": {
-						selectedCustomer.setName(nameContent.getText());
-						selectedCustomer.setAddress(addressContent.getText());
-						selectedCustomer.setPostal(postalContent.getText());
-						selectedCustomer.setPlace(placeContent.getText());
-						selectedCustomer.setDateOfBirth(datecontent.getValue());
-						selectedCustomer.setEmail(emailContent.getText());
-						selectedCustomer.setTel(phoneContent.getText());
-						selectedCustomer.setBankAccount(bankContent.getText());
-						selectedCustomer.setOnBlackList(blackListContent.isSelected());
-						setEditable(false);
-						break;
-					}
-					case "cancel":
-						clearInput();
-						setEditable(false);
-						break;
+				case "confirm": {
+					selectedObject.setName(nameContent.getText());
+					selectedObject.setAddress(addressContent.getText());
+					selectedObject.setPostal(postalContent.getText());
+					selectedObject.setPlace(placeContent.getText());
+					selectedObject.setDateOfBirth(datecontent.getValue());
+					selectedObject.setEmail(emailContent.getText());
+					selectedObject.setTel(phoneContent.getText());
+					selectedObject.setBankAccount(bankContent.getText());
+					selectedObject.setOnBlackList(blackListContent.isSelected());
+					setEditable(false);
+					break;
+				}
+				case "cancel":
+					clearInput();
+					setEditable(false);
+					break;
 				}
 			}
 			else{	
 				Notification confirm = new Notification(controller.getStage(),"Deze klant aanmaken?",ATDProgram.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
-					case "confirm": {
-						 Customer newCustomer = new Customer(
+				case "confirm": {
+					Customer newCustomer = new Customer(
 							nameContent.getText(), 
 							addressContent.getText(), 
 							postalContent.getText(), 
@@ -246,17 +246,17 @@ public class CustomerScreen extends HBox {
 							phoneContent.getText(),
 							bankContent.getText(),
 							blackListContent.isSelected()
-						);		
-						 controller.addorRemoveCustomer(newCustomer, false);
-						 itemList.getItems().add(new ListRegel(newCustomer));
-						 setEditable(false);
-						 break;
-					}
-					case "cancel":	{
-						clearInput();
-						setEditable(false);
-						break;
-					}
+							);		
+					controller.addorRemoveCustomer(newCustomer, false);
+					itemList.getItems().add(new ListItem(newCustomer));
+					setEditable(false);
+					break;
+				}
+				case "cancel":	{
+					clearInput();
+					setEditable(false);
+					break;
+				}
 				}
 			}
 			refreshList();
@@ -274,27 +274,27 @@ public class CustomerScreen extends HBox {
 		content.addAll(itemList.getItems());
 		itemList.getItems().clear();
 		itemList.getItems().addAll(content);
-		for (ListRegel listRegel : itemList.getItems())
-			listRegel.refresh();
+		for (ListItem listItem : itemList.getItems())
+			listItem.refresh();
 		select(selectedItem);
 	}
 	/**
 	 * selects an item
 	 * @param selectedValue the item to be selected
 	 */
-	private void select(ListRegel selectedValue){
+	private void select(ListItem selectedValue){
 		if(selectedValue!= null){
 			selectedItem = selectedValue;
-			selectedCustomer = selectedValue.getCustomer();
-			nameContent.setText(selectedCustomer.getName());
-			addressContent.setText(selectedCustomer.getAddress());
-			postalContent.setText(selectedCustomer.getPostal());
-			placeContent.setText(selectedCustomer.getPlace());
-			datecontent.setValue(selectedCustomer.getDateOfBirth());
-			emailContent.setText(selectedCustomer.getEmail());
-			phoneContent.setText(selectedCustomer.getTel());
-			bankContent.setText(selectedCustomer.getBankAccount());
-			blackListContent.setSelected(selectedCustomer.isOnBlackList());
+			selectedObject = selectedValue.getCustomer();
+			nameContent.setText(selectedObject.getName());
+			addressContent.setText(selectedObject.getAddress());
+			postalContent.setText(selectedObject.getPostal());
+			placeContent.setText(selectedObject.getPlace());
+			datecontent.setValue(selectedObject.getDateOfBirth());
+			emailContent.setText(selectedObject.getEmail());
+			phoneContent.setText(selectedObject.getTel());
+			bankContent.setText(selectedObject.getBankAccount());
+			blackListContent.setSelected(selectedObject.isOnBlackList());
 		}
 	}
 	/**
@@ -304,14 +304,14 @@ public class CustomerScreen extends HBox {
 	private void setEditable(boolean enable){
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
-		details.setDisable(!enable);
+		detailsBox.setDisable(!enable);
 		leftBox.setDisable(enable);
 	}	
 	/**
 	 * clears all the inputfields
 	 */
 	private void clearInput(){
-		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).clear();
 		datecontent.setValue(null);
 		blackListContent.setSelected(false);
@@ -321,7 +321,7 @@ public class CustomerScreen extends HBox {
 	 * @return false if one of the inputs is null
 	 */
 	private boolean checkInput(){
-		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField){
 				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty()){
 					return false;
@@ -334,7 +334,7 @@ public class CustomerScreen extends HBox {
 	 * @return false if nothing is selected
 	 */
 	private boolean checkSelected() {
-		if(selectedCustomer == null) return false;
+		if(selectedObject == null) return false;
 		return true;
 	}
 	/**
@@ -350,7 +350,7 @@ public class CustomerScreen extends HBox {
 		}
 		itemList.getItems().clear();
 		//add an item if any item that exists contains any value that has been searched for
-		for (ListRegel entry : content) {		
+		for (ListItem entry : content) {		
 			if (entry.getCustomer().getName().contains(newVal)
 					|| entry.getCustomer().getEmail().contains(newVal)
 					|| entry.getCustomer().getName().contains(newVal)) {
@@ -359,22 +359,22 @@ public class CustomerScreen extends HBox {
 		}
 	}
 	// this class represents every item in the list
-	public class ListRegel extends HBox{
+	public class ListItem extends HBox{
 		private Customer customer;
 		private Label itemPostalLabel = new Label(),itemNameLabel = new Label(),itemEmailLabel = new Label();
-		public ListRegel(Customer customer){
+		public ListItem(Customer customer){
 			//no filter
 			this.customer = customer;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
-				itemNameLabel,
-				new Separator(Orientation.VERTICAL),
-				itemPostalLabel,
-				new Separator(Orientation.VERTICAL),
-				itemEmailLabel);
-				for (Node node : getChildren()) 
-					if(node instanceof Label)((Label)node).setPrefWidth(100);
+					itemNameLabel,
+					new Separator(Orientation.VERTICAL),
+					itemPostalLabel,
+					new Separator(Orientation.VERTICAL),
+					itemEmailLabel);
+			for (Node node : getChildren()) 
+				if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
 		/**
 		 * fills in all the labels with the latest values

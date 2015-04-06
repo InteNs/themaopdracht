@@ -22,53 +22,54 @@ import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class MaintenanceScreen extends HBox {
-	private ATDProgram controller;
-	private MaintenanceSession selectedMaintenanceSession;
+	private final ATDProgram controller;
+	
+	private final ComboBox<String> filterSelector 	= new ComboBox<String>();
+	private final ComboBox<Mechanic> mechanicContent= new ComboBox<Mechanic>();
+	private final ArrayList<ListRegel> content 		= new ArrayList<ListRegel>();
+	private final ListView<ListRegel> itemList 		= new ListView<ListRegel>();
+	private final DatePicker dateContent 			= new DatePicker();
+	private MaintenanceSession selectedObject;
 	private ListRegel selectedItem;
-	private ComboBox<String> filterSelector = new ComboBox<String>();
-	private ComboBox<Mechanic> mechanicContent = new ComboBox<Mechanic>();
-	private ArrayList<ListRegel> content = new ArrayList<ListRegel>();
-	private ListView<ListRegel> itemList = new ListView<ListRegel>();
-	private DatePicker dateContent = new DatePicker();
+	private boolean isChanging;
 	private static final double
 			space_Small = 10,
-			space_Big = 20,
-			space_3 = 15,
-			button_3 = 140,
-			space_4 = 6,
-			button_4 = 108,
-			widthLabels = 120;
-	private boolean isChanging = false;
-	private Button 
-			newButton = new Button("Nieuw"), 
-			changeButton = new Button("Aanpassen"), 
-			removeButton = new Button("Verwijderen"), 
-			cancelButton = new Button("Annuleren"),
-			saveButton = new Button("Opslaan"),
-			addButton = new Button("+Product"),
-			endButton = new Button("Afronden");
-	private Label 
-			dateLabel = new Label("Datum: "),
-			mechanicLabel = new Label("Monteur: "), 
-			usedPartsLabel = new Label("Aantal onderdelen: "),
-			numberPlateLabel = new Label("Kenteken: ");
-	private TextField 
-			searchInput = new TextField("Zoek..."), 
-			usedPartsContent = new TextField(),
-			numberPlateContent = new TextField();
-	private VBox
-			leftBox = new VBox(space_Big),
-			rightBox = new VBox(space_Big);
-	private HBox 
-			details = new HBox(space_Small), 
-			mainButtonBox = new HBox(space_3), 
-			searchFieldBox = new HBox(space_4), 
-			mainBox = new HBox(space_Small);
+			space_Big 	= 20,
+			space_3 	= 15,
+			button_3 	= 140,
+			space_4 	= 6,
+			button_4 	= 108,
+			label_Normal= 120;
+	private final Button 
+			newButton 			= new Button("Nieuw"), 
+			changeButton 		= new Button("Aanpassen"), 
+			removeButton 		= new Button("Verwijderen"), 
+			cancelButton 		= new Button("Annuleren"),
+			saveButton 			= new Button("Opslaan"),
+			addButton 			= new Button("+Product"),
+			endButton 			= new Button("Afronden");
+	private final Label 
+			dateLabel 			= new Label("Datum: "),
+			mechanicLabel 		= new Label("Monteur: "), 
+			usedPartsLabel 		= new Label("Aantal onderdelen: "),
+			numberPlateLabel	= new Label("Kenteken: ");
+	private final TextField 
+			searchContent 		= new TextField("Zoek..."), 
+			usedPartsContent 	= new TextField(),
+			numberPlateContent  = new TextField();
+	private final VBox
+			leftBox 			= new VBox(space_Big),
+			rightBox 			= new VBox(space_Big);
+	private final HBox 
+			detailsBox 			= new HBox(space_Small), 
+			control_MainBox 	= new HBox(space_3), 
+			control_secBox 		= new HBox(space_4), 
+			mainBox 			= new HBox(space_Small);
 	public MaintenanceScreen(ATDProgram controller) {
 		this.controller = controller;
 		//StockDetails
 		mechanicContent.getItems().addAll(controller.getMechanics());
-		details.getChildren().addAll(
+		detailsBox.getChildren().addAll(
 				new VBox(20,
 						new HBox(20,dateLabel,		 dateContent),
 						new HBox(20,mechanicLabel,	 mechanicContent),
@@ -76,19 +77,19 @@ public class MaintenanceScreen extends HBox {
 						new HBox(20,numberPlateLabel,numberPlateContent),
 						new HBox(20,cancelButton,	 saveButton)
 						));
-		details.setPrefSize(450, 520);
-		details.getStyleClass().add("stockDetails");
-		details.setPadding(new Insets(20));
+		detailsBox.setPrefSize(450, 520);
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
+		detailsBox.setPadding(new Insets(space_Big));
 		setEditable(false);
 		//set width for all detail labels and textfields
-		for (Node node : ((VBox)details.getChildren().get(0)).getChildren()) {
+		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
-				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
+				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
 			if(((HBox)node).getChildren().get(1) instanceof TextField)
-				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(widthLabels*1.5);
+				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(label_Normal*1.5);
 		}
-		dateContent.setMinWidth(widthLabels*1.5);
-		mechanicContent.setMinWidth(widthLabels*1.5);
+		dateContent.setMinWidth(label_Normal*1.5);
+		mechanicContent.setMinWidth(label_Normal*1.5);
 		// save/cancel button
 		cancelButton.setPrefSize(150, 50);
 		cancelButton.setOnAction(e -> {
@@ -108,17 +109,17 @@ public class MaintenanceScreen extends HBox {
 			select(newValue);
 		});
 		//SearchField
-		searchInput.setPrefSize(button_4, 50);
-		searchInput.setOnMouseClicked(e -> {
-			if (searchInput.getText().equals("Zoek...")) {
-				searchInput.clear();
-			} else searchInput.selectAll();
+		searchContent.setPrefSize(button_4, 50);
+		searchContent.setOnMouseClicked(e -> {
+			if (searchContent.getText().equals("Zoek...")) {
+				searchContent.clear();
+			} else searchContent.selectAll();
 		});
-		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
+		searchContent.textProperty().addListener((observable, oldValue, newValue) -> {
 				search(oldValue, newValue);
 		});
 		//Main Buttons and filter
-		mainButtonBox.getChildren().addAll(
+		control_MainBox.getChildren().addAll(
 				newButton,
 				changeButton,
 				removeButton
@@ -155,9 +156,9 @@ public class MaintenanceScreen extends HBox {
 			changeFilter(newValue.intValue());
 		});
 		//Make & merge left & right
-		searchFieldBox.getChildren().addAll(searchInput,filterSelector,addButton,endButton);
-		leftBox.getChildren().addAll (itemList, searchFieldBox);
-		rightBox.getChildren().addAll(details,mainButtonBox);
+		control_secBox.getChildren().addAll(searchContent,filterSelector,addButton,endButton);
+		leftBox.getChildren().addAll (itemList, control_secBox);
+		rightBox.getChildren().addAll(detailsBox,control_MainBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
@@ -194,7 +195,7 @@ public class MaintenanceScreen extends HBox {
 		}
 		}
 		
-		if(!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());	
+		if(!searchContent.getText().equals("Zoek..."))search(null, searchContent.getText());	
 	}
 	/**
 	 * adds a product to the session
@@ -204,7 +205,7 @@ public class MaintenanceScreen extends HBox {
 			GetInfoNotification addProduct = new GetInfoNotification(controller, ATDProgram.notificationStyle.PRODUCTS);
 			addProduct.showAndWait();
 			if(addProduct.getKeuze().equals("confirm")){
-				if(selectedMaintenanceSession.usePart((Product)addProduct.getSelected())){
+				if(selectedObject.usePart((Product)addProduct.getSelected())){
 					refreshList();
 				}
 				else {
@@ -221,7 +222,7 @@ public class MaintenanceScreen extends HBox {
 		if(checkSelected() && checkMechanic()){
 			GetInfoNotification endSession = new GetInfoNotification(controller, ATDProgram.notificationStyle.ENDSESSION);
 			endSession.showAndWait();
-			selectedMaintenanceSession.endSession(endSession.getInput());
+			selectedObject.endSession(endSession.getInput());
 			Notification changeNotify = new Notification(controller .getStage(), "Klus is afgesloten",ATDProgram.notificationStyle.NOTIFY);
 			changeNotify.showAndWait();
 			refreshList();
@@ -236,7 +237,7 @@ public class MaintenanceScreen extends HBox {
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
-				controller.addorRemoveMaintenanceSessions(selectedMaintenanceSession, true);
+				controller.addorRemoveMaintenanceSessions(selectedObject, true);
 				Notification removeNotify = new Notification(controller.getStage(), "Het session is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 				removeNotify.showAndWait();
 			}
@@ -252,9 +253,9 @@ public class MaintenanceScreen extends HBox {
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
-						selectedMaintenanceSession.setPlannedDate(dateContent.getValue());
-						selectedMaintenanceSession.setMechanic(mechanicContent.getValue());
-						selectedMaintenanceSession.setNumberPlate(numberPlateContent.getText());
+						selectedObject.setPlannedDate(dateContent.getValue());
+						selectedObject.setMechanic(mechanicContent.getValue());
+						selectedObject.setNumberPlate(numberPlateContent.getText());
 						mechanicContent.setDisable(true);
 						refreshList();
 					}
@@ -309,11 +310,11 @@ public class MaintenanceScreen extends HBox {
 		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
 			if(selectedValue!=null)	{
 				selectedItem = selectedValue;
-				selectedMaintenanceSession = selectedValue.getMaintenanceSession();
-				dateContent.setValue(selectedMaintenanceSession.getPlannedDate());
-				mechanicContent.setValue(selectedMaintenanceSession.getMechanic());
-				numberPlateContent.setText(selectedMaintenanceSession.getNumberPlate());
-				usedPartsContent.setText(Integer.toString(selectedMaintenanceSession.getTotalParts()));
+				selectedObject = selectedValue.getMaintenanceSession();
+				dateContent.setValue(selectedObject.getPlannedDate());
+				mechanicContent.setValue(selectedObject.getMechanic());
+				numberPlateContent.setText(selectedObject.getNumberPlate());
+				usedPartsContent.setText(Integer.toString(selectedObject.getTotalParts()));
 			}
 		}
 	}
@@ -324,14 +325,14 @@ public class MaintenanceScreen extends HBox {
 	private void setEditable(boolean enable){
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
-		details.setDisable(!enable);
+		detailsBox.setDisable(!enable);
 		leftBox.setDisable(enable);
 	}	
 	/**
 	 * clears all the inputfields
 	 */
 	private void clearInput(){
-		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).clear();
 		mechanicContent.getSelectionModel().clearSelection();
 		dateContent.setValue(null);
@@ -342,7 +343,7 @@ public class MaintenanceScreen extends HBox {
 	 */
 	private boolean checkInput(){
 		boolean result = true;
-		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField){
 				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty()){
 					result = false;
@@ -356,7 +357,7 @@ public class MaintenanceScreen extends HBox {
 	 * @return false if nothing is selected
 	 */
 	private boolean checkSelected() {
-		if(selectedMaintenanceSession == null) return false;
+		if(selectedObject == null) return false;
 		return true;
 	}
 	/**
@@ -364,7 +365,7 @@ public class MaintenanceScreen extends HBox {
 	 * @return true if a mechanic is found
 	 */
 	private boolean checkMechanic(){
-		if(selectedMaintenanceSession.getMechanic()==null){
+		if(selectedObject.getMechanic()==null){
 			Notification notification = new Notification(controller.getStage(), "Eerst een montuer toewijzen!", ATDProgram.notificationStyle.NOTIFY);
 			notification.showAndWait();
 			return false;

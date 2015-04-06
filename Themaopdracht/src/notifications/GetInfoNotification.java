@@ -122,7 +122,7 @@ public class GetInfoNotification extends Stage {
 				setTitle("Factuur afhandelen");
 				melding.setText("Kies uw betaalmethode:");
 				ok.setText("Betalen");
-				paymentSelector.getItems().addAll(FXCollections.observableArrayList(Invoice.PayMethod.values()));
+				paymentSelector.getItems().addAll(Invoice.PayMethod.values());
 				notification.getChildren().addAll(paymentSelector, buttonBox);				
 				break;
 			}

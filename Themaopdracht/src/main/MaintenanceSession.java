@@ -13,6 +13,7 @@ public class MaintenanceSession {
 	
 	private HashMap<Product, Integer> usedParts;
 	public MaintenanceSession(String numberPlate, Stock stock,LocalDate plannedDate) {
+		this.stock = stock;
 		this.numberPlate = numberPlate;
 		this.plannedDate = plannedDate;
 		usedParts = new HashMap<Product, Integer>();

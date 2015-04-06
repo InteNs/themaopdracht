@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sequence-diagram version="1.1.8" icons="true">  
-  <object id="1" language="java" name="screens.CustomerScreen.ListRegel" project="Themaopdracht" 
+  <object id="1" language="java" name="screens.CustomerScreen.ListItem" project="Themaopdracht" 
     file="/Themaopdracht/src/screens/CustomerScreen.java" binary="false" label="listRegel" type="class" autoSize="true">    
     <position height="-1" width="-1" x="118" y="0"/>  
   </object>  
@@ -228,7 +228,7 @@
       <position height="21" width="0" x="0" y="1939"/>    
     </execution>  
   </object>  
-  <object id="123" language="java" name="screens.CustomerScreen.ListRegel" project="Themaopdracht" 
+  <object id="123" language="java" name="screens.CustomerScreen.ListItem" project="Themaopdracht" 
     file="/Themaopdracht/src/screens/CustomerScreen.java" binary="false" type="class" autoSize="true">    
     <position height="0" width="0" x="0" y="0"/>    
     <execution id="91">      
@@ -426,7 +426,7 @@
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="89"/>  
   </message>  
-  <message id="90" operation="ListRegel(main.Customer)">    
+  <message id="90" operation="ListItem(main.Customer)">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="91"/>  
   </message>  

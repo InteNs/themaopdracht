@@ -28,54 +28,53 @@ import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class InvoiceScreen extends HBox {
-	private ATDProgram controller;
+	private final ATDProgram controller;
+	private final ComboBox<String> filterSelector 	= new ComboBox<String>();
+	private final ComboBox<Customer> customerContent= new ComboBox<Customer>();
+	private final CheckBox isPayedContent 			= new CheckBox();
+	private final ArrayList<ListRegel> content 		= new ArrayList<ListRegel>();
+	private final ListView<ListRegel> itemList 		= new ListView<ListRegel>();
+	private final ListView<InvoiceItem> contentList = new ListView<InvoiceItem>();
+	private final DatePicker dateContent 			= new DatePicker();
 	private Invoice selectedInvoice;
 	private ListRegel selectedItem;
-	private final ComboBox<String> filterSelector = new ComboBox<String>();
-	private final ComboBox<Customer> customerContent = new ComboBox<Customer>();
-	private final CheckBox isPayedContent = new CheckBox();
-	private final ArrayList<ListRegel> content = new ArrayList<ListRegel>();
-	private final ListView<ListRegel> itemList = new ListView<ListRegel>();
-	private final ListView<InvoiceItem> contentList = new ListView<InvoiceItem>();
-	private final DatePicker dateContent = new DatePicker();
+	private boolean isChanging;
 	private static final double
-			space_small = 10,
-			space_tiny = 6,
+			space_Medium = 10,
 			space_big = 20,
-			button_small = 108,
-			widthLabels = 120;
-	private boolean isChanging = false;
-	private Button 
-			newButton = new Button("Nieuw"),  
-			payButton = new Button("Betalen"),
-			removeButton = new Button("Verwijderen"), 
-			cancelButton = new Button("Annuleren"),
-			changeButton = new Button("Aanpassen"),
-			saveButton = new Button("Opslaan"),
-			addMaintenanceButton = new Button("+Onderhoud"),
-			addRefuelButton = new Button("+Tanksessie"),
-			addParkingButton = new Button("+reservering");
-	private Label 
-			dateLabel = new Label("Datum: "),
-			priceLabel = new Label("Prijs: "), 
-			isPayedLabel = new Label("Is betaalt: "),
-			customerLabel = new Label("Klant: ");
-	private TextField 
-//			searchInput = new TextField("Zoek..."), 
-			priceContent = new TextField();
-	private VBox
-			leftBox = new VBox(space_big),
-			rightBox = new VBox(space_big);
-	private HBox 
-			details = new HBox(space_small), 
-			mainButtonBox = new HBox(space_tiny), 
-			searchFieldBox = new HBox(space_tiny), 
-			mainBox = new HBox(space_small);
+			space_4 = 6,
+			button_4 = 108,
+			label_Normal = 120;
+	private final Button 
+			newButton 	 		= new Button("Nieuw"),  
+			payButton 	 		= new Button("Betalen"),
+			removeButton 		= new Button("Verwijderen"), 
+			cancelButton 		= new Button("Annuleren"),
+			changeButton 		= new Button("Aanpassen"),
+			saveButton 	 		= new Button("Opslaan"),
+			addMaintenanceButton= new Button("+Onderhoud"),
+			addRefuelButton 	= new Button("+Tanksessie"),
+			addParkingButton 	= new Button("+reservering");
+	private final Label 
+			dateLabel 	  		= new Label("Datum: "),
+			priceLabel	  		= new Label("Prijs: "), 
+			isPayedLabel  		= new Label("Is betaalt: "),
+			customerLabel 		= new Label("Klant: ");
+	private final TextField 
+			priceContent  		= new TextField();
+	private final VBox
+			leftBox 			= new VBox(space_big),
+			rightBox 			= new VBox(space_big);
+	private final HBox 	
+			detailsBox 			= new HBox(space_Medium), 
+			control_MainBox 	= new HBox(space_4), 
+			control_secBox 		= new HBox(space_4), 
+			mainBox 			= new HBox(space_Medium);
 	public InvoiceScreen(ATDProgram controller) {
 		this.controller = controller;
 		//StockDetails
 		customerContent.getItems().addAll(controller.getCustomers());
-		details.getChildren().addAll(
+		detailsBox.getChildren().addAll(
 				new VBox(space_big,
 						new HBox(space_big,dateLabel,		dateContent),
 						new HBox(space_big,priceLabel,	 	priceContent),
@@ -84,18 +83,18 @@ public class InvoiceScreen extends HBox {
 						new HBox(space_big,cancelButton,	saveButton),
 						new HBox(contentList)
 						));
-		details.setPrefSize(450, 520);
-		details.getStyleClass().add("stockDetails");
-		details.setPadding(new Insets(space_big));
+		detailsBox.setPrefSize(450, 520);
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
+		detailsBox.setPadding(new Insets(space_big));
 		setEditable(false);
 		//set width for all detail labels and textfields
-		for (Node node : ((VBox)details.getChildren().get(0)).getChildren()) {
+		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
-				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
+				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
 		}
-		priceContent.setMinWidth(widthLabels*1.5);
-		dateContent.setMinWidth(widthLabels*1.5);
-		customerContent.setMinWidth(widthLabels*1.5);
+		priceContent.setMinWidth(label_Normal*1.5);
+		dateContent.setMinWidth(label_Normal*1.5);
+		customerContent.setMinWidth(label_Normal*1.5);
 		//Listview
 		contentList.setPrefSize(410, 300);
 		itemList.setPrefSize(450, 520);
@@ -116,61 +115,61 @@ public class InvoiceScreen extends HBox {
 //				search(oldValue, newValue);
 //		});
 		//Buttons and filter
-		addRefuelButton.setPrefSize(button_small, 50);
+		addRefuelButton.setPrefSize(button_4, 50);
 		addRefuelButton.setOnAction(e -> {
 			addFuel();
 		});
-		addMaintenanceButton.setPrefSize(button_small, 50);
+		addMaintenanceButton.setPrefSize(button_4, 50);
 		addMaintenanceButton.setOnAction(e -> {
 			addMaintenance();
 		});
-		addParkingButton.setPrefSize(button_small, 50);
+		addParkingButton.setPrefSize(button_4, 50);
 		addParkingButton.setOnAction(e->{
 			addParking();
 		});
-		newButton.setPrefSize(button_small, 50);
+		newButton.setPrefSize(button_4, 50);
 		newButton.setOnAction(e -> {
 			isChanging = false;
 			save();
 		});
-		payButton.setPrefSize(button_small, 50);
+		payButton.setPrefSize(button_4, 50);
 		payButton.setOnAction(e->{
 			pay();
 		});
-		changeButton.setPrefSize(button_small, 50);
+		changeButton.setPrefSize(button_4, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(button_small, 50);
+		removeButton.setPrefSize(button_4, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});
-		cancelButton.setPrefSize(button_small, 50);
+		cancelButton.setPrefSize(button_4, 50);
 		cancelButton.setOnAction(e -> {
 			setEditable(false);
 		});
-		saveButton.setPrefSize(button_small, 50);
+		saveButton.setPrefSize(button_4, 50);
 		saveButton.setOnAction(e -> {
 			save();
 		});
-		filterSelector.setPrefSize(button_small, 50);
+		filterSelector.setPrefSize(button_4, 50);
 		filterSelector.getItems().addAll("Filter: Geen", "Filter: Achterstand", "Filter: Anoniem", "Filter: Betaalt");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
 		//Make & merge left & right
-		mainButtonBox.getChildren().addAll(newButton,changeButton,payButton,removeButton);
-		searchFieldBox.getChildren().addAll(addMaintenanceButton,addRefuelButton,addParkingButton,filterSelector);
-		leftBox.getChildren().addAll (itemList, searchFieldBox);
-		rightBox.getChildren().addAll(details,mainButtonBox);
+		control_MainBox.getChildren().addAll(newButton,changeButton,payButton,removeButton);
+		control_secBox.getChildren().addAll(addMaintenanceButton,addRefuelButton,addParkingButton,filterSelector);
+		leftBox.getChildren().addAll (itemList, control_secBox);
+		rightBox.getChildren().addAll(detailsBox,control_MainBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setPadding(new Insets(space_big));
 		this.getChildren().add(mainBox);
-		System.out.println(details.getWidth());
+		System.out.println(detailsBox.getWidth());
 	}
 	/**
 	 * fills the list with items that fit with the given filter

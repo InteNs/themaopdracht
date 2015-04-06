@@ -23,160 +23,150 @@ import notifications.Notification;
 
 public class StockScreen extends HBox {
 	private final ATDProgram controller;
-	private Product selectedProduct;
-	private ListRegel selectedItem;
 	private final ComboBox<ProductSupplier> supplierContent = new ComboBox<ProductSupplier>();
-	private final ComboBox<String> filterSelector = new ComboBox<String>();
-	private final ArrayList<ListRegel> content = new ArrayList<ListRegel>();
-	private final ListView<ListRegel> itemList = new ListView<ListRegel>();
+	private final ComboBox<String> filterSelector 			= new ComboBox<String>();
+	private final ArrayList<ListItem> content 				= new ArrayList<ListItem>();
+	private final ListView<ListItem> itemList 				= new ListView<ListItem>();
+	private Product selectedObject;
+	private ListItem selectedItem;
+	private boolean isChanging;
 	private static final double
-			space_small = 10,
-			space_medium = 15,
-			space_big = 20,
-			button_small = 140,
-			widthLabels = 120;
-			
-	private boolean isChanging = false;
+	space_Small = 10,
+	space_Big 	= 20,
+	space_3 	= 15,	
+	button_3 	= 140,
+	label_Normal= 120;
 	private final Button 
-			newButton = new Button("Nieuw"), 
-			changeButton = new Button("Aanpassen"), 
-			removeButton = new Button("Verwijderen"), 
-			cancelButton = new Button("Annuleren"),
-			saveButton = new Button("Opslaan");
-			Button proceed = new Button("Opboeken");
-			Button newRule = new Button("regel toevoegen");
+	newButton 		= new Button("Nieuw"), 
+	changeButton 	= new Button("Aanpassen"), 
+	removeButton 	= new Button("Verwijderen"), 
+	cancelButton 	= new Button("Annuleren"),
+	saveButton 		= new Button("Opslaan"),
+	proceedButton 	= new Button("Opboeken"),
+	newRuleButton 	= new Button("regel toevoegen");
 	private final Label 
-			nameLabel = new Label("Naam: "),
-			amountLabel = new Label("Aantal: "), 
-			minAmountLabel = new Label("Min. aantal: "),
-			priceLabel = new Label("Prijs: "), 
-			buyPriceLabel = new Label("Inkoopprijs: "), 
-			supplierLabel = new Label("Leverancier: "), 
-			addressLabel = new Label("Adres: "), 
-			postalLabel = new Label("Postcode: "), 
-			placeLabel = new Label("Plaats: ");	
+	nameLabel 		= new Label("Naam: "),
+	amountLabel 	= new Label("Aantal: "), 
+	minAmountLabel 	= new Label("Min. aantal: "),
+	priceLabel 		= new Label("Prijs: "), 
+	buyPriceLabel 	= new Label("Inkoopprijs: "), 
+	supplierLabel	= new Label("Leverancier: "), 
+	addressLabel 	= new Label("Adres: "), 
+	postalLabel 	= new Label("Postcode: "), 
+	placeLabel 		= new Label("Plaats: ");	
 	private final TextField 
-			searchInput = new TextField("Zoek..."), 
-			nameContent = new TextField(), 
-			amountContent = new TextField(),
-			minAmountContent = new TextField(), 
-			priceContent = new TextField(), 
-			buyPriceContent = new TextField(), 
-			addressContent = new TextField(),
-			postalContent = new TextField(),
-			placeContent = new TextField();
+	searchContent 	= new TextField("Zoek..."), 
+	nameContent 	= new TextField(), 
+	amountContent 	= new TextField(),
+	minAmountContent= new TextField(), 
+	priceContent 	= new TextField(), 
+	buyPriceContent = new TextField(), 
+	addressContent 	= new TextField(),
+	postalContent 	= new TextField(),
+	placeContent 	= new TextField();
 	private final VBox
-			leftBox = new VBox(space_big),
-			rightBox = new VBox(space_big);
+	leftBox 		= new VBox(space_Big),
+	rightBox 		= new VBox(space_Big);
 	private final HBox 
-			details = new HBox(space_small), 
-			mainButtonBox = new HBox(space_medium), 
-			searchFieldBox = new HBox(space_small), 
-			mainBox = new HBox(space_small);
+	detailsBox 		= new HBox(space_Small), 
+	control_MainBox = new HBox(space_3), 
+	control_secBox 	= new HBox(space_Small), 
+	mainBox 		= new HBox(space_Small);
 	public StockScreen(ATDProgram controller) {
 		this.controller = controller;
-		//StockDetails
-		details.getChildren().addAll(
-				new VBox(space_big,
-						new HBox(space_big,nameLabel,		nameContent),
-						new HBox(space_big,amountLabel,		amountContent),
-						new HBox(space_big,minAmountLabel,	minAmountContent),
-						new HBox(space_big,priceLabel,		priceContent),
-						new HBox(space_big,buyPriceLabel,	buyPriceContent),
-						new HBox(space_big,supplierLabel,	supplierContent),
-						new HBox(space_big,addressLabel,	addressContent),
-						new HBox(space_big,postalLabel,		postalContent),
-						new HBox(space_big,placeLabel,		placeContent),	
-						new HBox(space_big,cancelButton,	saveButton)
-						));
-		details.getStyleClass().add("removeDisabledEffect");
-		details.getStyleClass().add("stockDetails");
-		details.setPadding(new Insets(space_big));
-		details.setPrefSize(450, 520);
-		setEditable(false);
+		//set styles and sizes
 		////set width for all detail labels and textfields
-		for (Node node : ((VBox)details.getChildren().get(0)).getChildren()) {
+		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
-				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
+				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
 			if(((HBox)node).getChildren().get(1) instanceof TextField)
-				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(widthLabels*1.5);
+				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(label_Normal*1.5);
 		}
-		supplierContent.setMinWidth(widthLabels*1.5);
+		supplierContent.setMinWidth(label_Normal*1.5);		
+		detailsBox.setPadding(new Insets(space_Big));
+		mainBox.setPadding(new Insets(space_Big));
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
+		leftBox.getStyleClass().add("removeDisabledEffect");
+		itemList.getStyleClass().add("removeDisabledEffect");
+		detailsBox.setPrefSize		(450	 , 520);
+		itemList.setPrefSize		(450	 , 520);
+		searchContent.setPrefSize	(290	 , 50);
+		filterSelector.setPrefSize	(150	 , 50);
+		cancelButton.setPrefSize	(180	 , 50);
+		saveButton.setPrefSize		(180	 , 50);
+		newButton.setPrefSize		(button_3, 50);
+		changeButton.setPrefSize	(button_3, 50);
+		removeButton.setPrefSize	(button_3, 50);		
+		//details
 		supplierContent.getItems().addAll(controller.getSuppliers());
 		supplierContent.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-		////fill in supplier details in corresponding textfields
-			if(newValue != null){
-				ProductSupplier supplier = supplierContent.getSelectionModel().getSelectedItem();
-				addressContent.setEditable(false);
-				addressContent.setText(supplier.getAdress());
-				postalContent.setEditable(false);
-				postalContent.setText(supplier.getPostal());
-				placeContent.setEditable(false);
-				placeContent.setText(supplier.getPlace());
-			}
+			selectSupplier(newValue);			
 		});
+		detailsBox.getChildren().addAll(
+				new VBox(space_Big,
+						new HBox(space_Big,nameLabel	 , nameContent),
+						new HBox(space_Big,amountLabel	 , amountContent),
+						new HBox(space_Big,minAmountLabel, minAmountContent),
+						new HBox(space_Big,priceLabel	 , priceContent),
+						new HBox(space_Big,buyPriceLabel , buyPriceContent),
+						new HBox(space_Big,supplierLabel , supplierContent),
+						new HBox(space_Big,addressLabel	 , addressContent),
+						new HBox(space_Big,postalLabel	 , postalContent),
+						new HBox(space_Big,placeLabel	 , placeContent),	
+						new HBox(space_Big,cancelButton	 , saveButton)
+						)
+				);	
+		setEditable(false);
 		//Listview
-		itemList.getStyleClass().add("removeDisabledEffect");
-		itemList.setPrefSize(450, 520);
 		for (Product product : controller.getStock().getAllProducts()) 
-			itemList.getItems().add(new ListRegel(product));
+			itemList.getItems().add(new ListItem(product));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
 		});
 		//SearchField
-		searchInput.setPrefSize(290, 50);
-		searchInput.setOnMouseClicked(e -> {
-			if (searchInput.getText().equals("Zoek...")) searchInput.clear();
-			else searchInput.selectAll();
+		searchContent.setOnMouseClicked(e -> {
+			if (searchContent.getText().equals("Zoek...")) searchContent.clear();
+			else searchContent.selectAll();
 		});
-		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
-				search(oldValue, newValue);
+		searchContent.textProperty().addListener((observable, oldValue, newValue) -> {
+			search(oldValue, newValue);
 		});
-		//Buttons and filter
-		cancelButton.setPrefSize(180, 50);
+		//Buttons and filter		
 		cancelButton.setOnAction(e -> {
 			clearInput();
 			setEditable(false);
-		});
-		saveButton.setPrefSize(180, 50);
+		});	
 		saveButton.setOnAction(e -> {
 			save();
-		});
-		newButton.setPrefSize(button_small, 50);
+		});	
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
 			isChanging = false;
-		});
-		changeButton.setPrefSize(button_small, 50);
+		});	
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
-		});
-		removeButton.setPrefSize(button_small, 50);
+		});	
 		removeButton.setOnAction(e->{
 			remove();
 		});
-		proceed.setOnAction(e-> boekop());
-		newRule.setOnAction(e->	itemList.getItems().add(itemList.getItems().size()-1,new ListRegel()));
-		
-		filterSelector.setPrefSize(150, 50);
+		proceedButton.setOnAction(e-> boekop());
+		newRuleButton.setOnAction(e->	itemList.getItems().add(itemList.getItems().size()-1,new ListItem()));	
 		filterSelector.getItems().addAll("Mode: Voorraad", "Mode: Benzine", "Mode: Onderdelen", "Mode: Bestellijst", "Mode: Opboeken");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
 		//put everything in the right places
-		mainButtonBox.getChildren().addAll(newButton,changeButton,removeButton);
-		searchFieldBox.getChildren().addAll(searchInput,filterSelector);
-		leftBox.getChildren().addAll (itemList, searchFieldBox);
-		rightBox.getChildren().addAll(details,mainButtonBox);
+		control_MainBox.getChildren().addAll(newButton,changeButton,removeButton);
+		control_secBox.getChildren().addAll(searchContent,filterSelector);
+		leftBox.getChildren().addAll (itemList, control_secBox);
+		rightBox.getChildren().addAll(detailsBox,control_MainBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
-		mainBox.setPadding(new Insets(space_big));
-		leftBox.getStyleClass().add("removeDisabledEffect");
 		this.getChildren().add(mainBox);
 	}
 	/**
@@ -188,42 +178,42 @@ public class StockScreen extends HBox {
 		case 0: default:{//voorraad
 			itemList.getItems().clear();
 			for (Product product : controller.getStock().getAllProducts())
-				itemList.getItems().add(new ListRegel(product));
+				itemList.getItems().add(new ListItem(product));
 			break;
-			}
+		}
 		case 1:{//Benzine
 			itemList.getItems().clear();
 			for (Product product : controller.getStock().getAllProducts())
-				if(product instanceof Fuel)itemList.getItems().add(new ListRegel(product));
+				if(product instanceof Fuel)itemList.getItems().add(new ListItem(product));
 			break;
 		}
 		case 2:{//Onderdelen
 			itemList.getItems().clear();
 			for (Product product : controller.getStock().getAllProducts())
-				if(product instanceof Part)itemList.getItems().add(new ListRegel(product));
+				if(product instanceof Part)itemList.getItems().add(new ListItem(product));
 			break;
 		}
 		case 3:{//Bestellijst
 			itemList.getItems().clear();
 			for(Entry<Object, Integer> entry : controller.getStock().getOrderedItems().entrySet()) 
-			    itemList.getItems().add(new ListRegel((Product)entry.getKey(), entry.getValue()));
+				itemList.getItems().add(new ListItem((Product)entry.getKey(), entry.getValue()));
 			break;
-			}
+		}
 		case 4:{//Opboeken
 			itemList.getItems().clear();
-			itemList.getItems().add(new ListRegel(newRule, proceed));
+			itemList.getItems().add(new ListItem(newRuleButton, proceedButton));
 			break;
-			}
 		}
-		if(!searchInput.getText().equals("Zoek..."))search(null, searchInput.getText());	
+		}
+		if(!searchContent.getText().equals("Zoek..."))search(null, searchContent.getText());	
 	}
 	/**
 	 * updates stock with every item in the list after removing the last item(buttons)
 	 */
 	private void boekop() {
 		itemList.getItems().remove(itemList.getItems().size()-1);
-		for (ListRegel listRegel : itemList.getItems())
-				controller.getStock().fill(listRegel.getSelected(), listRegel.getAmount());
+		for (ListItem listItem : itemList.getItems())
+			controller.getStock().fill(listItem.getSelected(), listItem.getAmount());
 		filterSelector.getSelectionModel().selectFirst();
 	}
 	/*
@@ -235,7 +225,7 @@ public class StockScreen extends HBox {
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
-				controller.addorRemoveproduct(selectedProduct, true);
+				controller.addorRemoveproduct(selectedObject, true);
 				Notification removeNotify = new Notification(controller.getStage(), "Het product is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 				removeNotify.showAndWait();
 				refreshList();
@@ -251,54 +241,54 @@ public class StockScreen extends HBox {
 				Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
 				changeConfirm.showAndWait();
 				switch (changeConfirm.getKeuze()) {
-					case "confirm": {
-						selectedProduct.setName(nameContent.getText());
-						selectedProduct.setAmount(Integer.parseInt(amountContent.getText()));
-						selectedProduct.setMinAmount(Integer.parseInt(minAmountContent.getText()));
-						selectedProduct.setSellPrice(Double.parseDouble(priceContent.getText()));
-						selectedProduct.setSellPrice(Double.parseDouble(buyPriceContent.getText()));
-						selectedProduct.setSupplier(supplierContent.getValue());
-						supplierContent.setDisable(true);
-						refreshList();
-					}
-					case "cancel":
-						clearInput();
-						setEditable(false);
+				case "confirm": {
+					selectedObject.setName(nameContent.getText());
+					selectedObject.setAmount(Integer.parseInt(amountContent.getText()));
+					selectedObject.setMinAmount(Integer.parseInt(minAmountContent.getText()));
+					selectedObject.setSellPrice(Double.parseDouble(priceContent.getText()));
+					selectedObject.setSellPrice(Double.parseDouble(buyPriceContent.getText()));
+					selectedObject.setSupplier(supplierContent.getValue());
+					supplierContent.setDisable(true);
+					refreshList();
+				}
+				case "cancel":
+					clearInput();
+					setEditable(false);
 				}
 			}
 			else{	
 				GetInfoNotification getType = new GetInfoNotification(controller, ATDProgram.notificationStyle.TYPE);
 				getType.showAndWait();
 				switch (getType.getKeuze()) {
-					case "confirm": {
-						 if(getType.getSelected().equals("Benzine")) {
-							 Fuel newProduct = new Fuel(
+				case "confirm": {
+					if(getType.getSelected().equals("Benzine")) {
+						Fuel newProduct = new Fuel(
 								nameContent.getText(), 
 								Integer.parseInt(amountContent.getText()), 
 								Integer.parseInt(minAmountContent.getText()), 
 								Double.parseDouble(priceContent.getText()), 
 								Double.parseDouble(buyPriceContent.getText()), 
 								supplierContent.getValue());	
-							 controller.addorRemoveproduct(newProduct, false);
-							 itemList.getItems().add(new ListRegel(newProduct));
-						 }
-						 if(getType.getSelected().equals("Onderdeel")) {
-							 Part newProduct = new Part(
+						controller.addorRemoveproduct(newProduct, false);
+						itemList.getItems().add(new ListItem(newProduct));
+					}
+					if(getType.getSelected().equals("Onderdeel")) {
+						Part newProduct = new Part(
 								nameContent.getText(), 
 								Integer.parseInt(amountContent.getText()), 
 								Integer.parseInt(minAmountContent.getText()), 
 								Double.parseDouble(priceContent.getText()), 
 								Double.parseDouble(buyPriceContent.getText()), 
 								supplierContent.getValue());	
-							 controller.addorRemoveproduct(newProduct, false);
-							 itemList.getItems().add(new ListRegel(newProduct));
-						 }
-						 setEditable(false);
+						controller.addorRemoveproduct(newProduct, false);
+						itemList.getItems().add(new ListItem(newProduct));
 					}
-					case "cancel":	{
-						clearInput();
-						setEditable(false);
-					}
+					setEditable(false);
+				}
+				case "cancel":	{
+					clearInput();
+					setEditable(false);
+				}
 				}
 			}
 		}
@@ -315,27 +305,42 @@ public class StockScreen extends HBox {
 		content.addAll(itemList.getItems());
 		itemList.getItems().clear();
 		itemList.getItems().addAll(content);
-		for (ListRegel listRegel : itemList.getItems())
-			listRegel.refresh();
+		for (ListItem listItem : itemList.getItems())
+			listItem.refresh();
 		select(selectedItem);
+	}
+	/**
+	 * 	fill in supplier details in corresponding textfields
+	 * @param newValue the selected supplier
+	 */
+	private void selectSupplier(ProductSupplier newValue){
+		if(newValue != null){
+			ProductSupplier supplier = supplierContent.getSelectionModel().getSelectedItem();
+			addressContent.setEditable(false);
+			addressContent.setText(supplier.getAdress());
+			postalContent.setEditable(false);
+			postalContent.setText(supplier.getPostal());
+			placeContent.setEditable(false);
+			placeContent.setText(supplier.getPlace());
+		}
 	}
 	/**
 	 * selects an item
 	 * @param selectedValue the item to be selected
 	 */
-	private void select(ListRegel selectedValue){
-//		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
-			if(selectedValue!=null)	{
-				selectedItem = selectedValue;
-				selectedProduct = selectedValue.getProduct();
-				nameContent.setText(selectedProduct.getName());
-				amountContent.setText(Integer.toString(selectedProduct.getAmount()));
-				minAmountContent.setText(Integer.toString(selectedProduct.getMinAmount()));
-				priceContent.setText(Double.toString(selectedProduct.getSellPrice()));
-				buyPriceContent.setText(Double.toString(selectedProduct.getBuyPrice()));
-				supplierContent.setValue(selectedProduct.getSupplier());
-			}
-//		}
+	private void select(ListItem selectedValue){
+		//		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
+		if(selectedValue!=null)	{
+			selectedItem = selectedValue;
+			selectedObject = selectedValue.getProduct();
+			nameContent.setText(selectedObject.getName());
+			amountContent.setText(Integer.toString(selectedObject.getAmount()));
+			minAmountContent.setText(Integer.toString(selectedObject.getMinAmount()));
+			priceContent.setText(Double.toString(selectedObject.getSellPrice()));
+			buyPriceContent.setText(Double.toString(selectedObject.getBuyPrice()));
+			supplierContent.setValue(selectedObject.getSupplier());
+		}
+		//		}
 	}
 	/**
 	 * disables/enables the left or right side of the stage
@@ -344,14 +349,14 @@ public class StockScreen extends HBox {
 	private void setEditable(boolean enable){
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
-		details.setDisable(!enable);
+		detailsBox.setDisable(!enable);
 		leftBox.setDisable(enable);
 	}	
 	/**
 	 * clears all the inputfields
 	 */
 	private void clearInput(){
-		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).clear();
 		supplierContent.getSelectionModel().clearSelection();
 	}
@@ -360,7 +365,7 @@ public class StockScreen extends HBox {
 	 * @return false if one of the inputs is null
 	 */
 	private boolean checkInput(){
-		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField)
 				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty())
 					return false;
@@ -379,7 +384,7 @@ public class StockScreen extends HBox {
 	 * @return false if nothing is selected
 	 */
 	private boolean checkSelected() {
-		if(selectedProduct == null) return false;
+		if(selectedObject == null) return false;
 		return true;
 	}
 	/**
@@ -395,7 +400,7 @@ public class StockScreen extends HBox {
 		}
 		itemList.getItems().clear();
 		//add an item if any item that exists contains any value that has been searched for
-		for (ListRegel entry : content) {		
+		for (ListItem entry : content) {		
 			if (entry.getProduct().getName().contains(newVal)
 					|| Double.toString(entry.getProduct().getSellPrice()).contains(newVal)
 					|| entry.getProduct().getSupplier().getName().contains(newVal)) {
@@ -404,26 +409,26 @@ public class StockScreen extends HBox {
 		}
 	}
 	// this represents every item in the list, it has different constructor for every filter option
-	public class ListRegel extends HBox{
+	public class ListItem extends HBox{
 		private Product product;
 		private ComboBox<Product> productSelector = new ComboBox<Product>();
 		private TextField input = new TextField();
 		private Label itemPriceLabel = new Label(),itemNameLabel = new Label(),itemSupplierLabel = new Label();
-		public ListRegel(Product product){
+		public ListItem(Product product){
 			//no filter
 			this.product = product;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
-				itemNameLabel,
-				new Separator(Orientation.VERTICAL),
-				itemPriceLabel,
-				new Separator(Orientation.VERTICAL),
-				itemSupplierLabel);
-				for (Node node : getChildren()) 
-					if(node instanceof Label)((Label)node).setPrefWidth(100);
+					itemNameLabel,
+					new Separator(Orientation.VERTICAL),
+					itemPriceLabel,
+					new Separator(Orientation.VERTICAL),
+					itemSupplierLabel);
+			for (Node node : getChildren()) 
+				if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
-		public ListRegel(Product product, int amount){
+		public ListItem(Product product, int amount){
 			//bestellijst filter
 			this.product = product;
 			refresh();
@@ -437,12 +442,12 @@ public class StockScreen extends HBox {
 			for (Node node : getChildren())
 				if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
-		public ListRegel(){
+		public ListItem(){
 			//opboeken filter
 			productSelector.getItems().addAll(controller.getProducts());
 			getChildren().addAll(productSelector, input);
 		}
-		public ListRegel(Button b1,Button b2){
+		public ListItem(Button b1,Button b2){
 			setSpacing(5);
 			getChildren().addAll(b1,b2);	
 		}
@@ -474,4 +479,3 @@ public class StockScreen extends HBox {
 		}
 	}
 }
-	
