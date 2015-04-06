@@ -175,7 +175,9 @@ public class ATDProgram extends Application {
 		addorRemoveproduct(new Fuel("Diesel", 300, 200, 1, 1.19, suppliers.get(2)), false);
 		addorRemoveproduct(new Fuel("Euro95", 275, 150, 1.11, 1.52, suppliers.get(2)), false);
 	}
-
+	public void drawCharts(){
+		((FinancesScreen)financesScreen.getContent()).drawCharts();
+	}
 	public static void main(String[] args) {;
 		launch();
 		}

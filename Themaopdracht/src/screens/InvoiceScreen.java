@@ -263,6 +263,7 @@ public class InvoiceScreen extends HBox {
 			selectedobject.payNow((PayMethod) confirm.getSelected());
 			Notification notify = new Notification(controller, "factuur is betaald.", ATDProgram.notificationStyle.NOTIFY);
 			notify.showAndWait();}
+		controller.drawCharts();
 		refreshList();
 	}
 	/**

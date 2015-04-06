@@ -2,17 +2,22 @@ package screens;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
 import main.Invoice;
+import main.Invoice.InvoiceItem;
 
 public class FinancesScreen extends HBox {
 	private ATDProgram controller;
+	private PieChart chart = new PieChart();
 	private double
 			spacingBoxes = 10,
 			widthLabels = 120;
@@ -31,23 +36,24 @@ public class FinancesScreen extends HBox {
 	private VBox
 			rightBox = new VBox(20);
 	private HBox 
-			stockDetails = new HBox(spacingBoxes), 
+			details = new HBox(spacingBoxes), 
 			mainButtonBox = new HBox(spacingBoxes), 
 			mainBox = new HBox(spacingBoxes);
 	public FinancesScreen(ATDProgram controller) {
 		this.controller = controller;
+		chart.setTitle("Facturen op totaalprijs");
 		//StockDetails
-		stockDetails.getChildren().addAll(
+		details.getChildren().addAll(
 				new VBox(20,
 						new HBox(20,grossProfitLabel,	grossProfitLabelContent),
 						new HBox(20,taxLabel,			taxLabelContent),
 						new HBox(20,amountLabel,		amountLabelContent)
 						));
-		stockDetails.setPrefSize(910, 520);
-		stockDetails.getStyleClass().add("detailsBox");
-		stockDetails.setPadding(new Insets(20));
+		details.setPrefSize(910, 520);
+		details.getStyleClass().add("detailsBox");
+		details.setPadding(new Insets(20));
 		//set width for all detail labels and textfields
-		for (Node node : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {
+		for (Node node : ((VBox)details.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
 				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels*3);
 		}
@@ -68,13 +74,28 @@ public class FinancesScreen extends HBox {
 				getFinanceData(fromDate.getValue(), newValue);
 			}
 		});
+        
 		//Make & merge left & right
-		rightBox.getChildren().addAll(stockDetails,mainButtonBox);
+        details.getChildren().add(chart);
+		rightBox.getChildren().addAll(details,mainButtonBox);
 		mainBox.getChildren().addAll (rightBox);
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
 	}
-	
+	public void drawCharts(){
+		int onder100 = 0;
+		int over100  = 0;
+		for (Invoice invoice : controller.getInvoices()) {
+			if(invoice.isPayed()&&invoice.getTotalPrice()<100)onder100++;
+			else if(invoice.isPayed()) over100++;
+		}
+		ObservableList<PieChart.Data> pieChartData =
+                FXCollections.observableArrayList(
+                new PieChart.Data("<100", onder100),
+                new PieChart.Data(">100", over100));
+		chart.getData().clear();
+		chart.getData().addAll(pieChartData);
+	}
 	public void getFinanceData(LocalDate from, LocalDate to) {
 		double omzet = 0.0;
 		double btw = 0.0;
