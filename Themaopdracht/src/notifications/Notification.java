@@ -56,7 +56,14 @@ public class Notification extends Stage {
 			if(stijl ==notificationStyle.CONFIRM || stijl == notificationStyle.NOTIFY){
 				keuze = "confirm";
 				this.hide();
-			}else if(getSelected() != null){
+			}
+			else if(stijl == notificationStyle.TANK || stijl == notificationStyle.ENDSESSION){
+				if(getSelected() != null && getInput() != 0){
+					keuze = "confirm";
+					this.hide();
+				}
+			}
+			else if(getSelected() != null){
 				keuze = "confirm";
 				this.hide();
 			}
@@ -181,6 +188,8 @@ public class Notification extends Stage {
 		}
 	}
 	public int getInput() {
-		return Integer.parseInt(input.getText());
+		if(!input.getText().isEmpty())
+			return Integer.parseInt(input.getText());
+		else return 0;
 	}
 }

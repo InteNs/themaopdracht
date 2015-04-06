@@ -8,6 +8,7 @@ public class Reservation {
 	private final static double fee = 10;
 	private ParkingSpace parkingSpace;
 	private boolean isActive;
+	private boolean isPayed;
 	private String numberPlate;
 	public Reservation(LocalDate fromDate, LocalDate toDate,String numberPlate, ParkingSpace parkingSpace) {
 		this.fromDate = fromDate;
@@ -17,15 +18,18 @@ public class Reservation {
 		this.numberPlate = numberPlate;
 		checkDate();
 	}
-	
+	public boolean isPayed() {
+		return isPayed;
+	}
+	public void setPayed(boolean isPayed) {
+		this.isPayed = isPayed;
+	}
 	public String getNumberPlate() {
 		return numberPlate;
 	}
-
 	public void setNumberPlate(String numberPlate) {
 		this.numberPlate = numberPlate;
 	}
-
 	public String isActive() {
 		if(LocalDate.now().isAfter(toDate)){
 			isActive = false;
@@ -41,11 +45,9 @@ public class Reservation {
 		parkingSpace.setAvailable(!isActive);
 		return "active";
 	}
-
 	public void setFromDate(LocalDate fromDate) {
 		this.fromDate = fromDate;
 	}
-
 	public void setToDate(LocalDate toDate) {
 		this.toDate = toDate;
 	}

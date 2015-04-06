@@ -155,7 +155,7 @@ public class CustomerScreen extends Screen {
 		removeButton.setOnAction(e->{
 			remove();
 		});
-		filterSelector.getItems().addAll("Filter: Geen", "Filter: Service", "Filter: Onderhoud");
+		filterSelector.getItems().addAll("Filter: Geen", "Filter: Service", "Filter: Onderhoud", "Filter: Blacklist");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
@@ -183,6 +183,12 @@ public class CustomerScreen extends Screen {
 			itemList.getItems().clear();
 			for (Customer object : controller.getRemindList(true))
 				itemList.getItems().add(new ListItem(object));
+			break;
+		}
+		case 3:{
+			itemList.getItems().clear();
+			for (Customer object : controller.getCustomers())
+				if(object.isOnBlackList())itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		}

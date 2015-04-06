@@ -317,16 +317,17 @@ public class InvoiceScreen extends Screen {
 	 * @param selectedValue the item to be selected
 	 */
 	private void select(ListItem selectedValue){
-		if(!checkSelected())return ;
-		selectedItem = selectedValue;
-		selectedobject = selectedValue.getInvoice();
-		dateContent.setValue(selectedobject.getInvoiceDate());
-		customerContent.setValue(selectedobject.getCustomer());
-		priceContent.setText(controller.convert(selectedobject.getTotalPrice()));
-		isPayedContent.setSelected(selectedobject.isPayed());
-		contentList.getItems().clear();
-		for (InvoiceItem item : selectedobject.getItems())
-			contentList.getItems().add(item);
+		if(selectedValue!= null){
+			selectedItem = selectedValue;
+			selectedobject = selectedValue.getInvoice();
+			dateContent.setValue(selectedobject.getInvoiceDate());
+			customerContent.setValue(selectedobject.getCustomer());
+			priceContent.setText(controller.convert(selectedobject.getTotalPrice()));
+			isPayedContent.setSelected(selectedobject.isPayed());
+			contentList.getItems().clear();
+			for (InvoiceItem item : selectedobject.getItems())
+				contentList.getItems().add(item);
+		}
 	}
 	/**
 	 * disables/enables the left or right side of the stage
