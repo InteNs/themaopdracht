@@ -16,6 +16,7 @@ import screens.CustomerScreen;
 import screens.FinancesScreen;
 import screens.InvoiceScreen;
 import screens.MaintenanceScreen;
+import screens.ParkingScreen;
 import screens.StockScreen;
 
 
@@ -28,6 +29,7 @@ public class ATDProgram extends Application {
 	private Tab serviceScreen;
 	private Tab invoiceScreen;
 	private Tab financesScreen;
+	private Tab parkingScreen;
 	private Scene mainScene;
 	private Stock stock = new Stock();
 	private ArrayList<MaintenanceSession> maintenanceSessions = new ArrayList<MaintenanceSession>();
@@ -65,7 +67,12 @@ public class ATDProgram extends Application {
 		financesScreen = new Tab("Financien");
 		financesScreen.setClosable(false);
 		financesScreen.setContent(new FinancesScreen(this));
-		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration,serviceScreen,invoiceScreen,financesScreen);
+		
+		parkingScreen = new Tab("reserveringen");
+		parkingScreen.setClosable(false);
+		parkingScreen.setContent(new ParkingScreen(this));
+		
+		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration,serviceScreen,invoiceScreen,financesScreen, parkingScreen);
 
 		// Create Mainscreen
 		mainScene = new Scene(tabsScreen);
@@ -140,6 +147,11 @@ public class ATDProgram extends Application {
 	public ArrayList<MaintenanceSession> getMaintenanceSessions() {
 		return maintenanceSessions;
 	}
+	
+	public ArrayList<ParkingSpace> getParkingSpaces() {
+		return parkingSpaces;
+	}
+
 	public void addorRemoveMaintenanceSessions(MaintenanceSession maintenanceSession, boolean remove) {
 		if(remove)maintenanceSessions.remove(maintenanceSession);
 		else maintenanceSessions.add(maintenanceSession);
@@ -176,6 +188,9 @@ public class ATDProgram extends Application {
 		addorRemoveproduct(new Part(this,"Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
 		addorRemoveproduct(new Fuel(this,"Diesel", 300, 200, 1, 1.19, suppliers.get(2)), false);
 		addorRemoveproduct(new Fuel(this,"Euro95", 275, 150, 1.11, 1.52, suppliers.get(2)), false);
+		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-07"), LocalDate.parse("2015-04-20"), "13-edm-1", parkingSpaces.get(0)), false);
+		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-01"), LocalDate.parse("2015-04-04"), "69-lmr-7", parkingSpaces.get(1)), false);
+		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-04"), LocalDate.parse("2015-04-09"), "31-dos-3", parkingSpaces.get(2)), false);
 	}
 	public void drawCharts(){
 		((FinancesScreen)financesScreen.getContent()).drawCharts();
