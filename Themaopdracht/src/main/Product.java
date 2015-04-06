@@ -6,7 +6,8 @@ public abstract class Product {
 	protected int amount, minAmount;
 	protected double buyPrice, sellPrice;
 	protected ProductSupplier supplier;
-	public Product(String name, int amount, int minAmount, double buyPrice,double sellPrice, ProductSupplier supplier) {
+	public Product(ATDProgram controller, String name, int amount, int minAmount, double buyPrice,double sellPrice, ProductSupplier supplier) {
+		this.controller = controller;
 		this.name = name;
 		this.amount = amount;
 		this.minAmount = minAmount;

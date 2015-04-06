@@ -14,9 +14,11 @@ public class Invoice {
 	private double totalPrice;
 	private boolean isPayed;
 	private Customer customer;
+	private ATDProgram controller;
 	private ArrayList<InvoiceItem> items = new ArrayList<InvoiceItem>();
 	public enum PayMethod{CASH,PIN,CREDIT};
-	public Invoice(){
+	public Invoice(ATDProgram controller){
+		this.controller = controller;
 		invoiceDate = LocalDate.now();
 	}
 	public double getTotalPrice() {
@@ -50,7 +52,6 @@ public class Invoice {
 		return "invoice";
 	}
 	public class InvoiceItem extends HBox{
-		private ATDProgram controller;
 		private int amount;
 		private double price, semiTotalPrice;
 		private Label description = new Label(),amountL = new Label(),priceL = new Label(),totalPriceL = new Label();;
@@ -59,7 +60,7 @@ public class Invoice {
 			this.amount = amount;
 			this.semiTotalPrice = amount*price;
 			description.setText(desc);
-			priceL.setText( controller.nf.format(price));
+			priceL.setText( controller.convert(price));
 			amountL.setText( Integer.toString(amount));
 			totalPriceL.setText( controller.nf.format(semiTotalPrice));
 			setSpacing(5);

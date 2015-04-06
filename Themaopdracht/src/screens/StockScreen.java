@@ -254,7 +254,7 @@ public class StockScreen extends HBox {
 				switch (changeConfirm.getKeuze()) {
 				case "confirm": {
 					selectedObject.setName(nameContent.getText());
-					selectedObject.setAmount(Integer.parseInt(amountContent.getText()));
+					selectedObject.setAmount(0);
 					selectedObject.setMinAmount(Integer.parseInt(minAmountContent.getText()));
 					selectedObject.setSellPrice(Double.parseDouble(priceContent.getText()));
 					selectedObject.setSellPrice(Double.parseDouble(buyPriceContent.getText()));
@@ -274,8 +274,9 @@ public class StockScreen extends HBox {
 				case "confirm": {
 					if(getType.getSelected().equals("Benzine")) {
 						Fuel newProduct = new Fuel(
+								controller,
 								nameContent.getText(), 
-								Integer.parseInt(amountContent.getText()), 
+								0, 
 								Integer.parseInt(minAmountContent.getText()), 
 								Double.parseDouble(priceContent.getText()), 
 								Double.parseDouble(buyPriceContent.getText()), 
@@ -285,8 +286,9 @@ public class StockScreen extends HBox {
 					}
 					if(getType.getSelected().equals("Onderdeel")) {
 						Part newProduct = new Part(
+								controller,
 								nameContent.getText(), 
-								Integer.parseInt(amountContent.getText()), 
+								0, 
 								Integer.parseInt(minAmountContent.getText()), 
 								Double.parseDouble(priceContent.getText()), 
 								Double.parseDouble(buyPriceContent.getText()), 
@@ -348,8 +350,8 @@ public class StockScreen extends HBox {
 			nameContent.setText(selectedObject.getName());
 			amountContent.setText(Integer.toString(selectedObject.getAmount()));
 			minAmountContent.setText(Integer.toString(selectedObject.getMinAmount()));
-			priceContent.setText(Double.toString(selectedObject.getSellPrice()));
-			buyPriceContent.setText(Double.toString(selectedObject.getBuyPrice()));
+			priceContent.setText(controller.convert(selectedObject.getSellPrice()));
+			buyPriceContent.setText(controller.convert(selectedObject.getBuyPrice()));
 			supplierContent.setValue(selectedObject.getSupplier());
 		}
 		//		}
@@ -363,6 +365,10 @@ public class StockScreen extends HBox {
 		saveButton.setVisible(enable);
 		detailsBox.setDisable(!enable);
 		amountContent.setDisable(true);
+		if(checkSelected()){
+			buyPriceContent.setText(Double.toString(selectedObject.getBuyPrice()));
+			priceContent.setText(Double.toString(selectedObject.getSellPrice()));
+		}
 		control_MainBox.setDisable(enable);
 		leftBox.setDisable(enable);
 	}	
@@ -380,11 +386,10 @@ public class StockScreen extends HBox {
 	 */
 	private boolean checkInput(){
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
-			if(((HBox)node1).getChildren().get(1) instanceof TextField)
+			if(((HBox)node1).getChildren().get(1) instanceof TextField && ((HBox)node1).getChildren().get(1) != amountContent)
 				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty())
 					return false;
 		try {
-			Integer.parseInt(amountContent.getText());
 			Integer.parseInt(minAmountContent.getText());
 			Double.parseDouble(priceContent.getText());
 			Double.parseDouble(buyPriceContent.getText());
@@ -424,7 +429,6 @@ public class StockScreen extends HBox {
 	}
 	// this represents every item in the list, it has different constructor for every filter option
 	public class ListItem extends HBox{
-		private ATDProgram controller;
 		private Product object;
 		private ComboBox<Product> productSelector = new ComboBox<Product>();
 		private TextField input = new TextField();
@@ -479,7 +483,8 @@ public class StockScreen extends HBox {
 		 */
 		public void refresh(){
 			itemNameLabel.setText(object.getName());
-			itemPriceLabel.setText(Double.toString(object.getSellPrice()));
+			System.out.println("" + controller + object + object.getSellPrice());
+			itemPriceLabel.setText((controller.convert(object.getSellPrice())));
 			itemSupplierLabel.setText(object.getSupplier().getName());
 			itemAmountLabel.setText(Integer.toString(object.getAmount()));
 		}

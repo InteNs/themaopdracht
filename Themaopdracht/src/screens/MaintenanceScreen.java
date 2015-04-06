@@ -305,15 +305,13 @@ public class MaintenanceScreen extends HBox {
 	 * @param selectedValue the item to be selected
 	 */
 	private void select(ListRegel selectedValue){
-		if(filterSelector.getSelectionModel().getSelectedIndex() != 3){
-			if(selectedValue!=null)	{
-				selectedItem = selectedValue;
-				selectedObject = selectedValue.getMaintenanceSession();
-				dateContent.setValue(selectedObject.getPlannedDate());
-				mechanicContent.setValue(selectedObject.getMechanic());
-				numberPlateContent.setText(selectedObject.getNumberPlate());
-				usedPartsContent.setText(Integer.toString(selectedObject.getTotalParts()));
-			}
+		if(selectedValue!=null)	{
+			selectedItem = selectedValue;
+			selectedObject = selectedValue.getMaintenanceSession();
+			dateContent.setValue(selectedObject.getPlannedDate());
+			mechanicContent.setValue(selectedObject.getMechanic());
+			numberPlateContent.setText(selectedObject.getNumberPlate());
+			usedPartsContent.setText(Integer.toString(selectedObject.getTotalParts()));
 		}
 	}
 	/**

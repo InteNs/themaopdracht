@@ -1,5 +1,4 @@
 package screens;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 
 import javafx.collections.FXCollections;
@@ -13,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.ATDProgram;
 import main.Invoice;
-import main.Invoice.InvoiceItem;
 
 public class FinancesScreen extends HBox {
 	private ATDProgram controller;
@@ -55,7 +53,7 @@ public class FinancesScreen extends HBox {
 		//set width for all detail labels and textfields
 		for (Node node : ((VBox)details.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
-				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels*3);
+				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
 		}
 		//Main Buttons and filter
 		mainButtonBox.getChildren().addAll(
@@ -109,8 +107,8 @@ public class FinancesScreen extends HBox {
 						omzet += invoice.getTotalPrice();
 			}
 			btw = (omzet/121)*21;
-			grossProfitLabelContent.setText(controller.nf.format(omzet));
-			taxLabelContent.setText(controller.nf.format(btw));
+			grossProfitLabelContent.setText(controller.convert(omzet));
+			taxLabelContent.setText(controller.convert(btw));
 			amountLabelContent.setText(aantal+"");
 		}
 	}

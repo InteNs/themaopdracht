@@ -284,7 +284,7 @@ public class InvoiceScreen extends HBox {
 			}
 		}
 		else{	
-			Invoice newInvoice = new Invoice();
+			Invoice newInvoice = new Invoice(controller);
 			controller.addorRemoveInvoice(newInvoice, false);
 			itemList.getItems().add(new ListRegel(newInvoice));
 		}
@@ -312,7 +312,7 @@ public class InvoiceScreen extends HBox {
 			selectedobject = selectedValue.getInvoice();
 			dateContent.setValue(selectedobject.getInvoiceDate());
 			customerContent.setValue(selectedobject.getCustomer());
-			priceContent.setText(Double.toString(selectedobject.getTotalPrice()));
+			priceContent.setText(controller.convert(selectedobject.getTotalPrice()));
 			isPayedContent.setSelected(selectedobject.isPayed());
 			contentList.getItems().clear();
 			for (InvoiceItem item : selectedobject.getItems())
@@ -343,7 +343,6 @@ public class InvoiceScreen extends HBox {
 	}
 	// this represents every item in the list, it has different constructor for every filter option
 	public class ListRegel extends HBox{
-		private ATDProgram controller;
 		private Invoice object;
 		private Label itemDateLabel = new Label(),itemPriceLabel = new Label(),itemCustomerLabel = new Label(),itemIsPayedLabel = new Label();
 		public ListRegel(Invoice object){
@@ -368,7 +367,7 @@ public class InvoiceScreen extends HBox {
 			itemDateLabel.setText(object.getInvoiceDate().toString());
 			if(object.getCustomer()==null)itemCustomerLabel.setText("Anoniem");
 			else itemCustomerLabel.setText(object.getCustomer().getName());
-			itemPriceLabel.setText(Double.toString(object.getTotalPrice()));
+			itemPriceLabel.setText(controller.convert(object.getTotalPrice()));
 			if(object.isPayed())itemIsPayedLabel.setText("Betaalt");
 			else itemIsPayedLabel.setText("Openstaand");
 		}
