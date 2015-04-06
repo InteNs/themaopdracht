@@ -12,6 +12,7 @@ public class Reservation {
 		this.fromDate = fromDate;
 		this.toDate = toDate;
 		this.parkingSpace = parkingSpace;
+		parkingSpace.setAvailable(false);
 		this.numberPlate = numberPlate;
 		checkDate();
 	}
@@ -25,8 +26,18 @@ public class Reservation {
 	}
 
 	public String isActive() {
-		if(LocalDate.now().isAfter(toDate)) return "done";
-		if(LocalDate.now().isBefore(fromDate))return "before";
+		if(LocalDate.now().isAfter(toDate)){
+			isActive = false;
+			parkingSpace.setAvailable(!isActive);
+			return "done";
+		}
+		if(LocalDate.now().isBefore(fromDate)){
+			isActive = false;
+			parkingSpace.setAvailable(!isActive);
+			return "before";
+		}
+		isActive = true;
+		parkingSpace.setAvailable(!isActive);
 		return "active";
 	}
 
