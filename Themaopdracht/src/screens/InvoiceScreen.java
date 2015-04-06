@@ -342,6 +342,7 @@ public class InvoiceScreen extends HBox {
 	}
 	// this represents every item in the list, it has different constructor for every filter option
 	public class ListRegel extends HBox{
+		private ATDProgram controller;
 		private Invoice object;
 		private Label itemDateLabel = new Label(),itemPriceLabel = new Label(),itemCustomerLabel = new Label(),itemIsPayedLabel = new Label();
 		public ListRegel(Invoice object){

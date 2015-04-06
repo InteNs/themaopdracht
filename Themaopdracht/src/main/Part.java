@@ -45,7 +45,7 @@ public class Part extends Product {
 	}
 	@Override
 	public String toString() {
-		return name + " - $" + sellPrice + " - " + supplier.getName();
+		return name + " - " + controller.nf.format(sellPrice) + " - " + supplier.getName();
 	}
 
 

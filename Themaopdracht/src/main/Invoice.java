@@ -50,6 +50,7 @@ public class Invoice {
 		return "invoice";
 	}
 	public class InvoiceItem extends HBox{
+		private ATDProgram controller;
 		private int amount;
 		private double price, semiTotalPrice;
 		private Label description = new Label(),amountL = new Label(),priceL = new Label(),totalPriceL = new Label();;
@@ -58,9 +59,9 @@ public class Invoice {
 			this.amount = amount;
 			this.semiTotalPrice = amount*price;
 			description.setText(desc);
-			priceL.setText( Double.toString(price));
+			priceL.setText( controller.nf.format(price));
 			amountL.setText( Integer.toString(amount));
-			totalPriceL.setText(Double.toString(semiTotalPrice));
+			totalPriceL.setText( controller.nf.format(semiTotalPrice));
 			setSpacing(5);
 			getChildren().addAll(
 					amountL,

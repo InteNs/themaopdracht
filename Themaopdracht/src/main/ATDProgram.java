@@ -1,8 +1,11 @@
 
 package main;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -34,9 +37,11 @@ public class ATDProgram extends Application {
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	private ArrayList<ParkingSpace> parkingSpaces = new ArrayList<ParkingSpace>();
 	private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+	public final NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("nl", "NL"));
 	@Override
 	public void start(Stage stage) throws Exception {
 		mainStage = stage;
+		nf.setCurrency(Currency.getInstance("EUR"));
 		addContent();
 		//create tabs and add content
 		tabsScreen = new TabPane();

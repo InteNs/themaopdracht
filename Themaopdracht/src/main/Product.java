@@ -1,6 +1,7 @@
 package main;
 
 public abstract class Product {
+	protected ATDProgram controller;
 	protected String name;
 	protected int amount, minAmount;
 	protected double buyPrice, sellPrice;

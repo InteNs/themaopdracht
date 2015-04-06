@@ -424,6 +424,7 @@ public class StockScreen extends HBox {
 	}
 	// this represents every item in the list, it has different constructor for every filter option
 	public class ListItem extends HBox{
+		private ATDProgram controller;
 		private Product object;
 		private ComboBox<Product> productSelector = new ComboBox<Product>();
 		private TextField input = new TextField();

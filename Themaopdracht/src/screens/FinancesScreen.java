@@ -88,10 +88,8 @@ public class FinancesScreen extends HBox {
 						omzet += invoice.getTotalPrice();
 			}
 			btw = (omzet/121)*21;
-			String grossProfitString = new DecimalFormat("€ ##.##").format(omzet);
-			grossProfitLabelContent.setText(grossProfitString);
-			String taxString = new DecimalFormat("€ ##.##").format(btw);
-			taxLabelContent.setText(taxString);
+			grossProfitLabelContent.setText(controller.nf.format(omzet));
+			taxLabelContent.setText(controller.nf.format(btw));
 			amountLabelContent.setText(aantal+"");
 		}
 	}
