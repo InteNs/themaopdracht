@@ -20,15 +20,10 @@ import main.ATDProgram;
 import main.Customer;
 import main.Fuel;
 import main.Invoice;
-<<<<<<< HEAD
-=======
 import main.Invoice.InvoiceItem;
 import main.Invoice.PayMethod;
->>>>>>> origin/master
 import main.MaintenanceSession;
 import main.Product;
-import main.Invoice.InvoiceItem;
-import main.Invoice.PayMethod;
 import notifications.GetInfoNotification;
 import notifications.Notification;
 
@@ -238,7 +233,7 @@ public class InvoiceScreen extends HBox {
 			//VERGEET NIET TE CHECKEN OF ER GENOEG BENZINE IS
 			selectedInvoice.add(selectedInvoice.new InvoiceItem(((Fuel)addFuelNotification.getSelected()).getName(), ((Fuel)addFuelNotification.getSelected()).getSellPrice(), addFuelNotification.getInput()));
 			refreshList();
-<<<<<<< HEAD
+
 		}
 	}
 	/**
@@ -279,27 +274,6 @@ public class InvoiceScreen extends HBox {
 			Notification payNotify = new Notification(controller.getStage(), "factuur is betaald.", ATDProgram.notificationStyle.NOTIFY);
 			payNotify.showAndWait();}
 		refreshList();
-=======
-		});
-		payButton.setPrefSize(130, 50);
-		payButton.setOnAction(e->{
-			GetInfoNotification payConfirm = new GetInfoNotification(controller, ATDProgram.notificationStyle.PAY);
-			payConfirm.showAndWait();
-			if(payConfirm.getKeuze().equals("confirm")) {
-				System.out.println((PayMethod) payConfirm.getSelected());
-				selectedInvoice.payNow((PayMethod) payConfirm.getSelected());
-				Notification payNotify = new Notification(controller.getStage(), "factuur is betaald.", ATDProgram.notificationStyle.NOTIFY);
-				payNotify.showAndWait();}
-			refreshList();
-		});
-		//Make & merge left & right
-		leftBox.getChildren().addAll (listView,SecButtonBox);
-		rightBox.getChildren().addAll(detailsBox,mainButtonBox);
-		mainBox.getChildren().addAll (leftBox,rightBox);
-		mainBox.setSpacing(20);
-		mainBox.setPadding(new Insets(20));
-		this.getChildren().add(mainBox);
->>>>>>> origin/master
 	}
 	/**
 	 * saves the input in either a selected item or a new item
