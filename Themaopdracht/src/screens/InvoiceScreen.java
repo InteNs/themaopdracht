@@ -329,8 +329,7 @@ public class InvoiceScreen extends HBox {
 		dateContent.setDisable(true);
 		isPayedContent.setDisable(true);
 		leftBox.setDisable(enable);
-	}	
-	
+	}		
 	/**
 	 * checks if an item is selected in the list
 	 * @return false if nothing is selected
@@ -339,26 +338,6 @@ public class InvoiceScreen extends HBox {
 		if(selectedobject == null) return false;
 		return true;
 	}
-
-	/**
-	 * searches through all items in the list
-	 * @param oldVal the previous content of the searchfield
-	 * @param newVal the new content of the searchfield
-	 */
-//	public void search(String oldVal, String newVal) {
-//		if (oldVal != null && (newVal.length() < oldVal.length())) {
-//			//actor has deleted a character, so reset the search
-//			itemList.getItems().clear();
-//			itemList.getItems().addAll(content);
-//		}
-//		itemList.getItems().clear();
-//		//add an item if any item that exists contains any value that has been searched for
-//		for (ListRegel entry : content) {		
-//			if (entry.getInvoice().getNumberPlate().contains(newVal)){
-//				itemList.getItems().add(entry);
-//			}
-//		}
-//	}
 	// this represents every item in the list, it has different constructor for every filter option
 	public class ListRegel extends HBox{
 		private Invoice object;
