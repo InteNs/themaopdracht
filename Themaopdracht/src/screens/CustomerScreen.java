@@ -110,8 +110,8 @@ public class CustomerScreen extends HBox {
 				);
 		setEditable(false);
 		//Listview
-		for (Customer customer : controller.getCustomers()) 
-			itemList.getItems().add(new ListItem(customer));
+		for (Customer object : controller.getCustomers()) 
+			itemList.getItems().add(new ListItem(object));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
@@ -153,12 +153,12 @@ public class CustomerScreen extends HBox {
 			changeFilter(newValue.intValue());
 		});
 		//put everything in the right places
-		control_MainBox.getChildren().addAll(newButton,changeButton,removeButton);
-		control_secBox.getChildren().addAll(searchContent,filterSelector);
-		leftBox.getChildren().addAll (itemList, control_secBox);
-		rightBox.getChildren().addAll(detailsBox,control_MainBox);
-		mainBox.getChildren().addAll (leftBox,rightBox);
-		this.getChildren().add(mainBox);
+		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
+		control_secBox.getChildren().addAll (searchContent	, filterSelector);
+		leftBox.getChildren().addAll 		(itemList		, control_secBox);
+		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
+		mainBox.getChildren().addAll 		(leftBox		, rightBox);
+		this.getChildren().add				(mainBox);
 	}
 	/**
 	 * fills the list with items that fit with the given filter
@@ -168,20 +168,20 @@ public class CustomerScreen extends HBox {
 		switch(newValue){
 		case 0:{
 			itemList.getItems().clear();
-			for (Customer customer : controller.getCustomers())
-				itemList.getItems().add(new ListItem(customer));
+			for (Customer object : controller.getCustomers())
+				itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		case 1:{
 			itemList.getItems().clear();
-			for (Customer customer : controller.getRemindList(false))
-				itemList.getItems().add(new ListItem(customer));
+			for (Customer object : controller.getRemindList(false))
+				itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		case 2:{
 			itemList.getItems().clear();
-			for (Customer customer : controller.getRemindList(true))
-				itemList.getItems().add(new ListItem(customer));
+			for (Customer object : controller.getRemindList(true))
+				itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		}
@@ -360,11 +360,11 @@ public class CustomerScreen extends HBox {
 	}
 	// this class represents every item in the list
 	public class ListItem extends HBox{
-		private Customer customer;
+		private Customer object;
 		private Label itemPostalLabel = new Label(),itemNameLabel = new Label(),itemEmailLabel = new Label();
-		public ListItem(Customer customer){
+		public ListItem(Customer object){
 			//no filter
-			this.customer = customer;
+			this.object = object;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
@@ -380,15 +380,15 @@ public class CustomerScreen extends HBox {
 		 * fills in all the labels with the latest values
 		 */
 		public void refresh(){
-			itemNameLabel.setText(customer.getName());
-			itemPostalLabel.setText(customer.getPostal());
-			itemEmailLabel.setText(customer.getEmail());
+			itemNameLabel.setText(object.getName());
+			itemPostalLabel.setText(object.getPostal());
+			itemEmailLabel.setText(object.getEmail());
 		}
 		/**
 		 * @return the object this item represents
 		 */
 		public Customer getCustomer(){
-			return customer;
+			return object;
 		}
 	}
 }

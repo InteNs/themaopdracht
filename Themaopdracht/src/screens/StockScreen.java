@@ -118,8 +118,8 @@ public class StockScreen extends HBox {
 				);	
 		setEditable(false);
 		//Listview
-		for (Product product : controller.getStock().getAllProducts()) 
-			itemList.getItems().add(new ListItem(product));
+		for (Product object : controller.getStock().getAllProducts()) 
+			itemList.getItems().add(new ListItem(object));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
@@ -162,12 +162,12 @@ public class StockScreen extends HBox {
 			changeFilter(newValue.intValue());
 		});
 		//put everything in the right places
-		control_MainBox.getChildren().addAll(newButton,changeButton,removeButton);
-		control_secBox.getChildren().addAll(searchContent,filterSelector);
-		leftBox.getChildren().addAll (itemList, control_secBox);
-		rightBox.getChildren().addAll(detailsBox,control_MainBox);
-		mainBox.getChildren().addAll (leftBox,rightBox);
-		this.getChildren().add(mainBox);
+		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
+		control_secBox.getChildren().addAll	(searchContent	, filterSelector);
+		leftBox.getChildren().addAll 		(itemList		, control_secBox);
+		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
+		mainBox.getChildren().addAll 		(leftBox		, rightBox);
+		this.getChildren().add				(mainBox);
 	}
 	/**
 	 * fills the list with items that fit with the given filter or mode
@@ -177,20 +177,20 @@ public class StockScreen extends HBox {
 		switch(newValue){
 		case 0: default:{//voorraad
 			itemList.getItems().clear();
-			for (Product product : controller.getStock().getAllProducts())
-				itemList.getItems().add(new ListItem(product));
+			for (Product object : controller.getStock().getAllProducts())
+				itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		case 1:{//Benzine
 			itemList.getItems().clear();
-			for (Product product : controller.getStock().getAllProducts())
-				if(product instanceof Fuel)itemList.getItems().add(new ListItem(product));
+			for (Product object : controller.getStock().getAllProducts())
+				if(object instanceof Fuel)itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		case 2:{//Onderdelen
 			itemList.getItems().clear();
-			for (Product product : controller.getStock().getAllProducts())
-				if(product instanceof Part)itemList.getItems().add(new ListItem(product));
+			for (Product object : controller.getStock().getAllProducts())
+				if(object instanceof Part)itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		case 3:{//Bestellijst
@@ -410,13 +410,13 @@ public class StockScreen extends HBox {
 	}
 	// this represents every item in the list, it has different constructor for every filter option
 	public class ListItem extends HBox{
-		private Product product;
+		private Product object;
 		private ComboBox<Product> productSelector = new ComboBox<Product>();
 		private TextField input = new TextField();
 		private Label itemPriceLabel = new Label(),itemNameLabel = new Label(),itemSupplierLabel = new Label();
-		public ListItem(Product product){
+		public ListItem(Product object){
 			//no filter
-			this.product = product;
+			this.object = object;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
@@ -428,9 +428,9 @@ public class StockScreen extends HBox {
 			for (Node node : getChildren()) 
 				if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
-		public ListItem(Product product, int amount){
+		public ListItem(Product object, int amount){
 			//bestellijst filter
-			this.product = product;
+			this.object = object;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
@@ -455,9 +455,9 @@ public class StockScreen extends HBox {
 		 * fills in all the labels with the latest values
 		 */
 		public void refresh(){
-			itemNameLabel.setText(product.getName());
-			itemPriceLabel.setText(Double.toString(product.getSellPrice()));
-			itemSupplierLabel.setText(product.getSupplier().getName());
+			itemNameLabel.setText(object.getName());
+			itemPriceLabel.setText(Double.toString(object.getSellPrice()));
+			itemSupplierLabel.setText(object.getSupplier().getName());
 		}
 		/**
 		 * @return the selected item	(opboeken)
@@ -475,7 +475,7 @@ public class StockScreen extends HBox {
 		 * @return the object this item represents
 		 */
 		public Product getProduct(){
-			return product;
+			return object;
 		}
 	}
 }

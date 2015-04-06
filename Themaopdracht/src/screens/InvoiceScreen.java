@@ -36,7 +36,7 @@ public class InvoiceScreen extends HBox {
 	private final ListView<ListRegel> itemList 		= new ListView<ListRegel>();
 	private final ListView<InvoiceItem> contentList = new ListView<InvoiceItem>();
 	private final DatePicker dateContent 			= new DatePicker();
-	private Invoice selectedInvoice;
+	private Invoice selectedobject;
 	private ListRegel selectedItem;
 	private boolean isChanging;
 	private static final double
@@ -72,7 +72,32 @@ public class InvoiceScreen extends HBox {
 			mainBox 			= new HBox(space_Medium);
 	public InvoiceScreen(ATDProgram controller) {
 		this.controller = controller;
-		//StockDetails
+		//set styles and sizes
+		////set width for all detail labels and textfields
+		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
+			if(((HBox)node).getChildren().get(0) instanceof Label)
+				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
+		}
+		priceContent.setMinWidth(label_Normal*1.5);
+		dateContent.setMinWidth(label_Normal*1.5);
+		customerContent.setMinWidth(label_Normal*1.5);
+		detailsBox.setPadding(new Insets(space_big));
+		mainBox.setPadding(new Insets(space_big));
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
+		detailsBox.setPrefSize			(450	 , 520);
+		itemList.setPrefSize			(450	 , 520);
+		contentList.setPrefSize			(410	 , 300);
+		filterSelector.setPrefSize		(button_4, 50);
+		cancelButton.setPrefSize		(button_4, 50);
+		saveButton.setPrefSize			(button_4, 50);
+		newButton.setPrefSize			(button_4, 50);
+		changeButton.setPrefSize		(button_4, 50);
+		removeButton.setPrefSize		(button_4, 50);
+		payButton.setPrefSize			(button_4, 50);
+		addParkingButton.setPrefSize	(button_4, 50);
+		addMaintenanceButton.setPrefSize(button_4, 50);
+		addRefuelButton.setPrefSize		(button_4, 50);
+		//StockDetails		
 		customerContent.getItems().addAll(controller.getCustomers());
 		detailsBox.getChildren().addAll(
 				new VBox(space_big,
@@ -83,93 +108,58 @@ public class InvoiceScreen extends HBox {
 						new HBox(space_big,cancelButton,	saveButton),
 						new HBox(contentList)
 						));
-		detailsBox.setPrefSize(450, 520);
-		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
-		detailsBox.setPadding(new Insets(space_big));
 		setEditable(false);
-		//set width for all detail labels and textfields
-		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
-			if(((HBox)node).getChildren().get(0) instanceof Label)
-				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
-		}
-		priceContent.setMinWidth(label_Normal*1.5);
-		dateContent.setMinWidth(label_Normal*1.5);
-		customerContent.setMinWidth(label_Normal*1.5);
 		//Listview
-		contentList.setPrefSize(410, 300);
-		itemList.setPrefSize(450, 520);
-		for (Invoice invoice : controller.getInvoices()) 
-			if(!invoice.isPayed())itemList.getItems().add(new ListRegel(invoice));
+		for (Invoice object : controller.getInvoices()) 
+			if(!object.isPayed())itemList.getItems().add(new ListRegel(object));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
 		});
-		//SearchField
-//		searchInput.setPrefSize(112.5, 50);
-//		searchInput.setOnMouseClicked(e -> {
-//			if (searchInput.getText().equals("Zoek...")) {
-//				searchInput.clear();
-//			} else searchInput.selectAll();
-//		});
-//		searchInput.textProperty().addListener((observable, oldValue, newValue) -> {
-//				search(oldValue, newValue);
-//		});
 		//Buttons and filter
-		addRefuelButton.setPrefSize(button_4, 50);
 		addRefuelButton.setOnAction(e -> {
 			addFuel();
 		});
-		addMaintenanceButton.setPrefSize(button_4, 50);
 		addMaintenanceButton.setOnAction(e -> {
 			addMaintenance();
 		});
-		addParkingButton.setPrefSize(button_4, 50);
 		addParkingButton.setOnAction(e->{
 			addParking();
 		});
-		newButton.setPrefSize(button_4, 50);
 		newButton.setOnAction(e -> {
 			isChanging = false;
 			save();
 		});
-		payButton.setPrefSize(button_4, 50);
 		payButton.setOnAction(e->{
 			pay();
 		});
-		changeButton.setPrefSize(button_4, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(button_4, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});
-		cancelButton.setPrefSize(button_4, 50);
 		cancelButton.setOnAction(e -> {
 			setEditable(false);
 		});
-		saveButton.setPrefSize(button_4, 50);
 		saveButton.setOnAction(e -> {
 			save();
 		});
-		filterSelector.setPrefSize(button_4, 50);
 		filterSelector.getItems().addAll("Filter: Geen", "Filter: Achterstand", "Filter: Anoniem", "Filter: Betaalt");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
-		//Make & merge left & right
-		control_MainBox.getChildren().addAll(newButton,changeButton,payButton,removeButton);
-		control_secBox.getChildren().addAll(addMaintenanceButton,addRefuelButton,addParkingButton,filterSelector);
-		leftBox.getChildren().addAll (itemList, control_secBox);
-		rightBox.getChildren().addAll(detailsBox,control_MainBox);
-		mainBox.getChildren().addAll (leftBox,rightBox);
-		mainBox.setPadding(new Insets(space_big));
-		this.getChildren().add(mainBox);
-		System.out.println(detailsBox.getWidth());
+		//put everything in the right place
+		control_MainBox.getChildren().addAll(newButton,changeButton	,payButton		,removeButton);
+		control_secBox.getChildren().addAll	(addMaintenanceButton	,addRefuelButton,addParkingButton,filterSelector);
+		leftBox.getChildren().addAll 		(itemList				, control_secBox);
+		rightBox.getChildren().addAll		(detailsBox				,control_MainBox);
+		mainBox.getChildren().addAll 		(leftBox				,rightBox);
+		this.getChildren().add				(mainBox);
 	}
 	/**
 	 * fills the list with items that fit with the given filter
@@ -179,27 +169,27 @@ public class InvoiceScreen extends HBox {
 		switch(newValue){
 		case 0:{//geen
 				itemList.getItems().clear();
-				for (Invoice invoice : controller.getInvoices())
-					if(!invoice.isPayed())itemList.getItems().add(new ListRegel(invoice));
+				for (Invoice object : controller.getInvoices())
+					if(!object.isPayed())itemList.getItems().add(new ListRegel(object));
 				break;
 			}
 		case 1:{//achterstand
 				itemList.getItems().clear();
-				for (Invoice invoice : controller.getInvoices())
-					if(!invoice.isPayed() && invoice.getInvoiceDate().isBefore(LocalDate.now().minusMonths(3)))
-						itemList.getItems().add(new ListRegel(invoice));
+				for (Invoice object : controller.getInvoices())
+					if(!object.isPayed() && object.getInvoiceDate().isBefore(LocalDate.now().minusMonths(3)))
+						itemList.getItems().add(new ListRegel(object));
 				break;
 			}
 		case 2:{//anoniem
 				itemList.getItems().clear();
-				for (Invoice invoice : controller.getInvoices())
-					if(!invoice.isPayed()&& invoice.getCustomer()==null)itemList.getItems().add(new ListRegel(invoice));
+				for (Invoice object : controller.getInvoices())
+					if(!object.isPayed()&& object.getCustomer()==null)itemList.getItems().add(new ListRegel(object));
 				break;
 			}
 		case 3:{//betaalt
 			itemList.getItems().clear();
-			for (Invoice invoice : controller.getInvoices())
-				if(invoice.isPayed())itemList.getItems().add(new ListRegel(invoice));
+			for (Invoice object : controller.getInvoices())
+				if(object.isPayed())itemList.getItems().add(new ListRegel(object));
 			break;
 		}
 		}
@@ -215,7 +205,7 @@ public class InvoiceScreen extends HBox {
 			removeConfirm.showAndWait();
 			if (removeConfirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
-				controller.addorRemoveInvoice(selectedInvoice, true);
+				controller.addorRemoveInvoice(selectedobject, true);
 				Notification removeNotify = new Notification(controller.getStage(), "Het invoice is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 				removeNotify.showAndWait();
 			}
@@ -230,7 +220,7 @@ public class InvoiceScreen extends HBox {
 		if(addFuelNotification.getKeuze().equals("confirm")){
 			controller.getStock().useProduct((Fuel)addFuelNotification.getSelected(), addFuelNotification.getInput());
 			//VERGEET NIET TE CHECKEN OF ER GENOEG BENZINE IS
-			selectedInvoice.add(selectedInvoice.new InvoiceItem(((Fuel)addFuelNotification.getSelected()).getName(), ((Fuel)addFuelNotification.getSelected()).getSellPrice(), addFuelNotification.getInput()));
+			selectedobject.add(selectedobject.new InvoiceItem(((Fuel)addFuelNotification.getSelected()).getName(), ((Fuel)addFuelNotification.getSelected()).getSellPrice(), addFuelNotification.getInput()));
 			refreshList();
 
 		}
@@ -243,13 +233,13 @@ public class InvoiceScreen extends HBox {
 		addMaintenanceNotification.showAndWait();
 		if(addMaintenanceNotification.getKeuze().equals("confirm")){
 			MaintenanceSession selection = (MaintenanceSession)addMaintenanceNotification.getSelected();
-			selectedInvoice.add(selectedInvoice.new InvoiceItem("Uurloon", selection.getMechanic().getHourlyFee(), selection.getMechanic().getWorkedHours()));
+			selectedobject.add(selectedobject.new InvoiceItem("Uurloon", selection.getMechanic().getHourlyFee(), selection.getMechanic().getWorkedHours()));
 			Iterator<Product> keySetIterator = selection.getUsedParts().keySet().iterator();
 			while(keySetIterator.hasNext()){
 				Product key = keySetIterator.next();
 				double price = key.getSellPrice() * selection.getUsedParts().get(key);
 				controller.getStock().useProduct(key, selection.getUsedParts().get(key));
-				selectedInvoice.add(selectedInvoice.new InvoiceItem(key.getName(),price,selection.getUsedParts().get(key)));
+				selectedobject.add(selectedobject.new InvoiceItem(key.getName(),price,selection.getUsedParts().get(key)));
 				refreshList();
 			}
 		}	
@@ -269,7 +259,7 @@ public class InvoiceScreen extends HBox {
 		GetInfoNotification payConfirm = new GetInfoNotification(controller, ATDProgram.notificationStyle.PAY);
 		payConfirm.showAndWait();
 		if(payConfirm.getKeuze().equals("confirm")) {
-			selectedInvoice.payNow((PayMethod) payConfirm.getSelected());
+			selectedobject.payNow((PayMethod) payConfirm.getSelected());
 			Notification payNotify = new Notification(controller.getStage(), "factuur is betaald.", ATDProgram.notificationStyle.NOTIFY);
 			payNotify.showAndWait();}
 		refreshList();
@@ -283,7 +273,7 @@ public class InvoiceScreen extends HBox {
 			confirm.showAndWait();
 			switch (confirm.getKeuze()) {
 			case "confirm": {	
-				if(customerContent.getValue()!=null)selectedInvoice.bindToCustomer(customerContent.getValue());
+				if(customerContent.getValue()!=null)selectedobject.bindToCustomer(customerContent.getValue());
 				customerContent.setDisable(true);
 				refreshList();
 			}
@@ -317,13 +307,13 @@ public class InvoiceScreen extends HBox {
 	private void select(ListRegel selectedValue){
 		if(selectedValue!=null)	{
 			selectedItem = selectedValue;
-			selectedInvoice = selectedValue.getInvoice();
-			dateContent.setValue(selectedInvoice.getInvoiceDate());
-			customerContent.setValue(selectedInvoice.getCustomer());
-			priceContent.setText(Double.toString(selectedInvoice.getTotalPrice()));
-			isPayedContent.setSelected(selectedInvoice.isPayed());
+			selectedobject = selectedValue.getInvoice();
+			dateContent.setValue(selectedobject.getInvoiceDate());
+			customerContent.setValue(selectedobject.getCustomer());
+			priceContent.setText(Double.toString(selectedobject.getTotalPrice()));
+			isPayedContent.setSelected(selectedobject.isPayed());
 			contentList.getItems().clear();
-			for (InvoiceItem item : selectedInvoice.getItems())
+			for (InvoiceItem item : selectedobject.getItems())
 				contentList.getItems().add(item);
 		}
 	}
@@ -346,7 +336,7 @@ public class InvoiceScreen extends HBox {
 	 * @return false if nothing is selected
 	 */
 	private boolean checkSelected() {
-		if(selectedInvoice == null) return false;
+		if(selectedobject == null) return false;
 		return true;
 	}
 
@@ -371,10 +361,10 @@ public class InvoiceScreen extends HBox {
 //	}
 	// this represents every item in the list, it has different constructor for every filter option
 	public class ListRegel extends HBox{
-		private Invoice invoice;
+		private Invoice object;
 		private Label itemDateLabel = new Label(),itemPriceLabel = new Label(),itemCustomerLabel = new Label(),itemIsPayedLabel = new Label();
-		public ListRegel(Invoice invoice){
-			this.invoice = invoice;
+		public ListRegel(Invoice object){
+			this.object = object;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
@@ -392,18 +382,18 @@ public class InvoiceScreen extends HBox {
 		 * fills in all the labels with the latest values
 		 */
 		public void refresh(){
-			itemDateLabel.setText(invoice.getInvoiceDate().toString());
-			if(invoice.getCustomer()==null)itemCustomerLabel.setText("Anoniem");
-			else itemCustomerLabel.setText(invoice.getCustomer().getName());
-			itemPriceLabel.setText(Double.toString(invoice.getTotalPrice()));
-			if(invoice.isPayed())itemIsPayedLabel.setText("Betaalt");
+			itemDateLabel.setText(object.getInvoiceDate().toString());
+			if(object.getCustomer()==null)itemCustomerLabel.setText("Anoniem");
+			else itemCustomerLabel.setText(object.getCustomer().getName());
+			itemPriceLabel.setText(Double.toString(object.getTotalPrice()));
+			if(object.isPayed())itemIsPayedLabel.setText("Betaalt");
 			else itemIsPayedLabel.setText("Openstaand");
 		}
 		/**
 		 * @return the object this item represents
 		 */
 		public Invoice getInvoice(){
-			return invoice;
+			return object;
 		}
 	}
 }

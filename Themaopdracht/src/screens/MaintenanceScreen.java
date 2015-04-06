@@ -67,21 +67,8 @@ public class MaintenanceScreen extends HBox {
 			mainBox 			= new HBox(space_Small);
 	public MaintenanceScreen(ATDProgram controller) {
 		this.controller = controller;
-		//StockDetails
-		mechanicContent.getItems().addAll(controller.getMechanics());
-		detailsBox.getChildren().addAll(
-				new VBox(20,
-						new HBox(20,dateLabel,		 dateContent),
-						new HBox(20,mechanicLabel,	 mechanicContent),
-						new HBox(20,usedPartsLabel,	 usedPartsContent),
-						new HBox(20,numberPlateLabel,numberPlateContent),
-						new HBox(20,cancelButton,	 saveButton)
-						));
-		detailsBox.setPrefSize(450, 520);
-		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
-		detailsBox.setPadding(new Insets(space_Big));
-		setEditable(false);
-		//set width for all detail labels and textfields
+		//set styles and sizes
+		////set width for all detail labels and textfields
 		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
 				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
@@ -89,27 +76,42 @@ public class MaintenanceScreen extends HBox {
 				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(label_Normal*1.5);
 		}
 		dateContent.setMinWidth(label_Normal*1.5);
-		mechanicContent.setMinWidth(label_Normal*1.5);
-		// save/cancel button
-		cancelButton.setPrefSize(150, 50);
-		cancelButton.setOnAction(e -> {
-			clearInput();
-			setEditable(false);
-		});
-		saveButton.setPrefSize(150, 50);
-		saveButton.setOnAction(e -> {
-			save();
-		});
-		//Listview
+		mechanicContent.setMinWidth(label_Normal*1.5);	
+		detailsBox.setPadding(new Insets(space_Big));
+		mainBox.setPadding(new Insets(space_Big));
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
+		leftBox.getStyleClass().add("removeDisabledEffect");
+		itemList.getStyleClass().add("removeDisabledEffect");
+		detailsBox.setPrefSize(450, 520);
 		itemList.setPrefSize(450, 520);
-		for (MaintenanceSession session : controller.getMaintenanceSessions()) 
-			if(!session.isFinished())itemList.getItems().add(new ListRegel(session));
+		searchContent.setPrefSize	(button_4, 50);
+		filterSelector.setPrefSize	(button_4, 50);
+		cancelButton.setPrefSize	(150	 , 50);
+		saveButton.setPrefSize		(150	 , 50);
+		newButton.setPrefSize		(button_3, 50);
+		changeButton.setPrefSize	(button_3, 50);
+		removeButton.setPrefSize	(button_3, 50);
+		endButton.setPrefSize		(button_4, 50);
+		addButton.setPrefSize		(button_4, 50);
+		//StockDetails
+		mechanicContent.getItems().addAll(controller.getMechanics());
+		detailsBox.getChildren().addAll(
+				new VBox(space_Big,
+						new HBox(space_Big,dateLabel,		 dateContent),
+						new HBox(space_Big,mechanicLabel,	 mechanicContent),
+						new HBox(space_Big,usedPartsLabel,	 usedPartsContent),
+						new HBox(space_Big,numberPlateLabel,numberPlateContent),
+						new HBox(space_Big,cancelButton,	 saveButton)
+						));
+		setEditable(false);
+		//Listview
+		for (MaintenanceSession object : controller.getMaintenanceSessions()) 
+			if(!object.isFinished())itemList.getItems().add(new ListRegel(object));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
 		});
-		//SearchField
-		searchContent.setPrefSize(button_4, 50);
+		//SearchField	
 		searchContent.setOnMouseClicked(e -> {
 			if (searchContent.getText().equals("Zoek...")) {
 				searchContent.clear();
@@ -118,50 +120,47 @@ public class MaintenanceScreen extends HBox {
 		searchContent.textProperty().addListener((observable, oldValue, newValue) -> {
 				search(oldValue, newValue);
 		});
-		//Main Buttons and filter
-		control_MainBox.getChildren().addAll(
-				newButton,
-				changeButton,
-				removeButton
-				);
-		newButton.setPrefSize(button_3, 50);
+		//Buttons and filter
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
 			isChanging = false;
 		});
-		changeButton.setPrefSize(button_3, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(button_3, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});
-		endButton.setPrefSize(button_4, 50);
 		endButton.setOnAction(e -> {
 			endSession();
 		});
-		addButton.setPrefSize(button_4, 50);
 		addButton.setOnAction(e->{
 			addProduct();
 		});
-		filterSelector.setPrefSize(button_4, 50);
+		cancelButton.setOnAction(e -> {
+			clearInput();
+			setEditable(false);
+		});
+		saveButton.setOnAction(e -> {
+			save();
+		});
+
 		filterSelector.getItems().addAll("Filter: Geen", "Filter: Vandaag", "Filter: Niet aangewezen", "Filter: Afgesloten");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
-		//Make & merge left & right
-		control_secBox.getChildren().addAll(searchContent,filterSelector,addButton,endButton);
-		leftBox.getChildren().addAll (itemList, control_secBox);
-		rightBox.getChildren().addAll(detailsBox,control_MainBox);
-		mainBox.getChildren().addAll (leftBox,rightBox);
-		mainBox.setPadding(new Insets(20));
-		this.getChildren().add(mainBox);
+		//put everything in the right place
+		control_MainBox.getChildren().addAll(newButton		, changeButton	  , removeButton);
+		control_secBox.getChildren().addAll (searchContent	, filterSelector  , addButton	  , endButton);
+		leftBox.getChildren().addAll		(itemList		, control_secBox);
+		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
+		mainBox.getChildren().addAll 		(leftBox		, rightBox);
+		this.getChildren().add				(mainBox);
 	}
 	/**
 	 * fills the list with items that fit with the given filter
@@ -171,26 +170,26 @@ public class MaintenanceScreen extends HBox {
 		switch(newValue){
 		case 0:{
 				itemList.getItems().clear();
-				for (MaintenanceSession session : controller.getMaintenanceSessions())
-					if(!session.isFinished())itemList.getItems().add(new ListRegel(session));
+				for (MaintenanceSession object : controller.getMaintenanceSessions())
+					if(!object.isFinished())itemList.getItems().add(new ListRegel(object));
 				break;
 			}
 		case 1:{
 				itemList.getItems().clear();
-				for (MaintenanceSession session : controller.getMaintenanceSessions())
-					if(session.getPlannedDate().isEqual(LocalDate.now()) && !session.isFinished()) itemList.getItems().add(new ListRegel(session));
+				for (MaintenanceSession object : controller.getMaintenanceSessions())
+					if(object.getPlannedDate().isEqual(LocalDate.now()) && !object.isFinished()) itemList.getItems().add(new ListRegel(object));
 				break;
 			}
 		case 2:{
 				itemList.getItems().clear();
-				for (MaintenanceSession session : controller.getMaintenanceSessions())
-					if(session.getMechanic()==null && !session.isFinished()) itemList.getItems().add(new ListRegel(session));
+				for (MaintenanceSession object : controller.getMaintenanceSessions())
+					if(object.getMechanic()==null && !object.isFinished()) itemList.getItems().add(new ListRegel(object));
 				break;
 			}
 		case 3:{
 			itemList.getItems().clear();
-			for (MaintenanceSession session : controller.getMaintenanceSessions())
-				if(session.isFinished())itemList.getItems().add(new ListRegel(session));
+			for (MaintenanceSession object : controller.getMaintenanceSessions())
+				if(object.isFinished())itemList.getItems().add(new ListRegel(object));
 			break;
 		}
 		}
@@ -393,10 +392,10 @@ public class MaintenanceScreen extends HBox {
 	}
 	// this represents every item in the list, it has different constructor for every filter option
 	public class ListRegel extends HBox{
-		private MaintenanceSession session;
+		private MaintenanceSession object;
 		private Label itemPlateLabel = new Label(),itemMechLabel = new Label(),itemPartsLabel = new Label();
-		public ListRegel(MaintenanceSession session){
-			this.session = session;
+		public ListRegel(MaintenanceSession object){
+			this.object = object;
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
@@ -412,16 +411,16 @@ public class MaintenanceScreen extends HBox {
 		 * fills in all the labels with the latest values
 		 */
 		public void refresh(){
-			if(session.getMechanic()==null)itemMechLabel.setText("geen Monteur");
-			else itemMechLabel.setText(session.getMechanic().getName());
-			itemPlateLabel.setText(session.getNumberPlate());
-			itemPartsLabel.setText(Integer.toString(session.getTotalParts()));
+			if(object.getMechanic()==null)itemMechLabel.setText("geen Monteur");
+			else itemMechLabel.setText(object.getMechanic().getName());
+			itemPlateLabel.setText(object.getNumberPlate());
+			itemPartsLabel.setText(Integer.toString(object.getTotalParts()));
 		}
 		/**
 		 * @return the object this item represents
 		 */
 		public MaintenanceSession getMaintenanceSession(){
-			return session;
+			return object;
 		}
 	}
 }
