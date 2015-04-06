@@ -87,8 +87,7 @@ public class Customer {
 	}
 	@Override
 	public String toString() {
-		return name + " - " + postal + " - "
-				+ email;
+		return name;
 	}
 	
 	

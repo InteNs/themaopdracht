@@ -33,6 +33,8 @@ public class CustomerScreen extends HBox {
 	private static final double
 			space_Small = 10,
 			space_Big = 20,
+			space_3 = 15,
+			button_3 = 140,
 			widthLabels = 120;
 	private final Button 
 			newButton = new Button("Nieuw"), 
@@ -63,14 +65,14 @@ public class CustomerScreen extends HBox {
 			leftBox = new VBox(space_Big),
 			rightBox = new VBox(space_Big);
 	private  final HBox 
-			stockDetails = new HBox(space_Small), 
-			mainButtonBox = new HBox(space_Small), 
+			details = new HBox(space_Small), 
+			mainButtonBox = new HBox(space_3), 
 			searchFieldBox = new HBox(space_Small), 
 			mainBox = new HBox(space_Small);
 	public CustomerScreen(ATDProgram controller) {
 		this.controller = controller;
 		//StockDetails
-		stockDetails.getChildren().addAll(
+		details.getChildren().addAll(
 				new VBox(space_Big,
 						new HBox(space_Big,nameLabel,		nameContent),
 						new HBox(space_Big,addressLabel,	addressContent),
@@ -83,12 +85,12 @@ public class CustomerScreen extends HBox {
 						new HBox(space_Big,blackListLabel, 	blackListContent),
 						new HBox(space_Big,cancelButton,	saveButton)
 						));
-		stockDetails.setPrefSize(555, 520);
-		stockDetails.getStyleClass().add("stockDetails");
-		stockDetails.setPadding(new Insets(space_Big));
+		details.setPrefSize(450, 520);
+		details.getStyleClass().add("stockDetails");
+		details.setPadding(new Insets(space_Big));
 		setEditable(false);
 		//set width for all detail labels and textfields
-		for (Node node : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {
+		for (Node node : ((VBox)details.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
 				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
 			if(((HBox)node).getChildren().get(1) instanceof TextField)
@@ -105,7 +107,7 @@ public class CustomerScreen extends HBox {
 			select(newValue);
 		});
 		//SearchField
-		searchContent.setPrefSize(310, 50);
+		searchContent.setPrefSize(290, 50);
 		searchContent.setOnMouseClicked(e -> {
 			if (searchContent.getText().equals("Zoek...")) {
 				searchContent.clear();
@@ -125,20 +127,20 @@ public class CustomerScreen extends HBox {
 		saveButton.setOnAction(e -> {
 			save();
 		});
-		newButton.setPrefSize(180, 50);
+		newButton.setPrefSize(button_3, 50);
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
 			isChanging = false;
 		});
-		changeButton.setPrefSize(180, 50);
+		changeButton.setPrefSize(button_3, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(180, 50);
+		removeButton.setPrefSize(button_3, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});
@@ -152,7 +154,7 @@ public class CustomerScreen extends HBox {
 		mainButtonBox.getChildren().addAll(newButton,changeButton,removeButton);
 		searchFieldBox.getChildren().addAll(searchContent,filterSelector);
 		leftBox.getChildren().addAll (itemList, searchFieldBox);
-		rightBox.getChildren().addAll(stockDetails,mainButtonBox);
+		rightBox.getChildren().addAll(details,mainButtonBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setPadding(new Insets(space_Big));
 		leftBox.getStyleClass().add("removeDisabledEffect");
@@ -274,6 +276,7 @@ public class CustomerScreen extends HBox {
 		itemList.getItems().addAll(content);
 		for (ListRegel listRegel : itemList.getItems())
 			listRegel.refresh();
+		select(selectedItem);
 	}
 	/**
 	 * selects an item
@@ -301,17 +304,14 @@ public class CustomerScreen extends HBox {
 	private void setEditable(boolean enable){
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
-		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
-			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).setDisable(!enable);
-		datecontent.setDisable(!enable);
-		blackListContent.setDisable(!enable);
+		details.setDisable(!enable);
 		leftBox.setDisable(enable);
 	}	
 	/**
 	 * clears all the inputfields
 	 */
 	private void clearInput(){
-		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).clear();
 		datecontent.setValue(null);
 		blackListContent.setSelected(false);
@@ -321,7 +321,7 @@ public class CustomerScreen extends HBox {
 	 * @return false if one of the inputs is null
 	 */
 	private boolean checkInput(){
-		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField){
 				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty()){
 					return false;

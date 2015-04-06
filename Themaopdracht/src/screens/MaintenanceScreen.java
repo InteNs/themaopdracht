@@ -30,8 +30,13 @@ public class MaintenanceScreen extends HBox {
 	private ArrayList<ListRegel> content = new ArrayList<ListRegel>();
 	private ListView<ListRegel> itemList = new ListView<ListRegel>();
 	private DatePicker dateContent = new DatePicker();
-	private double
-			spacingBoxes = 10,
+	private static final double
+			space_Small = 10,
+			space_Big = 20,
+			space_3 = 15,
+			button_3 = 140,
+			space_4 = 6,
+			button_4 = 108,
 			widthLabels = 120;
 	private boolean isChanging = false;
 	private Button 
@@ -52,13 +57,13 @@ public class MaintenanceScreen extends HBox {
 			usedPartsContent = new TextField(),
 			numberPlateContent = new TextField();
 	private VBox
-			leftBox = new VBox(20),
-			rightBox = new VBox(20);
+			leftBox = new VBox(space_Big),
+			rightBox = new VBox(space_Big);
 	private HBox 
-			details = new HBox(spacingBoxes), 
-			mainButtonBox = new HBox(spacingBoxes), 
-			searchFieldBox = new HBox(6), 
-			mainBox = new HBox(spacingBoxes);
+			details = new HBox(space_Small), 
+			mainButtonBox = new HBox(space_3), 
+			searchFieldBox = new HBox(space_4), 
+			mainBox = new HBox(space_Small);
 	public MaintenanceScreen(ATDProgram controller) {
 		this.controller = controller;
 		//StockDetails
@@ -71,7 +76,7 @@ public class MaintenanceScreen extends HBox {
 						new HBox(20,numberPlateLabel,numberPlateContent),
 						new HBox(20,cancelButton,	 saveButton)
 						));
-		details.setPrefSize(555, 520);
+		details.setPrefSize(450, 520);
 		details.getStyleClass().add("stockDetails");
 		details.setPadding(new Insets(20));
 		setEditable(false);
@@ -103,7 +108,7 @@ public class MaintenanceScreen extends HBox {
 			select(newValue);
 		});
 		//SearchField
-		searchInput.setPrefSize(112.5, 50);
+		searchInput.setPrefSize(button_4, 50);
 		searchInput.setOnMouseClicked(e -> {
 			if (searchInput.getText().equals("Zoek...")) {
 				searchInput.clear();
@@ -118,32 +123,32 @@ public class MaintenanceScreen extends HBox {
 				changeButton,
 				removeButton
 				);
-		newButton.setPrefSize(180, 50);
+		newButton.setPrefSize(button_3, 50);
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
 			isChanging = false;
 		});
-		changeButton.setPrefSize(180, 50);
+		changeButton.setPrefSize(button_3, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(180, 50);
+		removeButton.setPrefSize(button_3, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});
-		endButton.setPrefSize(112.5, 50);
+		endButton.setPrefSize(button_4, 50);
 		endButton.setOnAction(e -> {
 			endSession();
 		});
-		addButton.setPrefSize(112.5, 50);
+		addButton.setPrefSize(button_4, 50);
 		addButton.setOnAction(e->{
 			addProduct();
 		});
-		filterSelector.setPrefSize(112.5, 50);
+		filterSelector.setPrefSize(button_4, 50);
 		filterSelector.getItems().addAll("Filter: Geen", "Filter: Vandaag", "Filter: Niet aangewezen", "Filter: Afgesloten");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
@@ -294,6 +299,7 @@ public class MaintenanceScreen extends HBox {
 		for (ListRegel listRegel : itemList.getItems())
 			listRegel.refresh();
 		changeFilter(filterSelector.getSelectionModel().getSelectedIndex());
+		select(selectedItem);
 	}
 	/**
 	 * selects an item and fills in the information

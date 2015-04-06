@@ -70,10 +70,10 @@ public class Invoice {
 					priceL,
 					new Separator(Orientation.VERTICAL),
 					totalPriceL);
-			((Label)getChildren().get(0)).setPrefWidth(80);
-			((Label)getChildren().get(2)).setPrefWidth(150);
-			((Label)getChildren().get(4)).setPrefWidth(80);
-			((Label)getChildren().get(6)).setPrefWidth(80);
+			((Label)getChildren().get(0)).setPrefWidth(50);
+			((Label)getChildren().get(2)).setPrefWidth(100);
+			((Label)getChildren().get(4)).setPrefWidth(100);
+			((Label)getChildren().get(6)).setPrefWidth(100);
 		}
 		public double getTotal(){
 			return price * amount;

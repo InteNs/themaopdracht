@@ -31,8 +31,11 @@ public class StockScreen extends HBox {
 	private final ListView<ListRegel> itemList = new ListView<ListRegel>();
 	private static final double
 			space_small = 10,
+			space_medium = 15,
 			space_big = 20,
+			button_small = 140,
 			widthLabels = 120;
+			
 	private boolean isChanging = false;
 	private final Button 
 			newButton = new Button("Nieuw"), 
@@ -66,14 +69,14 @@ public class StockScreen extends HBox {
 			leftBox = new VBox(space_big),
 			rightBox = new VBox(space_big);
 	private final HBox 
-			stockDetails = new HBox(space_small), 
-			mainButtonBox = new HBox(space_small), 
+			details = new HBox(space_small), 
+			mainButtonBox = new HBox(space_medium), 
 			searchFieldBox = new HBox(space_small), 
 			mainBox = new HBox(space_small);
 	public StockScreen(ATDProgram controller) {
 		this.controller = controller;
 		//StockDetails
-		stockDetails.getChildren().addAll(
+		details.getChildren().addAll(
 				new VBox(space_big,
 						new HBox(space_big,nameLabel,		nameContent),
 						new HBox(space_big,amountLabel,		amountContent),
@@ -86,13 +89,13 @@ public class StockScreen extends HBox {
 						new HBox(space_big,placeLabel,		placeContent),	
 						new HBox(space_big,cancelButton,	saveButton)
 						));
-		stockDetails.getStyleClass().add("removeDisabledEffect");
-		stockDetails.getStyleClass().add("stockDetails");
-		stockDetails.setPadding(new Insets(space_big));
-		stockDetails.setPrefSize(555, 520);
+		details.getStyleClass().add("removeDisabledEffect");
+		details.getStyleClass().add("stockDetails");
+		details.setPadding(new Insets(space_big));
+		details.setPrefSize(450, 520);
 		setEditable(false);
 		////set width for all detail labels and textfields
-		for (Node node : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {
+		for (Node node : ((VBox)details.getChildren().get(0)).getChildren()) {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
 				((Label)((HBox)node).getChildren().get(0)).setMinWidth(widthLabels);
 			if(((HBox)node).getChildren().get(1) instanceof TextField)
@@ -122,7 +125,7 @@ public class StockScreen extends HBox {
 			select(newValue);
 		});
 		//SearchField
-		searchInput.setPrefSize(310, 50);
+		searchInput.setPrefSize(290, 50);
 		searchInput.setOnMouseClicked(e -> {
 			if (searchInput.getText().equals("Zoek...")) searchInput.clear();
 			else searchInput.selectAll();
@@ -140,20 +143,20 @@ public class StockScreen extends HBox {
 		saveButton.setOnAction(e -> {
 			save();
 		});
-		newButton.setPrefSize(180, 50);
+		newButton.setPrefSize(button_small, 50);
 		newButton.setOnAction(e -> {
 			clearInput();
 			setEditable(true);
 			isChanging = false;
 		});
-		changeButton.setPrefSize(180, 50);
+		changeButton.setPrefSize(button_small, 50);
 		changeButton.setOnAction(e -> {
 			if(checkSelected()){
 				setEditable(true);
 				isChanging = true;
 			}
 		});
-		removeButton.setPrefSize(180, 50);
+		removeButton.setPrefSize(button_small, 50);
 		removeButton.setOnAction(e->{
 			remove();
 		});
@@ -170,7 +173,7 @@ public class StockScreen extends HBox {
 		mainButtonBox.getChildren().addAll(newButton,changeButton,removeButton);
 		searchFieldBox.getChildren().addAll(searchInput,filterSelector);
 		leftBox.getChildren().addAll (itemList, searchFieldBox);
-		rightBox.getChildren().addAll(stockDetails,mainButtonBox);
+		rightBox.getChildren().addAll(details,mainButtonBox);
 		mainBox.getChildren().addAll (leftBox,rightBox);
 		mainBox.setPadding(new Insets(space_big));
 		leftBox.getStyleClass().add("removeDisabledEffect");
@@ -314,6 +317,7 @@ public class StockScreen extends HBox {
 		itemList.getItems().addAll(content);
 		for (ListRegel listRegel : itemList.getItems())
 			listRegel.refresh();
+		select(selectedItem);
 	}
 	/**
 	 * selects an item
@@ -340,14 +344,14 @@ public class StockScreen extends HBox {
 	private void setEditable(boolean enable){
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
-		stockDetails.setDisable(!enable);
+		details.setDisable(!enable);
 		leftBox.setDisable(enable);
 	}	
 	/**
 	 * clears all the inputfields
 	 */
 	private void clearInput(){
-		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).clear();
 		supplierContent.getSelectionModel().clearSelection();
 	}
@@ -356,7 +360,7 @@ public class StockScreen extends HBox {
 	 * @return false if one of the inputs is null
 	 */
 	private boolean checkInput(){
-		for (Node node1 : ((VBox)stockDetails.getChildren().get(0)).getChildren())
+		for (Node node1 : ((VBox)details.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField)
 				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty())
 					return false;
