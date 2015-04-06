@@ -18,7 +18,6 @@ import main.ATDProgram;
 import main.MaintenanceSession;
 import main.Mechanic;
 import main.Product;
-import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class MaintenanceScreen extends HBox {
@@ -67,6 +66,21 @@ public class MaintenanceScreen extends HBox {
 			mainBox 			= new HBox(space_Small);
 	public MaintenanceScreen(ATDProgram controller) {
 		this.controller = controller;
+		//put everything in the right place
+		control_MainBox.getChildren().addAll(newButton		, changeButton	  , removeButton);
+		control_secBox.getChildren().addAll (searchContent	, filterSelector  , addButton	  , endButton);
+		leftBox.getChildren().addAll		(itemList		, control_secBox);
+		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
+		mainBox.getChildren().addAll 		(leftBox		, rightBox);
+		this.getChildren().add				(mainBox);
+		detailsBox.getChildren().addAll(
+				new VBox(space_Big,
+						new HBox(space_Big,dateLabel,		 dateContent),
+						new HBox(space_Big,mechanicLabel,	 mechanicContent),
+						new HBox(space_Big,usedPartsLabel,	 usedPartsContent),
+						new HBox(space_Big,numberPlateLabel,numberPlateContent),
+						new HBox(space_Big,cancelButton,	 saveButton))
+		);
 		//set styles and sizes
 		////set width for all detail labels and textfields
 		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
@@ -79,7 +93,7 @@ public class MaintenanceScreen extends HBox {
 		mechanicContent.setMinWidth(label_Normal*1.5);	
 		detailsBox.setPadding(new Insets(space_Big));
 		mainBox.setPadding(new Insets(space_Big));
-		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");
 		leftBox.getStyleClass().add("removeDisabledEffect");
 		itemList.getStyleClass().add("removeDisabledEffect");
 		detailsBox.setPrefSize(450, 520);
@@ -95,14 +109,6 @@ public class MaintenanceScreen extends HBox {
 		addButton.setPrefSize		(button_4, 50);
 		//StockDetails
 		mechanicContent.getItems().addAll(controller.getMechanics());
-		detailsBox.getChildren().addAll(
-				new VBox(space_Big,
-						new HBox(space_Big,dateLabel,		 dateContent),
-						new HBox(space_Big,mechanicLabel,	 mechanicContent),
-						new HBox(space_Big,usedPartsLabel,	 usedPartsContent),
-						new HBox(space_Big,numberPlateLabel,numberPlateContent),
-						new HBox(space_Big,cancelButton,	 saveButton)
-						));
 		setEditable(false);
 		//Listview
 		for (MaintenanceSession object : controller.getMaintenanceSessions()) 
@@ -154,13 +160,6 @@ public class MaintenanceScreen extends HBox {
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
-		//put everything in the right place
-		control_MainBox.getChildren().addAll(newButton		, changeButton	  , removeButton);
-		control_secBox.getChildren().addAll (searchContent	, filterSelector  , addButton	  , endButton);
-		leftBox.getChildren().addAll		(itemList		, control_secBox);
-		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
-		mainBox.getChildren().addAll 		(leftBox		, rightBox);
-		this.getChildren().add				(mainBox);
 	}
 	/**
 	 * fills the list with items that fit with the given filter
@@ -201,14 +200,14 @@ public class MaintenanceScreen extends HBox {
 	 */
 	private void addProduct(){
 		if(checkSelected() && checkMechanic()){
-			GetInfoNotification addProduct = new GetInfoNotification(controller, ATDProgram.notificationStyle.PRODUCTS);
+			Notification addProduct = new Notification(controller,"", ATDProgram.notificationStyle.PRODUCTS);
 			addProduct.showAndWait();
 			if(addProduct.getKeuze().equals("confirm")){
 				if(selectedObject.usePart((Product)addProduct.getSelected())){
 					refreshList();
 				}
 				else {
-					Notification noPart  = new Notification(controller.getStage(), "Dat product is op!",ATDProgram.notificationStyle.NOTIFY);
+					Notification noPart  = new Notification(controller, "Dat product is op!",ATDProgram.notificationStyle.NOTIFY);
 					noPart.showAndWait();
 				}
 			} 
@@ -219,11 +218,11 @@ public class MaintenanceScreen extends HBox {
 	 */
 	private void endSession(){
 		if(checkSelected() && checkMechanic()){
-			GetInfoNotification endSession = new GetInfoNotification(controller, ATDProgram.notificationStyle.ENDSESSION);
+			Notification endSession = new Notification(controller,"", ATDProgram.notificationStyle.ENDSESSION);
 			endSession.showAndWait();
 			selectedObject.endSession(endSession.getInput());
-			Notification changeNotify = new Notification(controller .getStage(), "Klus is afgesloten",ATDProgram.notificationStyle.NOTIFY);
-			changeNotify.showAndWait();
+			Notification Notify = new Notification(controller, "Klus is afgesloten",ATDProgram.notificationStyle.NOTIFY);
+			Notify.showAndWait();
 			refreshList();
 		}
 	}
@@ -232,13 +231,13 @@ public class MaintenanceScreen extends HBox {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit session wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
-			removeConfirm.showAndWait();
-			if (removeConfirm.getKeuze().equals("confirm")){
+			Notification Confirm = new Notification(controller, "Weet u zeker dat u deze klus wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			Confirm.showAndWait();
+			if (Confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveMaintenanceSessions(selectedObject, true);
-				Notification removeNotify = new Notification(controller.getStage(), "Het session is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
-				removeNotify.showAndWait();
+				Notification Notify = new Notification(controller, "de klus is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				Notify.showAndWait();
 			}
 		}			
 	}
@@ -248,7 +247,7 @@ public class MaintenanceScreen extends HBox {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification confirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -264,7 +263,7 @@ public class MaintenanceScreen extends HBox {
 				}
 			}
 			else{	
-				Notification confirm = new Notification(controller.getStage(),"Deze klus aanmaken?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller,"Deze klus aanmaken?",ATDProgram.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -284,7 +283,7 @@ public class MaintenanceScreen extends HBox {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller.getStage(), "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}
@@ -365,8 +364,8 @@ public class MaintenanceScreen extends HBox {
 	 */
 	private boolean checkMechanic(){
 		if(selectedObject.getMechanic()==null){
-			Notification notification = new Notification(controller.getStage(), "Eerst een montuer toewijzen!", ATDProgram.notificationStyle.NOTIFY);
-			notification.showAndWait();
+			Notification notify = new Notification(controller, "Eerst een montuer toewijzen!", ATDProgram.notificationStyle.NOTIFY);
+			notify.showAndWait();
 			return false;
 		}
 		return true;

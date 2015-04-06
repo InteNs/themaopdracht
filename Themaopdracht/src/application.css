@@ -7,7 +7,7 @@
 .check-box {
 	-fx-opacity: 1.0;
 }
-.stockDetails {
+.detailsBox {
 	-fx-background-color: white; 
 	-fx-border-color: lightgray; 
 	-fx-border: solid;

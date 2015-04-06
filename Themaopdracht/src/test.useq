@@ -39,8 +39,8 @@
       <position height="21" width="0" x="0" y="2242"/>    
     </execution>  
   </object>  
-  <object id="108" language="java" name="notifications.Notification" project="Themaopdracht" 
-    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="changeConfirm" type="class" 
+  <object id="108" language="java" name="oldfiles.Notification" project="Themaopdracht" 
+    file="/Themaopdracht/src/oldfiles/Notification.java" binary="false" label="changeConfirm" type="class" 
     autoSize="true">    
     <position height="0" width="0" x="0" y="0"/>    
     <execution id="9">      
@@ -199,9 +199,8 @@
       <position height="21" width="0" x="0" y="1855"/>    
     </execution>  
   </object>  
-  <object id="120" language="java" name="notifications.Notification" project="Themaopdracht" 
-    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="confirm" type="class" 
-    autoSize="true">    
+  <object id="120" language="java" name="oldfiles.Notification" project="Themaopdracht" 
+    file="/Themaopdracht/src/oldfiles/Notification.java" binary="false" label="confirm" type="class" autoSize="true">    
     <position height="0" width="0" x="0" y="0"/>    
     <execution id="59">      
       <position height="21" width="0" x="0" y="1309"/>    
@@ -242,9 +241,8 @@
       <position height="21" width="0" x="0" y="2023"/>    
     </execution>  
   </object>  
-  <object id="125" language="java" name="notifications.Notification" project="Themaopdracht" 
-    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="notFilled" type="class" 
-    autoSize="true">    
+  <object id="125" language="java" name="oldfiles.Notification" project="Themaopdracht" 
+    file="/Themaopdracht/src/oldfiles/Notification.java" binary="false" label="notFilled" type="class" autoSize="true">    
     <position height="0" width="0" x="0" y="0"/>    
     <execution id="103">      
       <position height="21" width="0" x="0" y="2273"/>    

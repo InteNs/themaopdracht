@@ -18,7 +18,6 @@ import main.Fuel;
 import main.Part;
 import main.Product;
 import main.ProductSupplier;
-import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class StockScreen extends HBox {
@@ -74,6 +73,26 @@ public class StockScreen extends HBox {
 	mainBox 		= new HBox(space_Small);
 	public StockScreen(ATDProgram controller) {
 		this.controller = controller;
+		//put everything in the right places
+		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
+		control_secBox.getChildren().addAll	(searchContent	, filterSelector);
+		leftBox.getChildren().addAll 		(itemList		, control_secBox);
+		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
+		mainBox.getChildren().addAll 		(leftBox		, rightBox);
+		this.getChildren().add				(mainBox);
+		detailsBox.getChildren().addAll(
+				new VBox(space_Big,
+						new HBox(space_Big,nameLabel	 , nameContent),
+						new HBox(space_Big,amountLabel	 , amountContent),
+						new HBox(space_Big,minAmountLabel, minAmountContent),
+						new HBox(space_Big,priceLabel	 , priceContent),
+						new HBox(space_Big,buyPriceLabel , buyPriceContent),
+						new HBox(space_Big,supplierLabel , supplierContent),
+						new HBox(space_Big,addressLabel	 , addressContent),
+						new HBox(space_Big,postalLabel	 , postalContent),
+						new HBox(space_Big,placeLabel	 , placeContent),	
+						new HBox(space_Big,cancelButton	 , saveButton))
+		);	
 		//set styles and sizes
 		////set width for all detail labels and textfields
 		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
@@ -85,7 +104,7 @@ public class StockScreen extends HBox {
 		supplierContent.setMinWidth(label_Normal*1.5);		
 		detailsBox.setPadding(new Insets(space_Big));
 		mainBox.setPadding(new Insets(space_Big));
-		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");
 		leftBox.getStyleClass().add("removeDisabledEffect");
 		itemList.getStyleClass().add("removeDisabledEffect");
 		detailsBox.setPrefSize		(450	 , 520);
@@ -102,20 +121,6 @@ public class StockScreen extends HBox {
 		supplierContent.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			selectSupplier(newValue);			
 		});
-		detailsBox.getChildren().addAll(
-				new VBox(space_Big,
-						new HBox(space_Big,nameLabel	 , nameContent),
-						new HBox(space_Big,amountLabel	 , amountContent),
-						new HBox(space_Big,minAmountLabel, minAmountContent),
-						new HBox(space_Big,priceLabel	 , priceContent),
-						new HBox(space_Big,buyPriceLabel , buyPriceContent),
-						new HBox(space_Big,supplierLabel , supplierContent),
-						new HBox(space_Big,addressLabel	 , addressContent),
-						new HBox(space_Big,postalLabel	 , postalContent),
-						new HBox(space_Big,placeLabel	 , placeContent),	
-						new HBox(space_Big,cancelButton	 , saveButton)
-						)
-				);	
 		setEditable(false);
 		//Listview
 		for (Product object : controller.getStock().getAllProducts()) 
@@ -161,13 +166,6 @@ public class StockScreen extends HBox {
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
-		//put everything in the right places
-		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
-		control_secBox.getChildren().addAll	(searchContent	, filterSelector);
-		leftBox.getChildren().addAll 		(itemList		, control_secBox);
-		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
-		mainBox.getChildren().addAll 		(leftBox		, rightBox);
-		this.getChildren().add				(mainBox);
 	}
 	/**
 	 * fills the list with items that fit with the given filter or mode
@@ -221,13 +219,13 @@ public class StockScreen extends HBox {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit product wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
-			removeConfirm.showAndWait();
-			if (removeConfirm.getKeuze().equals("confirm")){
+			Notification confirm = new Notification(controller, "Weet u zeker dat u dit product wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			confirm.showAndWait();
+			if (confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveproduct(selectedObject, true);
-				Notification removeNotify = new Notification(controller.getStage(), "Het product is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
-				removeNotify.showAndWait();
+				Notification notify = new Notification(controller, "Het product is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				notify.showAndWait();
 				refreshList();
 			}
 		}			
@@ -238,7 +236,7 @@ public class StockScreen extends HBox {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+				Notification changeConfirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
 				changeConfirm.showAndWait();
 				switch (changeConfirm.getKeuze()) {
 				case "confirm": {
@@ -257,7 +255,7 @@ public class StockScreen extends HBox {
 				}
 			}
 			else{	
-				GetInfoNotification getType = new GetInfoNotification(controller, ATDProgram.notificationStyle.TYPE);
+				Notification getType = new Notification(controller,"", ATDProgram.notificationStyle.TYPE);
 				getType.showAndWait();
 				switch (getType.getKeuze()) {
 				case "confirm": {
@@ -293,7 +291,7 @@ public class StockScreen extends HBox {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller.getStage(), "Niet alle velden zijn juist ingevuld!",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld!",ATDProgram.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}

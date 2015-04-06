@@ -71,29 +71,13 @@ public class CustomerScreen extends HBox {
 	mainBox 		= new HBox(space_Small);
 	public CustomerScreen(ATDProgram controller) {
 		this.controller = controller;
-		//set styles and sizes
-		////set width for all detail labels and textfields
-		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
-			if(((HBox)node).getChildren().get(0) instanceof Label)
-				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
-			if(((HBox)node).getChildren().get(1) instanceof TextField)
-				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(label_Normal*1.5);
-		}
-		datecontent.setMinWidth(label_Normal*1.5);
-		detailsBox.setPadding(new Insets(space_Big));
-		mainBox.setPadding(new Insets(space_Big));
-		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
-		leftBox.getStyleClass().add("removeDisabledEffect");
-		detailsBox.setPrefSize		(450	 , 520);
-		itemList.setPrefSize		(450	 , 520);
-		searchContent.setPrefSize	(290	 , 50);
-		filterSelector.setPrefSize	(150	 , 50);
-		cancelButton.setPrefSize	(150	 , 50);
-		saveButton.setPrefSize		(150	 , 50);
-		newButton.setPrefSize		(button_3, 50);
-		changeButton.setPrefSize	(button_3, 50);
-		removeButton.setPrefSize	(button_3, 50);
-		//details
+		//put everything in the right places
+		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
+		control_secBox.getChildren().addAll (searchContent	, filterSelector);
+		leftBox.getChildren().addAll 		(itemList		, control_secBox);
+		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
+		mainBox.getChildren().addAll 		(leftBox		, rightBox);
+		this.getChildren().add				(mainBox);
 		detailsBox.getChildren().addAll(
 				new VBox(space_Big,
 						new HBox(space_Big,nameLabel	 , nameContent),
@@ -105,9 +89,31 @@ public class CustomerScreen extends HBox {
 						new HBox(space_Big,phoneLabel	 , phoneContent),
 						new HBox(space_Big,bankLabel	 , bankContent),	
 						new HBox(space_Big,blackListLabel, blackListContent),
-						new HBox(space_Big,cancelButton	 , saveButton)
-						)
-				);
+						new HBox(space_Big,cancelButton	 , saveButton))
+		);
+		//set styles and sizes
+		////set width for all detail labels and textfields
+		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
+			if(((HBox)node).getChildren().get(0) instanceof Label)
+				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
+			if(((HBox)node).getChildren().get(1) instanceof TextField)
+				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(label_Normal*1.5);
+		}
+		datecontent.setMinWidth(label_Normal*1.5);
+		detailsBox.setPadding(new Insets(space_Big));
+		mainBox.setPadding(new Insets(space_Big));
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");
+		leftBox.getStyleClass().add("removeDisabledEffect");
+		detailsBox.setPrefSize		(450	 , 520);
+		itemList.setPrefSize		(450	 , 520);
+		searchContent.setPrefSize	(290	 , 50);
+		filterSelector.setPrefSize	(150	 , 50);
+		cancelButton.setPrefSize	(150	 , 50);
+		saveButton.setPrefSize		(150	 , 50);
+		newButton.setPrefSize		(button_3, 50);
+		changeButton.setPrefSize	(button_3, 50);
+		removeButton.setPrefSize	(button_3, 50);
+		//details	
 		setEditable(false);
 		//Listview
 		for (Customer object : controller.getCustomers()) 
@@ -152,13 +158,6 @@ public class CustomerScreen extends HBox {
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
-		//put everything in the right places
-		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
-		control_secBox.getChildren().addAll (searchContent	, filterSelector);
-		leftBox.getChildren().addAll 		(itemList		, control_secBox);
-		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
-		mainBox.getChildren().addAll 		(leftBox		, rightBox);
-		this.getChildren().add				(mainBox);
 	}
 	/**
 	 * fills the list with items that fit with the given filter
@@ -192,13 +191,13 @@ public class CustomerScreen extends HBox {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit customer wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
-			removeConfirm.showAndWait();
-			if (removeConfirm.getKeuze().equals("confirm")){
+			Notification confirm = new Notification(controller, "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			confirm.showAndWait();
+			if (confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveCustomer(selectedObject, true);
-				Notification removeNotify = new Notification(controller.getStage(), "Het customer is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
-				removeNotify.showAndWait();
+				Notification notify = new Notification(controller, "De klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				notify.showAndWait();
 				refreshList();
 			}
 		}			
@@ -209,9 +208,9 @@ public class CustomerScreen extends HBox {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification changeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
-				changeConfirm.showAndWait();
-				switch (changeConfirm.getKeuze()) {
+				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+				confirm.showAndWait();
+				switch (confirm.getKeuze()) {
 				case "confirm": {
 					selectedObject.setName(nameContent.getText());
 					selectedObject.setAddress(addressContent.getText());
@@ -232,7 +231,7 @@ public class CustomerScreen extends HBox {
 				}
 			}
 			else{	
-				Notification confirm = new Notification(controller.getStage(),"Deze klant aanmaken?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller,"Deze klant aanmaken?",ATDProgram.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 				case "confirm": {
@@ -262,7 +261,7 @@ public class CustomerScreen extends HBox {
 			refreshList();
 		}
 		else{
-			Notification notFilled = new Notification(controller.getStage(), "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}

@@ -24,7 +24,6 @@ import main.Invoice.InvoiceItem;
 import main.Invoice.PayMethod;
 import main.MaintenanceSession;
 import main.Product;
-import notifications.GetInfoNotification;
 import notifications.Notification;
 
 public class InvoiceScreen extends HBox {
@@ -72,6 +71,22 @@ public class InvoiceScreen extends HBox {
 			mainBox 			= new HBox(space_Medium);
 	public InvoiceScreen(ATDProgram controller) {
 		this.controller = controller;
+		//put everything in the right place
+		control_MainBox.getChildren().addAll(newButton,changeButton	,payButton		,removeButton);
+		control_secBox.getChildren().addAll	(addMaintenanceButton	,addRefuelButton,addParkingButton,filterSelector);
+		leftBox.getChildren().addAll 		(itemList				, control_secBox);
+		rightBox.getChildren().addAll		(detailsBox				,control_MainBox);
+		mainBox.getChildren().addAll 		(leftBox				,rightBox);
+		this.getChildren().add				(mainBox);
+		detailsBox.getChildren().addAll(
+				new VBox(space_big,
+						new HBox(space_big,dateLabel,		dateContent),
+						new HBox(space_big,priceLabel,	 	priceContent),
+						new HBox(space_big,customerLabel,	customerContent),
+						new HBox(space_big,isPayedLabel,	isPayedContent),
+						new HBox(space_big,cancelButton,	saveButton),
+						new HBox(contentList))
+		);
 		//set styles and sizes
 		////set width for all detail labels and textfields
 		for (Node node : ((VBox)detailsBox.getChildren().get(0)).getChildren()) {
@@ -83,7 +98,7 @@ public class InvoiceScreen extends HBox {
 		customerContent.setMinWidth(label_Normal*1.5);
 		detailsBox.setPadding(new Insets(space_big));
 		mainBox.setPadding(new Insets(space_big));
-		detailsBox.getStyleClass().addAll("removeDisabledEffect","stockDetails");
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");
 		detailsBox.setPrefSize			(450	 , 520);
 		itemList.setPrefSize			(450	 , 520);
 		contentList.setPrefSize			(410	 , 300);
@@ -97,17 +112,8 @@ public class InvoiceScreen extends HBox {
 		addParkingButton.setPrefSize	(button_4, 50);
 		addMaintenanceButton.setPrefSize(button_4, 50);
 		addRefuelButton.setPrefSize		(button_4, 50);
-		//StockDetails		
+		//details		
 		customerContent.getItems().addAll(controller.getCustomers());
-		detailsBox.getChildren().addAll(
-				new VBox(space_big,
-						new HBox(space_big,dateLabel,		dateContent),
-						new HBox(space_big,priceLabel,	 	priceContent),
-						new HBox(space_big,customerLabel,	customerContent),
-						new HBox(space_big,isPayedLabel,	isPayedContent),
-						new HBox(space_big,cancelButton,	saveButton),
-						new HBox(contentList)
-						));
 		setEditable(false);
 		//Listview
 		for (Invoice object : controller.getInvoices()) 
@@ -153,13 +159,6 @@ public class InvoiceScreen extends HBox {
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
-		//put everything in the right place
-		control_MainBox.getChildren().addAll(newButton,changeButton	,payButton		,removeButton);
-		control_secBox.getChildren().addAll	(addMaintenanceButton	,addRefuelButton,addParkingButton,filterSelector);
-		leftBox.getChildren().addAll 		(itemList				, control_secBox);
-		rightBox.getChildren().addAll		(detailsBox				,control_MainBox);
-		mainBox.getChildren().addAll 		(leftBox				,rightBox);
-		this.getChildren().add				(mainBox);
 	}
 	/**
 	 * fills the list with items that fit with the given filter
@@ -201,13 +200,13 @@ public class InvoiceScreen extends HBox {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification removeConfirm = new Notification(controller.getStage(), "Weet u zeker dat u dit invoice wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
-			removeConfirm.showAndWait();
-			if (removeConfirm.getKeuze().equals("confirm")){
+			Notification Confirm = new Notification(controller, "Weet u zeker dat u deze rekening wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			Confirm.showAndWait();
+			if (Confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveInvoice(selectedobject, true);
-				Notification removeNotify = new Notification(controller.getStage(), "Het invoice is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
-				removeNotify.showAndWait();
+				Notification Notify = new Notification(controller, "De rekening is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				Notify.showAndWait();
 			}
 		}			
 	}
@@ -215,7 +214,7 @@ public class InvoiceScreen extends HBox {
 	 * adds a fuelsession to the invoice
 	 */
 	private void addFuel(){
-		GetInfoNotification addFuelNotification = new GetInfoNotification(controller, ATDProgram.notificationStyle.TANK);
+		Notification addFuelNotification = new Notification(controller,"", ATDProgram.notificationStyle.TANK);
 		addFuelNotification.showAndWait();
 		if(addFuelNotification.getKeuze().equals("confirm")){
 			controller.getStock().useProduct((Fuel)addFuelNotification.getSelected(), addFuelNotification.getInput());
@@ -229,7 +228,7 @@ public class InvoiceScreen extends HBox {
 	 * adds a maintenance session to the invoice
 	 */
 	private void addMaintenance(){
-		GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller, ATDProgram.notificationStyle.MAINTENANCE);
+		Notification addMaintenanceNotification = new Notification(controller,"", ATDProgram.notificationStyle.MAINTENANCE);
 		addMaintenanceNotification.showAndWait();
 		if(addMaintenanceNotification.getKeuze().equals("confirm")){
 			MaintenanceSession selection = (MaintenanceSession)addMaintenanceNotification.getSelected();
@@ -248,7 +247,7 @@ public class InvoiceScreen extends HBox {
 	 * adds a reservation to the invoice
 	 */
 	private void addParking(){
-		GetInfoNotification addMaintenanceNotification = new GetInfoNotification(controller, ATDProgram.notificationStyle.PARKING);
+		Notification addMaintenanceNotification = new Notification(controller,"", ATDProgram.notificationStyle.PARKING);
 		addMaintenanceNotification.showAndWait();
 		//TODO
 	}
@@ -256,12 +255,12 @@ public class InvoiceScreen extends HBox {
 	 * pays the selected invoice
 	 */
 	private void pay(){
-		GetInfoNotification payConfirm = new GetInfoNotification(controller, ATDProgram.notificationStyle.PAY);
-		payConfirm.showAndWait();
-		if(payConfirm.getKeuze().equals("confirm")) {
-			selectedobject.payNow((PayMethod) payConfirm.getSelected());
-			Notification payNotify = new Notification(controller.getStage(), "factuur is betaald.", ATDProgram.notificationStyle.NOTIFY);
-			payNotify.showAndWait();}
+		Notification confirm = new Notification(controller,"", ATDProgram.notificationStyle.PAY);
+		confirm.showAndWait();
+		if(confirm.getKeuze().equals("confirm")) {
+			selectedobject.payNow((PayMethod) confirm.getSelected());
+			Notification notify = new Notification(controller, "factuur is betaald.", ATDProgram.notificationStyle.NOTIFY);
+			notify.showAndWait();}
 		refreshList();
 	}
 	/**
@@ -269,7 +268,7 @@ public class InvoiceScreen extends HBox {
 	 */
 	private void save(){
 		if(isChanging){
-			Notification confirm = new Notification(controller.getStage(), "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+			Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
 			confirm.showAndWait();
 			switch (confirm.getKeuze()) {
 			case "confirm": {	
