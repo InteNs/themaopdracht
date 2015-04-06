@@ -1,5 +1,6 @@
 package notifications;
 
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,6 +17,8 @@ import main.ATDProgram;
 import main.ATDProgram.notificationStyle;
 import main.Customer;
 import main.Fuel;
+import main.Invoice;
+import main.Invoice.PayMethod;
 import main.MaintenanceSession;
 import main.Part;
 import main.Product;
@@ -28,12 +31,13 @@ public class GetInfoNotification extends Stage {
 	private ComboBox<MaintenanceSession> maintenanceSessionSelector = new ComboBox<MaintenanceSession>();
 	private ComboBox<Reservation> reservationSelector = new ComboBox<Reservation>();
 	private ComboBox<String> typeSelector = new ComboBox<String>();
+	private ComboBox<PayMethod> paymentSelector = new ComboBox<PayMethod>();
 	private TextField input = new TextField();
 	private Button annuleren = new Button("annuleren"), ok = new Button("Opslaan");
 	private Label melding = new Label();
 	private String keuze;
 	private VBox notification = new VBox(10,melding);
-	private HBox buttonBox = new HBox(10,ok,annuleren);
+	private HBox buttonBox = new HBox(10,annuleren,ok);
 	private notificationStyle stijl;
 
 	public GetInfoNotification(ATDProgram controller, ATDProgram.notificationStyle nwstijl) {
@@ -114,6 +118,14 @@ public class GetInfoNotification extends Stage {
 				notification.getChildren().addAll(input,buttonBox);
 				break;
 			}
+			case PAY : {
+				setTitle("Factuur afhandelen");
+				melding.setText("Kies uw betaalmethode:");
+				ok.setText("Betalen");
+				paymentSelector.getItems().addAll(FXCollections.observableArrayList(Invoice.PayMethod.values()));
+				notification.getChildren().addAll(paymentSelector, buttonBox);				
+				break;
+			}
 			default: ;
 		}
 		notification.setAlignment(Pos.CENTER);
@@ -133,6 +145,7 @@ public class GetInfoNotification extends Stage {
 		case TYPE:			return typeSelector.getSelectionModel().getSelectedItem();
 		case CUSTOMER:		return customerSelector.getSelectionModel().getSelectedItem();
 		case PRODUCTS:		return partSelector.getSelectionModel().getSelectedItem();
+		case PAY:			return paymentSelector.getSelectionModel().getSelectedItem();
 		default : return null;
 		}
 	}
