@@ -44,7 +44,7 @@ public class FinancesScreen extends HBox {
 						new HBox(20,amountLabel,		amountLabelContent)
 						));
 		stockDetails.setPrefSize(910, 520);
-		stockDetails.getStyleClass().add("stockDetails");
+		stockDetails.getStyleClass().add("detailsBox");
 		stockDetails.setPadding(new Insets(20));
 		//set width for all detail labels and textfields
 		for (Node node : ((VBox)stockDetails.getChildren().get(0)).getChildren()) {

@@ -324,6 +324,8 @@ public class MaintenanceScreen extends HBox {
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
 		detailsBox.setDisable(!enable);
+		control_MainBox.setDisable(enable);
+		usedPartsContent.setDisable(true);
 		leftBox.setDisable(enable);
 	}	
 	/**
@@ -392,7 +394,7 @@ public class MaintenanceScreen extends HBox {
 	// this represents every item in the list, it has different constructor for every filter option
 	public class ListRegel extends HBox{
 		private MaintenanceSession object;
-		private Label itemPlateLabel = new Label(),itemMechLabel = new Label(),itemPartsLabel = new Label();
+		private Label itemPlateLabel = new Label(),itemMechLabel = new Label(),itemDateLabel = new Label(),itemPartsLabel = new Label();
 		public ListRegel(MaintenanceSession object){
 			this.object = object;
 			refresh();
@@ -401,6 +403,8 @@ public class MaintenanceScreen extends HBox {
 				itemMechLabel,
 				new Separator(Orientation.VERTICAL),
 				itemPlateLabel,
+				new Separator(Orientation.VERTICAL),
+				itemDateLabel,
 				new Separator(Orientation.VERTICAL),
 				itemPartsLabel);
 				for (Node node : getChildren()) 
@@ -413,6 +417,7 @@ public class MaintenanceScreen extends HBox {
 			if(object.getMechanic()==null)itemMechLabel.setText("geen Monteur");
 			else itemMechLabel.setText(object.getMechanic().getName());
 			itemPlateLabel.setText(object.getNumberPlate());
+			itemDateLabel.setText(object.getPlannedDate().toString());
 			itemPartsLabel.setText(Integer.toString(object.getTotalParts()));
 		}
 		/**

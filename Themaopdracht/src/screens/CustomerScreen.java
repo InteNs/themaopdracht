@@ -304,6 +304,7 @@ public class CustomerScreen extends HBox {
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
 		detailsBox.setDisable(!enable);
+		control_MainBox.setDisable(enable);
 		leftBox.setDisable(enable);
 	}	
 	/**

@@ -21,6 +21,7 @@ import main.Invoice.PayMethod;
 import main.MaintenanceSession;
 import main.Part;
 import main.Product;
+import main.ProductSupplier;
 import main.Reservation;
 
 public class Notification extends Stage {
@@ -31,7 +32,12 @@ public class Notification extends Stage {
 	private ComboBox<Reservation> reservationSelector = new ComboBox<Reservation>();
 	private ComboBox<String> typeSelector = new ComboBox<String>();
 	private ComboBox<PayMethod> paymentSelector = new ComboBox<PayMethod>();
-	private TextField input = new TextField();
+	private TextField 
+	input 	= new TextField(),
+	name 	= new TextField("Naam"),
+	address = new TextField("Adres"),
+	postal 	= new TextField("Postcode"),
+	place 	= new TextField("Plaats");
 	private Button annuleren = new Button("annuleren"), ok = new Button("Opslaan");
 	private Label melding = new Label();
 	private String keuze;
@@ -138,6 +144,12 @@ public class Notification extends Stage {
 				notification.getChildren().addAll(buttonBox);
 				break;
 			}
+			case SUPPLIER: {
+				this.setTitle("Leverancier aanmaken");
+				melding.setText("Vul de gegevens in");
+				notification.getChildren().addAll(name,address,postal,place,buttonBox);
+				break;
+			}
 			default: ;
 		}
 		notification.setAlignment(Pos.CENTER);
@@ -159,6 +171,7 @@ public class Notification extends Stage {
 		case CUSTOMER:		return customerSelector.getSelectionModel().getSelectedItem();
 		case PRODUCTS:		return partSelector.getSelectionModel().getSelectedItem();
 		case PAY:			return paymentSelector.getSelectionModel().getSelectedItem();
+		case SUPPLIER:		return new ProductSupplier(name.getText(), address.getText(), postal.getText(), place.getText());
 		default : return null;
 		}
 	}

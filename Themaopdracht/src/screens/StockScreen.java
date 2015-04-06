@@ -37,12 +37,13 @@ public class StockScreen extends HBox {
 	label_Normal= 120;
 	private final Button 
 	newButton 		= new Button("Nieuw"), 
+	newSupButton	= new Button("Nieuwe supplier"),
 	changeButton 	= new Button("Aanpassen"), 
 	removeButton 	= new Button("Verwijderen"), 
 	cancelButton 	= new Button("Annuleren"),
 	saveButton 		= new Button("Opslaan"),
 	proceedButton 	= new Button("Opboeken"),
-	newRuleButton 	= new Button("regel toevoegen");
+	newRuleButton 	= new Button("Regel toevoegen");
 	private final Label 
 	nameLabel 		= new Label("Naam: "),
 	amountLabel 	= new Label("Aantal: "), 
@@ -75,7 +76,7 @@ public class StockScreen extends HBox {
 		this.controller = controller;
 		//put everything in the right places
 		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
-		control_secBox.getChildren().addAll	(searchContent	, filterSelector);
+		control_secBox.getChildren().addAll	(searchContent	, filterSelector	,newSupButton);
 		leftBox.getChildren().addAll 		(itemList		, control_secBox);
 		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
 		mainBox.getChildren().addAll 		(leftBox		, rightBox);
@@ -109,8 +110,9 @@ public class StockScreen extends HBox {
 		itemList.getStyleClass().add("removeDisabledEffect");
 		detailsBox.setPrefSize		(450	 , 520);
 		itemList.setPrefSize		(450	 , 520);
-		searchContent.setPrefSize	(290	 , 50);
-		filterSelector.setPrefSize	(150	 , 50);
+		searchContent.setPrefSize	(button_3, 50);
+		filterSelector.setPrefSize	(button_3, 50);
+		newSupButton.setPrefSize	(button_3, 50);
 		cancelButton.setPrefSize	(180	 , 50);
 		saveButton.setPrefSize		(180	 , 50);
 		newButton.setPrefSize		(button_3, 50);
@@ -158,6 +160,9 @@ public class StockScreen extends HBox {
 		});	
 		removeButton.setOnAction(e->{
 			remove();
+		});
+		newSupButton.setOnAction(e->{
+			newSupplier();
 		});
 		proceedButton.setOnAction(e-> boekop());
 		newRuleButton.setOnAction(e->	itemList.getItems().add(itemList.getItems().size()-1,new ListItem()));	
@@ -229,6 +234,14 @@ public class StockScreen extends HBox {
 				refreshList();
 			}
 		}			
+	}
+	private void newSupplier(){
+		Notification newSupplier = new Notification(controller, "", ATDProgram.notificationStyle.SUPPLIER);
+		newSupplier.showAndWait();
+		if(newSupplier.getKeuze().equals("confirm")){
+			controller.addorRemoveSupplier((ProductSupplier)newSupplier.getSelected(), false);
+			supplierContent.getItems().add((ProductSupplier)newSupplier.getSelected());
+		}
 	}
 	/**
 	 * saves the input in either a selected item or a new item
@@ -306,6 +319,7 @@ public class StockScreen extends HBox {
 		for (ListItem listItem : itemList.getItems())
 			listItem.refresh();
 		select(selectedItem);
+		controller.getStock().checkStock();
 	}
 	/**
 	 * 	fill in supplier details in corresponding textfields
@@ -314,11 +328,11 @@ public class StockScreen extends HBox {
 	private void selectSupplier(ProductSupplier newValue){
 		if(newValue != null){
 			ProductSupplier supplier = supplierContent.getSelectionModel().getSelectedItem();
-			addressContent.setEditable(false);
+			addressContent.setDisable(true);
 			addressContent.setText(supplier.getAdress());
-			postalContent.setEditable(false);
+			postalContent.setDisable(true);
 			postalContent.setText(supplier.getPostal());
-			placeContent.setEditable(false);
+			placeContent.setDisable(true);
 			placeContent.setText(supplier.getPlace());
 		}
 	}
@@ -348,6 +362,8 @@ public class StockScreen extends HBox {
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
 		detailsBox.setDisable(!enable);
+		amountContent.setDisable(true);
+		control_MainBox.setDisable(enable);
 		leftBox.setDisable(enable);
 	}	
 	/**
@@ -411,7 +427,12 @@ public class StockScreen extends HBox {
 		private Product object;
 		private ComboBox<Product> productSelector = new ComboBox<Product>();
 		private TextField input = new TextField();
-		private Label itemPriceLabel = new Label(),itemNameLabel = new Label(),itemSupplierLabel = new Label();
+		private Label 
+				itemPriceLabel	 = new Label(),
+				itemNameLabel	 = new Label(),
+				itemSupplierLabel= new Label(),
+				itemAmountLabel  = new Label(),
+				itemOrderedLabel = new Label();
 		public ListItem(Product object){
 			//no filter
 			this.object = object;
@@ -422,19 +443,22 @@ public class StockScreen extends HBox {
 					new Separator(Orientation.VERTICAL),
 					itemPriceLabel,
 					new Separator(Orientation.VERTICAL),
-					itemSupplierLabel);
+					itemSupplierLabel,
+					new Separator(Orientation.VERTICAL),
+					itemAmountLabel);
 			for (Node node : getChildren()) 
 				if(node instanceof Label)((Label)node).setPrefWidth(100);
 		}
 		public ListItem(Product object, int amount){
 			//bestellijst filter
 			this.object = object;
+			itemOrderedLabel.setText(Integer.toString(amount));
 			refresh();
 			setSpacing(5);
 			getChildren().addAll(
 					itemNameLabel,
 					new Separator(Orientation.VERTICAL),
-					new Label(Integer.toString(amount)),
+					itemOrderedLabel,
 					new Separator(Orientation.VERTICAL),
 					itemSupplierLabel);
 			for (Node node : getChildren())
@@ -456,6 +480,7 @@ public class StockScreen extends HBox {
 			itemNameLabel.setText(object.getName());
 			itemPriceLabel.setText(Double.toString(object.getSellPrice()));
 			itemSupplierLabel.setText(object.getSupplier().getName());
+			itemAmountLabel.setText(Integer.toString(object.getAmount()));
 		}
 		/**
 		 * @return the selected item	(opboeken)

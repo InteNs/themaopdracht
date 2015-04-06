@@ -26,7 +26,7 @@ public class Stock {
 	public void removeProduct(Product product){
 		products.remove(product);
 	}
-	private void checkStock(){
+	public void checkStock(){
 		for (Product product : products) {
 			if(product.getAmount()<product.getMinAmount()) this.orderProduct(product,product.getMinAmount()-product.getAmount());
 		}

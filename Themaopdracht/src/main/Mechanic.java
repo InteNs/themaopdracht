@@ -27,7 +27,7 @@ public class Mechanic {
 		this.hourlyFee = hourlyFee;
 	}
 	public String toString(){
-		return name + " a € " + hourlyFee;
+		return name + " a " + hourlyFee;
 	}
 	
 }

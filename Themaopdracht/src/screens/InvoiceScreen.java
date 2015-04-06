@@ -217,9 +217,11 @@ public class InvoiceScreen extends HBox {
 		Notification addFuelNotification = new Notification(controller,"", ATDProgram.notificationStyle.TANK);
 		addFuelNotification.showAndWait();
 		if(addFuelNotification.getKeuze().equals("confirm")){
-			controller.getStock().useProduct((Fuel)addFuelNotification.getSelected(), addFuelNotification.getInput());
-			//VERGEET NIET TE CHECKEN OF ER GENOEG BENZINE IS
-			selectedobject.add(selectedobject.new InvoiceItem(((Fuel)addFuelNotification.getSelected()).getName(), ((Fuel)addFuelNotification.getSelected()).getSellPrice(), addFuelNotification.getInput()));
+			int tanked = addFuelNotification.getInput();
+			Fuel type = (Fuel)addFuelNotification.getSelected();
+			if(tanked > type.getAmount())tanked = type.getAmount();
+			controller.getStock().useProduct(type,tanked);
+			selectedobject.add(selectedobject.new InvoiceItem(type.getName(), type.getSellPrice(), tanked));
 			refreshList();
 
 		}
@@ -327,6 +329,7 @@ public class InvoiceScreen extends HBox {
 		priceContent.setDisable(true);
 		dateContent.setDisable(true);
 		isPayedContent.setDisable(true);
+		control_MainBox.setDisable(enable);
 		leftBox.setDisable(enable);
 	}		
 	/**
