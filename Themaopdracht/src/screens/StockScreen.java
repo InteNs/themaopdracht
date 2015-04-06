@@ -225,19 +225,19 @@ public class StockScreen extends Screen {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification confirm = new Notification(controller, "Weet u zeker dat u dit product wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			Notification confirm = new Notification(controller, "Weet u zeker dat u dit product wilt verwijderen?", Notification.notificationStyle.CONFIRM);
 			confirm.showAndWait();
 			if (confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveproduct(selectedObject, true);
-				Notification notify = new Notification(controller, "Het product is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				Notification notify = new Notification(controller, "Het product is verwijderd.", Notification.notificationStyle.NOTIFY);
 				notify.showAndWait();
 				refreshList();
 			}
 		}			
 	}
 	private void newSupplier(){
-		Notification newSupplier = new Notification(controller, "", ATDProgram.notificationStyle.SUPPLIER);
+		Notification newSupplier = new Notification(controller, "", Notification.notificationStyle.SUPPLIER);
 		newSupplier.showAndWait();
 		if(newSupplier.getKeuze().equals("confirm")){
 			controller.addorRemoveSupplier((ProductSupplier)newSupplier.getSelected(), false);
@@ -250,7 +250,7 @@ public class StockScreen extends Screen {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification changeConfirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+				Notification changeConfirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",Notification.notificationStyle.CONFIRM);
 				changeConfirm.showAndWait();
 				switch (changeConfirm.getKeuze()) {
 				case "confirm": {
@@ -269,7 +269,7 @@ public class StockScreen extends Screen {
 				}
 			}
 			else{	
-				Notification getType = new Notification(controller,"", ATDProgram.notificationStyle.TYPE);
+				Notification getType = new Notification(controller,"", Notification.notificationStyle.TYPE);
 				getType.showAndWait();
 				switch (getType.getKeuze()) {
 				case "confirm": {
@@ -307,7 +307,7 @@ public class StockScreen extends Screen {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld!",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld!",Notification.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}

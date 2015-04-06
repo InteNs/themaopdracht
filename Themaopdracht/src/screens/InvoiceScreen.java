@@ -201,22 +201,22 @@ public class InvoiceScreen extends Screen {
 	 * removes the selected item
 	 */
 	private void remove(){
-		if(checkSelected()){
-			Notification Confirm = new Notification(controller, "Weet u zeker dat u deze rekening wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
-			Confirm.showAndWait();
-			if (Confirm.getKeuze().equals("confirm")){
-				itemList.getItems().remove(selectedItem);
-				controller.addorRemoveInvoice(selectedobject, true);
-				Notification Notify = new Notification(controller, "De rekening is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
-				Notify.showAndWait();
-			}
-		}			
+		if(!checkSelected())return ;
+		Notification Confirm = new Notification(controller, "Weet u zeker dat u deze rekening wilt verwijderen?", Notification.notificationStyle.CONFIRM);
+		Confirm.showAndWait();
+		if (Confirm.getKeuze().equals("confirm")){
+			itemList.getItems().remove(selectedItem);
+			controller.addorRemoveInvoice(selectedobject, true);
+			Notification Notify = new Notification(controller, "De rekening is verwijderd.", Notification.notificationStyle.NOTIFY);
+			Notify.showAndWait();
+		}		
 	}
 	/**
 	 * adds a fuelsession to the invoice
 	 */
 	private void addFuel(){
-		Notification addFuelNotification = new Notification(controller,"", ATDProgram.notificationStyle.TANK);
+		if(!checkSelected())return ;
+		Notification addFuelNotification = new Notification(controller,"", Notification.notificationStyle.TANK);
 		addFuelNotification.showAndWait();
 		if(addFuelNotification.getKeuze().equals("confirm")){
 			int tanked = addFuelNotification.getInput();
@@ -232,7 +232,8 @@ public class InvoiceScreen extends Screen {
 	 * adds a maintenance session to the invoice
 	 */
 	private void addMaintenance(){
-		Notification addMaintenanceNotification = new Notification(controller,"", ATDProgram.notificationStyle.MAINTENANCE);
+		if(!checkSelected())return ;
+		Notification addMaintenanceNotification = new Notification(controller,"", Notification.notificationStyle.MAINTENANCE);
 		addMaintenanceNotification.showAndWait();
 		if(addMaintenanceNotification.getKeuze().equals("confirm")){
 			MaintenanceSession selection = (MaintenanceSession)addMaintenanceNotification.getSelected();
@@ -251,11 +252,12 @@ public class InvoiceScreen extends Screen {
 	 * adds a reservation to the invoice
 	 */
 	private void addParking(){
-		Notification addParking = new Notification(controller,"", ATDProgram.notificationStyle.PARKING);
+		if(!checkSelected())return ;
+		Notification addParking = new Notification(controller,"", Notification.notificationStyle.PARKING);
 		addParking.showAndWait();
 		if(addParking.getKeuze().equals("confirm")) {
 			selectedobject.add(selectedobject.new InvoiceItem("Parkeersessie",((Reservation)addParking.getSelected()).getTotalPrice(),1));
-			Notification notify = new Notification(controller, "reservering toegevoegd.", ATDProgram.notificationStyle.NOTIFY);
+			Notification notify = new Notification(controller, "reservering toegevoegd.", Notification.notificationStyle.NOTIFY);
 			notify.showAndWait();
 		}
 		refreshList();
@@ -264,11 +266,12 @@ public class InvoiceScreen extends Screen {
 	 * pays the selected invoice
 	 */
 	private void pay(){
-		Notification confirm = new Notification(controller,"", ATDProgram.notificationStyle.PAY);
+		if(!checkSelected())return ;
+		Notification confirm = new Notification(controller,"", Notification.notificationStyle.PAY);
 		confirm.showAndWait();
 		if(confirm.getKeuze().equals("confirm")) {
 			selectedobject.payNow((PayMethod) confirm.getSelected());
-			Notification notify = new Notification(controller, "factuur is betaald.", ATDProgram.notificationStyle.NOTIFY);
+			Notification notify = new Notification(controller, "factuur is betaald.", Notification.notificationStyle.NOTIFY);
 			notify.showAndWait();
 		}
 		refreshList();
@@ -278,7 +281,7 @@ public class InvoiceScreen extends Screen {
 	 */
 	private void save(){
 		if(isChanging){
-			Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+			Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",Notification.notificationStyle.CONFIRM);
 			confirm.showAndWait();
 			switch (confirm.getKeuze()) {
 			case "confirm": {	
@@ -314,17 +317,16 @@ public class InvoiceScreen extends Screen {
 	 * @param selectedValue the item to be selected
 	 */
 	private void select(ListItem selectedValue){
-		if(selectedValue!=null)	{
-			selectedItem = selectedValue;
-			selectedobject = selectedValue.getInvoice();
-			dateContent.setValue(selectedobject.getInvoiceDate());
-			customerContent.setValue(selectedobject.getCustomer());
-			priceContent.setText(controller.convert(selectedobject.getTotalPrice()));
-			isPayedContent.setSelected(selectedobject.isPayed());
-			contentList.getItems().clear();
-			for (InvoiceItem item : selectedobject.getItems())
-				contentList.getItems().add(item);
-		}
+		if(!checkSelected())return ;
+		selectedItem = selectedValue;
+		selectedobject = selectedValue.getInvoice();
+		dateContent.setValue(selectedobject.getInvoiceDate());
+		customerContent.setValue(selectedobject.getCustomer());
+		priceContent.setText(controller.convert(selectedobject.getTotalPrice()));
+		isPayedContent.setSelected(selectedobject.isPayed());
+		contentList.getItems().clear();
+		for (InvoiceItem item : selectedobject.getItems())
+			contentList.getItems().add(item);
 	}
 	/**
 	 * disables/enables the left or right side of the stage

@@ -200,14 +200,14 @@ public class MaintenanceScreen extends Screen {
 	 */
 	private void addProduct(){
 		if(checkSelected() && checkMechanic()){
-			Notification addProduct = new Notification(controller,"", ATDProgram.notificationStyle.PRODUCTS);
+			Notification addProduct = new Notification(controller,"", Notification.notificationStyle.PRODUCTS);
 			addProduct.showAndWait();
 			if(addProduct.getKeuze().equals("confirm")){
 				if(selectedObject.usePart((Product)addProduct.getSelected())){
 					refreshList();
 				}
 				else {
-					Notification noPart  = new Notification(controller, "Dat product is op!",ATDProgram.notificationStyle.NOTIFY);
+					Notification noPart  = new Notification(controller, "Dat product is op!",Notification.notificationStyle.NOTIFY);
 					noPart.showAndWait();
 				}
 			} 
@@ -218,10 +218,10 @@ public class MaintenanceScreen extends Screen {
 	 */
 	private void endSession(){
 		if(checkSelected() && checkMechanic()){
-			Notification endSession = new Notification(controller,"", ATDProgram.notificationStyle.ENDSESSION);
+			Notification endSession = new Notification(controller,"", Notification.notificationStyle.ENDSESSION);
 			endSession.showAndWait();
 			selectedObject.endSession(endSession.getInput());
-			Notification Notify = new Notification(controller, "Klus is afgesloten",ATDProgram.notificationStyle.NOTIFY);
+			Notification Notify = new Notification(controller, "Klus is afgesloten",Notification.notificationStyle.NOTIFY);
 			Notify.showAndWait();
 			refreshList();
 		}
@@ -231,12 +231,12 @@ public class MaintenanceScreen extends Screen {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification Confirm = new Notification(controller, "Weet u zeker dat u deze klus wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			Notification Confirm = new Notification(controller, "Weet u zeker dat u deze klus wilt verwijderen?", Notification.notificationStyle.CONFIRM);
 			Confirm.showAndWait();
 			if (Confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveMaintenanceSessions(selectedObject, true);
-				Notification Notify = new Notification(controller, "de klus is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				Notification Notify = new Notification(controller, "de klus is verwijderd.", Notification.notificationStyle.NOTIFY);
 				Notify.showAndWait();
 			}
 		}			
@@ -247,7 +247,7 @@ public class MaintenanceScreen extends Screen {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -263,7 +263,7 @@ public class MaintenanceScreen extends Screen {
 				}
 			}
 			else{	
-				Notification confirm = new Notification(controller,"Deze klus aanmaken?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller,"Deze klus aanmaken?",Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -283,7 +283,7 @@ public class MaintenanceScreen extends Screen {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",Notification.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}
@@ -364,7 +364,7 @@ public class MaintenanceScreen extends Screen {
 	 */
 	private boolean checkMechanic(){
 		if(selectedObject.getMechanic()==null){
-			Notification notify = new Notification(controller, "Eerst een montuer toewijzen!", ATDProgram.notificationStyle.NOTIFY);
+			Notification notify = new Notification(controller, "Eerst een montuer toewijzen!", Notification.notificationStyle.NOTIFY);
 			notify.showAndWait();
 			return false;
 		}

@@ -193,12 +193,12 @@ public class ParkingScreen extends Screen {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification Confirm = new Notification(controller, "Weet u zeker dat u deze reservering wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			Notification Confirm = new Notification(controller, "Weet u zeker dat u deze reservering wilt verwijderen?", Notification.notificationStyle.CONFIRM);
 			Confirm.showAndWait();
 			if (Confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveReservations(selectedObject, true);
-				Notification Notify = new Notification(controller, "de reservering is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				Notification Notify = new Notification(controller, "de reservering is verwijderd.", Notification.notificationStyle.NOTIFY);
 				Notify.showAndWait();
 			}
 		}			
@@ -209,7 +209,7 @@ public class ParkingScreen extends Screen {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -225,7 +225,7 @@ public class ParkingScreen extends Screen {
 				}
 			}
 			else{	
-				Notification confirm = new Notification(controller,"Deze reservering aanmaken?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller,"Deze reservering aanmaken?",Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -246,7 +246,7 @@ public class ParkingScreen extends Screen {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",Notification.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}
@@ -304,7 +304,7 @@ public class ParkingScreen extends Screen {
 		for (ParkingSpace space : controller.getParkingSpaces())
 			spaceContent.getItems().add(space);
 		for (Reservation reservation : controller.getReservations()) {
-			if(isOverlapping(reservation.getFromDate(), reservation.getToDate(), dateFromContent.getValue(), dateToContent.getValue())){
+			if(reservation != selectedObject && isOverlapping(reservation.getFromDate(), reservation.getToDate(), dateFromContent.getValue(), dateToContent.getValue())){
 				spaceContent.getItems().remove(reservation.getParkingSpace());
 			}
 		}
@@ -320,8 +320,9 @@ public class ParkingScreen extends Screen {
 		boolean result = true;
 		if(numberPlateContent.getText().isEmpty())result = false;
 		if(dateToContent.getValue()==null || dateToContent.getValue().isBefore(LocalDate.now()))result = false;
+		if(isChanging && dateFromContent.getValue()==null) result = false;
 		if(dateFromContent.getValue()==null ||dateFromContent.getValue().isAfter(dateToContent.getValue()))result = false;
-		if(dateFromContent.getValue()==null ||dateFromContent.getValue().isBefore(LocalDate.now()))result = false;
+		if(!isChanging && (dateFromContent.getValue()==null ||dateFromContent.getValue().isBefore(LocalDate.now())))result = false;
 		if(spaceContent.getSelectionModel().getSelectedItem() == null) result = false;
 		return result;
 	}

@@ -21,7 +21,6 @@ import screens.StockScreen;
 
 
 public class ATDProgram extends Application {
-	public enum notificationStyle {CONFIRM, NOTIFY, ENDSESSION, PRODUCTS, CUSTOMER, TANK, PARKING, MAINTENANCE, TYPE, PAY, SUPPLIER}
 	private Stage mainStage;
 	private TabPane tabsScreen;
 	private Tab customerAdministration;

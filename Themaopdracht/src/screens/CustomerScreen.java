@@ -136,6 +136,7 @@ public class CustomerScreen extends Screen {
 		cancelButton.setOnAction(e -> {
 			clearInput();
 			setEditable(false);
+			refreshList();
 		});
 		saveButton.setOnAction(e -> {
 			save();
@@ -192,14 +193,13 @@ public class CustomerScreen extends Screen {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification confirm = new Notification(controller, "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
+			Notification confirm = new Notification(controller, "Weet u zeker dat u deze klant wilt verwijderen?", Notification.notificationStyle.CONFIRM);
 			confirm.showAndWait();
 			if (confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveCustomer(selectedObject, true);
-				Notification notify = new Notification(controller, "De klant is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				Notification notify = new Notification(controller, "De klant is verwijderd.", Notification.notificationStyle.NOTIFY);
 				notify.showAndWait();
-				refreshList();
 			}
 		}			
 	}
@@ -209,7 +209,7 @@ public class CustomerScreen extends Screen {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 				case "confirm": {
@@ -228,11 +228,12 @@ public class CustomerScreen extends Screen {
 				case "cancel":
 					clearInput();
 					setEditable(false);
+					refreshList();
 					break;
 				}
 			}
 			else{	
-				Notification confirm = new Notification(controller,"Deze klant aanmaken?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller,"Deze klant aanmaken?",Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 				case "confirm": {
@@ -255,6 +256,7 @@ public class CustomerScreen extends Screen {
 				case "cancel":	{
 					clearInput();
 					setEditable(false);
+					refreshList();
 					break;
 				}
 				}
@@ -262,7 +264,7 @@ public class CustomerScreen extends Screen {
 			refreshList();
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",Notification.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}

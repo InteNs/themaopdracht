@@ -13,7 +13,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.ATDProgram;
-import main.ATDProgram.notificationStyle;
 import main.Customer;
 import main.Fuel;
 import main.Invoice;
@@ -25,6 +24,7 @@ import main.ProductSupplier;
 import main.Reservation;
 
 public class Notification extends Stage {
+	public enum notificationStyle {CONFIRM, NOTIFY, ENDSESSION, PRODUCTS, CUSTOMER, TANK, PARKING, MAINTENANCE, TYPE, PAY, SUPPLIER}
 	private ComboBox<Product> partSelector = new ComboBox<Product>();
 	private ComboBox<Product> fuelSelector = new ComboBox<Product>();
 	private ComboBox<Customer> customerSelector = new ComboBox<Customer>();
@@ -45,7 +45,7 @@ public class Notification extends Stage {
 	private HBox buttonBox = new HBox(10,annuleren,ok);
 	private notificationStyle stijl;
 
-	public Notification(ATDProgram controller,String message, ATDProgram.notificationStyle nwstijl) {
+	public Notification(ATDProgram controller,String message, notificationStyle nwstijl) {
 		super(StageStyle.UNDECORATED);
 		initOwner(controller.getStage());
 		initModality(Modality.WINDOW_MODAL);
@@ -53,8 +53,13 @@ public class Notification extends Stage {
 		this.setResizable(false);
 		ok.setPrefWidth(100);
 		ok.setOnAction(e -> {
-			keuze = "confirm";
-			this.hide();
+			if(stijl ==notificationStyle.CONFIRM || stijl == notificationStyle.NOTIFY){
+				keuze = "confirm";
+				this.hide();
+			}else if(getSelected() != null){
+				keuze = "confirm";
+				this.hide();
+			}
 		});
 		annuleren.setPrefWidth(100);
 		annuleren.setOnAction(e -> {
