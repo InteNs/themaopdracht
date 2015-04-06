@@ -71,6 +71,7 @@ public class CustomerScreen extends Screen {
 	mainBox 		= new HBox(space_Small);
 	public CustomerScreen(ATDProgram controller) {
 		super(controller);
+		this.controller = controller;
 		//put everything in the right places
 		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
 		control_secBox.getChildren().addAll (searchContent	, filterSelector);
@@ -163,7 +164,7 @@ public class CustomerScreen extends Screen {
 	 * fills the list with items that fit with the given filter
 	 * @param newValue selected filter
 	 */
-	protected void changeFilter(int newValue) {
+	private void changeFilter(int newValue) {
 		switch(newValue){
 		case 0:{
 			itemList.getItems().clear();
@@ -189,7 +190,7 @@ public class CustomerScreen extends Screen {
 	/*
 	 * removes the selected item
 	 */
-	protected void remove(){
+	private void remove(){
 		if(checkSelected()){
 			Notification confirm = new Notification(controller, "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			confirm.showAndWait();
@@ -205,7 +206,7 @@ public class CustomerScreen extends Screen {
 	/**
 	 * saves the input in either a selected item or a new item
 	 */
-	protected void save(){
+	private void save(){
 		if(checkInput()){
 			if(isChanging){
 				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
@@ -268,20 +269,21 @@ public class CustomerScreen extends Screen {
 	/**
 	 * refreshes the list and every item itself
 	 */
-	protected void refreshList(){
+	public void refreshList(){
 		content.clear();
 		content.addAll(itemList.getItems());
 		itemList.getItems().clear();
 		itemList.getItems().addAll(content);
 		for (ListItem listItem : itemList.getItems())
 			listItem.refresh();
+		changeFilter(filterSelector.getSelectionModel().getSelectedIndex());
 		select(selectedItem);
 	}
 	/**
 	 * selects an item
 	 * @param selectedValue the item to be selected
 	 */
-	protected void select(ListItem selectedValue){
+	private void select(ListItem selectedValue){
 		if(selectedValue!= null){
 			selectedItem = selectedValue;
 			selectedObject = selectedValue.getCustomer();
@@ -300,7 +302,7 @@ public class CustomerScreen extends Screen {
 	 * disables/enables the left or right side of the stage
 	 * @param enable
 	 */
-	protected void setEditable(boolean enable){
+	private void setEditable(boolean enable){
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
 		detailsBox.setDisable(!enable);
@@ -310,7 +312,7 @@ public class CustomerScreen extends Screen {
 	/**
 	 * clears all the inputfields
 	 */
-	protected void clearInput(){
+	private void clearInput(){
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).clear();
 		datecontent.setValue(null);
@@ -320,7 +322,7 @@ public class CustomerScreen extends Screen {
 	 * checks if all the inputfields are filled in
 	 * @return false if one of the inputs is null
 	 */
-	protected boolean checkInput(){
+	private boolean checkInput(){
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField){
 				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty()){
@@ -333,7 +335,7 @@ public class CustomerScreen extends Screen {
 	 * checks if an item is selected in the list
 	 * @return false if nothing is selected
 	 */
-	protected boolean checkSelected() {
+	private boolean checkSelected() {
 		if(selectedObject == null) return false;
 		return true;
 	}

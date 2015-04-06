@@ -19,17 +19,16 @@ import main.ParkingSpace;
 import main.Reservation;
 import notifications.Notification;
 
-public class ParkingScreen extends HBox {
-	private final ATDProgram controller;
-	
+public class ParkingScreen extends Screen {
+	private ATDProgram controller;	
 	private final ComboBox<String> filterSelector 	= new ComboBox<String>();
 	private final ComboBox<ParkingSpace> spaceContent	= new ComboBox<ParkingSpace>();
-	private final ArrayList<ListRegel> content 		= new ArrayList<ListRegel>();
-	private final ListView<ListRegel> itemList 		= new ListView<ListRegel>();
+	private final ArrayList<ListItem> content 		= new ArrayList<ListItem>();
+	private final ListView<ListItem> itemList 		= new ListView<ListItem>();
 	private final DatePicker dateFromContent 		= new DatePicker();
 	private final DatePicker dateToContent 			= new DatePicker();
 	private Reservation selectedObject;
-	private ListRegel selectedItem;
+	private ListItem selectedItem;
 	private boolean isChanging;
 	private static final double
 			space_Small = 10,
@@ -60,6 +59,7 @@ public class ParkingScreen extends HBox {
 			control_secBox 		= new HBox(space_3), 
 			mainBox 			= new HBox(space_Small);
 	public ParkingScreen(ATDProgram controller) {
+		super(controller);
 		this.controller = controller;
 		//put everything in the right place
 		control_MainBox.getChildren().addAll(newButton		, changeButton	  , removeButton);
@@ -84,6 +84,7 @@ public class ParkingScreen extends HBox {
 		}
 		numberPlateContent.setMinWidth(label_Normal*1.5);
 		dateToContent.setMinWidth(label_Normal*1.5);
+		dateFromContent.setMinWidth(label_Normal*1.5);		
 		spaceContent.setMinWidth(label_Normal*1.5);	
 		detailsBox.setPadding(new Insets(space_Big));
 		mainBox.setPadding(new Insets(space_Big));
@@ -104,7 +105,7 @@ public class ParkingScreen extends HBox {
 		setEditable(false);
 		//Listview
 		for (Reservation object : controller.getReservations()) 
-			if(object.isActive().equals("active")||object.isActive().equals("before"))itemList.getItems().add(new ListRegel(object));
+			if(object.isActive().equals("active")||object.isActive().equals("before"))itemList.getItems().add(new ListItem(object));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
@@ -161,24 +162,26 @@ public class ParkingScreen extends HBox {
 		case 0:{//Geen
 				itemList.getItems().clear();
 				for (Reservation object : controller.getReservations())
-					itemList.getItems().add(new ListRegel(object));
+					itemList.getItems().add(new ListItem(object));
 				break;
 			}
 		case 1:{//Actief
 				itemList.getItems().clear();
 				for (Reservation object : controller.getReservations())
-					if(object.isActive().equals("active"))itemList.getItems().add(new ListRegel(object));
+					if(object.isActive().equals("active"))itemList.getItems().add(new ListItem(object));
 				break;
 			}
 		case 2:{//Overzicht
 				itemList.getItems().clear();
-				//TODO
+				for (Reservation object : controller.getReservations())
+					if(object.getFromDate().getMonth()==(LocalDate.now().getMonth().minus(1))||object.getToDate().getMonth()==(LocalDate.now().getMonth().minus(1)))
+						itemList.getItems().add(new ListItem(object));
 				break;
 			}
 		case 3:{//Afgesloten
 			itemList.getItems().clear();
 			for (Reservation object : controller.getReservations())
-				if(object.isActive().equals("done"))itemList.getItems().add(new ListRegel(object));
+				if(object.isActive().equals("done"))itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		}
@@ -232,7 +235,7 @@ public class ParkingScreen extends HBox {
 								numberPlateContent.getText(), 
 								spaceContent.getValue());
 						controller.addorRemoveReservations(newReservation, false);
-						itemList.getItems().add(new ListRegel(newReservation));
+						itemList.getItems().add(new ListItem(newReservation));
 						setEditable(false);
 					}
 					case "cancel":	{
@@ -250,13 +253,13 @@ public class ParkingScreen extends HBox {
 	/**
 	 * refreshes the list and every item itself
 	 */
-	private void refreshList(){
+	public void refreshList(){
 		content.clear();
 		content.addAll(itemList.getItems());
 		itemList.getItems().clear();
 		itemList.getItems().addAll(content);
-		for (ListRegel listRegel : itemList.getItems())
-			listRegel.refresh();
+		for (ListItem listItem : itemList.getItems())
+			listItem.refresh();
 		changeFilter(filterSelector.getSelectionModel().getSelectedIndex());
 		select(selectedItem);
 	}
@@ -264,7 +267,7 @@ public class ParkingScreen extends HBox {
 	 * selects an item and fills in the information
 	 * @param selectedValue the item to be selected
 	 */
-	private void select(ListRegel selectedValue){
+	private void select(ListItem selectedValue){
 		if(selectedValue!=null)	{
 			selectedItem = selectedValue;
 			selectedObject = selectedValue.getReservation();
@@ -307,7 +310,7 @@ public class ParkingScreen extends HBox {
 		}
 	}
 	private static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-	    return start1.isBefore(end2) && start2.isBefore(end1);
+		return (start1.isBefore(end2) || start1.isEqual(end2)) && (start2.isBefore(end1) || start2.isEqual(end1));
 	}
 	/**
 	 * checks if all the inputfields are filled in
@@ -327,7 +330,7 @@ public class ParkingScreen extends HBox {
 	 * @return false if nothing is selected
 	 */
 	private boolean checkSelected() {
-		if(selectedObject == null) return false;
+		if(selectedObject == null || selectedObject.getToDate().isBefore(LocalDate.now())) return false;
 		return true;
 	}
 	/**
@@ -344,17 +347,17 @@ public class ParkingScreen extends HBox {
 		
 		itemList.getItems().clear();
 		//add an item if any item that exists contains any value that has been searched for
-		for (ListRegel entry : content) {		
+		for (ListItem entry : content) {		
 			if (entry.getReservation().getNumberPlate().contains(newVal)){
 				itemList.getItems().add(entry);
 			}
 		}
 	}
 	// this represents every item in the list, it has different constructor for every filter option
-	public class ListRegel extends HBox{
+	public class ListItem extends HBox{
 		private Reservation object;
 		private Label itemPlateLabel = new Label(),itemFromLabel = new Label(),itemToLabel = new Label(),itemSpaceLabel = new Label();
-		public ListRegel(Reservation object){
+		public ListItem(Reservation object){
 			this.object = object;
 			refresh();
 			setSpacing(5);

@@ -20,16 +20,15 @@ import main.Mechanic;
 import main.Product;
 import notifications.Notification;
 
-public class MaintenanceScreen extends HBox {
-	private final ATDProgram controller;
-	
+public class MaintenanceScreen extends Screen {
+	private ATDProgram controller;
 	private final ComboBox<String> filterSelector 	= new ComboBox<String>();
 	private final ComboBox<Mechanic> mechanicContent= new ComboBox<Mechanic>();
-	private final ArrayList<ListRegel> content 		= new ArrayList<ListRegel>();
-	private final ListView<ListRegel> itemList 		= new ListView<ListRegel>();
+	private final ArrayList<ListItem> content 		= new ArrayList<ListItem>();
+	private final ListView<ListItem> itemList 		= new ListView<ListItem>();
 	private final DatePicker dateContent 			= new DatePicker();
 	private MaintenanceSession selectedObject;
-	private ListRegel selectedItem;
+	private ListItem selectedItem;
 	private boolean isChanging;
 	private static final double
 			space_Small = 10,
@@ -65,6 +64,7 @@ public class MaintenanceScreen extends HBox {
 			control_secBox 		= new HBox(space_4), 
 			mainBox 			= new HBox(space_Small);
 	public MaintenanceScreen(ATDProgram controller) {
+		super(controller);
 		this.controller = controller;
 		//put everything in the right place
 		control_MainBox.getChildren().addAll(newButton		, changeButton	  , removeButton);
@@ -112,7 +112,7 @@ public class MaintenanceScreen extends HBox {
 		setEditable(false);
 		//Listview
 		for (MaintenanceSession object : controller.getMaintenanceSessions()) 
-			if(!object.isFinished())itemList.getItems().add(new ListRegel(object));
+			if(!object.isFinished())itemList.getItems().add(new ListItem(object));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
@@ -170,25 +170,25 @@ public class MaintenanceScreen extends HBox {
 		case 0:{
 				itemList.getItems().clear();
 				for (MaintenanceSession object : controller.getMaintenanceSessions())
-					if(!object.isFinished())itemList.getItems().add(new ListRegel(object));
+					if(!object.isFinished())itemList.getItems().add(new ListItem(object));
 				break;
 			}
 		case 1:{
 				itemList.getItems().clear();
 				for (MaintenanceSession object : controller.getMaintenanceSessions())
-					if(object.getPlannedDate().isEqual(LocalDate.now()) && !object.isFinished()) itemList.getItems().add(new ListRegel(object));
+					if(object.getPlannedDate().isEqual(LocalDate.now()) && !object.isFinished()) itemList.getItems().add(new ListItem(object));
 				break;
 			}
 		case 2:{
 				itemList.getItems().clear();
 				for (MaintenanceSession object : controller.getMaintenanceSessions())
-					if(object.getMechanic()==null && !object.isFinished()) itemList.getItems().add(new ListRegel(object));
+					if(object.getMechanic()==null && !object.isFinished()) itemList.getItems().add(new ListItem(object));
 				break;
 			}
 		case 3:{
 			itemList.getItems().clear();
 			for (MaintenanceSession object : controller.getMaintenanceSessions())
-				if(object.isFinished())itemList.getItems().add(new ListRegel(object));
+				if(object.isFinished())itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		}
@@ -272,7 +272,7 @@ public class MaintenanceScreen extends HBox {
 								controller.getStock(), 
 								dateContent.getValue());
 						controller.addorRemoveMaintenanceSessions(newMaintenanceSession, false);
-						itemList.getItems().add(new ListRegel(newMaintenanceSession));
+						itemList.getItems().add(new ListItem(newMaintenanceSession));
 						setEditable(false);
 					}
 					case "cancel":	{
@@ -290,13 +290,13 @@ public class MaintenanceScreen extends HBox {
 	/**
 	 * refreshes the list and every item itself
 	 */
-	private void refreshList(){
+	public void refreshList(){
 		content.clear();
 		content.addAll(itemList.getItems());
 		itemList.getItems().clear();
 		itemList.getItems().addAll(content);
-		for (ListRegel listRegel : itemList.getItems())
-			listRegel.refresh();
+		for (ListItem listItem : itemList.getItems())
+			listItem.refresh();
 		changeFilter(filterSelector.getSelectionModel().getSelectedIndex());
 		select(selectedItem);
 	}
@@ -304,7 +304,7 @@ public class MaintenanceScreen extends HBox {
 	 * selects an item and fills in the information
 	 * @param selectedValue the item to be selected
 	 */
-	private void select(ListRegel selectedValue){
+	private void select(ListItem selectedValue){
 		if(selectedValue!=null)	{
 			selectedItem = selectedValue;
 			selectedObject = selectedValue.getMaintenanceSession();
@@ -383,17 +383,17 @@ public class MaintenanceScreen extends HBox {
 		}
 		itemList.getItems().clear();
 		//add an item if any item that exists contains any value that has been searched for
-		for (ListRegel entry : content) {		
+		for (ListItem entry : content) {		
 			if (entry.getMaintenanceSession().getNumberPlate().contains(newVal)){
 				itemList.getItems().add(entry);
 			}
 		}
 	}
 	// this represents every item in the list, it has different constructor for every filter option
-	public class ListRegel extends HBox{
+	public class ListItem extends HBox{
 		private MaintenanceSession object;
 		private Label itemPlateLabel = new Label(),itemMechLabel = new Label(),itemDateLabel = new Label(),itemPartsLabel = new Label();
-		public ListRegel(MaintenanceSession object){
+		public ListItem(MaintenanceSession object){
 			this.object = object;
 			refresh();
 			setSpacing(5);

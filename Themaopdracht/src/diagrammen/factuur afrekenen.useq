@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sequence-diagram version="1.1.8" icons="true" automaticImage="PNG">  
-  <object id="1" language="java" name="screens.InvoiceScreen.ListRegel" project="Themaopdracht" 
+  <object id="1" language="java" name="screens.InvoiceScreen.ListItem" project="Themaopdracht" 
     file="/Themaopdracht/src/screens/InvoiceScreen.java" binary="false" label="listRegel" type="class" autoSize="true">    
     <position height="-1" width="-1" x="99" y="0"/>  
   </object>  

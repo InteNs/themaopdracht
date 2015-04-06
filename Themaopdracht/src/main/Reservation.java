@@ -1,10 +1,11 @@
 package main;
 import java.time.LocalDate;
+import java.time.Period;
 
 
 public class Reservation {
 	private LocalDate fromDate, toDate;
-	private double totalPrice;
+	private final static double fee = 10;
 	private ParkingSpace parkingSpace;
 	private boolean isActive;
 	private String numberPlate;
@@ -48,10 +49,6 @@ public class Reservation {
 	public void setToDate(LocalDate toDate) {
 		this.toDate = toDate;
 	}
-
-	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
 	public void checkDate(){
 		isActive = true;
 		if(LocalDate.now().isAfter(toDate))isActive = false;
@@ -64,7 +61,9 @@ public class Reservation {
 		return toDate;
 	}
 	public double getTotalPrice() {
-		return totalPrice;
+		Period p = Period.between(fromDate, toDate);	
+		System.out.println(""+p.getDays());
+		return (p.getDays())*fee;
 	}
 	public ParkingSpace getParkingSpace() {
 		return parkingSpace;

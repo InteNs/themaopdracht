@@ -24,19 +24,20 @@ import main.Invoice.InvoiceItem;
 import main.Invoice.PayMethod;
 import main.MaintenanceSession;
 import main.Product;
+import main.Reservation;
 import notifications.Notification;
 
-public class InvoiceScreen extends HBox {
-	private final ATDProgram controller;
+public class InvoiceScreen extends Screen {
+	private ATDProgram controller;
 	private final ComboBox<String> filterSelector 	= new ComboBox<String>();
 	private final ComboBox<Customer> customerContent= new ComboBox<Customer>();
 	private final CheckBox isPayedContent 			= new CheckBox();
-	private final ArrayList<ListRegel> content 		= new ArrayList<ListRegel>();
-	private final ListView<ListRegel> itemList 		= new ListView<ListRegel>();
+	private final ArrayList<ListItem> content 		= new ArrayList<ListItem>();
+	private final ListView<ListItem> itemList 		= new ListView<ListItem>();
 	private final ListView<InvoiceItem> contentList = new ListView<InvoiceItem>();
 	private final DatePicker dateContent 			= new DatePicker();
 	private Invoice selectedobject;
-	private ListRegel selectedItem;
+	private ListItem selectedItem;
 	private boolean isChanging;
 	private static final double
 			space_Medium = 10,
@@ -53,7 +54,7 @@ public class InvoiceScreen extends HBox {
 			saveButton 	 		= new Button("Opslaan"),
 			addMaintenanceButton= new Button("+Onderhoud"),
 			addRefuelButton 	= new Button("+Tanksessie"),
-			addParkingButton 	= new Button("+reservering");
+			addParkingButton 	= new Button("+Reservering");
 	private final Label 
 			dateLabel 	  		= new Label("Datum: "),
 			priceLabel	  		= new Label("Prijs: "), 
@@ -70,6 +71,7 @@ public class InvoiceScreen extends HBox {
 			control_secBox 		= new HBox(space_4), 
 			mainBox 			= new HBox(space_Medium);
 	public InvoiceScreen(ATDProgram controller) {
+		super(controller);
 		this.controller = controller;
 		//put everything in the right place
 		control_MainBox.getChildren().addAll(newButton,changeButton	,payButton		,removeButton);
@@ -117,7 +119,7 @@ public class InvoiceScreen extends HBox {
 		setEditable(false);
 		//Listview
 		for (Invoice object : controller.getInvoices()) 
-			if(!object.isPayed())itemList.getItems().add(new ListRegel(object));
+			if(!object.isPayed())itemList.getItems().add(new ListItem(object));
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
@@ -169,26 +171,26 @@ public class InvoiceScreen extends HBox {
 		case 0:{//geen
 				itemList.getItems().clear();
 				for (Invoice object : controller.getInvoices())
-					if(!object.isPayed())itemList.getItems().add(new ListRegel(object));
+					if(!object.isPayed())itemList.getItems().add(new ListItem(object));
 				break;
 			}
 		case 1:{//achterstand
 				itemList.getItems().clear();
 				for (Invoice object : controller.getInvoices())
 					if(!object.isPayed() && object.getInvoiceDate().isBefore(LocalDate.now().minusMonths(3)))
-						itemList.getItems().add(new ListRegel(object));
+						itemList.getItems().add(new ListItem(object));
 				break;
 			}
 		case 2:{//anoniem
 				itemList.getItems().clear();
 				for (Invoice object : controller.getInvoices())
-					if(!object.isPayed()&& object.getCustomer()==null)itemList.getItems().add(new ListRegel(object));
+					if(!object.isPayed()&& object.getCustomer()==null)itemList.getItems().add(new ListItem(object));
 				break;
 			}
 		case 3:{//betaalt
 			itemList.getItems().clear();
 			for (Invoice object : controller.getInvoices())
-				if(object.isPayed())itemList.getItems().add(new ListRegel(object));
+				if(object.isPayed())itemList.getItems().add(new ListItem(object));
 			break;
 		}
 		}
@@ -249,9 +251,14 @@ public class InvoiceScreen extends HBox {
 	 * adds a reservation to the invoice
 	 */
 	private void addParking(){
-		Notification addMaintenanceNotification = new Notification(controller,"", ATDProgram.notificationStyle.PARKING);
-		addMaintenanceNotification.showAndWait();
-		//TODO
+		Notification addParking = new Notification(controller,"", ATDProgram.notificationStyle.PARKING);
+		addParking.showAndWait();
+		if(addParking.getKeuze().equals("confirm")) {
+			selectedobject.add(selectedobject.new InvoiceItem("Parkeersessie",((Reservation)addParking.getSelected()).getTotalPrice(),1));
+			Notification notify = new Notification(controller, "reservering toegevoegd.", ATDProgram.notificationStyle.NOTIFY);
+			notify.showAndWait();
+		}
+		refreshList();
 	}
 	/**
 	 * pays the selected invoice
@@ -262,8 +269,8 @@ public class InvoiceScreen extends HBox {
 		if(confirm.getKeuze().equals("confirm")) {
 			selectedobject.payNow((PayMethod) confirm.getSelected());
 			Notification notify = new Notification(controller, "factuur is betaald.", ATDProgram.notificationStyle.NOTIFY);
-			notify.showAndWait();}
-		controller.drawCharts();
+			notify.showAndWait();
+		}
 		refreshList();
 	}
 	/**
@@ -286,19 +293,19 @@ public class InvoiceScreen extends HBox {
 		else{	
 			Invoice newInvoice = new Invoice(controller);
 			controller.addorRemoveInvoice(newInvoice, false);
-			itemList.getItems().add(new ListRegel(newInvoice));
+			itemList.getItems().add(new ListItem(newInvoice));
 		}
 	}
 	/**
 	 * refreshes the list and every item itself
 	 */
-	private void refreshList(){
+	public void refreshList(){
 		content.clear();
 		content.addAll(itemList.getItems());
 		itemList.getItems().clear();
 		itemList.getItems().addAll(content);
-		for (ListRegel listRegel : itemList.getItems())
-			listRegel.refresh();
+		for (ListItem listItem : itemList.getItems())
+			listItem.refresh();
 		changeFilter(filterSelector.getSelectionModel().getSelectedIndex());
 		select(selectedItem);
 	}
@@ -306,7 +313,7 @@ public class InvoiceScreen extends HBox {
 	 * selects an item and fills in the information
 	 * @param selectedValue the item to be selected
 	 */
-	private void select(ListRegel selectedValue){
+	private void select(ListItem selectedValue){
 		if(selectedValue!=null)	{
 			selectedItem = selectedValue;
 			selectedobject = selectedValue.getInvoice();
@@ -342,10 +349,10 @@ public class InvoiceScreen extends HBox {
 		return true;
 	}
 	// this represents every item in the list, it has different constructor for every filter option
-	public class ListRegel extends HBox{
+	public class ListItem extends HBox{
 		private Invoice object;
 		private Label itemDateLabel = new Label(),itemPriceLabel = new Label(),itemCustomerLabel = new Label(),itemIsPayedLabel = new Label();
-		public ListRegel(Invoice object){
+		public ListItem(Invoice object){
 			this.object = object;
 			refresh();
 			setSpacing(5);

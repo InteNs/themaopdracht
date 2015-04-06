@@ -20,8 +20,8 @@ import main.Product;
 import main.ProductSupplier;
 import notifications.Notification;
 
-public class StockScreen extends HBox {
-	private final ATDProgram controller;
+public class StockScreen extends Screen {
+	private ATDProgram controller;
 	private final ComboBox<ProductSupplier> supplierContent = new ComboBox<ProductSupplier>();
 	private final ComboBox<String> filterSelector 			= new ComboBox<String>();
 	private final ArrayList<ListItem> content 				= new ArrayList<ListItem>();
@@ -73,6 +73,7 @@ public class StockScreen extends HBox {
 	control_secBox 	= new HBox(space_Small), 
 	mainBox 		= new HBox(space_Small);
 	public StockScreen(ATDProgram controller) {
+		super(controller);
 		this.controller = controller;
 		//put everything in the right places
 		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
@@ -313,15 +314,15 @@ public class StockScreen extends HBox {
 	/**
 	 * refreshes the list and every item 
 	 */
-	private void refreshList(){
+	public void refreshList(){
 		content.clear();
 		content.addAll(itemList.getItems());
 		itemList.getItems().clear();
 		itemList.getItems().addAll(content);
 		for (ListItem listItem : itemList.getItems())
 			listItem.refresh();
+		changeFilter(filterSelector.getSelectionModel().getSelectedIndex());
 		select(selectedItem);
-		controller.getStock().checkStock();
 	}
 	/**
 	 * 	fill in supplier details in corresponding textfields
@@ -483,7 +484,6 @@ public class StockScreen extends HBox {
 		 */
 		public void refresh(){
 			itemNameLabel.setText(object.getName());
-			System.out.println("" + controller + object + object.getSellPrice());
 			itemPriceLabel.setText((controller.convert(object.getSellPrice())));
 			itemSupplierLabel.setText(object.getSupplier().getName());
 			itemAmountLabel.setText(Integer.toString(object.getAmount()));

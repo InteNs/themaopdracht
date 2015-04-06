@@ -74,6 +74,7 @@ public class ATDProgram extends Application {
 		
 		tabsScreen.getTabs().addAll(financesScreen,invoiceScreen,customerAdministration,stockAdministration,serviceScreen,parkingScreen);
 		tabsScreen.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
+			((screens.Screen)newValue.getContent()).refreshList();
 		});
 		// Create Mainscreen
 		mainScene = new Scene(tabsScreen);
@@ -189,12 +190,9 @@ public class ATDProgram extends Application {
 		addorRemoveproduct(new Part(this,"Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
 		addorRemoveproduct(new Fuel(this,"Diesel", 300, 200, 1, 1.19, suppliers.get(2)), false);
 		addorRemoveproduct(new Fuel(this,"Euro95", 275, 150, 1.11, 1.52, suppliers.get(2)), false);
-		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-07"), LocalDate.parse("2015-04-20"), "13-edm-1", parkingSpaces.get(0)), false);
+		addorRemoveReservations(new Reservation(LocalDate.parse("2015-03-29"), LocalDate.parse("2015-04-20"), "13-edm-1", parkingSpaces.get(0)), false);
 		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-01"), LocalDate.parse("2015-04-04"), "69-lmr-7", parkingSpaces.get(1)), false);
 		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-04"), LocalDate.parse("2015-04-09"), "31-dos-3", parkingSpaces.get(2)), false);
-	}
-	public void drawCharts(){
-		((FinancesScreen)financesScreen.getContent()).drawCharts();
 	}
 	public static void main(String[] args) {;
 		launch();

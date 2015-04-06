@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import main.ATDProgram;
 import main.Invoice;
 
-public class FinancesScreen extends HBox {
+public class FinancesScreen extends Screen {
 	private ATDProgram controller;
 	private PieChart chart = new PieChart();
 	private double
@@ -38,6 +38,7 @@ public class FinancesScreen extends HBox {
 			mainButtonBox = new HBox(spacingBoxes), 
 			mainBox = new HBox(spacingBoxes);
 	public FinancesScreen(ATDProgram controller) {
+		super(controller);
 		this.controller = controller;
 		chart.setTitle("Facturen op totaalprijs");
 		//StockDetails
@@ -82,7 +83,7 @@ public class FinancesScreen extends HBox {
 		mainBox.setPadding(new Insets(20));
 		this.getChildren().add(mainBox);
 	}
-	public void drawCharts(){
+	private void drawCharts(){
 		int onder100 = 0;
 		int over100  = 0;
 		for (Invoice invoice : controller.getInvoices()) {
@@ -101,10 +102,7 @@ public class FinancesScreen extends HBox {
 		double btw = 0.0;
 		int aantal = 0;
 		for (Invoice invoice : controller.getInvoices()) {
-			if ((	invoice.getInvoiceDate().isEqual(from) || 
-					invoice.getInvoiceDate().isAfter(from)) && 
-				(	invoice.getInvoiceDate().isEqual(to) || 
-					invoice.getInvoiceDate().isBefore(to))) {
+			if(invoice.isPayed()&&isOverlapping(from, to, invoice.getInvoiceDate(), invoice.getInvoiceDate())){
 						aantal++;
 						omzet += invoice.getTotalPrice();
 			}
@@ -113,6 +111,15 @@ public class FinancesScreen extends HBox {
 			taxLabelContent.setText(controller.convert(btw));
 			amountLabelContent.setText(aantal+"");
 		}
+	}
+	private static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+		return (start1.isBefore(end2) || start1.isEqual(end2)) && (start2.isBefore(end1) || start2.isEqual(end1));
+	}
+	@Override
+	public void refreshList() {
+		drawCharts();
+		getFinanceData(fromDate.getValue(), toDate.getValue());
+		
 	}
 }
 
