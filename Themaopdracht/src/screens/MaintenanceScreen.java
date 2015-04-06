@@ -283,7 +283,7 @@ public class MaintenanceScreen extends HBox {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}

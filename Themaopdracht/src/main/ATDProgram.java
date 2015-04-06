@@ -68,12 +68,13 @@ public class ATDProgram extends Application {
 		financesScreen.setClosable(false);
 		financesScreen.setContent(new FinancesScreen(this));
 		
-		parkingScreen = new Tab("reserveringen");
+		parkingScreen = new Tab("Parkeren");
 		parkingScreen.setClosable(false);
 		parkingScreen.setContent(new ParkingScreen(this));
 		
-		tabsScreen.getTabs().addAll(customerAdministration,stockAdministration,serviceScreen,invoiceScreen,financesScreen, parkingScreen);
-
+		tabsScreen.getTabs().addAll(financesScreen,invoiceScreen,customerAdministration,stockAdministration,serviceScreen,parkingScreen);
+		tabsScreen.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
+		});
 		// Create Mainscreen
 		mainScene = new Scene(tabsScreen);
 		mainScene.getStylesheets().add("application.css");

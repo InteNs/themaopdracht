@@ -44,8 +44,8 @@ public class ParkingScreen extends HBox {
 			cancelButton 		= new Button("Annuleren"),
 			saveButton 			= new Button("Opslaan");
 	private final Label 
-			dateToLabel 		= new Label("Datum van: "),
-			dateFromLabel 		= new Label("Datum tot: "), 
+			dateToLabel 		= new Label("Datum tot: "),
+			dateFromLabel 		= new Label("Datum van: "), 
 			spaceLabel 			= new Label("Parkeerplaats: "),
 			numberPlateLabel 	= new Label("Kenteken: ");
 	private final TextField 
@@ -70,8 +70,8 @@ public class ParkingScreen extends HBox {
 		this.getChildren().add				(mainBox);
 		detailsBox.getChildren().addAll(
 				new VBox(space_Big,
-						new HBox(space_Big,dateToLabel,		dateToContent),
 						new HBox(space_Big,dateFromLabel,	dateFromContent),
+						new HBox(space_Big,dateToLabel,		dateToContent),
 						new HBox(space_Big,numberPlateLabel,numberPlateContent),
 						new HBox(space_Big,spaceLabel,	 	spaceContent),
 						new HBox(space_Big,cancelButton,	saveButton))
@@ -100,7 +100,7 @@ public class ParkingScreen extends HBox {
 		changeButton.setPrefSize	(button_3, 50);
 		removeButton.setPrefSize	(button_3, 50);
 		//StockDetails
-		spaceContent.getItems().addAll(controller.getParkingSpaces());
+		//spaceContent.getItems().addAll(controller.getParkingSpaces());
 		setEditable(false);
 		//Listview
 		for (Reservation object : controller.getReservations()) 
@@ -108,6 +108,12 @@ public class ParkingScreen extends HBox {
 		refreshList();
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
+		});
+		dateFromContent.valueProperty().addListener(e->{
+			if(dateFromContent.getValue() !=null && dateToContent.getValue()!=null)checkDates();
+		});
+		dateToContent.valueProperty().addListener(e->{
+			if(dateFromContent.getValue() !=null && dateToContent.getValue()!=null)checkDates();
 		});
 		//SearchField	
 		searchContent.setOnMouseClicked(e -> {
@@ -140,7 +146,6 @@ public class ParkingScreen extends HBox {
 		saveButton.setOnAction(e -> {
 			save();
 		});
-
 		filterSelector.getItems().addAll("Filter: Geen", "Filter: Actief", "Filter: Overzicht", "Filter: Afgesloten");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
@@ -190,7 +195,7 @@ public class ParkingScreen extends HBox {
 			if (Confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveReservations(selectedObject, true);
-				Notification Notify = new Notification(controller, "de klus is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
+				Notification Notify = new Notification(controller, "de reservering is verwijderd.", ATDProgram.notificationStyle.NOTIFY);
 				Notify.showAndWait();
 			}
 		}			
@@ -217,7 +222,7 @@ public class ParkingScreen extends HBox {
 				}
 			}
 			else{	
-				Notification confirm = new Notification(controller,"Deze klus aanmaken?",ATDProgram.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(controller,"Deze reservering aanmaken?",ATDProgram.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -238,7 +243,7 @@ public class ParkingScreen extends HBox {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}
@@ -291,6 +296,19 @@ public class ParkingScreen extends HBox {
 		dateToContent.setValue(null);
 		dateFromContent.setValue(null);
 	}
+	private void checkDates(){
+		spaceContent.getItems().clear();
+		for (ParkingSpace space : controller.getParkingSpaces())
+			spaceContent.getItems().add(space);
+		for (Reservation reservation : controller.getReservations()) {
+			if(isOverlapping(reservation.getFromDate(), reservation.getToDate(), dateFromContent.getValue(), dateToContent.getValue())){
+				spaceContent.getItems().remove(reservation.getParkingSpace());
+			}
+		}
+	}
+	private static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+	    return start1.isBefore(end2) && start2.isBefore(end1);
+	}
 	/**
 	 * checks if all the inputfields are filled in
 	 * @return false if one of the inputs is null
@@ -298,9 +316,10 @@ public class ParkingScreen extends HBox {
 	private boolean checkInput(){
 		boolean result = true;
 		if(numberPlateContent.getText().isEmpty())result = false;
-		if(dateToContent.getValue().isBefore(LocalDate.now()))result = false;
-		if(dateFromContent.getValue().isBefore(LocalDate.now()))result = false;
-		if(spaceContent.getSelectionModel().getSelectedItem()!=null) result = false;
+		if(dateToContent.getValue()==null || dateToContent.getValue().isBefore(LocalDate.now()))result = false;
+		if(dateFromContent.getValue()==null ||dateFromContent.getValue().isAfter(dateToContent.getValue()))result = false;
+		if(dateFromContent.getValue()==null ||dateFromContent.getValue().isBefore(LocalDate.now()))result = false;
+		if(spaceContent.getSelectionModel().getSelectedItem() == null) result = false;
 		return result;
 	}
 	/**
@@ -322,6 +341,7 @@ public class ParkingScreen extends HBox {
 			itemList.getItems().clear();
 			itemList.getItems().addAll(content);
 		}
+		
 		itemList.getItems().clear();
 		//add an item if any item that exists contains any value that has been searched for
 		for (ListRegel entry : content) {		

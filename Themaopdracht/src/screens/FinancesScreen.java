@@ -41,6 +41,7 @@ public class FinancesScreen extends HBox {
 		this.controller = controller;
 		chart.setTitle("Facturen op totaalprijs");
 		//StockDetails
+		
 		details.getChildren().addAll(
 				new VBox(20,
 						new HBox(20,grossProfitLabel,	grossProfitLabelContent),
@@ -72,7 +73,8 @@ public class FinancesScreen extends HBox {
 				getFinanceData(fromDate.getValue(), newValue);
 			}
 		});
-        
+        fromDate.setValue(LocalDate.now());
+		toDate.setValue(LocalDate.now());
 		//Make & merge left & right
         details.getChildren().add(chart);
 		rightBox.getChildren().addAll(details,mainButtonBox);

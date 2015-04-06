@@ -1,7 +1,7 @@
 package main;
 
 public class ParkingSpace {
-	private boolean isAvailable;
+	private boolean isAvailable = true;
 	private int ID;
 	public ParkingSpace(int ID){
 		this.ID = ID;

@@ -19,8 +19,8 @@ import main.ATDProgram;
 import main.Customer;
 import notifications.Notification;
 
-public class CustomerScreen extends HBox {
-	private final ATDProgram controller;
+public class CustomerScreen extends Screen {
+	private ATDProgram controller;
 
 	private final ComboBox<String> filterSelector 	= new ComboBox<String>();
 	private final ArrayList<ListItem> content 		= new ArrayList<ListItem>();
@@ -70,7 +70,7 @@ public class CustomerScreen extends HBox {
 	control_secBox 	= new HBox(space_Small), 
 	mainBox 		= new HBox(space_Small);
 	public CustomerScreen(ATDProgram controller) {
-		this.controller = controller;
+		super(controller);
 		//put everything in the right places
 		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
 		control_secBox.getChildren().addAll (searchContent	, filterSelector);
@@ -163,7 +163,7 @@ public class CustomerScreen extends HBox {
 	 * fills the list with items that fit with the given filter
 	 * @param newValue selected filter
 	 */
-	private void changeFilter(int newValue) {
+	protected void changeFilter(int newValue) {
 		switch(newValue){
 		case 0:{
 			itemList.getItems().clear();
@@ -189,7 +189,7 @@ public class CustomerScreen extends HBox {
 	/*
 	 * removes the selected item
 	 */
-	private void remove(){
+	protected void remove(){
 		if(checkSelected()){
 			Notification confirm = new Notification(controller, "Weet u zeker dat u deze klant wilt verwijderen?", ATDProgram.notificationStyle.CONFIRM);
 			confirm.showAndWait();
@@ -205,7 +205,7 @@ public class CustomerScreen extends HBox {
 	/**
 	 * saves the input in either a selected item or a new item
 	 */
-	private void save(){
+	protected void save(){
 		if(checkInput()){
 			if(isChanging){
 				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",ATDProgram.notificationStyle.CONFIRM);
@@ -261,14 +261,14 @@ public class CustomerScreen extends HBox {
 			refreshList();
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn Juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",ATDProgram.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}
 	/**
 	 * refreshes the list and every item itself
 	 */
-	private void refreshList(){
+	protected void refreshList(){
 		content.clear();
 		content.addAll(itemList.getItems());
 		itemList.getItems().clear();
@@ -281,7 +281,7 @@ public class CustomerScreen extends HBox {
 	 * selects an item
 	 * @param selectedValue the item to be selected
 	 */
-	private void select(ListItem selectedValue){
+	protected void select(ListItem selectedValue){
 		if(selectedValue!= null){
 			selectedItem = selectedValue;
 			selectedObject = selectedValue.getCustomer();
@@ -300,7 +300,7 @@ public class CustomerScreen extends HBox {
 	 * disables/enables the left or right side of the stage
 	 * @param enable
 	 */
-	private void setEditable(boolean enable){
+	protected void setEditable(boolean enable){
 		cancelButton.setVisible(enable);
 		saveButton.setVisible(enable);
 		detailsBox.setDisable(!enable);
@@ -310,7 +310,7 @@ public class CustomerScreen extends HBox {
 	/**
 	 * clears all the inputfields
 	 */
-	private void clearInput(){
+	protected void clearInput(){
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField)((TextField)((HBox)node1).getChildren().get(1)).clear();
 		datecontent.setValue(null);
@@ -320,7 +320,7 @@ public class CustomerScreen extends HBox {
 	 * checks if all the inputfields are filled in
 	 * @return false if one of the inputs is null
 	 */
-	private boolean checkInput(){
+	protected boolean checkInput(){
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
 			if(((HBox)node1).getChildren().get(1) instanceof TextField){
 				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty()){
@@ -333,7 +333,7 @@ public class CustomerScreen extends HBox {
 	 * checks if an item is selected in the list
 	 * @return false if nothing is selected
 	 */
-	private boolean checkSelected() {
+	protected boolean checkSelected() {
 		if(selectedObject == null) return false;
 		return true;
 	}
