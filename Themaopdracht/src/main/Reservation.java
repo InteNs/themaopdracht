@@ -70,4 +70,7 @@ public class Reservation {
 	public ParkingSpace getParkingSpace() {
 		return parkingSpace;
 	}
+	public String toString() {
+		return numberPlate;
+	}
 }

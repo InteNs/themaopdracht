@@ -14,11 +14,10 @@ public class Invoice {
 	private double totalPrice;
 	private boolean isPayed;
 	private Customer customer;
-	private ATDProgram controller;
+
 	private ArrayList<InvoiceItem> items = new ArrayList<InvoiceItem>();
 	public enum PayMethod{CASH,PIN,CREDIT};
-	public Invoice(ATDProgram controller){
-		this.controller = controller;
+	public Invoice(){
 		invoiceDate = LocalDate.now();
 	}
 	public double getTotalPrice() {
@@ -60,9 +59,9 @@ public class Invoice {
 			this.amount = amount;
 			this.semiTotalPrice = amount*price;
 			description.setText(desc);
-			priceL.setText( controller.convert(price));
+			priceL.setText(ATDProgram.convert(price));
 			amountL.setText( Integer.toString(amount));
-			totalPriceL.setText( controller.nf.format(semiTotalPrice));
+			totalPriceL.setText(ATDProgram.convert(semiTotalPrice));
 			setSpacing(5);
 			getChildren().addAll(
 					amountL,

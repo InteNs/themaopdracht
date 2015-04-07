@@ -38,7 +38,7 @@ public class ATDProgram extends Application {
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	private ArrayList<ParkingSpace> parkingSpaces = new ArrayList<ParkingSpace>();
 	private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
-	public final NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("nl", "NL"));
+	public final static NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("nl", "NL"));
 	@Override
 	public void start(Stage stage) throws Exception {
 		mainStage = stage;
@@ -157,7 +157,7 @@ public class ATDProgram extends Application {
 		if(remove)maintenanceSessions.remove(maintenanceSession);
 		else maintenanceSessions.add(maintenanceSession);
 	}
-	public String convert(double price){
+	public static final String convert(double price){
 		return nf.format(price);
 	}
 	private void addContent(){
@@ -178,8 +178,8 @@ public class ATDProgram extends Application {
 		addorRemoveMechanic(new Mechanic(2, "Hans", 12.5), false);
 		addorRemoveMechanic(new Mechanic(3, "Sjaak", 10.0), false);
 		addorRemoveMechanic(new Mechanic(4, "Piet", 15.0), false);
-		addorRemoveInvoice(new Invoice(this), false);
-		addorRemoveInvoice(new Invoice(this), false);
+		addorRemoveInvoice(new Invoice(), false);
+		addorRemoveInvoice(new Invoice(), false);
 		addorRemoveMaintenanceSessions(new MaintenanceSession("13-LOL-3",stock, LocalDate.now()), false);
 		addorRemoveMaintenanceSessions(new MaintenanceSession("65-RGB-1",stock, LocalDate.now().plusDays(4)), false);
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);

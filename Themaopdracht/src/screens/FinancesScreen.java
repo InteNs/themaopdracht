@@ -80,7 +80,7 @@ public class FinancesScreen extends Screen {
         details.getChildren().add(chart);
 		rightBox.getChildren().addAll(details,mainButtonBox);
 		mainBox.getChildren().addAll (rightBox);
-		mainBox.setPadding(new Insets(20));
+		mainBox.setPadding(new Insets(10));
 		this.getChildren().add(mainBox);
 	}
 	private void drawCharts(){
@@ -107,8 +107,8 @@ public class FinancesScreen extends Screen {
 						omzet += invoice.getTotalPrice();
 			}
 			btw = (omzet/121)*21;
-			grossProfitLabelContent.setText(controller.convert(omzet));
-			taxLabelContent.setText(controller.convert(btw));
+			grossProfitLabelContent.setText(ATDProgram.convert(omzet));
+			taxLabelContent.setText(ATDProgram.convert(btw));
 			amountLabelContent.setText(aantal+"");
 		}
 	}

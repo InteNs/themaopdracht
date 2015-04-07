@@ -34,7 +34,8 @@ public class StockScreen extends Screen {
 	space_Big 	= 20,
 	space_3 	= 15,	
 	button_3 	= 140,
-	label_Normal= 120;
+	label_Normal= 120,
+	item_Normal = 89;
 	private final Button 
 	newButton 		= new Button("Nieuw"), 
 	newSupButton	= new Button("Nieuwe supplier"),
@@ -65,20 +66,21 @@ public class StockScreen extends Screen {
 	postalContent 	= new TextField(),
 	placeContent 	= new TextField();
 	private final VBox
-	leftBox 		= new VBox(space_Big),
+	leftBox 		= new VBox(),
 	rightBox 		= new VBox(space_Big);
 	private final HBox 
+	listLabels		= new HBox(5),
 	detailsBox 		= new HBox(space_Small), 
 	control_MainBox = new HBox(space_3), 
-	control_secBox 	= new HBox(space_Small), 
+	control_SecBox 	= new HBox(space_3), 
 	mainBox 		= new HBox(space_Small);
 	public StockScreen(ATDProgram controller) {
 		super(controller);
 		this.controller = controller;
 		//put everything in the right places
-		control_MainBox.getChildren().addAll(newButton		, changeButton		,removeButton);
-		control_secBox.getChildren().addAll	(searchContent	, filterSelector	,newSupButton);
-		leftBox.getChildren().addAll 		(itemList		, control_secBox);
+		control_MainBox.getChildren().addAll(newButton		, changeButton		, removeButton);
+		control_SecBox.getChildren().addAll	(searchContent	, filterSelector	, newSupButton);
+		leftBox.getChildren().addAll 		(listLabels		, itemList			, control_SecBox);
 		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
 		mainBox.getChildren().addAll 		(leftBox		, rightBox);
 		this.getChildren().add				(mainBox);
@@ -104,13 +106,16 @@ public class StockScreen extends Screen {
 				((TextField)((HBox)node).getChildren().get(1)).setMinWidth(label_Normal*1.5);
 		}
 		supplierContent.setMinWidth(label_Normal*1.5);		
-		detailsBox.setPadding(new Insets(space_Big));
-		mainBox.setPadding(new Insets(space_Big));
-		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");
+		detailsBox.setPadding(new Insets		(space_Big));
+		mainBox.setPadding(new Insets			(space_Small));
+		control_SecBox.setPadding(new Insets	(space_Big,0,space_Small,0));
+		listLabels.setPadding(new Insets		(0,0,0,7));
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");		
 		leftBox.getStyleClass().add("removeDisabledEffect");
 		itemList.getStyleClass().add("removeDisabledEffect");
+		listLabels.getStyleClass().add("detailsBox");
 		detailsBox.setPrefSize		(450	 , 520);
-		itemList.setPrefSize		(450	 , 520);
+		itemList.setPrefSize		(450	 , 501);
 		searchContent.setPrefSize	(button_3, 50);
 		filterSelector.setPrefSize	(button_3, 50);
 		newSupButton.setPrefSize	(button_3, 50);
@@ -216,8 +221,9 @@ public class StockScreen extends Screen {
 	 */
 	private void boekop() {
 		itemList.getItems().remove(itemList.getItems().size()-1);
-		for (ListItem listItem : itemList.getItems())
+		for (ListItem listItem : itemList.getItems()){
 			controller.getStock().fill(listItem.getSelected(), listItem.getAmount());
+		}
 		filterSelector.getSelectionModel().selectFirst();
 	}
 	/*
@@ -225,19 +231,19 @@ public class StockScreen extends Screen {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification confirm = new Notification(controller, "Weet u zeker dat u dit product wilt verwijderen?", Notification.notificationStyle.CONFIRM);
+			Notification confirm = new Notification(null, controller, "Weet u zeker dat u dit product wilt verwijderen?", Notification.notificationStyle.CONFIRM);
 			confirm.showAndWait();
 			if (confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveproduct(selectedObject, true);
-				Notification notify = new Notification(controller, "Het product is verwijderd.", Notification.notificationStyle.NOTIFY);
+				Notification notify = new Notification(null, controller, "Het product is verwijderd.", Notification.notificationStyle.NOTIFY);
 				notify.showAndWait();
 				refreshList();
 			}
 		}			
 	}
 	private void newSupplier(){
-		Notification newSupplier = new Notification(controller, "", Notification.notificationStyle.SUPPLIER);
+		Notification newSupplier = new Notification(null, controller, "", Notification.notificationStyle.SUPPLIER);
 		newSupplier.showAndWait();
 		if(newSupplier.getKeuze().equals("confirm")){
 			controller.addorRemoveSupplier((ProductSupplier)newSupplier.getSelected(), false);
@@ -250,7 +256,7 @@ public class StockScreen extends Screen {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification changeConfirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",Notification.notificationStyle.CONFIRM);
+				Notification changeConfirm = new Notification(null, controller,"Weet u zeker dat u deze wijzigingen wilt doorvoeren?", Notification.notificationStyle.CONFIRM);
 				changeConfirm.showAndWait();
 				switch (changeConfirm.getKeuze()) {
 				case "confirm": {
@@ -269,7 +275,7 @@ public class StockScreen extends Screen {
 				}
 			}
 			else{	
-				Notification getType = new Notification(controller,"", Notification.notificationStyle.TYPE);
+				Notification getType = new Notification(null,controller, "", Notification.notificationStyle.TYPE);
 				getType.showAndWait();
 				switch (getType.getKeuze()) {
 				case "confirm": {
@@ -307,7 +313,7 @@ public class StockScreen extends Screen {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld!",Notification.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(null, controller,"Niet alle velden zijn juist ingevuld!", Notification.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}
@@ -351,8 +357,8 @@ public class StockScreen extends Screen {
 			nameContent.setText(selectedObject.getName());
 			amountContent.setText(Integer.toString(selectedObject.getAmount()));
 			minAmountContent.setText(Integer.toString(selectedObject.getMinAmount()));
-			priceContent.setText(controller.convert(selectedObject.getSellPrice()));
-			buyPriceContent.setText(controller.convert(selectedObject.getBuyPrice()));
+			priceContent.setText(ATDProgram.convert(selectedObject.getSellPrice()));
+			buyPriceContent.setText(ATDProgram.convert(selectedObject.getBuyPrice()));
 			supplierContent.setValue(selectedObject.getSupplier());
 		}
 		//		}
@@ -421,8 +427,9 @@ public class StockScreen extends Screen {
 		itemList.getItems().clear();
 		//add an item if any item that exists contains any value that has been searched for
 		for (ListItem entry : content) {		
-			if (entry.getProduct().getName().contains(newVal)
+			if (	   entry.getProduct().getName().contains(newVal)
 					|| Double.toString(entry.getProduct().getSellPrice()).contains(newVal)
+					|| Integer.toString(entry.getProduct().getAmount()).contains(newVal)
 					|| entry.getProduct().getSupplier().getName().contains(newVal)) {
 				itemList.getItems().add(entry);
 			}
@@ -434,11 +441,14 @@ public class StockScreen extends Screen {
 		private ComboBox<Product> productSelector = new ComboBox<Product>();
 		private TextField input = new TextField();
 		private Label 
-				itemPriceLabel	 = new Label(),
-				itemNameLabel	 = new Label(),
-				itemSupplierLabel= new Label(),
-				itemAmountLabel  = new Label(),
-				itemOrderedLabel = new Label();
+				itemPriceLabel	 	= new Label(),
+				itemNameLabel	 	= new Label(),
+				itemSupplierLabel	= new Label(),
+				itemAmountLabel  	= new Label(),
+				itemBuyPriceLabel	= new Label(),
+				itemOrderedLabel 	= new Label(),
+				opboekSupplierLabel	= new Label(),
+				opboekOrderedLabel 	= new Label();
 		public ListItem(Product object){
 			//no filter
 			this.object = object;
@@ -453,7 +463,18 @@ public class StockScreen extends Screen {
 					new Separator(Orientation.VERTICAL),
 					itemAmountLabel);
 			for (Node node : getChildren()) 
-				if(node instanceof Label)((Label)node).setPrefWidth(100);
+				if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
+			listLabels.getChildren().clear();
+			listLabels.getChildren().addAll(
+					new Label("Naam"),
+					new Separator(Orientation.VERTICAL),
+					new Label("Prijs"),
+					new Separator(Orientation.VERTICAL),
+					new Label("Leverancier"),
+					new Separator(Orientation.VERTICAL),
+					new Label("Aantal"));
+			for (Node node : listLabels.getChildren()) 
+				if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
 		}
 		public ListItem(Product object, int amount){
 			//bestellijst filter
@@ -464,18 +485,65 @@ public class StockScreen extends Screen {
 			getChildren().addAll(
 					itemNameLabel,
 					new Separator(Orientation.VERTICAL),
-					itemOrderedLabel,
+					itemBuyPriceLabel,
 					new Separator(Orientation.VERTICAL),
-					itemSupplierLabel);
+					itemSupplierLabel,
+					new Separator(Orientation.VERTICAL),
+					itemOrderedLabel);
 			for (Node node : getChildren())
-				if(node instanceof Label)((Label)node).setPrefWidth(100);
+				if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
+			listLabels.getChildren().clear();
+			listLabels.getChildren().addAll(
+					new Label("Naam"),
+					new Separator(Orientation.VERTICAL),
+					new Label("InkoopPrijs"),
+					new Separator(Orientation.VERTICAL),
+					new Label("Leverancier"),
+					new Separator(Orientation.VERTICAL),
+					new Label("Aantal besteld"));
+			for (Node node : listLabels.getChildren()) 
+				if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
 		}
 		public ListItem(){
 			//opboeken filter
 			productSelector.getItems().addAll(controller.getProducts());
-			getChildren().addAll(productSelector, input);
+			productSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
+				if(newValue !=null){
+					opboekSupplierLabel.setText(((Product)newValue).getSupplier().getName());
+					try {
+						opboekOrderedLabel.setText(Integer.toString(controller.getStock().getOrderedItems().get((Product)newValue)));
+					} catch (Exception e) {
+						opboekOrderedLabel.setText("0");
+					}
+				}
+			});
+			getChildren().addAll(
+					productSelector,
+					new Separator(Orientation.VERTICAL),
+					input,
+					new Separator(Orientation.VERTICAL),
+					opboekOrderedLabel,
+					new Separator(Orientation.VERTICAL),
+					opboekSupplierLabel);
+			for (Node node : getChildren())
+				if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
+			productSelector.setPrefWidth(item_Normal);
+			input.setPrefWidth(item_Normal);
+			setSpacing(5);
 		}
 		public ListItem(Button b1,Button b2){
+			listLabels.getChildren().clear();
+			listLabels.getChildren().addAll(
+					new Label("Product"),
+					new Separator(Orientation.VERTICAL),
+					new Label("Op te boeken"),
+					new Separator(Orientation.VERTICAL),
+					new Label("Aantal besteld"),
+					new Separator(Orientation.VERTICAL),
+					new Label("Leverancier"));
+			for (Node node : listLabels.getChildren()) 
+				if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
+		
 			setSpacing(5);
 			getChildren().addAll(b1,b2);	
 		}
@@ -484,9 +552,10 @@ public class StockScreen extends Screen {
 		 */
 		public void refresh(){
 			itemNameLabel.setText(object.getName());
-			itemPriceLabel.setText((controller.convert(object.getSellPrice())));
+			itemPriceLabel.setText((ATDProgram.convert(object.getSellPrice())));
 			itemSupplierLabel.setText(object.getSupplier().getName());
 			itemAmountLabel.setText(Integer.toString(object.getAmount()));
+			itemBuyPriceLabel.setText(ATDProgram.convert(object.getBuyPrice()));
 		}
 		/**
 		 * @return the selected item	(opboeken)
@@ -498,7 +567,11 @@ public class StockScreen extends Screen {
 		 * @return the filled in amount (opboeken)
 		 */
 		public int getAmount(){
-			return Integer.parseInt(input.getText());
+			try {
+				return Integer.parseInt(input.getText());
+			} catch (NumberFormatException e) {
+				return 0;
+			}
 		}
 		/**
 		 * @return the object this item represents

@@ -37,7 +37,8 @@ public class MaintenanceScreen extends Screen {
 			button_3 	= 140,
 			space_4 	= 6,
 			button_4 	= 108,
-			label_Normal= 120;
+			label_Normal= 120,
+			item_Normal = 89;
 	private final Button 
 			newButton 			= new Button("Nieuw"), 
 			changeButton 		= new Button("Aanpassen"), 
@@ -56,20 +57,21 @@ public class MaintenanceScreen extends Screen {
 			usedPartsContent 	= new TextField(),
 			numberPlateContent  = new TextField();
 	private final VBox
-			leftBox 			= new VBox(space_Big),
+			leftBox 			= new VBox(),
 			rightBox 			= new VBox(space_Big);
 	private final HBox 
+			listLabels			= new HBox(5),
 			detailsBox 			= new HBox(space_Small), 
 			control_MainBox 	= new HBox(space_3), 
-			control_secBox 		= new HBox(space_4), 
+			control_SecBox 		= new HBox(space_4), 
 			mainBox 			= new HBox(space_Small);
 	public MaintenanceScreen(ATDProgram controller) {
 		super(controller);
 		this.controller = controller;
 		//put everything in the right place
 		control_MainBox.getChildren().addAll(newButton		, changeButton	  , removeButton);
-		control_secBox.getChildren().addAll (searchContent	, filterSelector  , addButton	  , endButton);
-		leftBox.getChildren().addAll		(itemList		, control_secBox);
+		control_SecBox.getChildren().addAll (searchContent	, filterSelector  , addButton	  , endButton);
+		leftBox.getChildren().addAll		(listLabels		, itemList		  , control_SecBox);
 		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
 		mainBox.getChildren().addAll 		(leftBox		, rightBox);
 		this.getChildren().add				(mainBox);
@@ -91,13 +93,16 @@ public class MaintenanceScreen extends Screen {
 		}
 		dateContent.setMinWidth(label_Normal*1.5);
 		mechanicContent.setMinWidth(label_Normal*1.5);	
-		detailsBox.setPadding(new Insets(space_Big));
-		mainBox.setPadding(new Insets(space_Big));
-		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");
+		detailsBox.setPadding(new Insets	(space_Big));
+		control_SecBox.setPadding(new Insets(space_Big,0,space_Small,0));
+		listLabels.setPadding(new Insets	(0,0,0,7));
+		mainBox.setPadding(new Insets		(space_Small));
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");		
 		leftBox.getStyleClass().add("removeDisabledEffect");
 		itemList.getStyleClass().add("removeDisabledEffect");
-		detailsBox.setPrefSize(450, 520);
-		itemList.setPrefSize(450, 520);
+		listLabels.getStyleClass().add("detailsBox");
+		detailsBox.setPrefSize		(450	 , 520);
+		itemList.setPrefSize		(450	 , 501);
 		searchContent.setPrefSize	(button_4, 50);
 		filterSelector.setPrefSize	(button_4, 50);
 		cancelButton.setPrefSize	(150	 , 50);
@@ -117,6 +122,16 @@ public class MaintenanceScreen extends Screen {
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
 		});
+		listLabels.getChildren().addAll(
+				new Label("Monteur"),
+				new Separator(Orientation.VERTICAL),
+				new Label("Kenteken"),
+				new Separator(Orientation.VERTICAL),
+				new Label("Datum"),
+				new Separator(Orientation.VERTICAL),
+				new Label("Onderdelen"));
+		for (Node node : listLabels.getChildren()) 
+			if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
 		//SearchField	
 		searchContent.setOnMouseClicked(e -> {
 			if (searchContent.getText().equals("Zoek...")) {
@@ -200,14 +215,14 @@ public class MaintenanceScreen extends Screen {
 	 */
 	private void addProduct(){
 		if(checkSelected() && checkMechanic()){
-			Notification addProduct = new Notification(controller,"", Notification.notificationStyle.PRODUCTS);
+			Notification addProduct = new Notification(null,controller, "", Notification.notificationStyle.PRODUCTS);
 			addProduct.showAndWait();
 			if(addProduct.getKeuze().equals("confirm")){
 				if(selectedObject.usePart((Product)addProduct.getSelected())){
 					refreshList();
 				}
 				else {
-					Notification noPart  = new Notification(controller, "Dat product is op!",Notification.notificationStyle.NOTIFY);
+					Notification noPart  = new Notification(null, controller,"Dat product is op!", Notification.notificationStyle.NOTIFY);
 					noPart.showAndWait();
 				}
 			} 
@@ -218,10 +233,10 @@ public class MaintenanceScreen extends Screen {
 	 */
 	private void endSession(){
 		if(checkSelected() && checkMechanic()){
-			Notification endSession = new Notification(controller,"", Notification.notificationStyle.ENDSESSION);
+			Notification endSession = new Notification(null,controller, "", Notification.notificationStyle.ENDSESSION);
 			endSession.showAndWait();
 			selectedObject.endSession(endSession.getInput());
-			Notification Notify = new Notification(controller, "Klus is afgesloten",Notification.notificationStyle.NOTIFY);
+			Notification Notify = new Notification(null, controller,"Klus is afgesloten", Notification.notificationStyle.NOTIFY);
 			Notify.showAndWait();
 			refreshList();
 		}
@@ -231,12 +246,12 @@ public class MaintenanceScreen extends Screen {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification Confirm = new Notification(controller, "Weet u zeker dat u deze klus wilt verwijderen?", Notification.notificationStyle.CONFIRM);
+			Notification Confirm = new Notification(null, controller, "Weet u zeker dat u deze klus wilt verwijderen?", Notification.notificationStyle.CONFIRM);
 			Confirm.showAndWait();
 			if (Confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveMaintenanceSessions(selectedObject, true);
-				Notification Notify = new Notification(controller, "de klus is verwijderd.", Notification.notificationStyle.NOTIFY);
+				Notification Notify = new Notification(null, controller, "de klus is verwijderd.", Notification.notificationStyle.NOTIFY);
 				Notify.showAndWait();
 			}
 		}			
@@ -247,7 +262,7 @@ public class MaintenanceScreen extends Screen {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",Notification.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(null, controller,"Weet u zeker dat u deze wijzigingen wilt doorvoeren?", Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -263,7 +278,7 @@ public class MaintenanceScreen extends Screen {
 				}
 			}
 			else{	
-				Notification confirm = new Notification(controller,"Deze klus aanmaken?",Notification.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(null,controller,"Deze klus aanmaken?", Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -283,7 +298,7 @@ public class MaintenanceScreen extends Screen {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",Notification.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(null, controller,"Niet alle velden zijn juist ingevuld", Notification.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}
@@ -342,12 +357,12 @@ public class MaintenanceScreen extends Screen {
 	private boolean checkInput(){
 		boolean result = true;
 		for (Node node1 : ((VBox)detailsBox.getChildren().get(0)).getChildren())
-			if(((HBox)node1).getChildren().get(1) instanceof TextField){
+			if(((HBox)node1).getChildren().get(1) instanceof TextField && ((HBox)node1).getChildren().get(1) != usedPartsContent){
 				if(((TextField)((HBox)node1).getChildren().get(1)).getText().isEmpty()){
 					result = false;
 				}
 			}
-		if(dateContent.getValue()==null)result = false;
+		if(dateContent.getValue()==null && dateContent.getValue().isBefore(LocalDate.now()))result = false;
 		return result;
 	}
 	/**
@@ -364,7 +379,7 @@ public class MaintenanceScreen extends Screen {
 	 */
 	private boolean checkMechanic(){
 		if(selectedObject.getMechanic()==null){
-			Notification notify = new Notification(controller, "Eerst een montuer toewijzen!", Notification.notificationStyle.NOTIFY);
+			Notification notify = new Notification(null, controller, "Eerst een montuer toewijzen!", Notification.notificationStyle.NOTIFY);
 			notify.showAndWait();
 			return false;
 		}
@@ -384,7 +399,8 @@ public class MaintenanceScreen extends Screen {
 		itemList.getItems().clear();
 		//add an item if any item that exists contains any value that has been searched for
 		for (ListItem entry : content) {		
-			if (entry.getMaintenanceSession().getNumberPlate().contains(newVal)){
+			if (	  entry.getMaintenanceSession().getNumberPlate().contains(newVal)
+					||entry.getMaintenanceSession().getPlannedDate().toString().contains(newVal)){
 				itemList.getItems().add(entry);
 			}
 		}
@@ -406,7 +422,7 @@ public class MaintenanceScreen extends Screen {
 				new Separator(Orientation.VERTICAL),
 				itemPartsLabel);
 				for (Node node : getChildren()) 
-					if(node instanceof Label)((Label)node).setPrefWidth(100);
+					if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
 		}
 		/**
 		 * fills in all the labels with the latest values

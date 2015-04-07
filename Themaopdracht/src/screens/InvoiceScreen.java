@@ -40,11 +40,12 @@ public class InvoiceScreen extends Screen {
 	private ListItem selectedItem;
 	private boolean isChanging;
 	private static final double
-			space_Medium = 10,
-			space_big = 20,
+			space_Small = 10,
+			space_Big = 20,
 			space_4 = 6,
 			button_4 = 108,
-			label_Normal = 120;
+			label_Normal = 120,
+			item_Normal = 98;
 	private final Button 
 			newButton 	 		= new Button("Nieuw"),  
 			payButton 	 		= new Button("Betalen"),
@@ -63,30 +64,31 @@ public class InvoiceScreen extends Screen {
 	private final TextField 
 			priceContent  		= new TextField();
 	private final VBox
-			leftBox 			= new VBox(space_big),
-			rightBox 			= new VBox(space_big);
+			leftBox 			= new VBox(),
+			rightBox 			= new VBox(space_Big);
 	private final HBox 	
-			detailsBox 			= new HBox(space_Medium), 
+			listLabels			= new HBox(5),
+			detailsBox 			= new HBox(space_Small), 
 			control_MainBox 	= new HBox(space_4), 
-			control_secBox 		= new HBox(space_4), 
-			mainBox 			= new HBox(space_Medium);
+			control_SecBox 		= new HBox(space_4), 
+			mainBox 			= new HBox(space_Small);
 	public InvoiceScreen(ATDProgram controller) {
 		super(controller);
 		this.controller = controller;
 		//put everything in the right place
-		control_MainBox.getChildren().addAll(newButton,changeButton	,payButton		,removeButton);
-		control_secBox.getChildren().addAll	(addMaintenanceButton	,addRefuelButton,addParkingButton,filterSelector);
-		leftBox.getChildren().addAll 		(itemList				, control_secBox);
-		rightBox.getChildren().addAll		(detailsBox				,control_MainBox);
-		mainBox.getChildren().addAll 		(leftBox				,rightBox);
+		control_MainBox.getChildren().addAll(newButton			 ,changeButton	 ,payButton			,removeButton);
+		control_SecBox.getChildren().addAll	(addMaintenanceButton,addRefuelButton,addParkingButton	,filterSelector);
+		leftBox.getChildren().addAll 		(listLabels			 ,itemList		 ,control_SecBox);
+		rightBox.getChildren().addAll		(detailsBox			 ,control_MainBox);
+		mainBox.getChildren().addAll 		(leftBox			 ,rightBox);
 		this.getChildren().add				(mainBox);
 		detailsBox.getChildren().addAll(
-				new VBox(space_big,
-						new HBox(space_big,dateLabel,		dateContent),
-						new HBox(space_big,priceLabel,	 	priceContent),
-						new HBox(space_big,customerLabel,	customerContent),
-						new HBox(space_big,isPayedLabel,	isPayedContent),
-						new HBox(space_big,cancelButton,	saveButton),
+				new VBox(space_Big,
+						new HBox(space_Big,dateLabel,		dateContent),
+						new HBox(space_Big,priceLabel,	 	priceContent),
+						new HBox(space_Big,customerLabel,	customerContent),
+						new HBox(space_Big,isPayedLabel,	isPayedContent),
+						new HBox(space_Big,cancelButton,	saveButton),
 						new HBox(contentList))
 		);
 		//set styles and sizes
@@ -98,11 +100,14 @@ public class InvoiceScreen extends Screen {
 		priceContent.setMinWidth(label_Normal*1.5);
 		dateContent.setMinWidth(label_Normal*1.5);
 		customerContent.setMinWidth(label_Normal*1.5);
-		detailsBox.setPadding(new Insets(space_big));
-		mainBox.setPadding(new Insets(space_big));
+		detailsBox.setPadding(new Insets	(space_Big));
+		control_SecBox.setPadding(new Insets(space_Big,0,space_Small,0));
+		listLabels.setPadding(new Insets	(0,0,0,7));
+		mainBox.setPadding(new Insets		(space_Small));
+		listLabels.getStyleClass().add("detailsBox");
 		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");
 		detailsBox.setPrefSize			(450	 , 520);
-		itemList.setPrefSize			(450	 , 520);
+		itemList.setPrefSize			(450	 , 501);
 		contentList.setPrefSize			(410	 , 300);
 		filterSelector.setPrefSize		(button_4, 50);
 		cancelButton.setPrefSize		(button_4, 50);
@@ -124,6 +129,16 @@ public class InvoiceScreen extends Screen {
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
 		});
+		listLabels.getChildren().addAll(
+				new Label("Datum"),
+				new Separator(Orientation.VERTICAL),
+				new Label("Klant"),
+				new Separator(Orientation.VERTICAL),
+				new Label("Bedrag"),
+				new Separator(Orientation.VERTICAL),
+				new Label("Betaald"));
+		for (Node node : listLabels.getChildren()) 
+			if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
 		//Buttons and filter
 		addRefuelButton.setOnAction(e -> {
 			addFuel();
@@ -202,12 +217,12 @@ public class InvoiceScreen extends Screen {
 	 */
 	private void remove(){
 		if(!checkSelected())return ;
-		Notification Confirm = new Notification(controller, "Weet u zeker dat u deze rekening wilt verwijderen?", Notification.notificationStyle.CONFIRM);
+		Notification Confirm = new Notification(null, controller, "Weet u zeker dat u deze rekening\nwilt verwijderen?", Notification.notificationStyle.CONFIRM);
 		Confirm.showAndWait();
 		if (Confirm.getKeuze().equals("confirm")){
 			itemList.getItems().remove(selectedItem);
 			controller.addorRemoveInvoice(selectedobject, true);
-			Notification Notify = new Notification(controller, "De rekening is verwijderd.", Notification.notificationStyle.NOTIFY);
+			Notification Notify = new Notification(null, controller, "De rekening is verwijderd.", Notification.notificationStyle.NOTIFY);
 			Notify.showAndWait();
 		}		
 	}
@@ -216,7 +231,7 @@ public class InvoiceScreen extends Screen {
 	 */
 	private void addFuel(){
 		if(!checkSelected())return ;
-		Notification addFuelNotification = new Notification(controller,"", Notification.notificationStyle.TANK);
+		Notification addFuelNotification = new Notification(null,controller, "", Notification.notificationStyle.TANK);
 		addFuelNotification.showAndWait();
 		if(addFuelNotification.getKeuze().equals("confirm")){
 			int tanked = addFuelNotification.getInput();
@@ -233,7 +248,7 @@ public class InvoiceScreen extends Screen {
 	 */
 	private void addMaintenance(){
 		if(!checkSelected())return ;
-		Notification addMaintenanceNotification = new Notification(controller,"", Notification.notificationStyle.MAINTENANCE);
+		Notification addMaintenanceNotification = new Notification(null,controller, "", Notification.notificationStyle.MAINTENANCE);
 		addMaintenanceNotification.showAndWait();
 		if(addMaintenanceNotification.getKeuze().equals("confirm")){
 			MaintenanceSession selection = (MaintenanceSession)addMaintenanceNotification.getSelected();
@@ -253,11 +268,11 @@ public class InvoiceScreen extends Screen {
 	 */
 	private void addParking(){
 		if(!checkSelected())return ;
-		Notification addParking = new Notification(controller,"", Notification.notificationStyle.PARKING);
+		Notification addParking = new Notification(null,controller, "", Notification.notificationStyle.PARKING);
 		addParking.showAndWait();
 		if(addParking.getKeuze().equals("confirm")) {
 			selectedobject.add(selectedobject.new InvoiceItem("Parkeersessie",((Reservation)addParking.getSelected()).getTotalPrice(),1));
-			Notification notify = new Notification(controller, "reservering toegevoegd.", Notification.notificationStyle.NOTIFY);
+			Notification notify = new Notification(null, controller, "reservering toegevoegd.", Notification.notificationStyle.NOTIFY);
 			notify.showAndWait();
 		}
 		refreshList();
@@ -267,11 +282,11 @@ public class InvoiceScreen extends Screen {
 	 */
 	private void pay(){
 		if(!checkSelected())return ;
-		Notification confirm = new Notification(controller,"", Notification.notificationStyle.PAY);
+		Notification confirm = new Notification(null,controller, "", Notification.notificationStyle.PAY);
 		confirm.showAndWait();
 		if(confirm.getKeuze().equals("confirm")) {
 			selectedobject.payNow((PayMethod) confirm.getSelected());
-			Notification notify = new Notification(controller, "factuur is betaald.", Notification.notificationStyle.NOTIFY);
+			Notification notify = new Notification(null, controller, "factuur is betaald.", Notification.notificationStyle.NOTIFY);
 			notify.showAndWait();
 		}
 		refreshList();
@@ -281,7 +296,7 @@ public class InvoiceScreen extends Screen {
 	 */
 	private void save(){
 		if(isChanging){
-			Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",Notification.notificationStyle.CONFIRM);
+			Notification confirm = new Notification(null, controller,"Weet u zeker dat u deze\nwijzigingen wilt doorvoeren?", Notification.notificationStyle.CONFIRM);
 			confirm.showAndWait();
 			switch (confirm.getKeuze()) {
 			case "confirm": {	
@@ -294,7 +309,7 @@ public class InvoiceScreen extends Screen {
 			}
 		}
 		else{	
-			Invoice newInvoice = new Invoice(controller);
+			Invoice newInvoice = new Invoice();
 			controller.addorRemoveInvoice(newInvoice, false);
 			itemList.getItems().add(new ListItem(newInvoice));
 		}
@@ -322,7 +337,7 @@ public class InvoiceScreen extends Screen {
 			selectedobject = selectedValue.getInvoice();
 			dateContent.setValue(selectedobject.getInvoiceDate());
 			customerContent.setValue(selectedobject.getCustomer());
-			priceContent.setText(controller.convert(selectedobject.getTotalPrice()));
+			priceContent.setText(ATDProgram.convert(selectedobject.getTotalPrice()));
 			isPayedContent.setSelected(selectedobject.isPayed());
 			contentList.getItems().clear();
 			for (InvoiceItem item : selectedobject.getItems())
@@ -368,7 +383,7 @@ public class InvoiceScreen extends Screen {
 				new Separator(Orientation.VERTICAL),
 				itemIsPayedLabel);
 				for (Node node : getChildren()) 
-					if(node instanceof Label)((Label)node).setPrefWidth(100);
+					if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
 		}
 		/**
 		 * fills in all the labels with the latest values
@@ -377,7 +392,7 @@ public class InvoiceScreen extends Screen {
 			itemDateLabel.setText(object.getInvoiceDate().toString());
 			if(object.getCustomer()==null)itemCustomerLabel.setText("Anoniem");
 			else itemCustomerLabel.setText(object.getCustomer().getName());
-			itemPriceLabel.setText(controller.convert(object.getTotalPrice()));
+			itemPriceLabel.setText(ATDProgram.convert(object.getTotalPrice()));
 			if(object.isPayed())itemIsPayedLabel.setText("Betaalt");
 			else itemIsPayedLabel.setText("Openstaand");
 		}

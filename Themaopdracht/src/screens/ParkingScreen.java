@@ -35,7 +35,8 @@ public class ParkingScreen extends Screen {
 			space_Big 	= 20,
 			space_3 	= 15,
 			button_3 	= 140,
-			label_Normal= 120;
+			label_Normal= 120,
+			item_Normal = 98;
 	private final Button 
 			newButton 			= new Button("Nieuw"), 
 			changeButton 		= new Button("Aanpassen"), 
@@ -51,20 +52,21 @@ public class ParkingScreen extends Screen {
 			searchContent 		= new TextField("Zoek..."),
 			numberPlateContent	= new TextField();
 	private final VBox
-			leftBox 			= new VBox(space_Big),
+			leftBox 			= new VBox(),
 			rightBox 			= new VBox(space_Big);
 	private final HBox 
+			listLabels			= new HBox(5),
 			detailsBox 			= new HBox(space_Small), 
 			control_MainBox 	= new HBox(space_3), 
-			control_secBox 		= new HBox(space_3), 
+			control_SecBox 		= new HBox(space_Small), 
 			mainBox 			= new HBox(space_Small);
 	public ParkingScreen(ATDProgram controller) {
 		super(controller);
 		this.controller = controller;
 		//put everything in the right place
-		control_MainBox.getChildren().addAll(newButton		, changeButton	  , removeButton);
-		control_secBox.getChildren().addAll (searchContent	, filterSelector);
-		leftBox.getChildren().addAll		(itemList		, control_secBox);
+		control_MainBox.getChildren().addAll(newButton		, changeButton	  	, removeButton);
+		control_SecBox.getChildren().addAll (searchContent	, filterSelector);
+		leftBox.getChildren().addAll		(listLabels		, itemList			, control_SecBox);
 		rightBox.getChildren().addAll		(detailsBox		, control_MainBox);
 		mainBox.getChildren().addAll 		(leftBox		, rightBox);
 		this.getChildren().add				(mainBox);
@@ -82,25 +84,34 @@ public class ParkingScreen extends Screen {
 			if(((HBox)node).getChildren().get(0) instanceof Label)
 				((Label)((HBox)node).getChildren().get(0)).setMinWidth(label_Normal);
 		}
-		numberPlateContent.setMinWidth(label_Normal*1.5);
-		dateToContent.setMinWidth(label_Normal*1.5);
-		dateFromContent.setMinWidth(label_Normal*1.5);		
-		spaceContent.setMinWidth(label_Normal*1.5);	
-		detailsBox.setPadding(new Insets(space_Big));
-		mainBox.setPadding(new Insets(space_Big));
-		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");
+		numberPlateContent.setMinWidth	(label_Normal*1.5);
+		dateToContent.setMinWidth		(label_Normal*1.5);
+		dateFromContent.setMinWidth		(label_Normal*1.5);		
+		spaceContent.setMinWidth		(label_Normal*1.5);	
+		detailsBox.setPadding(new Insets	(space_Big));
+		control_SecBox.setPadding(new Insets(space_Big,0,space_Small,0));
+		listLabels.setPadding(new Insets	(0,0,0,7));
+		mainBox.setPadding(new Insets		(space_Small));
+		detailsBox.getStyleClass().addAll("removeDisabledEffect","detailsBox");		
 		leftBox.getStyleClass().add("removeDisabledEffect");
 		itemList.getStyleClass().add("removeDisabledEffect");
-		detailsBox.setPrefSize(450, 520);
-		itemList.setPrefSize(450, 520);
-		searchContent.setPrefSize	(290, 50);
-		filterSelector.setPrefSize	(button_3, 50);
+		listLabels.getStyleClass().add("detailsBox");
+		detailsBox.setPrefSize		(450	 , 520);
+		itemList.setPrefSize		(450	 , 501);
+		searchContent.setPrefSize	(290	 , 50);
+		filterSelector.setPrefSize	(150	 , 50);
 		cancelButton.setPrefSize	(150	 , 50);
 		saveButton.setPrefSize		(150	 , 50);
 		newButton.setPrefSize		(button_3, 50);
 		changeButton.setPrefSize	(button_3, 50);
 		removeButton.setPrefSize	(button_3, 50);
 		//StockDetails
+		dateFromContent.valueProperty().addListener(e->{
+			if(dateFromContent.getValue() !=null && dateToContent.getValue()!=null)checkDates();
+		});
+		dateToContent.valueProperty().addListener(e->{
+			if(dateFromContent.getValue() !=null && dateToContent.getValue()!=null)checkDates();
+		});
 		//spaceContent.getItems().addAll(controller.getParkingSpaces());
 		setEditable(false);
 		//Listview
@@ -110,12 +121,16 @@ public class ParkingScreen extends Screen {
 		itemList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			select(newValue);
 		});
-		dateFromContent.valueProperty().addListener(e->{
-			if(dateFromContent.getValue() !=null && dateToContent.getValue()!=null)checkDates();
-		});
-		dateToContent.valueProperty().addListener(e->{
-			if(dateFromContent.getValue() !=null && dateToContent.getValue()!=null)checkDates();
-		});
+		listLabels.getChildren().addAll(
+				new Label("Datum van"),
+				new Separator(Orientation.VERTICAL),
+				new Label("Datum tot"),
+				new Separator(Orientation.VERTICAL),
+				new Label("Kenteken"),
+				new Separator(Orientation.VERTICAL),
+				new Label("Parkeerplaats"));
+		for (Node node : listLabels.getChildren()) 
+			if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
 		//SearchField	
 		searchContent.setOnMouseClicked(e -> {
 			if (searchContent.getText().equals("Zoek...")) {
@@ -193,12 +208,12 @@ public class ParkingScreen extends Screen {
 	 */
 	private void remove(){
 		if(checkSelected()){
-			Notification Confirm = new Notification(controller, "Weet u zeker dat u deze reservering wilt verwijderen?", Notification.notificationStyle.CONFIRM);
+			Notification Confirm = new Notification(null, controller, "Weet u zeker dat u deze reservering wilt verwijderen?", Notification.notificationStyle.CONFIRM);
 			Confirm.showAndWait();
 			if (Confirm.getKeuze().equals("confirm")){
 				itemList.getItems().remove(selectedItem);
 				controller.addorRemoveReservations(selectedObject, true);
-				Notification Notify = new Notification(controller, "de reservering is verwijderd.", Notification.notificationStyle.NOTIFY);
+				Notification Notify = new Notification(null, controller, "de reservering is verwijderd.", Notification.notificationStyle.NOTIFY);
 				Notify.showAndWait();
 			}
 		}			
@@ -209,7 +224,7 @@ public class ParkingScreen extends Screen {
 	private void save(){
 		if(checkInput()){
 			if(isChanging){
-				Notification confirm = new Notification(controller, "Weet u zeker dat u deze wijzigingen wilt doorvoeren?",Notification.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(null, controller,"Weet u zeker dat u deze wijzigingen wilt doorvoeren?", Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -225,7 +240,7 @@ public class ParkingScreen extends Screen {
 				}
 			}
 			else{	
-				Notification confirm = new Notification(controller,"Deze reservering aanmaken?",Notification.notificationStyle.CONFIRM);
+				Notification confirm = new Notification(null,controller,"Deze reservering aanmaken?", Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
 					case "confirm": {
@@ -246,7 +261,7 @@ public class ParkingScreen extends Screen {
 			}
 		}
 		else{
-			Notification notFilled = new Notification(controller, "Niet alle velden zijn juist ingevuld",Notification.notificationStyle.NOTIFY);
+			Notification notFilled = new Notification(null, controller,"Niet alle velden zijn juist ingevuld", Notification.notificationStyle.NOTIFY);
 			notFilled.showAndWait();
 		}
 	}
@@ -349,7 +364,8 @@ public class ParkingScreen extends Screen {
 		itemList.getItems().clear();
 		//add an item if any item that exists contains any value that has been searched for
 		for (ListItem entry : content) {		
-			if (entry.getReservation().getNumberPlate().contains(newVal)){
+			if (	  entry.getReservation().getNumberPlate().contains(newVal)
+					||Integer.toString(entry.getReservation().getParkingSpace().getID()).contains(newVal)){
 				itemList.getItems().add(entry);
 			}
 		}
@@ -371,7 +387,7 @@ public class ParkingScreen extends Screen {
 				new Separator(Orientation.VERTICAL),
 				itemSpaceLabel);
 				for (Node node : getChildren()) 
-					if(node instanceof Label)((Label)node).setPrefWidth(100);
+					if(node instanceof Label)((Label)node).setPrefWidth(item_Normal);
 		}
 		/**
 		 * fills in all the labels with the latest values

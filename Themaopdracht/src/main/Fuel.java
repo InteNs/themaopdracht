@@ -45,7 +45,7 @@ public class Fuel extends Product {
 	}
 	@Override
 	public String toString() {
-		return name + " - " + controller.convert(sellPrice) + " - " + supplier.getName();
+		return name;
 	}
 
 }

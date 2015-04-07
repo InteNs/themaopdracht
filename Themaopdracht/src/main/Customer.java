@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Customer {
 	private String name, place, email, address, postal,bankAccount, tel;
 	private LocalDate dateOfBirth,lastVisit, lastMaintenance;
-	private boolean isOnBlackList;
+	private boolean isOnBlackList, notified;
 	public Customer(String name, String place,String bankAccount, LocalDate bornDate, String email, String postal, String tel, String adress, boolean isOnBlackList) {
 		this.name = name;
 		this.isOnBlackList = isOnBlackList;
@@ -17,6 +17,15 @@ public class Customer {
 		this.tel = tel;
 		this.dateOfBirth = bornDate;
 	}
+	
+	public boolean isNotified() {
+		return notified;
+	}
+
+	public void setNotified(boolean notified) {
+		this.notified = notified;
+	}
+
 	public String getName() {
 		return name;
 	}
