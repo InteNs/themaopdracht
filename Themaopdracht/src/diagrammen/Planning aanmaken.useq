@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.1.8" icons="true" automaticImage="PNG">  
+  <object id="1" language="java" name="screens.MaintenanceScreen" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/MaintenanceScreen.java" binary="false" label="maintenanceScreen" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="227" y="0"/>    
+    <execution id="2">      
+      <position height="1528" width="137" x="78" y="178"/>    
+    </execution>    
+    <execution id="4">      
+      <position height="1465" width="137" x="78" y="220"/>    
+    </execution>    
+    <execution id="6">      
+      <position height="21" width="0" x="0" y="272"/>    
+    </execution>    
+    <execution id="8">      
+      <position height="21" width="0" x="0" y="324"/>    
+    </execution>    
+    <execution id="30">      
+      <position height="21" width="0" x="0" y="796"/>    
+    </execution>    
+    <execution id="32">      
+      <position height="21" width="0" x="0" y="848"/>    
+    </execution>    
+    <execution id="34">      
+      <position height="21" width="0" x="0" y="900"/>    
+    </execution>    
+    <execution id="36">      
+      <position height="21" width="0" x="0" y="952"/>    
+    </execution>    
+    <execution id="54">      
+      <position height="21" width="0" x="0" y="1466"/>    
+    </execution>    
+    <execution id="56">      
+      <position height="21" width="0" x="0" y="1518"/>    
+    </execution>    
+    <execution id="58">      
+      <position height="21" width="0" x="0" y="1570"/>    
+    </execution>  
+  </object>  
+  <object id="63" language="java" name="notifications.Notification" project="Themaopdracht" 
+    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="confirm" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="10">      
+      <position height="21" width="0" x="0" y="355"/>    
+    </execution>    
+    <execution id="12">      
+      <position height="21" width="0" x="0" y="397"/>    
+    </execution>    
+    <execution id="14">      
+      <position height="21" width="0" x="0" y="439"/>    
+    </execution>  
+  </object>  
+  <object id="64" language="java" name="main.MaintenanceSession" project="Themaopdracht" 
+    file="/Themaopdracht/src/main/MaintenanceSession.java" binary="false" label="selectedObject" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="16">      
+      <position height="21" width="0" x="0" y="481"/>    
+    </execution>    
+    <execution id="20">      
+      <position height="21" width="0" x="0" y="565"/>    
+    </execution>    
+    <execution id="24">      
+      <position height="21" width="0" x="0" y="649"/>    
+    </execution>  
+  </object>  
+  <object id="65" language="java" name="javafx.scene.control.ComboBoxBase" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="dateContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="18">      
+      <position height="21" width="0" x="0" y="523"/>    
+    </execution>    
+    <execution id="50">      
+      <position height="21" width="0" x="0" y="1235"/>    
+    </execution>  
+  </object>  
+  <object id="66" language="java" name="javafx.scene.control.ComboBoxBase" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="mechanicContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="22">      
+      <position height="21" width="0" x="0" y="607"/>    
+    </execution>    
+    <execution id="28">      
+      <position height="21" width="0" x="0" y="733"/>    
+    </execution>  
+  </object>  
+  <object id="67" language="java" name="javafx.scene.control.TextInputControl" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="numberPlateContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="26">      
+      <position height="21" width="0" x="0" y="691"/>    
+    </execution>    
+    <execution id="46">      
+      <position height="21" width="0" x="0" y="1151"/>    
+    </execution>  
+  </object>  
+  <object id="68" language="java" name="notifications.Notification" project="Themaopdracht" 
+    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="confirm1" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="38">      
+      <position height="21" width="0" x="0" y="983"/>    
+    </execution>    
+    <execution id="40">      
+      <position height="21" width="0" x="0" y="1025"/>    
+    </execution>    
+    <execution id="42">      
+      <position height="21" width="0" x="0" y="1067"/>    
+    </execution>  
+  </object>  
+  <object id="69" language="java" name="main.MaintenanceSession" project="Themaopdracht" 
+    file="/Themaopdracht/src/main/MaintenanceSession.java" binary="false" label="newMaintenanceSession" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="44">      
+      <position height="21" width="0" x="0" y="1109"/>    
+    </execution>  
+  </object>  
+  <object id="70" language="java" name="main.ATDProgram" project="Themaopdracht" 
+    file="/Themaopdracht/src/main/ATDProgram.java" binary="false" label="controller" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="48">      
+      <position height="21" width="0" x="0" y="1193"/>    
+    </execution>    
+    <execution id="52">      
+      <position height="21" width="0" x="0" y="1277"/>    
+    </execution>  
+  </object>  
+  <object id="71" language="java" name="notifications.Notification" project="Themaopdracht" 
+    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="notFilled" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="60">      
+      <position height="21" width="0" x="0" y="1601"/>    
+    </execution>    
+    <execution id="62">      
+      <position height="21" width="0" x="0" y="1643"/>    
+    </execution>  
+  </object>  
+  <message id="3" operation="save():void">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="5" operation="checkInput():boolean">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="6"/>  
+  </message>  
+  <message id="7" operation="isChanging():boolean">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </message>  
+  <message id="9" 
+    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="10"/>  
+  </message>  
+  <message id="11" operation="showAndWait():void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="12"/>  
+  </message>  
+  <message id="13" operation="getKeuze():java.lang.String">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="14"/>  
+  </message>  
+  <message id="15" operation="setPlannedDate(java.time.LocalDate):void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="16"/>  
+  </message>  
+  <message id="17" operation="getValue():T">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="18"/>  
+  </message>  
+  <message id="19" operation="setMechanic(main.Mechanic):void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="20"/>  
+  </message>  
+  <message id="21" operation="getValue():T">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="22"/>  
+  </message>  
+  <message id="23" operation="setNumberPlate(java.lang.String):void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="24"/>  
+  </message>  
+  <message id="25" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="26"/>  
+  </message>  
+  <message id="27" operation="setDisable(boolean):void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="28"/>  
+  </message>  
+  <message id="29" operation="refreshList():void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="30"/>  
+  </message>  
+  <message id="31" operation="clearInput():void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="32"/>  
+  </message>  
+  <message id="33" operation="setEditable(boolean):void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="34"/>  
+  </message>  
+  <message id="35" operation="isChanging():boolean">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="36"/>  
+  </message>  
+  <message id="37" 
+    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="38"/>  
+  </message>  
+  <message id="39" operation="showAndWait():void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="40"/>  
+  </message>  
+  <message id="41" operation="getKeuze():java.lang.String">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="42"/>  
+  </message>  
+  <message id="43" operation="MaintenanceSession(java.lang.String,main.Stock,java.time.LocalDate)">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="44"/>  
+  </message>  
+  <message id="45" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="46"/>  
+  </message>  
+  <message id="47" operation="getStock():main.Stock">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="48"/>  
+  </message>  
+  <message id="49" operation="getValue():T">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="50"/>  
+  </message>  
+  <message id="51" operation="addorRemoveMaintenanceSessions(main.MaintenanceSession,boolean):void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="52"/>  
+  </message>  
+  <message id="53" operation="setEditable(boolean):void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="54"/>  
+  </message>  
+  <message id="55" operation="clearInput():void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="56"/>  
+  </message>  
+  <message id="57" operation="setEditable(boolean):void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="58"/>  
+  </message>  
+  <message id="59" 
+    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="60"/>  
+  </message>  
+  <message id="61" operation="showAndWait():void">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="62"/>  
+  </message>
+</sequence-diagram>

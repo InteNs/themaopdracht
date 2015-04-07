@@ -171,12 +171,18 @@ public class StockScreen extends Screen {
 			newSupplier();
 		});
 		proceedButton.setOnAction(e-> boekop());
-		newRuleButton.setOnAction(e->	itemList.getItems().add(itemList.getItems().size()-1,new ListItem()));	
+		newRuleButton.setOnAction(e->	addRule());	
 		filterSelector.getItems().addAll("Mode: Voorraad", "Mode: Benzine", "Mode: Onderdelen", "Mode: Bestellijst", "Mode: Opboeken");
 		filterSelector.getSelectionModel().selectFirst();
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
+	}
+	/**
+	 *  voegt opboekregel toe
+	 */
+	private void addRule() {
+		itemList.getItems().add(itemList.getItems().size()-1,new ListItem());
 	}
 	/**
 	 * fills the list with items that fit with the given filter or mode

@@ -143,15 +143,10 @@ public class MaintenanceScreen extends Screen {
 		});
 		//Buttons and filter
 		newButton.setOnAction(e -> {
-			clearInput();
-			setEditable(true);
-			isChanging = false;
+			newAction();
 		});
 		changeButton.setOnAction(e -> {
-			if(checkSelected()){
-				setEditable(true);
-				isChanging = true;
-			}
+			changeAction();
 		});
 		removeButton.setOnAction(e->{
 			remove();
@@ -175,6 +170,20 @@ public class MaintenanceScreen extends Screen {
 		filterSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue)->{
 			changeFilter(newValue.intValue());
 		});
+	}
+	private void newAction() {
+		clearInput();
+		setEditable(true);
+		isChanging = false;
+	}
+	private void changeAction() {
+		if(checkSelected()){
+			setEditable(true);
+			isChanging = true;
+		}
+	}
+	public boolean isChanging() {
+		return isChanging;
 	}
 	/**
 	 * fills the list with items that fit with the given filter
@@ -261,7 +270,7 @@ public class MaintenanceScreen extends Screen {
 	 */
 	private void save(){
 		if(checkInput()){
-			if(isChanging){
+			if(isChanging()){
 				Notification confirm = new Notification(null, controller,"Weet u zeker dat u deze wijzigingen wilt doorvoeren?", Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
@@ -277,7 +286,7 @@ public class MaintenanceScreen extends Screen {
 						setEditable(false);
 				}
 			}
-			else{	
+			else if(!isChanging()){	
 				Notification confirm = new Notification(null,controller,"Deze klus aanmaken?", Notification.notificationStyle.CONFIRM);
 				confirm.showAndWait();
 				switch (confirm.getKeuze()) {
@@ -362,7 +371,7 @@ public class MaintenanceScreen extends Screen {
 					result = false;
 				}
 			}
-		if(dateContent.getValue()==null && dateContent.getValue().isBefore(LocalDate.now()))result = false;
+		if(dateContent.getValue()==null || dateContent.getValue().isBefore(LocalDate.now()))result = false;
 		return result;
 	}
 	/**

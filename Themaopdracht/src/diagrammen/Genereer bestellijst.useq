@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.1.8" icons="true" automaticImage="PNG">  
+  <object id="1" language="java" name="screens.StockScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/StockScreen.java" binary="false" label="listItem" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="230" y="0"/>  
+  </object>  
+  <object id="2" language="java" name="screens.StockScreen" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/StockScreen.java" binary="false" label="stockScreen" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="230" y="0"/>    
+    <execution id="3">      
+      <position height="1396" width="97" x="78" y="163"/>    
+    </execution>    
+    <execution id="5">      
+      <position height="1333" width="97" x="78" y="205"/>    
+    </execution>  
+  </object>  
+  <object id="24" language="java" name="javafx.scene.control.ListView" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="itemList" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="15">      
+      <position height="21" width="0" x="0" y="1328"/>    
+    </execution>  
+  </object>  
+  <object id="25" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="26" language="java" name="main.ATDProgram" project="Themaopdracht" 
+    file="/Themaopdracht/src/main/ATDProgram.java" binary="false" label="controller" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="9">      
+      <position height="21" width="0" x="0" y="1202"/>    
+    </execution>  
+  </object>  
+  <object id="27" language="java" name="main.Stock" project="Themaopdracht" file="/Themaopdracht/src/main/Stock.java" 
+    binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="28" language="java" name="screens.StockScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/StockScreen.java" binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="29" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="30" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="31" language="java" name="main.Stock" project="Themaopdracht" file="/Themaopdracht/src/main/Stock.java" 
+    binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="32" language="java" name="screens.StockScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/StockScreen.java" binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="33" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="34" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="35" language="java" name="main.Stock" project="Themaopdracht" file="/Themaopdracht/src/main/Stock.java" 
+    binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="36" language="java" name="screens.StockScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/StockScreen.java" binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="37" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="38" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="7">      
+      <position height="21" width="0" x="0" y="1160"/>    
+    </execution>  
+  </object>  
+  <object id="39" language="java" name="main.Stock" project="Themaopdracht" file="/Themaopdracht/src/main/Stock.java" 
+    binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="11">      
+      <position height="21" width="0" x="0" y="1244"/>    
+    </execution>    
+    <execution id="13">      
+      <position height="21" width="0" x="0" y="1286"/>    
+    </execution>  
+  </object>  
+  <object id="40" language="java" name="java.util.Map.Entry" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/rt.jar" binary="true" label="entry" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="17">      
+      <position height="21" width="0" x="0" y="1370"/>    
+    </execution>    
+    <execution id="19">      
+      <position height="21" width="0" x="0" y="1412"/>    
+    </execution>  
+  </object>  
+  <object id="41" language="java" name="screens.StockScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/StockScreen.java" binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="21">      
+      <position height="21" width="0" x="0" y="1454"/>    
+    </execution>  
+  </object>  
+  <object id="42" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="23">      
+      <position height="21" width="0" x="0" y="1496"/>    
+    </execution>  
+  </object>  
+  <object id="43" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="44" language="java" name="screens.StockScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/StockScreen.java" binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="45" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <object id="46" language="java" name="javafx.scene.control.TextInputControl" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="searchContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>  
+  </object>  
+  <message id="4" operation="changeFilter(int):void">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </message>  
+  <message id="6" operation="clear():void">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
+  </message>  
+  <message id="8" operation="getStock():main.Stock">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="9"/>  
+  </message>  
+  <message id="10" operation="getOrderedItems():java.util.HashMap&lt;Object,Integer&gt;">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="11"/>  
+  </message>  
+  <message id="12" operation="entrySet():java.util.Set&lt;java.util.Map.Entry&lt;K,V&gt;&gt;">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="13"/>  
+  </message>  
+  <message id="14" operation="getItems():javafx.collections.ObservableList&lt;T&gt;">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="15"/>  
+  </message>  
+  <message id="16" operation="getKey():K">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="17"/>  
+  </message>  
+  <message id="18" operation="getValue():V">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="19"/>  
+  </message>  
+  <message id="20" operation="ListItem(main.Product,int)">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="21"/>  
+  </message>  
+  <message id="22" operation="add(E):boolean">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="23"/>  
+  </message>
+</sequence-diagram>

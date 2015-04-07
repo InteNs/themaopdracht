@@ -1,131 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sequence-diagram version="1.1.8" icons="true" automaticImage="PNG">  
   <object id="1" language="java" name="screens.InvoiceScreen.ListItem" project="Themaopdracht" 
-    file="/Themaopdracht/src/screens/InvoiceScreen.java" binary="false" label="listRegel" type="class" autoSize="true">    
-    <position height="-1" width="-1" x="99" y="0"/>  
+    file="/Themaopdracht/src/screens/InvoiceScreen.java" binary="false" label="listItem" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="135" y="0"/>  
   </object>  
   <object id="2" language="java" name="screens.InvoiceScreen" project="Themaopdracht" 
     file="/Themaopdracht/src/screens/InvoiceScreen.java" binary="false" label="invoiceScreen" type="class" 
     autoSize="true">    
-    <position height="-1" width="-1" x="99" y="0"/>    
+    <position height="-1" width="-1" x="135" y="0"/>    
     <execution id="3">      
-      <position height="587" width="104" x="78" y="78"/>    
+      <position height="503" width="104" x="78" y="102"/>    
     </execution>    
     <execution id="5">      
-      <position height="524" width="104" x="78" y="120"/>    
+      <position height="440" width="104" x="78" y="144"/>    
     </execution>    
     <execution id="7">      
-      <position height="21" width="0" x="0" y="172"/>    
+      <position height="21" width="0" x="0" y="196"/>    
     </execution>    
-    <execution id="27">      
-      <position height="21" width="0" x="0" y="602"/>    
-    </execution>    
-    <execution id="28">      
-      <position height="671" width="104" x="78" y="707"/>    
-    </execution>    
-    <execution id="30">      
-      <position height="608" width="104" x="78" y="749"/>    
-    </execution>    
-    <execution id="32">      
-      <position height="21" width="0" x="0" y="801"/>    
-    </execution>    
-    <execution id="56">      
-      <position height="21" width="0" x="0" y="1315"/>    
+    <execution id="23">      
+      <position height="21" width="0" x="0" y="542"/>    
     </execution>  
   </object>  
-  <object id="57" language="java" name="notifications.Notification" project="Themaopdracht" 
-    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="addParking" type="class" 
-    autoSize="true">    
-    <position height="0" width="0" x="0" y="0"/>    
-    <execution id="34">      
-      <position height="21" width="0" x="0" y="832"/>    
-    </execution>    
-    <execution id="38">      
-      <position height="21" width="0" x="0" y="916"/>    
-    </execution>    
-    <execution id="40">      
-      <position height="21" width="0" x="0" y="958"/>    
-    </execution>    
-    <execution id="44">      
-      <position height="21" width="0" x="0" y="1042"/>    
-    </execution>  
-  </object>  
-  <object id="58" language="java" name="main.Reservation" project="Themaopdracht" 
-    file="/Themaopdracht/src/main/Reservation.java" binary="false" type="class" autoSize="true">    
-    <position height="0" width="0" x="0" y="0"/>    
-    <execution id="46">      
-      <position height="21" width="0" x="0" y="1084"/>    
-    </execution>  
-  </object>  
-  <object id="59" language="java" name="main.Invoice" project="Themaopdracht" 
-    file="/Themaopdracht/src/main/Invoice.java" binary="false" type="class" autoSize="true">    
-    <position height="0" width="0" x="0" y="0"/>    
-    <execution id="48">      
-      <position height="21" width="0" x="0" y="1126"/>    
-    </execution>  
-  </object>  
-  <object id="60" language="java" name="javafx.stage.Stage" project="Themaopdracht" 
-    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="notify1" type="class" 
-    autoSize="true">    
-    <position height="0" width="0" x="0" y="0"/>    
-    <execution id="54">      
-      <position height="21" width="0" x="0" y="1252"/>    
-    </execution>  
-  </object>  
-  <object id="61" language="java" name="notifications.Notification" project="Themaopdracht" 
+  <object id="24" language="java" name="notifications.Notification" project="Themaopdracht" 
     file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="confirm" type="class" 
     autoSize="true">    
     <position height="0" width="0" x="0" y="0"/>    
     <execution id="9">      
-      <position height="21" width="0" x="0" y="203"/>    
+      <position height="21" width="0" x="0" y="227"/>    
+    </execution>    
+    <execution id="11">      
+      <position height="21" width="0" x="0" y="269"/>    
     </execution>    
     <execution id="13">      
-      <position height="21" width="0" x="0" y="287"/>    
+      <position height="21" width="0" x="0" y="311"/>    
     </execution>    
-    <execution id="15">      
-      <position height="21" width="0" x="0" y="329"/>    
-    </execution>    
-    <execution id="19">      
-      <position height="21" width="0" x="0" y="413"/>    
+    <execution id="17">      
+      <position height="21" width="0" x="0" y="395"/>    
     </execution>  
   </object>  
-  <object id="62" language="java" name="main.ATDProgram" project="Themaopdracht" 
-    file="/Themaopdracht/src/main/ATDProgram.java" binary="false" label="controller" type="class" autoSize="true">    
-    <position height="0" width="0" x="0" y="0"/>    
-    <execution id="11">      
-      <position height="21" width="0" x="0" y="245"/>    
-    </execution>    
-    <execution id="23">      
-      <position height="21" width="0" x="0" y="497"/>    
-    </execution>    
-    <execution id="36">      
-      <position height="21" width="0" x="0" y="874"/>    
-    </execution>    
-    <execution id="52">      
-      <position height="21" width="0" x="0" y="1210"/>    
-    </execution>  
-  </object>  
-  <object id="63" language="java" name="main.Invoice" project="Themaopdracht" 
+  <object id="25" language="java" name="main.Invoice" project="Themaopdracht" 
     file="/Themaopdracht/src/main/Invoice.java" binary="false" label="selectedobject" type="class" autoSize="true">    
     <position height="0" width="0" x="0" y="0"/>    
-    <execution id="17">      
-      <position height="21" width="0" x="0" y="371"/>    
-    </execution>    
-    <execution id="42">      
-      <position height="21" width="0" x="0" y="1000"/>    
+    <execution id="15">      
+      <position height="21" width="0" x="0" y="353"/>    
     </execution>  
   </object>  
-  <object id="64" language="java" name="notifications.Notification" project="Themaopdracht" 
+  <object id="26" language="java" name="notifications.Notification" project="Themaopdracht" 
     file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="notify" type="class" autoSize="true">    
     <position height="0" width="0" x="0" y="0"/>    
+    <execution id="19">      
+      <position height="21" width="0" x="0" y="437"/>    
+    </execution>    
     <execution id="21">      
-      <position height="21" width="0" x="0" y="455"/>    
-    </execution>    
-    <execution id="25">      
-      <position height="21" width="0" x="0" y="539"/>    
-    </execution>    
-    <execution id="50">      
-      <position height="21" width="0" x="0" y="1168"/>    
+      <position height="21" width="0" x="0" y="479"/>    
     </execution>  
   </object>  
   <message id="4" operation="pay():void">    
@@ -141,99 +68,33 @@
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="9"/>  
   </message>  
-  <message id="10" operation="getStage():javafx.stage.Stage">    
+  <message id="10" operation="showAndWait():void">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="11"/>  
   </message>  
-  <message id="12" operation="showAndWait():void">    
+  <message id="12" operation="getKeuze():java.lang.String">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="13"/>  
   </message>  
-  <message id="14" operation="getKeuze():java.lang.String">    
+  <message id="14" operation="payNow(main.Invoice.PayMethod):void">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="15"/>  
   </message>  
-  <message id="16" operation="payNow(main.Invoice.PayMethod):void">    
+  <message id="16" operation="getSelected():java.lang.Object">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="17"/>  
   </message>  
-  <message id="18" operation="getSelected():java.lang.Object">    
+  <message id="18" 
+    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="19"/>  
   </message>  
-  <message id="20" 
-    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
+  <message id="20" operation="showAndWait():void">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="21"/>  
   </message>  
-  <message id="22" operation="getStage():javafx.stage.Stage">    
+  <message id="22" operation="refreshList():void">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="23"/>  
-  </message>  
-  <message id="24" operation="showAndWait():void">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="25"/>  
-  </message>  
-  <message id="26" operation="refreshList():void">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="27"/>  
-  </message>  
-  <message id="29" operation="addParking():void">    
-    <end type="SOURCE" refId="28"/>    
-    <end type="TARGET" refId="30"/>  
-  </message>  
-  <message id="31" operation="checkSelected():boolean">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="32"/>  
-  </message>  
-  <message id="33" 
-    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="34"/>  
-  </message>  
-  <message id="35" operation="getStage():javafx.stage.Stage">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="36"/>  
-  </message>  
-  <message id="37" operation="showAndWait():void">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="38"/>  
-  </message>  
-  <message id="39" operation="getKeuze():java.lang.String">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="40"/>  
-  </message>  
-  <message id="41" operation="add(main.Invoice.InvoiceItem):boolean">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="42"/>  
-  </message>  
-  <message id="43" operation="getSelected():java.lang.Object">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="44"/>  
-  </message>  
-  <message id="45" operation="getTotalPrice():double">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="46"/>  
-  </message>  
-  <message id="47" operation="InvoiceItem(java.lang.String,double,int)">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="48"/>  
-  </message>  
-  <message id="49" 
-    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="50"/>  
-  </message>  
-  <message id="51" operation="getStage():javafx.stage.Stage">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="52"/>  
-  </message>  
-  <message id="53" operation="showAndWait():void">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="54"/>  
-  </message>  
-  <message id="55" operation="refreshList():void">    
-    <end type="SOURCE" refId="30"/>    
-    <end type="TARGET" refId="56"/>  
   </message>
 </sequence-diagram>
