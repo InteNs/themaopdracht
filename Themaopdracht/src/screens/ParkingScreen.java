@@ -174,26 +174,26 @@ public class ParkingScreen extends Screen {
 	 */
 	private void changeFilter(int newValue) {
 		switch(newValue){
-		case 0:{//Geen
+		case 0:{
 				itemList.getItems().clear();
 				for (Reservation object : controller.getReservations())
 					itemList.getItems().add(new ListItem(object));
 				break;
 			}
-		case 1:{//Actief
+		case 1:{
 				itemList.getItems().clear();
 				for (Reservation object : controller.getReservations())
 					if(object.isActive().equals("active"))itemList.getItems().add(new ListItem(object));
 				break;
 			}
-		case 2:{//Overzicht
+		case 2:{
 				itemList.getItems().clear();
 				for (Reservation object : controller.getReservations())
 					if(object.getFromDate().getMonth()==(LocalDate.now().getMonth().minus(1))||object.getToDate().getMonth()==(LocalDate.now().getMonth().minus(1)))
 						itemList.getItems().add(new ListItem(object));
 				break;
 			}
-		case 3:{//Afgesloten
+		case 3:{
 			itemList.getItems().clear();
 			for (Reservation object : controller.getReservations())
 				if(object.isActive().equals("done"))itemList.getItems().add(new ListItem(object));

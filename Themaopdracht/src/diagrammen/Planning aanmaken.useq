@@ -5,10 +5,10 @@
     autoSize="true">    
     <position height="-1" width="-1" x="227" y="0"/>    
     <execution id="2">      
-      <position height="1528" width="137" x="78" y="178"/>    
+      <position height="1405" width="137" x="78" y="178"/>    
     </execution>    
     <execution id="4">      
-      <position height="1465" width="137" x="78" y="220"/>    
+      <position height="1342" width="137" x="78" y="220"/>    
     </execution>    
     <execution id="6">      
       <position height="21" width="0" x="0" y="272"/>    
@@ -29,13 +29,13 @@
       <position height="21" width="0" x="0" y="952"/>    
     </execution>    
     <execution id="54">      
-      <position height="21" width="0" x="0" y="1466"/>    
+      <position height="21" width="0" x="0" y="1343"/>    
     </execution>    
     <execution id="56">      
-      <position height="21" width="0" x="0" y="1518"/>    
+      <position height="21" width="0" x="0" y="1395"/>    
     </execution>    
     <execution id="58">      
-      <position height="21" width="0" x="0" y="1570"/>    
+      <position height="21" width="0" x="0" y="1447"/>    
     </execution>  
   </object>  
   <object id="63" language="java" name="notifications.Notification" project="Themaopdracht" 
@@ -136,10 +136,10 @@
     autoSize="true">    
     <position height="0" width="0" x="0" y="0"/>    
     <execution id="60">      
-      <position height="21" width="0" x="0" y="1601"/>    
+      <position height="21" width="0" x="0" y="1478"/>    
     </execution>    
     <execution id="62">      
-      <position height="21" width="0" x="0" y="1643"/>    
+      <position height="21" width="0" x="0" y="1520"/>    
     </execution>  
   </object>  
   <message id="3" operation="save():void">    

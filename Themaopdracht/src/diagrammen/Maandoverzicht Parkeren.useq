@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.1.8" icons="true" automaticImage="PNG">  
+  <object id="1" language="java" name="screens.ParkingScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/ParkingScreen.java" binary="false" label="listItem" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="354" y="0"/>  
+  </object>  
+  <object id="2" language="java" name="screens.ParkingScreen" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/ParkingScreen.java" binary="false" label="parkingScreen" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="354" y="0"/>    
+    <execution id="3">      
+      <position height="84" width="108" x="78" y="154"/>    
+    </execution>    
+    <execution id="5">      
+      <position height="21" width="108" x="78" y="196"/>    
+    </execution>  
+  </object>  
+  <message id="4" operation="changeFilter(int):void">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </message>
+</sequence-diagram>

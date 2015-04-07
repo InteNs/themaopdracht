@@ -192,8 +192,12 @@ public class InvoiceScreen extends Screen {
 		case 1:{//achterstand
 				itemList.getItems().clear();
 				for (Invoice object : controller.getInvoices())
-					if(!object.isPayed() && object.getInvoiceDate().isBefore(LocalDate.now().minusMonths(3)))
+					if(!object.isPayed() && object.getInvoiceDate().isBefore(LocalDate.now().minusMonths(3))){
 						itemList.getItems().add(new ListItem(object));
+						if(object.getCustomer()!=null)object.getCustomer().setOnBlackList(true);
+					}
+					else if(object.getCustomer()!=null)object.getCustomer().setOnBlackList(false);
+						
 				break;
 			}
 		case 2:{//anoniem

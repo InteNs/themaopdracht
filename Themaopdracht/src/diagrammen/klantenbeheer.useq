@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.1.8" icons="true" automaticImage="PNG">  
+  <object id="1" language="java" name="screens.CustomerScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/CustomerScreen.java" binary="false" label="listItem" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="174" y="0"/>  
+  </object>  
+  <object id="2" language="java" name="screens.CustomerScreen" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/CustomerScreen.java" binary="false" label="customerScreen" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="174" y="0"/>    
+    <execution id="3">      
+      <position height="301" width="120" x="78" y="116"/>    
+    </execution>    
+    <execution id="5">      
+      <position height="238" width="120" x="78" y="158"/>    
+    </execution>    
+    <execution id="15">      
+      <position height="21" width="0" x="0" y="213"/>    
+    </execution>    
+    <execution id="24">      
+      <position height="2294" width="120" x="78" y="475"/>    
+    </execution>    
+    <execution id="26">      
+      <position height="2231" width="120" x="78" y="517"/>    
+    </execution>    
+    <execution id="28">      
+      <position height="21" width="0" x="0" y="569"/>    
+    </execution>    
+    <execution id="72">      
+      <position height="21" width="0" x="0" y="1503"/>    
+    </execution>    
+    <execution id="74">      
+      <position height="21" width="0" x="0" y="1555"/>    
+    </execution>    
+    <execution id="76">      
+      <position height="21" width="0" x="0" y="1607"/>    
+    </execution>    
+    <execution id="78">      
+      <position height="21" width="0" x="0" y="1659"/>    
+    </execution>    
+    <execution id="114">      
+      <position height="21" width="0" x="0" y="2425"/>    
+    </execution>    
+    <execution id="116">      
+      <position height="21" width="0" x="0" y="2477"/>    
+    </execution>    
+    <execution id="118">      
+      <position height="21" width="0" x="0" y="2529"/>    
+    </execution>    
+    <execution id="120">      
+      <position height="21" width="0" x="0" y="2581"/>    
+    </execution>    
+    <execution id="122">      
+      <position height="21" width="0" x="0" y="2633"/>    
+    </execution>  
+  </object>  
+  <object id="127" language="java" name="javafx.stage.Stage" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="confirm1" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="32">      
+      <position height="21" width="0" x="0" y="642"/>    
+    </execution>    
+    <execution id="34">      
+      <position height="21" width="0" x="0" y="684"/>    
+    </execution>  
+  </object>  
+  <object id="128" language="java" name="main.Customer" project="Themaopdracht" 
+    file="/Themaopdracht/src/main/Customer.java" binary="false" label="selectedObject" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="36">      
+      <position height="21" width="0" x="0" y="726"/>    
+    </execution>    
+    <execution id="40">      
+      <position height="21" width="0" x="0" y="810"/>    
+    </execution>    
+    <execution id="44">      
+      <position height="21" width="0" x="0" y="894"/>    
+    </execution>    
+    <execution id="48">      
+      <position height="21" width="0" x="0" y="978"/>    
+    </execution>    
+    <execution id="52">      
+      <position height="21" width="0" x="0" y="1062"/>    
+    </execution>    
+    <execution id="56">      
+      <position height="21" width="0" x="0" y="1146"/>    
+    </execution>    
+    <execution id="60">      
+      <position height="21" width="0" x="0" y="1230"/>    
+    </execution>    
+    <execution id="64">      
+      <position height="21" width="0" x="0" y="1314"/>    
+    </execution>    
+    <execution id="68">      
+      <position height="21" width="0" x="0" y="1398"/>    
+    </execution>  
+  </object>  
+  <object id="129" language="java" name="javafx.scene.control.TextInputControl" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="nameContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="38">      
+      <position height="21" width="0" x="0" y="768"/>    
+    </execution>    
+    <execution id="88">      
+      <position height="21" width="0" x="0" y="1858"/>    
+    </execution>  
+  </object>  
+  <object id="130" language="java" name="javafx.scene.control.TextInputControl" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="addressContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="42">      
+      <position height="21" width="0" x="0" y="852"/>    
+    </execution>    
+    <execution id="90">      
+      <position height="21" width="0" x="0" y="1900"/>    
+    </execution>  
+  </object>  
+  <object id="131" language="java" name="javafx.scene.control.TextInputControl" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="postalContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="46">      
+      <position height="21" width="0" x="0" y="936"/>    
+    </execution>    
+    <execution id="92">      
+      <position height="21" width="0" x="0" y="1942"/>    
+    </execution>  
+  </object>  
+  <object id="132" language="java" name="javafx.scene.control.TextInputControl" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="placeContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="50">      
+      <position height="21" width="0" x="0" y="1020"/>    
+    </execution>    
+    <execution id="96">      
+      <position height="21" width="0" x="0" y="2026"/>    
+    </execution>  
+  </object>  
+  <object id="133" language="java" name="javafx.scene.control.ComboBoxBase" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="datecontent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="54">      
+      <position height="21" width="0" x="0" y="1104"/>    
+    </execution>    
+    <execution id="94">      
+      <position height="21" width="0" x="0" y="1984"/>    
+    </execution>  
+  </object>  
+  <object id="134" language="java" name="javafx.scene.control.TextInputControl" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="emailContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="58">      
+      <position height="21" width="0" x="0" y="1188"/>    
+    </execution>    
+    <execution id="98">      
+      <position height="21" width="0" x="0" y="2068"/>    
+    </execution>  
+  </object>  
+  <object id="135" language="java" name="javafx.scene.control.TextInputControl" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="phoneContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="62">      
+      <position height="21" width="0" x="0" y="1272"/>    
+    </execution>    
+    <execution id="100">      
+      <position height="21" width="0" x="0" y="2110"/>    
+    </execution>  
+  </object>  
+  <object id="136" language="java" name="javafx.scene.control.TextInputControl" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="bankContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="66">      
+      <position height="21" width="0" x="0" y="1356"/>    
+    </execution>    
+    <execution id="102">      
+      <position height="21" width="0" x="0" y="2152"/>    
+    </execution>  
+  </object>  
+  <object id="137" language="java" name="javafx.scene.control.CheckBox" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="blackListContent" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="70">      
+      <position height="21" width="0" x="0" y="1440"/>    
+    </execution>    
+    <execution id="104">      
+      <position height="21" width="0" x="0" y="2194"/>    
+    </execution>  
+  </object>  
+  <object id="138" language="java" name="javafx.stage.Stage" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="confirm2" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="82">      
+      <position height="21" width="0" x="0" y="1732"/>    
+    </execution>    
+    <execution id="84">      
+      <position height="21" width="0" x="0" y="1774"/>    
+    </execution>  
+  </object>  
+  <object id="139" language="java" name="main.Customer" project="Themaopdracht" 
+    file="/Themaopdracht/src/main/Customer.java" binary="false" label="newCustomer" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="86">      
+      <position height="21" width="0" x="0" y="1816"/>    
+    </execution>  
+  </object>  
+  <object id="140" language="java" name="screens.CustomerScreen.ListItem" project="Themaopdracht" 
+    file="/Themaopdracht/src/screens/CustomerScreen.java" binary="false" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="110">      
+      <position height="21" width="0" x="0" y="2320"/>    
+    </execution>  
+  </object>  
+  <object id="141" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="112">      
+      <position height="21" width="0" x="0" y="2362"/>    
+    </execution>  
+  </object>  
+  <object id="142" language="java" name="notifications.Notification" project="Themaopdracht" 
+    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="notFilled" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="124">      
+      <position height="21" width="0" x="0" y="2664"/>    
+    </execution>    
+    <execution id="126">      
+      <position height="21" width="0" x="0" y="2706"/>    
+    </execution>  
+  </object>  
+  <object id="143" language="java" name="notifications.Notification" project="Themaopdracht" 
+    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="confirm" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="7">      
+      <position height="21" width="0" x="0" y="192"/>    
+    </execution>    
+    <execution id="9">      
+      <position height="21" width="0" x="0" y="192"/>    
+    </execution>    
+    <execution id="11">      
+      <position height="21" width="0" x="0" y="192"/>    
+    </execution>    
+    <execution id="30">      
+      <position height="21" width="0" x="0" y="600"/>    
+    </execution>    
+    <execution id="80">      
+      <position height="21" width="0" x="0" y="1690"/>    
+    </execution>  
+  </object>  
+  <object id="144" language="java" name="javafx.scene.control.ListView" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" label="itemList" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="13">      
+      <position height="21" width="0" x="0" y="192"/>    
+    </execution>    
+    <execution id="108">      
+      <position height="21" width="0" x="0" y="2278"/>    
+    </execution>  
+  </object>  
+  <object id="145" language="java" name="javafx.collections.ObservableList" project="Themaopdracht" 
+    file="C:/Program Files/Java/jre1.8.0_40/lib/ext/jfxrt.jar" binary="true" type="interface" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="17">      
+      <position height="21" width="0" x="0" y="228"/>    
+    </execution>  
+  </object>  
+  <object id="146" language="java" name="main.ATDProgram" project="Themaopdracht" 
+    file="/Themaopdracht/src/main/ATDProgram.java" binary="false" label="controller" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="19">      
+      <position height="21" width="0" x="0" y="270"/>    
+    </execution>    
+    <execution id="106">      
+      <position height="21" width="0" x="0" y="2236"/>    
+    </execution>  
+  </object>  
+  <object id="147" language="java" name="notifications.Notification" project="Themaopdracht" 
+    file="/Themaopdracht/src/notifications/Notification.java" binary="false" label="notify" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="21">      
+      <position height="21" width="0" x="0" y="312"/>    
+    </execution>    
+    <execution id="23">      
+      <position height="21" width="0" x="0" y="354"/>    
+    </execution>  
+  </object>  
+  <message id="4" operation="remove():void">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </message>  
+  <message id="6" 
+    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
+  </message>  
+  <message id="8" operation="showAndWait():void">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="9"/>  
+  </message>  
+  <message id="10" operation="getKeuze():java.lang.String">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="11"/>  
+  </message>  
+  <message id="12" operation="getItems():javafx.collections.ObservableList&lt;T&gt;">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="13"/>  
+  </message>  
+  <message id="14" operation="checkSelected():boolean">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="15"/>  
+  </message>  
+  <message id="16" operation="remove(java.lang.Object):boolean">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="17"/>  
+  </message>  
+  <message id="18" operation="addorRemoveCustomer(main.Customer,boolean):void">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="19"/>  
+  </message>  
+  <message id="20" 
+    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="21"/>  
+  </message>  
+  <message id="22" operation="showAndWait():void">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="23"/>  
+  </message>  
+  <message id="25" operation="save():void">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="26"/>  
+  </message>  
+  <message id="27" operation="checkInput():boolean">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="28"/>  
+  </message>  
+  <message id="29" 
+    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="30"/>  
+  </message>  
+  <message id="31" operation="showAndWait():void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="32"/>  
+  </message>  
+  <message id="33" operation="getKeuze():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="34"/>  
+  </message>  
+  <message id="35" operation="setName(java.lang.String):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="36"/>  
+  </message>  
+  <message id="37" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="38"/>  
+  </message>  
+  <message id="39" operation="setAddress(java.lang.String):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="40"/>  
+  </message>  
+  <message id="41" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="42"/>  
+  </message>  
+  <message id="43" operation="setPostal(java.lang.String):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="44"/>  
+  </message>  
+  <message id="45" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="46"/>  
+  </message>  
+  <message id="47" operation="setPlace(java.lang.String):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="48"/>  
+  </message>  
+  <message id="49" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="50"/>  
+  </message>  
+  <message id="51" operation="setDateOfBirth(java.time.LocalDate):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="52"/>  
+  </message>  
+  <message id="53" operation="getValue():T">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="54"/>  
+  </message>  
+  <message id="55" operation="setEmail(java.lang.String):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="56"/>  
+  </message>  
+  <message id="57" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="58"/>  
+  </message>  
+  <message id="59" operation="setTel(java.lang.String):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="60"/>  
+  </message>  
+  <message id="61" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="62"/>  
+  </message>  
+  <message id="63" operation="setBankAccount(java.lang.String):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="64"/>  
+  </message>  
+  <message id="65" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="66"/>  
+  </message>  
+  <message id="67" operation="setOnBlackList(boolean):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="68"/>  
+  </message>  
+  <message id="69" operation="isSelected():boolean">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="70"/>  
+  </message>  
+  <message id="71" operation="setEditable(boolean):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="72"/>  
+  </message>  
+  <message id="73" operation="clearInput():void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="74"/>  
+  </message>  
+  <message id="75" operation="setEditable(boolean):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="76"/>  
+  </message>  
+  <message id="77" operation="refreshList():void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="78"/>  
+  </message>  
+  <message id="79" 
+    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="80"/>  
+  </message>  
+  <message id="81" operation="showAndWait():void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="82"/>  
+  </message>  
+  <message id="83" operation="getKeuze():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="84"/>  
+  </message>  
+  <message id="85" 
+    operation="Customer(java.lang.String,java.lang.String,java.lang.String,java.time.LocalDate,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean)">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="86"/>  
+  </message>  
+  <message id="87" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="88"/>  
+  </message>  
+  <message id="89" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="90"/>  
+  </message>  
+  <message id="91" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="92"/>  
+  </message>  
+  <message id="93" operation="getValue():T">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="94"/>  
+  </message>  
+  <message id="95" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="96"/>  
+  </message>  
+  <message id="97" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="98"/>  
+  </message>  
+  <message id="99" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="100"/>  
+  </message>  
+  <message id="101" operation="getText():java.lang.String">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="102"/>  
+  </message>  
+  <message id="103" operation="isSelected():boolean">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="104"/>  
+  </message>  
+  <message id="105" operation="addorRemoveCustomer(main.Customer,boolean):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="106"/>  
+  </message>  
+  <message id="107" operation="getItems():javafx.collections.ObservableList&lt;T&gt;">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="108"/>  
+  </message>  
+  <message id="109" operation="ListItem(main.Customer)">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="110"/>  
+  </message>  
+  <message id="111" operation="add(E):boolean">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="112"/>  
+  </message>  
+  <message id="113" operation="setEditable(boolean):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="114"/>  
+  </message>  
+  <message id="115" operation="clearInput():void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="116"/>  
+  </message>  
+  <message id="117" operation="setEditable(boolean):void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="118"/>  
+  </message>  
+  <message id="119" operation="refreshList():void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="120"/>  
+  </message>  
+  <message id="121" operation="refreshList():void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="122"/>  
+  </message>  
+  <message id="123" 
+    operation="Notification(javafx.stage.Stage,main.ATDProgram,java.lang.String,notifications.Notification.notificationStyle)">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="124"/>  
+  </message>  
+  <message id="125" operation="showAndWait():void">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="126"/>  
+  </message>
+</sequence-diagram>
