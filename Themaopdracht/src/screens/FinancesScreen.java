@@ -102,7 +102,7 @@ public class FinancesScreen extends Screen {
 		double btw = 0.0;
 		int aantal = 0;
 		for (Invoice invoice : controller.getInvoices()) {
-			if(invoice.isPayed()&&isOverlapping(from, to, invoice.getInvoiceDate(), invoice.getInvoiceDate())){
+			if(invoice.isPayed()&&ATDProgram.isOverlapping(from, to, invoice.getInvoiceDate(), invoice.getInvoiceDate())){
 						aantal++;
 						omzet += invoice.getTotalPrice();
 			}
@@ -111,9 +111,6 @@ public class FinancesScreen extends Screen {
 			taxLabelContent.setText(ATDProgram.convert(btw));
 			amountLabelContent.setText(aantal+"");
 		}
-	}
-	private static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-		return (start1.isBefore(end2) || start1.isEqual(end2)) && (start2.isBefore(end1) || start2.isEqual(end1));
 	}
 	@Override
 	public void refreshList() {

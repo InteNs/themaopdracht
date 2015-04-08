@@ -35,6 +35,7 @@ public class ATDProgram extends Application {
 	private ArrayList<Invoice> receipts = new ArrayList<Invoice>();
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
 	private ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
+	private ArrayList<Order> orders = new ArrayList<Order>();
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	private ArrayList<ParkingSpace> parkingSpaces = new ArrayList<ParkingSpace>();
 	private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
@@ -124,6 +125,13 @@ public class ATDProgram extends Application {
 		if(remove)stock.removeProduct(product);
 		else stock.newProduct(product);
 	}
+	public ArrayList<Order> getOrders() {
+		return orders;
+	}
+	public void addorRemoveOrder(Order order, boolean remove){
+		if(remove)orders.remove(order);
+		else orders.add(order);
+	}
 	public ArrayList<ProductSupplier> getSuppliers() {
 		return suppliers;
 	}
@@ -157,8 +165,11 @@ public class ATDProgram extends Application {
 		if(remove)maintenanceSessions.remove(maintenanceSession);
 		else maintenanceSessions.add(maintenanceSession);
 	}
-	public static final String convert(double price){
+	public static String convert(double price){
 		return nf.format(price);
+	}
+	public static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+		return (start1.isBefore(end2) || start1.isEqual(end2)) && (start2.isBefore(end1) || start2.isEqual(end1));
 	}
 	private void addContent(){
 		for (int i = 0; i < 20; i++) {
@@ -185,10 +196,10 @@ public class ATDProgram extends Application {
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
 		addorRemoveSupplier(new ProductSupplier("Shell", "Aarde", "1337AF", "De Maan"), false);
-		addorRemoveproduct(new Part(this,"Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
-		addorRemoveproduct(new Part(this,"Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
-		addorRemoveproduct(new Fuel(this,"Diesel", 300, 200, 1, 1.19, suppliers.get(2)), false);
-		addorRemoveproduct(new Fuel(this,"Euro95", 275, 150, 1.11, 1.52, suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
+		addorRemoveproduct(new Fuel("Diesel", 300, 200, 1, 1.19, suppliers.get(2)), false);
+		addorRemoveproduct(new Fuel("Euro95", 275, 150, 1.11, 1.52, suppliers.get(2)), false);
 		addorRemoveReservations(new Reservation(LocalDate.parse("2015-03-29"), LocalDate.parse("2015-04-20"), "13-edm-1", parkingSpaces.get(0)), false);
 		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-01"), LocalDate.parse("2015-04-04"), "69-lmr-7", parkingSpaces.get(1)), false);
 		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-04"), LocalDate.parse("2015-04-09"), "31-dos-3", parkingSpaces.get(2)), false);

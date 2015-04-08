@@ -1,13 +1,11 @@
 package main;
 
 public abstract class Product {
-	protected ATDProgram controller;
 	protected String name;
 	protected int amount, minAmount;
 	protected double buyPrice, sellPrice;
 	protected ProductSupplier supplier;
-	public Product(ATDProgram controller, String name, int amount, int minAmount, double buyPrice,double sellPrice, ProductSupplier supplier) {
-		this.controller = controller;
+	public Product(String name, int amount, int minAmount, double buyPrice,double sellPrice, ProductSupplier supplier) {
 		this.name = name;
 		this.amount = amount;
 		this.minAmount = minAmount;

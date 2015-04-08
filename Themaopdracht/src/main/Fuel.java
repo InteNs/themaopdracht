@@ -2,9 +2,9 @@ package main;
 
 public class Fuel extends Product {
 
-	public Fuel(ATDProgram controller,String name, int amount, int minAmount, double buyPrice,
+	public Fuel(String name, int amount, int minAmount, double buyPrice,
 			double sellPrice, ProductSupplier supplier) {
-		super(controller, name, amount, minAmount, buyPrice, sellPrice, supplier);
+		super(name, amount, minAmount, buyPrice, sellPrice, supplier);
 		// TODO Auto-generated constructor stub
 	}
 	public String getName() {

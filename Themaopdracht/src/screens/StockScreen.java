@@ -287,7 +287,6 @@ public class StockScreen extends Screen {
 				case "confirm": {
 					if(getType.getSelected().equals("Benzine")) {
 						Fuel newProduct = new Fuel(
-								controller,
 								nameContent.getText(), 
 								0, 
 								Integer.parseInt(minAmountContent.getText()), 
@@ -299,7 +298,6 @@ public class StockScreen extends Screen {
 					}
 					if(getType.getSelected().equals("Onderdeel")) {
 						Part newProduct = new Part(
-								controller,
 								nameContent.getText(), 
 								0, 
 								Integer.parseInt(minAmountContent.getText()), 

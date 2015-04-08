@@ -319,13 +319,10 @@ public class ParkingScreen extends Screen {
 		for (ParkingSpace space : controller.getParkingSpaces())
 			spaceContent.getItems().add(space);
 		for (Reservation reservation : controller.getReservations()) {
-			if(reservation != selectedObject && isOverlapping(reservation.getFromDate(), reservation.getToDate(), dateFromContent.getValue(), dateToContent.getValue())){
+			if(reservation != selectedObject && ATDProgram.isOverlapping(reservation.getFromDate(), reservation.getToDate(), dateFromContent.getValue(), dateToContent.getValue())){
 				spaceContent.getItems().remove(reservation.getParkingSpace());
 			}
 		}
-	}
-	private static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-		return (start1.isBefore(end2) || start1.isEqual(end2)) && (start2.isBefore(end1) || start2.isEqual(end1));
 	}
 	/**
 	 * checks if all the inputfields are filled in
