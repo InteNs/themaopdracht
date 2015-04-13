@@ -419,6 +419,6 @@ public class CustomerScreen extends Screen {
 		 */
 		public Customer getCustomer(){
 			return object;
-		}
+		}//test
 	}
 }
