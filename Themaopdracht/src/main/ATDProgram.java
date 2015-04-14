@@ -181,6 +181,33 @@ public class ATDProgram extends Application {
 		addorRemoveCustomer(new Customer("Mark Havekes", "De Meern", "n.v.t.", LocalDate.parse("1990-05-31"),
 				"mark.havekes@gmail.com", "3453MC", "0302801265",
 				"De Drecht 32", false),false);
+		addorRemoveCustomer(new Customer("Taoufik Abou", "Utrecht",
+				"NL35 INGB 0001 1234 56", LocalDate.parse("1997-08-08"), "taoufik.abou@live.nl",
+				"3550AA", "0612345678", "Mijnstraat 123", false), false);
+		addorRemoveCustomer(new Customer("Oussama Aalili", "Utrecht", "n.v.t.", LocalDate.parse("1995-08-25"),
+				"oussama.aalili@live.nl", "3563CR", "0690874563",
+				"Drielenbrochdreef 11", false),false);
+		addorRemoveCustomer(new Customer("Jantje Bont", "Utrecht",
+				"NL35 INGB 0128 4553 66", LocalDate.parse("1980-09-07"), "jantje.bont@live.nl",
+				"3535AA", "0656789032", "Walstraat 123", false), false);
+		addorRemoveCustomer(new Customer("Kees Jansma", "Dordrecht", "n.v.t.", LocalDate.parse("1970-07-12"),
+				"kees.jansma@gmail.com", "3400BB", "0678324211",
+				"Kiboltstraat 12", false),false);
+		addorRemoveCustomer(new Customer("Jeroen van der Boom", "Vianen",
+				"NL35 ABNA 0056 8953 57", LocalDate.parse("1989-08-25"), "jeroen.vanderboom@live.nl",
+				"3552AZ", "0636114939", "Jeroenstraat 11", false), false);
+		addorRemoveCustomer(new Customer("Frans Bouwer", "Maastricht", "n.v.t.", LocalDate.parse("1975-05-31"),
+				"frans.bouwer@gmail.com", "3451AC", "0690324576",
+				"Franslaan 89", false),false);
+		addorRemoveCustomer(new Customer("Ali Bouali", "Nieuwegein",
+				"NL35 ABNA 0067 8953 57", LocalDate.parse("1945-08-25"), "ali.bouali@icloud.com",
+				"3560AZ", "0690125467", "Groteneusdreef 10", false), false);
+		addorRemoveCustomer(new Customer("Jan Shit", "Amsterdam", "n.v.t.", LocalDate.parse("1965-05-31"),
+				"jan.shit@gmail.com", "3745BC", "0301234567",
+				"Wallendreef 34", false),false);
+		
+		
+		
 		customers.get(0).setLastMaintenance(LocalDate.now().minusMonths(7));
 		customers.get(0).setLastVisit(		LocalDate.now().minusMonths(1));
 		customers.get(1).setLastMaintenance(LocalDate.now().minusMonths(4));
