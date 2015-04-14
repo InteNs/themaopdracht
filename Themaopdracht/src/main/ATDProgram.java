@@ -47,7 +47,7 @@ public class ATDProgram extends Application {
 		addContent();
 		//create tabs and add content
 		tabsScreen = new TabPane();
-
+//test
 		customerAdministration = new Tab("Klanten");
 		customerAdministration.setClosable(false);
 		customerAdministration.setContent(new CustomerScreen(this));
