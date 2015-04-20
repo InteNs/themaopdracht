@@ -205,6 +205,36 @@ public class ATDProgram extends Application {
 		addorRemoveCustomer(new Customer("Jan Shit", "Amsterdam", "n.v.t.", LocalDate.parse("1965-05-31"),
 				"jan.shit@gmail.com", "3745BC", "0301234567",
 				"Wallendreef 34", false),false);
+		addorRemoveCustomer(new Customer("Arjen Robben", "Groningen",
+				"NL35 INGB 0208 5953 55", LocalDate.parse("1978-01-45"), "arjenrobben@icloud.com",
+				"2544AZ", "0637124999", "kalekop 11", false), false);
+		addorRemoveCustomer(new Customer("Robin van Persie", "Rotterdam", "n.v.t.", LocalDate.parse("1979-05-31"),
+				"robin.vanpersie@gmail.com", "3853MC", "0672831215",
+				"", false),false);
+		addorRemoveCustomer(new Customer("Wesley Sneijder", "Utrecht",
+				"NL35 INGB 0031 1134 78", LocalDate.parse("1987-08-08"), "wesley.sneijder@live.nl",
+				"3230AA", "0622375668", "Ondiepstraat 11", false), false);
+		addorRemoveCustomer(new Customer("Klaas-Jan Huntelaar", "Abcoude", "n.v.t.", LocalDate.parse("1989-08-25"),
+				"klaasjan.huntelaar@live.nl", "3134CR", "0620174413",
+				"schalkestraat 11", false),false);
+		addorRemoveCustomer(new Customer("Memphis Depay", "Leiden",
+				"NL35 INGB 0118 4253 56", LocalDate.parse("1990-09-07"), "memphisdepay@live.nl",
+				"3333AA", "0645769232", "wcstraat 13", false), false);
+		addorRemoveCustomer(new Customer("Daley Blind", "Amsterdam", "n.v.t.", LocalDate.parse("1991-07-12"),
+				"daley.blind@gmail.com", "3441BB", "0678624321",
+				"Kilostraat 12", false),false);
+		addorRemoveCustomer(new Customer("Tim Krul", "Vianen",
+				"NL65 ABNA 0156 8653 51", LocalDate.parse("1989-08-25"), "tim.krul@live.nl",
+				"3553AZ", "0616113931", "mexicostraat 11", false), false);
+		addorRemoveCustomer(new Customer(" Bas Dost", "Den Haag", "n.v.t.", LocalDate.parse("1975-05-31"),
+				"Bas.Dost@gmail.com", "3451AC", "0690324576",
+				"Englandlaan 89", false),false);
+		addorRemoveCustomer(new Customer("Leo Messi", "Nieuwegein",
+				"NL23 ABNA 0267 8153 37", LocalDate.parse("1988-08-25"), "leo.messi@icloud.com",
+				"3564AZ", "0690421467", "Kleineneusdreef 10", false), false);
+		addorRemoveCustomer(new Customer("Andre Hazes", "Amsterdam", "n.v.t.", LocalDate.parse("1957-05-31"),
+				"andre.hazes@gmail.com", "3715BC", "0621234167",
+				"legendedreef 12", false),false);
 		
 		
 		
@@ -222,11 +252,65 @@ public class ATDProgram extends Application {
 		addorRemoveMaintenanceSessions(new MaintenanceSession("65-RGB-1",stock, LocalDate.now().plusDays(4)), false);
 		addorRemoveSupplier(new ProductSupplier("Cheapo BV", "Hoevelaan 2", "7853OQ", "Den Haag"), false);
 		addorRemoveSupplier(new ProductSupplier("Banden BV", "Hamburgerstraat 10", "4198KW", "Utrecht"), false);
-		addorRemoveSupplier(new ProductSupplier("Shell", "Aarde", "1337AF", "De Maan"), false);
+		addorRemoveSupplier(new ProductSupplier("Peugeot", "Parijslaan", "2353PL", "Amsterdam"), false);
+		addorRemoveSupplier(new ProductSupplier("Mercedes", "Berlijnstraat 45", "5462KY", "Rotterdam"), false);
+		addorRemoveSupplier(new ProductSupplier("Shell", "Hoevenlaan 99", "1337AF", "Eindhoven"), false);
 		addorRemoveproduct(new Part("Uitlaat", 5, 5, 20, 22,suppliers.get(0)), false);
 		addorRemoveproduct(new Part("Band klein", 7, 10, 60, 100,suppliers.get(1)), false);
-		addorRemoveproduct(new Fuel("Diesel", 300, 200, 1, 1.19, suppliers.get(2)), false);
-		addorRemoveproduct(new Fuel("Euro95", 275, 150, 1.11, 1.52, suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Accu", 80, 85, 180, 220,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Airco", 70, 100, 200, 230,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Band groot", 50, 50, 25, 52,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Velgen klein", 9, 10, 60, 120,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Velgen groot", 20, 27, 20, 22,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Besturingsysteem", 4, 10, 110, 250,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Brandstofsysteem", 30, 50, 60, 80,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Dashboard", 15, 20, 60, 100,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Schakelaar", 20, 20, 20, 35,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Kabels", 78, 80, 6, 12,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Filter", 40, 50, 20, 22,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Bekleding", 26, 30, 40, 100,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Interieur", 50, 50, 250, 320,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Motor", 70, 75, 300, 400,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Ophanging", 10, 15, 75, 88,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Onderstel", 7, 10, 60, 100,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Remmen", 50, 65, 80, 120,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Aandrijving", 20, 25, 60, 100,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Ruiten", 40, 50, 20, 40,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Toebehoren Ruiten", 40, 50, 20, 40,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Spiegels", 25, 30, 20, 32,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Transmissie en toebehoren", 50, 60, 30, 40,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Transmissie", 25, 30, 220, 332,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Lampen", 35, 40, 2, 5,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Koplamp voor", 35, 40, 20, 42,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Koplamp achter", 35, 40, 60, 90,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Autosleutel", 5, 20, 15, 25,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Winterband groot", 20, 10, 60, 100,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Winterband klein", 20, 5, 50, 90,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Sneeuwketting groot", 20, 15, 60, 100,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Sneeuwketting klein", 20, 15, 50, 90,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Schroeven extra groot", 8, 10, 5, 10,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Schroeven groot", 8, 10, 4, 8,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Schroeven middelmaat", 8, 3, 6, 100,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Schroeven klein", 8, 10, 2, 4,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Schroeven extra klein", 8, 10, 1, 2,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Radio duur", 10, 20, 50, 75,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Radio normaal", 7, 10, 30, 55,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Radio goedkoop", 5, 5, 15, 20,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Radio extra goedkoop", 7, 10, 10, 15,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("Velgen extra duur", 20, 20, 30, 62,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("Besturingsysteem duur", 20, 30, 150, 250,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Brandstofsysteem duur", 20, 40, 200, 350,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Dashboard classic", 7, 10, 60, 100,suppliers.get(1)), false);
+		addorRemoveproduct(new Part("doekjes", 5, 5,  1, 3,suppliers.get(2)), false);
+		addorRemoveproduct(new Part("ververs olie", 150, 200, 6, 10,suppliers.get(3)), false);
+		addorRemoveproduct(new Part("Reiningmiddel", 150, 200, 2, 5,suppliers.get(0)), false);
+		addorRemoveproduct(new Part("Schoonmaakmiddel", 200, 300, 3, 6,suppliers.get(1)), false);
+		addorRemoveproduct(new Fuel("Diesel", 300, 200, 1, 1.19, suppliers.get(4)), false);
+		addorRemoveproduct(new Fuel("Euro95", 275, 150, 1.11, 1.52, suppliers.get(4)), false);
+		addorRemoveproduct(new Fuel("Euro98", 271, 250, 1, 1.69, suppliers.get(4)), false);
+		addorRemoveproduct(new Fuel("Lpg", 275, 150, 1.11, 1.12, suppliers.get(4)), false);
+		addorRemoveproduct(new Fuel("Electriteit", 300, 200, 1, 2.19, suppliers.get(4)), false);
+		addorRemoveproduct(new Fuel("Waterstof", 275, 150, 1.11, 8.62, suppliers.get(4)), false);
 		addorRemoveReservations(new Reservation(LocalDate.parse("2015-03-29"), LocalDate.parse("2015-04-20"), "13-edm-1", parkingSpaces.get(0)), false);
 		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-01"), LocalDate.parse("2015-04-04"), "69-lmr-7", parkingSpaces.get(1)), false);
 		addorRemoveReservations(new Reservation(LocalDate.parse("2015-04-04"), LocalDate.parse("2015-04-09"), "31-dos-3", parkingSpaces.get(2)), false);
