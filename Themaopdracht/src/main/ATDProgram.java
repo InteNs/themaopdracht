@@ -206,7 +206,7 @@ public class ATDProgram extends Application {
 				"jan.shit@gmail.com", "3745BC", "0301234567",
 				"Wallendreef 34", false),false);
 		addorRemoveCustomer(new Customer("Arjen Robben", "Groningen",
-				"NL35 INGB 0208 5953 55", LocalDate.parse("1978-01-45"), "arjenrobben@icloud.com",
+				"NL35 INGB 0208 5953 55", LocalDate.parse("1978-01-30"), "arjenrobben@icloud.com",
 				"2544AZ", "0637124999", "kalekop 11", false), false);
 		addorRemoveCustomer(new Customer("Robin van Persie", "Rotterdam", "n.v.t.", LocalDate.parse("1979-05-31"),
 				"robin.vanpersie@gmail.com", "3853MC", "0672831215",
