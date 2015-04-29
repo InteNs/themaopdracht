@@ -319,7 +319,7 @@ public class ParkingScreen extends Screen {
 		for (ParkingSpace space : controller.getParkingSpaces())
 			spaceContent.getItems().add(space);
 		for (Reservation reservation : controller.getReservations()) {
-			if(reservation != selectedObject && ATDProgram.isOverlapping(reservation.getFromDate(), reservation.getToDate(), dateFromContent.getValue(), dateToContent.getValue())){
+			if(reservation != selectedObject && ATDProgram.periodIsOverlapping(reservation.getFromDate(), reservation.getToDate(), dateFromContent.getValue(), dateToContent.getValue())){
 				spaceContent.getItems().remove(reservation.getParkingSpace());
 			}
 		}

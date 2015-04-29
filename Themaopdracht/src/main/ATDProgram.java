@@ -168,8 +168,8 @@ public class ATDProgram extends Application {
 	public static String convert(double price){
 		return nf.format(price);
 	}
-	public static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-		return (start1.isBefore(end2) || start1.isEqual(end2)) && (start2.isBefore(end1) || start2.isEqual(end1));
+	public static boolean periodIsOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+		return (!start1.isAfter(end2)) && (!start2.isAfter(end1));
 	}
 	private void addContent(){
 		for (int i = 0; i < 20; i++) {

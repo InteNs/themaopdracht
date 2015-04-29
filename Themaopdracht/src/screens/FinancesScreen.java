@@ -102,7 +102,7 @@ public class FinancesScreen extends Screen {
 		double btw = 0.0;
 		int aantal = 0;
 		for (Invoice invoice : controller.getInvoices()) {
-			if(invoice.isPayed()&&ATDProgram.isOverlapping(from, to, invoice.getInvoiceDate(), invoice.getInvoiceDate())){
+			if(invoice.isPayed()&&ATDProgram.periodIsOverlapping(from, to, invoice.getInvoiceDate(), invoice.getInvoiceDate())){
 						aantal++;
 						omzet += invoice.getTotalPrice();
 			}
