@@ -39,6 +39,9 @@ public class ATDProgram extends Application {
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	private ArrayList<ParkingSpace> parkingSpaces = new ArrayList<ParkingSpace>();
 	private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+
+	//moet bij klant
+	//private ArrayList<Vehicle> vehicles = new Arraylist<Vehicle>;
 	public final static NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("nl", "NL"));
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -71,6 +74,9 @@ public class ATDProgram extends Application {
 		parkingScreen = new Tab("Parkeren");
 		parkingScreen.setClosable(false);
 		parkingScreen.setContent(new ParkingScreen(this));
+		
+		
+		
 		
 		tabsScreen.getTabs().addAll(financesScreen,invoiceScreen,customerAdministration,stockAdministration,serviceScreen,parkingScreen);
 		tabsScreen.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
@@ -128,6 +134,11 @@ public class ATDProgram extends Application {
 	public ArrayList<Order> getOrders() {
 		return orders;
 	}
+	//moet bij klant
+	//public void addorRemoveVehicle (Vehicle vehicles, boolean remove){
+	//if (remove)vehicle.remove(vehicle);
+	//else vehicle.add(vehicle);
+	//}
 	public void addorRemoveOrder(Order order, boolean remove){
 		if(remove)orders.remove(order);
 		else orders.add(order);
@@ -235,7 +246,8 @@ public class ATDProgram extends Application {
 		addorRemoveCustomer(new Customer("Andre Hazes", "Amsterdam", "n.v.t.", LocalDate.parse("1957-05-31"),
 				"andre.hazes@gmail.com", "3715BC", "0621234167",
 				"legendedreef 12", false),false);
-		
+		//klant
+		//addorRemoveVehicle(new Vehicle("volkswagen", "13-LOL-3", Customer.get(1)), false);
 		
 		
 		customers.get(0).setLastMaintenance(LocalDate.now().minusMonths(7));
