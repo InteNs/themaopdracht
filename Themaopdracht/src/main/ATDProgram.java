@@ -40,8 +40,7 @@ public class ATDProgram extends Application {
 	private ArrayList<ParkingSpace> parkingSpaces = new ArrayList<ParkingSpace>();
 	private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
 
-	//moet bij klant
-	//private ArrayList<Vehicle> vehicles = new Arraylist<Vehicle>;
+	
 	public final static NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("nl", "NL"));
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -134,11 +133,7 @@ public class ATDProgram extends Application {
 	public ArrayList<Order> getOrders() {
 		return orders;
 	}
-	//moet bij klant
-	//public void addorRemoveVehicle (Vehicle vehicles, boolean remove){
-	//if (remove)vehicle.remove(vehicle);
-	//else vehicle.add(vehicle);
-	//}
+	
 	public void addorRemoveOrder(Order order, boolean remove){
 		if(remove)orders.remove(order);
 		else orders.add(order);
