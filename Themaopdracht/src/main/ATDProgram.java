@@ -1,5 +1,6 @@
 
 package main;
+import java.lang.System;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class ATDProgram extends Application {
 	public final static NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("nl", "NL"));
 	@Override
 	public void start(Stage stage) throws Exception {
+		System.out.println("TEST VAN INTELLIJ IDEA 14.1.2");
 		mainStage = stage;
 		nf.setCurrency(Currency.getInstance("EUR"));
 		addContent();
