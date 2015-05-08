@@ -111,32 +111,14 @@ public class Customer {
 	public ArrayList<Car> getCars() {
 		return cars;
 	}
-	public void addorRemoveCar (Car cars, boolean remove){
-		if (remove)Car.remove(cars);
-		else Car.add(cars);
+	public void addorRemoveCar (Car auto, boolean remove){
+		if (remove)cars.remove(auto);
+		else cars.add(auto);
 		}
-	{
-	addorRemoveCar(new Car("volkswagen", "13-LOL-3", Customer.get(1)), false);
-	addorRemoveCar(new Car("porsche", "14-LAL-5", Customer.get(2)), false);
-	addorRemoveCar(new Car("ferrari", "15-LIL-6", Customer.get(3)), false);
-	addorRemoveCar(new Car("mercedes", "16-LEL-9", Customer.get(4)), false);
-	addorRemoveCar(new Car("bmw", "17-LQL-1", Customer.get(5)), false);
-	addorRemoveCar(new Car("nissan", "18-POL-2", Customer.get(6)), false);
-	addorRemoveCar(new Car("opel", "18-LVL-8", Customer.get(7)), false);
-	addorRemoveCar(new Car("renault", "15-WOL-1", Customer.get(8)), false);
-	addorRemoveCar(new Car("audi", "24-QOL-9", Customer.get(9)), false);
-	addorRemoveCar(new Car("lamborgini", "53-TOL-3", Customer.get(10)), false);
-	
-	}
+
 	@Override
 	public String toString() {
 		return name;
 	}
-
-	private static Customer get(int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	
 }
