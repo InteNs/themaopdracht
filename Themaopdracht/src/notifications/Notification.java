@@ -35,6 +35,7 @@ public class Notification extends Stage {
 	private ComboBox<String> typeSelector = new ComboBox<String>();
 	private ComboBox<PayMethod> paymentSelector = new ComboBox<PayMethod>();
 	private ComboBox<ProductSupplier> supplierSelector = new ComboBox<ProductSupplier>();
+	
 	private TextField 
 	input 	= new TextField(),
 	name 	= new TextField("Naam"),

@@ -40,6 +40,8 @@ public class ATDProgram extends Application {
 	private ArrayList<ProductSupplier> suppliers = new ArrayList<ProductSupplier>();
 	private ArrayList<ParkingSpace> parkingSpaces = new ArrayList<ParkingSpace>();
 	private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+
+	
 	public final static NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("nl", "NL"));
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -73,6 +75,9 @@ public class ATDProgram extends Application {
 		parkingScreen = new Tab("Parkeren");
 		parkingScreen.setClosable(false);
 		parkingScreen.setContent(new ParkingScreen(this));
+		
+		
+		
 		
 		tabsScreen.getTabs().addAll(financesScreen,invoiceScreen,customerAdministration,stockAdministration,serviceScreen,parkingScreen);
 		tabsScreen.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
@@ -130,6 +135,7 @@ public class ATDProgram extends Application {
 	public ArrayList<Order> getOrders() {
 		return orders;
 	}
+	
 	public void addorRemoveOrder(Order order, boolean remove){
 		if(remove)orders.remove(order);
 		else orders.add(order);
@@ -237,8 +243,44 @@ public class ATDProgram extends Application {
 		addorRemoveCustomer(new Customer("Andre Hazes", "Amsterdam", "n.v.t.", LocalDate.parse("1957-05-31"),
 				"andre.hazes@gmail.com", "3715BC", "0621234167",
 				"legendedreef 12", false),false);
+	
+	
+		
+
+		
+		customers.get(0).addorRemoveCar(new Car("volkswagen", "13-LOL-3"), false);
+		customers.get(1).addorRemoveCar(new Car("porsche", "14-LAL-5"), false);
+		customers.get(2).addorRemoveCar(new Car("ferrari", "15-LIL-6"),  false);
+		customers.get(3).addorRemoveCar(new Car("mercedes", "16-LEL-9") , false);
+		customers.get(4).addorRemoveCar(new Car("bmw", "17-LQL-1"), false);
+		customers.get(5).addorRemoveCar(new Car("nissan", "18-POL-2"),  false);
+		customers.get(6).addorRemoveCar(new Car("opel", "18-LVL-8"), false);
+		customers.get(7).addorRemoveCar(new Car("renault", "15-WOL-1"),  false);
+		customers.get(8).addorRemoveCar(new Car("audi", "24-QOL-9"),  false);
+		customers.get(9).addorRemoveCar(new Car("lamborgini", "03-TOL-3"),  false);
+		customers.get(10).addorRemoveCar(new Car("volkswagen", "93-TOL-3"),  false);
+		customers.get(11).addorRemoveCar(new Car("porsche", "43-TOL-3"),  false);
+		customers.get(12).addorRemoveCar(new Car("ferrari", "23-TOL-3"),  false);
+		customers.get(13).addorRemoveCar(new Car("mercedes", "83-TOL-3"),  false);
+		customers.get(14).addorRemoveCar(new Car("bmw", "33-TOL-3"),  false);
+		customers.get(15).addorRemoveCar(new Car("opel", "13-TOL-3"),  false);
+		customers.get(16).addorRemoveCar(new Car("renault", "33-TOL-3"),  false);
+		customers.get(17).addorRemoveCar(new Car("audi", "12-TOL-3"),  false);
+		customers.get(18).addorRemoveCar(new Car("lamborgini", "50-TOL-3"),  false);
+		customers.get(19).addorRemoveCar(new Car("volkswagen", "59-TOL-3"),  false);
+		customers.get(1).addorRemoveCar(new Car("lamborgini", "58-TOL-3"),  false);
+		customers.get(1).addorRemoveCar(new Car("porsche", "57-TOL-3"),  false);
+		customers.get(2).addorRemoveCar(new Car("lamborgini", "52-TOL-3"),  false);
+		customers.get(3).addorRemoveCar(new Car("lamborgini", "56-TOL-3"),  false);
+		customers.get(4).addorRemoveCar(new Car("lamborgini", "55-TOL-3"),  false);
+		customers.get(5).addorRemoveCar(new Car("lamborgini", "54-TOL-3"),  false);
+		customers.get(6).addorRemoveCar(new Car("lamborgini", "04-TOL-3"),  false);
+	
 		
 		
+		
+		
+			
 		
 		customers.get(0).setLastMaintenance(LocalDate.now().minusMonths(7));
 		customers.get(0).setLastVisit(		LocalDate.now().minusMonths(1));

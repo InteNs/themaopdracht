@@ -1,11 +1,25 @@
 package main;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
+
+
+
+//moet bij klant
+	//public void addorRemoveVehicle (Vehicle vehicles, boolean remove){
+	//if (remove)vehicle.remove(vehicle);
+	//else vehicle.add(vehicle);
+	//}
+
+//klant
+		//addorRemoveVehicle(new Vehicle("volkswagen", "13-LOL-3", Customer.get(1)), false);
 
 public class Customer {
 	private String name, place, email, address, postal,bankAccount, tel;
 	private LocalDate dateOfBirth,lastVisit, lastMaintenance;
 	private boolean isOnBlackList, notified;
+	private ArrayList<Car> cars = new ArrayList<Car>();
+	
 	public Customer(String name, String place,String bankAccount, LocalDate bornDate, String email, String postal, String tel, String adress, boolean isOnBlackList) {
 		this.name = name;
 		this.isOnBlackList = isOnBlackList;
@@ -94,10 +108,17 @@ public class Customer {
 		this.lastVisit = lastMaintenance;
 		
 	}
+	public ArrayList<Car> getCars() {
+		return cars;
+	}
+	public void addorRemoveCar (Car auto, boolean remove){
+		if (remove)cars.remove(auto);
+		else cars.add(auto);
+		}
+
 	@Override
 	public String toString() {
 		return name;
 	}
-	
 	
 }
