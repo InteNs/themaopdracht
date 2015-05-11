@@ -20,7 +20,7 @@
     <body>
      <div class="container" style="margin-top:50px;">
        <div class="jumbotron">
-        <h1 style="text-align:center; color:#0099CC; margin-bottom:20px;">AutoTotaalDienst</h1>
+        <h1 style="text-align:center; color:#0099CC; margin-bottom:20px;"></h1>
 
         <div class="row">
           <div class="col-md-4"></div>

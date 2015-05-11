@@ -1,5 +1,7 @@
 package screens;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -139,7 +141,7 @@ public class CustomerScreen extends Screen {
             } else searchContent.selectAll();
         });
         searchContent.textProperty().addListener((observable, oldValue, newValue) -> {
-            search(oldValue, newValue);
+            CustomerScreen.this.search(oldValue, newValue);
         });
         //buttons and filter
         cancelButton.setOnAction(e -> {
@@ -228,6 +230,7 @@ public class CustomerScreen extends Screen {
                 switch (confirm.getKeuze()) {
                     case "confirm": {
                         selectedObject.setName(nameContent.getText());
+                        selectedObject.setMiddelNaam("blabla");
                         selectedObject.setAddress(addressContent.getText());
                         selectedObject.setPostal(postalContent.getText());
                         selectedObject.setPlace(placeContent.getText());
@@ -375,10 +378,12 @@ public class CustomerScreen extends Screen {
         }
         itemList.getItems().clear();
         //add an item if any item that exists contains any value that has been searched for
-        content.stream().filter(entry -> entry.getCustomer().getName().contains(newVal)
+        content.stream().filter(entry ->
+                entry.getCustomer().getName().contains(newVal)
                 || entry.getCustomer().getEmail().contains(newVal)
                 || entry.getCustomer().getPlace().contains(newVal)
-                || entry.getCustomer().getPostal().contains(newVal)).forEach(entry -> itemList.getItems().add(entry));
+                || entry.getCustomer().getPostal().contains(newVal)).forEach(entry ->
+                itemList.getItems().add(entry));
     }
 
     // this class represents every item in the list
