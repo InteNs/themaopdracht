@@ -230,7 +230,6 @@ public class CustomerScreen extends Screen {
                 switch (confirm.getKeuze()) {
                     case "confirm": {
                         selectedObject.setName(nameContent.getText());
-                        selectedObject.setMiddelNaam("blabla");
                         selectedObject.setAddress(addressContent.getText());
                         selectedObject.setPostal(postalContent.getText());
                         selectedObject.setPlace(placeContent.getText());

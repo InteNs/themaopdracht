@@ -3,16 +3,6 @@ package main;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-
-//moet bij klant
-//public void addorRemoveVehicle (Vehicle vehicles, boolean remove){
-//if (remove)vehicle.remove(vehicle);
-//else vehicle.add(vehicle);
-//}
-
-//klant
-//addorRemoveVehicle(new Vehicle("volkswagen", "13-LOL-3", Customer.get(1)), false);
-
 public class Customer {
     private String name, place, email, address, postal, bankAccount, tel;
     private LocalDate dateOfBirth, lastVisit, lastMaintenance;
@@ -133,9 +123,12 @@ public class Customer {
         return cars;
     }
 
-    public void addorRemoveCar(Car auto, boolean remove) {
-        if (remove) cars.remove(auto);
-        else cars.add(auto);
+    public void add(Car car) {
+        cars.add(car);
+    }
+
+    public void removeCar(Car car){
+        cars.remove(car);
     }
 
     @Override

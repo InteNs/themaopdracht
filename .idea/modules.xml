@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Themaopdracht/Application.iml" filepath="$PROJECT_DIR$/Themaopdracht/Application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Web Application/Web Application.iml" filepath="$PROJECT_DIR$/Web Application/Web Application.iml" />
+    </modules>
+  </component>
+</project>
