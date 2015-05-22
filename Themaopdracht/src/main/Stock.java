@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 @Deprecated
-public class Stock {
+public class Stock extends Product {
     private final ArrayList<Product> products;
     private final HashMap<Object, Integer> toOrder;
 

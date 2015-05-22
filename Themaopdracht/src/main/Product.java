@@ -8,13 +8,16 @@ public abstract class Product {
     double sellPrice;
     ProductSupplier supplier;
 
-    Product(String name, int amount, int minAmount, double buyPrice, double sellPrice, ProductSupplier supplier) {
+    public Product(String name, int amount, int minAmount, double buyPrice, double sellPrice, ProductSupplier supplier) {
         this.name = name;
         this.amount = amount;
         this.minAmount = minAmount;
         this.buyPrice = buyPrice;
         this.sellPrice = sellPrice;
         this.supplier = supplier;
+    }
+
+    protected Product() {
     }
 
     public String getName() {

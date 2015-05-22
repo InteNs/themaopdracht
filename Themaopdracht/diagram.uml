@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="310.0" y="470.0">main.Stock</node>
+    <node x="282.41666666666663" y="771.0">main.MaintenanceSession</node>
+    <node x="584.5" y="0.0">main.ProductSupplier</node>
+    <node x="603.0" y="558.5">main.Fuel</node>
+    <node x="312.0" y="1259.0">main.Customer</node>
+    <node x="977.0" y="558.5">main.Part</node>
+    <node x="78.0" y="1714.0">main.Invoice</node>
+    <node x="231.237037037037" y="279.5">main.Order</node>
+    <node x="0.0" y="525.0">main.Mechanic</node>
+    <node x="562.0" y="1090.0">main.Car</node>
+    <node x="533.0" y="213.0">main.Product</node>
+    <node x="1127.0" y="1090.0">main.ParkingSpace</node>
+    <node x="1067.0" y="1259.0">main.Reservation</node>
+    <node x="0.0" y="1335.5">main.Invoice.InvoiceItem</node>
+    <node x="164.5" y="2015.0">main.Invoice.PayMethod</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="main.MaintenanceSession" target="main.Stock">
+      <point x="0.0" y="-137.0" />
+      <point x="438.91666666666663" y="746.0" />
+      <point x="446.5" y="746.0" />
+      <point x="0.0" y="125.5" />
+    </edge>
+    <edge source="main.Reservation" target="main.ParkingSpace">
+      <point x="0.0" y="-148.0" />
+      <point x="0.0" y="59.5" />
+    </edge>
+    <edge source="main.Invoice.PayMethod" target="main.Invoice">
+      <point x="0.0" y="-47.5" />
+      <point x="0.0" y="125.5" />
+    </edge>
+    <edge source="main.Part" target="main.Product">
+      <point x="0.0" y="-37.0" />
+      <point x="1153.5" y="450.0" />
+      <point x="878.8000000000002" y="450.0" />
+      <point x="98.80000000000018" y="103.5" />
+    </edge>
+    <edge source="main.Invoice" target="main.Invoice.InvoiceItem">
+      <point x="-94.0" y="-125.5" />
+      <point x="125.0" y="1689.0" />
+      <point x="73.0" y="1689.0" />
+      <point x="-73.0" y="126.0" />
+    </edge>
+    <edge source="main.Invoice" target="main.Customer">
+      <point x="94.0" y="-125.5" />
+      <point x="313.0" y="1689.0" />
+      <point x="667.0" y="1689.0" />
+      <point x="0.0" y="202.5" />
+    </edge>
+    <edge source="main.MaintenanceSession" target="main.Mechanic">
+      <point x="-104.33333333333326" y="-137.0" />
+      <point x="334.58333333333337" y="746.0" />
+      <point x="145.0" y="746.0" />
+      <point x="0.0" y="70.5" />
+    </edge>
+    <edge source="main.Stock" target="main.Product">
+      <point x="0.0" y="-125.5" />
+      <point x="446.5" y="440.0" />
+      <point x="582.4" y="440.0" />
+      <point x="-197.60000000000002" y="103.5" />
+    </edge>
+    <edge source="main.Fuel" target="main.Product">
+      <point x="0.0" y="-37.0" />
+      <point x="0.0" y="103.5" />
+    </edge>
+    <edge source="main.Customer" target="main.Car">
+      <point x="0.0" y="-202.5" />
+      <point x="0.0" y="59.5" />
+    </edge>
+    <edge source="main.Product" target="main.ProductSupplier">
+      <point x="0.0" y="-103.5" />
+      <point x="0.0" y="81.5" />
+    </edge>
+    <edge source="main.MaintenanceSession" target="main.Product">
+      <point x="104.33333333333326" y="-137.0" />
+      <point x="543.2499999999999" y="746.0" />
+      <point x="1340.5" y="746.0" />
+      <point x="1340.5" y="440.0" />
+      <point x="977.6000000000001" y="440.0" />
+      <point x="197.60000000000014" y="103.5" />
+    </edge>
+    <edge source="main.Invoice.InvoiceItem" target="main.Invoice">
+      <point x="73.0" y="126.0" />
+      <point x="0.0" y="-125.5" />
+    </edge>
+    <edge source="main.Stock" target="main.Order">
+      <point x="-91.0" y="-125.5" />
+      <point x="355.5" y="450.0" />
+      <point x="364.737037037037" y="450.0" />
+      <point x="0.0" y="37.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.41877934272300466" x="738.3811659192826" y="1524.3789237668161" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Properties</Category>
+    <Category>Methods</Category>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
