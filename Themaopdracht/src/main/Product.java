@@ -17,31 +17,56 @@ public abstract class Product {
         this.supplier = supplier;
     }
 
-    public abstract String getName();
+    public String getName() {
+        return name;
+    }
 
-    public abstract void setName(String name);
+    public int getAmount() {
+        return amount;
+    }
 
-    public abstract int getAmount();
+    public int getMinAmount() {
+        return minAmount;
+    }
 
-    public abstract void setAmount(int amount);
+    public double getBuyPrice() {
+        return buyPrice;
+    }
 
-    public abstract int getMinAmount();
+    public double getSellPrice() {
+        return sellPrice;
+    }
 
-    public abstract void setMinAmount(int orderAmount);
+    public ProductSupplier getSupplier() {
+        return supplier;
+    }
 
-    public abstract double getBuyPrice();
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public abstract void setBuyPrice(double buyPrice);
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 
-    public abstract double getSellPrice();
+    public void setMinAmount(int minAmount) {
+        this.minAmount = minAmount;
+    }
 
-    public abstract void setSellPrice(double sellPrice);
+    public void setBuyPrice(double buyPrice) {
+        this.buyPrice = buyPrice;
+    }
 
-    public abstract ProductSupplier getSupplier();
+    public void setSellPrice(double sellPrice) {
+        this.sellPrice = sellPrice;
+    }
 
-    public abstract void setSupplier(ProductSupplier supplier);
+    public void setSupplier(ProductSupplier supplier) {
+        this.supplier = supplier;
+    }
 
     @Override
-    public abstract String toString();
-
+    public String toString() {
+        return name;
+    }
 }

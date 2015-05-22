@@ -3,7 +3,7 @@ package main;
 import java.util.HashMap;
 
 
-class Order {
+public class Order {
     @SuppressWarnings("unused")
     private final HashMap<Object, Integer> orderList;
 

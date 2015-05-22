@@ -3,7 +3,7 @@ package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+@Deprecated
 public class Stock {
     private final ArrayList<Product> products;
     private final HashMap<Object, Integer> toOrder;

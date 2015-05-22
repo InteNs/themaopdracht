@@ -229,15 +229,15 @@ public class CustomerScreen extends Screen {
                 confirm.showAndWait();
                 switch (confirm.getKeuze()) {
                     case "confirm": {
-                        selectedObject.setName(nameContent.getText());
+                        selectedObject.setFirstName(nameContent.getText());
                         selectedObject.setAddress(addressContent.getText());
-                        selectedObject.setPostal(postalContent.getText());
-                        selectedObject.setPlace(placeContent.getText());
+                        //selectedObject.setPostal(postalContent.getText());
+                        //selectedObject.setPlace(placeContent.getText());
                         selectedObject.setDateOfBirth(datecontent.getValue());
                         selectedObject.setEmail(emailContent.getText());
-                        selectedObject.setTel(phoneContent.getText());
-                        selectedObject.setBankAccount(bankContent.getText());
-                        selectedObject.setOnBlackList(blackListContent.isSelected());
+                        //selectedObject.setTel(phoneContent.getText());
+                        //selectedObject.setBankAccount(bankContent.getText());
+                        selectedObject.setIsOnBlackList(blackListContent.isSelected());
                         setEditable(false);
                         break;
                     }
@@ -252,19 +252,19 @@ public class CustomerScreen extends Screen {
                 confirm.showAndWait();
                 switch (confirm.getKeuze()) {
                     case "confirm": {
-                        Customer newCustomer = new Customer(
-                                nameContent.getText(),
-                                addressContent.getText(),
-                                postalContent.getText(),
-                                datecontent.getValue(),
-                                placeContent.getText(),
-                                emailContent.getText(),
-                                phoneContent.getText(),
-                                bankContent.getText(),
-                                blackListContent.isSelected()
-                        );
-                        controller.addorRemoveCustomer(newCustomer, false);
-                        itemList.getItems().add(new ListItem(newCustomer));
+                        //Customer newCustomer = new Customer(
+                                //nameContent.getText(),
+                                //addressContent.getText(),
+                                //postalContent.getText(),
+                                //datecontent.getValue(),
+                                //placeContent.getText(),
+                               // emailContent.getText(),
+                                //phoneContent.getText(),
+                               // bankContent.getText(),
+                                //blackListContent.isSelected()
+                        //);
+                        //controller.addorRemoveCustomer(newCustomer, false);
+                        //itemList.getItems().add(new ListItem(newCustomer));
                         setEditable(false);
                         break;
                     }
@@ -305,14 +305,14 @@ public class CustomerScreen extends Screen {
         if (selectedValue != null) {
             selectedItem = selectedValue;
             selectedObject = selectedValue.getCustomer();
-            nameContent.setText(selectedObject.getName());
+            //nameContent.setText(selectedObject.getName());
             addressContent.setText(selectedObject.getAddress());
-            postalContent.setText(selectedObject.getPostal());
-            placeContent.setText(selectedObject.getPlace());
+            //postalContent.setText(selectedObject.getPostal());
+            //placeContent.setText(selectedObject.getPlace());
             datecontent.setValue(selectedObject.getDateOfBirth());
             emailContent.setText(selectedObject.getEmail());
-            phoneContent.setText(selectedObject.getTel());
-            bankContent.setText(selectedObject.getBankAccount());
+            //phoneContent.setText(selectedObject.getTel());
+            //bankContent.setText(selectedObject.getBankAccount());
             blackListContent.setSelected(selectedObject.isOnBlackList());
         }
     }
@@ -378,10 +378,10 @@ public class CustomerScreen extends Screen {
         itemList.getItems().clear();
         //add an item if any item that exists contains any value that has been searched for
         content.stream().filter(entry ->
-                entry.getCustomer().getName().contains(newVal)
-                || entry.getCustomer().getEmail().contains(newVal)
-                || entry.getCustomer().getPlace().contains(newVal)
-                || entry.getCustomer().getPostal().contains(newVal)).forEach(entry ->
+                //entry.getCustomer().getName().contains(newVal)
+                //|| entry.getCustomer().getEmail().contains(newVal)
+                //|| entry.getCustomer().getPlace().contains(newVal)
+                //|| entry.getCustomer().getPostal().contains(newVal)).forEach(entry ->
                 itemList.getItems().add(entry));
     }
 
@@ -413,10 +413,10 @@ public class CustomerScreen extends Screen {
          * fills in all the labels with the latest values
          */
         public void refresh() {
-            itemNameLabel.setText(object.getName());
-            itemPostalLabel.setText(object.getPostal());
-            itemPhoneLabel.setText(object.getTel());
-            itemPlaceLabel.setText(object.getPlace());
+            //itemNameLabel.setText(object.getName());
+            //itemPostalLabel.setText(object.getPostal());
+            //itemPhoneLabel.setText(object.getTel());
+            //itemPlaceLabel.setText(object.getPlace());
         }
 
         /**

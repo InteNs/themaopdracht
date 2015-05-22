@@ -163,8 +163,8 @@ public class InvoiceScreen extends Screen {
                 for (Invoice object : controller.getInvoices())
                     if (!object.isPayed() && object.getInvoiceDate().isBefore(LocalDate.now().minusMonths(3))) {
                         itemList.getItems().add(new ListItem(object));
-                        if (object.getCustomer() != null) object.getCustomer().setOnBlackList(true);
-                    } else if (object.getCustomer() != null) object.getCustomer().setOnBlackList(false);
+                        if (object.getCustomer() != null)  object.getCustomer().setIsOnBlackList(true);
+                    } else if (object.getCustomer() != null) object.getCustomer().setIsOnBlackList(false);
 
                 break;
             }
@@ -374,7 +374,7 @@ public class InvoiceScreen extends Screen {
         public void refresh() {
             itemDateLabel.setText(object.getInvoiceDate().toString());
             if (object.getCustomer() == null) itemCustomerLabel.setText("Anoniem");
-            else itemCustomerLabel.setText(object.getCustomer().getName());
+            //else itemCustomerLabel.setText(object.getCustomer().getName());
             itemPriceLabel.setText(ATDProgram.convert(object.getTotalPrice()));
             if (object.isPayed()) itemIsPayedLabel.setText("Betaalt");
             else itemIsPayedLabel.setText("Openstaand");

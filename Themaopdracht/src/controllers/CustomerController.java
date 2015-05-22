@@ -58,7 +58,7 @@ public class CustomerController {
      * search for customer (on firstname, email and address
      * @param oldVal    old value of changelistener
      * @param newVal    new value of changelistener
-     * @return the results of the search in a list
+     * @return a list with the results of the search
      */
     //may need to change depending on format of listeners in html/javascript or whatever(no clue)
     public List<Customer> searchCustomer(String oldVal, String newVal) {
@@ -68,7 +68,6 @@ public class CustomerController {
             //actor has deleted a character, so reset the search
             results.clear();
         }
-        results.clear();
         //add an item if any item that exists contains any value that has been searched for
         customers.stream()
                 .filter(customer ->
@@ -80,9 +79,15 @@ public class CustomerController {
     }
 
     /**
-     * toDo
-     *
-     * @param customer
+     * change customer info
+     * @param customer      the customer in question
+     * @param email         @nullable
+     * @param password      @nullable
+     * @param firstName     @nullable
+     * @param lastName      @nullable
+     * @param address       @nullable
+     * @param country       @nullable
+     * @param dateOfBirth   @nullable
      */
     public void changeCustomerInfo(Customer customer,String email, String password, String firstName, String lastName, String address, String country, LocalDate dateOfBirth) {
         if (email !=null)       customer.setEmail(email);
