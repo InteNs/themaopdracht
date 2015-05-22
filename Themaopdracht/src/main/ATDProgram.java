@@ -1,5 +1,6 @@
 package main;
 
+import controllers.CustomerController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
@@ -38,6 +39,13 @@ public class ATDProgram extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
+
+
+
+
+
+
         mainStage = stage;
         nf.setCurrency(Currency.getInstance("EUR"));
         addContent();
@@ -113,7 +121,7 @@ public class ATDProgram extends Application {
         if (remove) reservations.remove(reservation);
         else reservations.add(reservation);
     }
-
+    @Deprecated
     public void addorRemoveCustomer(Customer customer, boolean remove) {
         if (remove) customers.remove(customer);
         else customers.add(customer);
