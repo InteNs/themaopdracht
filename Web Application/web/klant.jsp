@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -69,18 +69,6 @@
    	<div class="row row-centered">
   		<div class="col-md-3 col-centered">
   			<a href="#" alt="My Website Article" title="Klanten"><span class="glyphicon glyphicon-user blok" style="font-size: 10.8em;"></a></span>	
-  		</div>
-  		<div class="col-md-3 col-centered">
-			<a href="mywebsite/article" alt="My Website Article" title="Finaniciën"><span class="glyphicon glyphicon-euro blok" style="font-size: 10.8em;"></a></span>
-  		</div>
-  		<div class="col-md-3 col-centered">
-  			<a href="mywebsite/article" alt="My Website Article" title="Facaturen"><span class="glyphicon glyphicon-list-alt blok" style="font-size: 10.8em;"></a></span>
-  		</div><br>
-  		<div class="col-md-3 col-centered">
-			<a href="mywebsite/article" alt="My Website Article" title="Voorraad"><span class="glyphicon glyphicon-tint blok" style="font-size: 10.8em;"></a></span>
-  		</div>
-		<div class="col-md-3 col-centered">
-  			<a href="mywebsite/article" alt="My Website Article" title="Onderhoud"><span class="glyphicon glyphicon-wrench blok" style="font-size: 10.8em;"></a></span>
   		</div>
   		<div class="col-md-3 col-centered">
 			<a href="mywebsite/article" alt="My Website Article" title="Parkeren"><span class="glyphicon glyphicon-calendar blok1" style="font-size: 10.8em;"></a></span>

@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row">
+        <div id="tab-container" class="span6 offset1">
+        <ul class="nav nav-tabs" id="myTab">
+              <li class="active"><a href="#options" data-toggle="tab">Options</a></li>
+              <li class="disabled"><a href="#information" data-toggle="tab">Information</a></li>
+              <li class="disabled"><a href="#payment" data-toggle="tab">Payment</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="options">
+                    <div class="well">
+                    <form id="frmtype1" action="" name="frmtype1" method="post">
+                        <fieldset>
+                            <legend>Registration Options</legend>
+
+                            <label for="Reg_type1" class="radio">
+                            <input type="radio" name="Reg_type" id="Reg_type1" value="1"/>
+                        Registering myself with credit card or bank account
+                        </label>
+                        <br>
+                        <label for="Reg_type2" class="radio">
+                            <input type="radio" name="Reg_type" id="Reg_type2" value="2"/>
+                        Registering multiple people using credit card or bank account
+                        </label>
+                        <br>
+                        <label for="Reg_type3" class="radio">
+                            <input type="radio" name="Reg_type" id="Reg_type3" value="3"/>
+                        Registering using a purchase order
+                        </label>
+                        </fieldset>
+                                <button class="btn-demo btn" data-activate="#information">Continue</button>
+                        <span class="help-inline" style="display:none;">Please choose an option</span>
+                    </form> 
+                    </div><!--/.well -->
+                </div>
+                <div class="tab-pane" id="information">
+                    <div class="well">
+                    <form name="everything" id="frmtype2" action="" method="post"><p>Some content to give this pane a little bit of bulk</p>
+                         <button class="btn-demo btn" data-activate="#payment" type="submit">Continue</button>
+                    </form>
+                    </div><!--/.well -->
+                </div>
+                <div class="tab-pane" id="payment">
+                    <div class="well">
+                    <p>Some content for the 3rd pane.</p>     
+                    </div><!-- .well -->
+                </div>
+            </div>
+        </div><!-- /.row -->
+    </div><!-- /#tab-container --> </div><!-- /.container -->
