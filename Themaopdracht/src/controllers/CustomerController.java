@@ -4,7 +4,6 @@ import main.Customer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -79,25 +78,28 @@ public class CustomerController {
     }
 
     /**
-     * change customer info
-     * @param customer      the customer in question
+     * change a customer deetail
+     * @param customer      the customer that needs to be changed
      * @param email         @nullable
      * @param password      @nullable
      * @param firstName     @nullable
      * @param lastName      @nullable
+     * @param dateOfBirth   @nullable
+     * @param postal        @nullable
      * @param address       @nullable
      * @param country       @nullable
-     * @param dateOfBirth   @nullable
+     * @param phoneNumber   @nullable
      */
-    public void changeCustomerInfo(Customer customer,String email, String password, String firstName, String lastName, String address, String country, LocalDate dateOfBirth) {
+    public void changeCustomerInfo(Customer customer,String email, String password, String firstName, String lastName,LocalDate dateOfBirth,String postal, String address, String country,String phoneNumber) {
         if (email !=null)       customer.setEmail(email);
         if (password !=null)    customer.setPassword(password);
         if (firstName !=null)   customer.setFirstName(firstName);
         if (lastName !=null)    customer.setLastName(lastName);
+        if (dateOfBirth !=customer.getDateOfBirth()) customer.setDateOfBirth(dateOfBirth);
+        if (postal != null)     customer.setPostal(postal);
         if (address !=null)     customer.setAddress(address);
         if (country !=null)     customer.setCountry(country);
-        if (dateOfBirth !=customer.getDateOfBirth())
-                                customer.setDateOfBirth(dateOfBirth);
+        if (phoneNumber != null)customer.setPhoneNumber(phoneNumber);
     }
 
     /**
@@ -111,8 +113,8 @@ public class CustomerController {
      * @param country     country
      * @param dateOfBirth dateOfBirth
      */
-    public void newCustomer(String email, String password, String firstName, String lastName, String address, String country, LocalDate dateOfBirth) {
-        customers.add(new Customer(email, password, firstName, lastName, address, country, dateOfBirth));
+    public void newCustomer(String email, String password, String firstName, String lastName,LocalDate dateOfBirth,String postal, String address, String country,String phoneNumber ) {
+        customers.add(new Customer(email, password, firstName, lastName, dateOfBirth, postal, address, country, phoneNumber));
     }
 
     /**
