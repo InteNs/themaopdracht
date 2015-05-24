@@ -15,7 +15,6 @@
       <th>Achternaam</th>
       <th>Adress</th>
       <th>Postcode</th>
-      <th>Land</th>
       <th>Email</th>
       <th>Aanpassen</th>
     </tr>
@@ -24,7 +23,6 @@
       <td>Meulenbeld</td>
       <td>Omloop 48</td>
       <td>3552 AZ</td>
-      <td>Nederland</td>
       <td>jorritmeulenbeld@icloud.com</td>
       <td><span class="glyphicon glyphicon-edit"></span></td>
     </tr>
@@ -33,7 +31,6 @@
       <td>Meulenbeld</td>
       <td>Omloop 48</td>
       <td>3552 AZ</td>
-      <td>Nederland</td>
       <td>jorritmeulenbeld@icloud.com</td>
       <td><span class="glyphicon glyphicon-edit"></span></td>
     </tr>
