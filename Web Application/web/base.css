@@ -1,0 +1,56 @@
+.btn {
+  background-color: #0099CC;
+  color: #FFFFFF;
+}
+
+.btn-welcome {
+  border-style: hidden;
+  background-color: transparent;
+  opacity: 0.9;
+}
+
+body {
+  background: url("background.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.jumbotron {
+  background-color: rgba(238,238,238,0.8);
+}
+
+.blok {
+  height: 120px;
+  width: 120px;
+}
+
+.btn-welcome:hover {
+  transition: ease-out 0.1s;
+  -webkit-transition: ease-out 0.1s; /* Safari 3.1 to 6.0 */
+  -ms-transform: scale(1.1,1.1); /* IE 9 */
+  -webkit-transform: scale(1.1,1.1); /* Safari */
+  transform: scale(1.1,1.1);
+  opacity: 1.0;
+}
+
+.row-centered {
+  text-align:center;
+}
+.col-centered {
+  display:inline-block;
+  float:none;
+  /* reset the text-align */
+  text-align:left;
+  /* inline-block space fix */
+  margin-right:-4px;
+}
+
+.carou-img {
+  width: 120px;
+  height: 120px;
+  position: center;
+}
+.carousel-inner > .item > img {
+  margin: 0 auto;
+}
