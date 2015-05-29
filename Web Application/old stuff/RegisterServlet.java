@@ -21,7 +21,7 @@ public class RegisterServlet extends HttpServlet {
 		String password       = req.getParameter("passwordreg");
 		String firstname      = req.getParameter("firstname");
 		String lastName       = req.getParameter("lastname");
-        LocalDate dateOfBirth = req.getParameter("birth");//TODO combobox maken
+        LocalDate dateOfBirth = req.getParameter("birth");
 		String address        = req.getParameter("address");
         String postal         = req.getParameter("")
 		String phoneNumber    =
