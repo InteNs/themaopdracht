@@ -54,7 +54,7 @@ public class CustomerController {
     }
 
     /**
-     * search for customer (on firstname, email and address
+     * search for customer (on firstname, email and address)
      * @param oldVal    old value of changelistener
      * @param newVal    new value of changelistener
      * @return a list with the results of the search
@@ -87,10 +87,9 @@ public class CustomerController {
      * @param dateOfBirth   @nullable
      * @param postal        @nullable
      * @param address       @nullable
-     * @param country       @nullable
      * @param phoneNumber   @nullable
      */
-    public void changeCustomerInfo(Customer customer,String email, String password, String firstName, String lastName,LocalDate dateOfBirth,String postal, String address, String country,String phoneNumber) {
+    public void changeCustomerInfo(Customer customer,String email, String password, String firstName, String lastName,LocalDate dateOfBirth, String address,String postal,String phoneNumber) {
         if (email !=null)       customer.setEmail(email);
         if (password !=null)    customer.setPassword(password);
         if (firstName !=null)   customer.setFirstName(firstName);
@@ -98,7 +97,6 @@ public class CustomerController {
         if (dateOfBirth !=customer.getDateOfBirth()) customer.setDateOfBirth(dateOfBirth);
         if (postal != null)     customer.setPostal(postal);
         if (address !=null)     customer.setAddress(address);
-        if (country !=null)     customer.setCountry(country);
         if (phoneNumber != null)customer.setPhoneNumber(phoneNumber);
     }
 
@@ -110,11 +108,10 @@ public class CustomerController {
      * @param firstName   firstname
      * @param lastName    lastname
      * @param address     adress(street + house number)
-     * @param country     country
      * @param dateOfBirth dateOfBirth
      */
-    public void newCustomer(String email, String password, String firstName, String lastName,LocalDate dateOfBirth,String postal, String address, String country,String phoneNumber ) {
-        customers.add(new Customer(email, password, firstName, lastName, dateOfBirth, postal, address, country, phoneNumber));
+    public void newCustomer(String email, String password, String firstName, String lastName,LocalDate dateOfBirth, String address, String postal, String phoneNumber ) {
+        customers.add(new Customer(email, password, firstName, lastName, dateOfBirth, postal, address, phoneNumber));
     }
 
     /**

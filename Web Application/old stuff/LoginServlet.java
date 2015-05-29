@@ -1,12 +1,11 @@
-package login;
+package session;
 
+import main.Customer;
 import model.User;
 
-import java.io.*;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +20,7 @@ public class LoginServlet extends HttpServlet {
         // request dispatcher zorgd dat de applicatie weer door kan na deze code
         RequestDispatcher rd;
 		String email = req.getParameter("email");
-        User user = null;
+        Customer user = null;
         //String file = req.getServletContext().getRealPath("/")+"users.txt";
 		String password = req.getParameter("password");
 //        try {

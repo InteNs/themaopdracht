@@ -59,7 +59,7 @@
 
 
                     <div class="form-group">
-                        <label for="surname">Voornaam</label> <input type="text"
+                        <label for="firstname">Voornaam</label> <input type="text"
                                                                      name="firstname" class="form-control" id="surname"
                                                                      placeholder="Vul voornaam in">
                         <span id="surnameErr"></span>

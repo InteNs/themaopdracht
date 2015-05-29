@@ -1,7 +1,6 @@
-package register;
-import java.io.*;
+package session;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -18,13 +17,15 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			 throws ServletException, IOException {
         RequestDispatcher rd;
-		String email = req.getParameter("emailreg");
-		String password = req.getParameter("passwordreg");
-		String firstname = req.getParameter("firstname");
-		String surName = req.getParameter("lastname");
-		String address = req.getParameter("address");
-		String country = req.getParameter("country"); 
-		System.out.println(email + password + firstname + surName + address + country);
+		String email          = req.getParameter("emailreg");
+		String password       = req.getParameter("passwordreg");
+		String firstname      = req.getParameter("firstname");
+		String lastName       = req.getParameter("lastname");
+        LocalDate dateOfBirth = req.getParameter("birth");//TODO combobox maken
+		String address        = req.getParameter("address");
+        String postal         = req.getParameter("")
+		String phoneNumber    =
+		//System.out.println(email + password + firstname + surName + address + country);
 		if(!email.equals("")
                 && !password.equals("")
 				&& !firstname.equals("")

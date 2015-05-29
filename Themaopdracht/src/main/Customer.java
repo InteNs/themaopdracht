@@ -9,21 +9,19 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String address;
-    private String country;
     private String phoneNumber;
     private String postal;
     private LocalDate dateOfBirth, lastVisit, lastMaintenance;
     private boolean isOnBlackList, notified;
     private final ArrayList<Car> cars;
 
-    public Customer(String email, String password, String firstName, String lastName, LocalDate dateOfBirth, String postal, String address, String country, String phoneNumber) {
+    public Customer(String email, String password, String firstName, String lastName, LocalDate dateOfBirth, String address, String postal, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.postal = postal;
         this.address = address;
-        this.country = country;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         cars = new ArrayList<>();
@@ -47,10 +45,6 @@ public class Customer {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
@@ -102,11 +96,6 @@ public class Customer {
     public String getAddress() {
         return address;
     }
-
-    public String getCountry() {
-        return country;
-    }
-
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
