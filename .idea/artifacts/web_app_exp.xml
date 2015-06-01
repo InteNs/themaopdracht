@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="web app exp">
+    <output-path>$MODULE_DIR$/out/artifacts/web_app_exp</output-path>
+    <root id="root" />
+  </artifact>
+</component>

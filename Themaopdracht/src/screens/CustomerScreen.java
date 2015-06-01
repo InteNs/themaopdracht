@@ -229,7 +229,7 @@ public class CustomerScreen extends Screen {
                 confirm.showAndWait();
                 switch (confirm.getKeuze()) {
                     case "confirm": {
-                        selectedObject.setFirstName(nameContent.getText());
+                       // selectedObject.setFirstName(nameContent.getText());
                         selectedObject.setAddress(addressContent.getText());
                         //selectedObject.setPostal(postalContent.getText());
                         //selectedObject.setPlace(placeContent.getText());

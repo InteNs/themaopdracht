@@ -1,6 +1,6 @@
 package main;
 
-class Car {
+public class Car {
 
     private String type;
     private String kenteken;

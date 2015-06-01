@@ -70,48 +70,26 @@ public class CustomerController {
         //add an item if any item that exists contains any value that has been searched for
         customers.stream()
                 .filter(customer ->
-                        customer.getFirstName().contains(newVal)
+                        customer.getRealName().contains(newVal)
                                 || customer.getEmail().contains(newVal)
                                 || customer.getAddress().contains(newVal))
                 .forEach(results::add);
         return results;
     }
 
-    /**
-     * change a customer deetail
-     * @param customer      the customer that needs to be changed
-     * @param email         @nullable
-     * @param password      @nullable
-     * @param firstName     @nullable
-     * @param lastName      @nullable
-     * @param dateOfBirth   @nullable
-     * @param postal        @nullable
-     * @param address       @nullable
-     * @param phoneNumber   @nullable
-     */
-    public void changeCustomerInfo(Customer customer,String email, String password, String firstName, String lastName,LocalDate dateOfBirth, String address,String postal,String phoneNumber) {
+    public void changeCustomerInfo(Customer customer,String email, String password, String realName,LocalDate dateOfBirth, String address,String postal,String phoneNumber) {
         if (email !=null)       customer.setEmail(email);
         if (password !=null)    customer.setPassword(password);
-        if (firstName !=null)   customer.setFirstName(firstName);
-        if (lastName !=null)    customer.setLastName(lastName);
+        if (realName !=null)   customer.setRealName(realName);
         if (dateOfBirth !=customer.getDateOfBirth()) customer.setDateOfBirth(dateOfBirth);
         if (postal != null)     customer.setPostal(postal);
         if (address !=null)     customer.setAddress(address);
         if (phoneNumber != null)customer.setPhoneNumber(phoneNumber);
     }
 
-    /**
-     * create a new customer
-     *
-     * @param email       emailadress
-     * @param password    password
-     * @param firstName   firstname
-     * @param lastName    lastname
-     * @param address     adress(street + house number)
-     * @param dateOfBirth dateOfBirth
-     */
-    public void newCustomer(String email, String password, String firstName, String lastName,LocalDate dateOfBirth, String address, String postal, String phoneNumber ) {
-        customers.add(new Customer(email, password, firstName, lastName, dateOfBirth, postal, address, phoneNumber));
+
+    public void newCustomer(String email, String password, String realName,LocalDate dateOfBirth, String address, String postal, String phoneNumber ) {
+        customers.add(new Customer(email, password, realName, dateOfBirth, postal, address, phoneNumber));
     }
 
     /**
