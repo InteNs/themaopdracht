@@ -50,9 +50,9 @@ public class product extends HttpServlet {
                 && !Objects.equals(postcode,"")
                 && !Objects.equals(plaats,"")
                 ){
-            controller.newPart();
+            //controller.newPart();
                     ///newProduct(aantal, minAantal, prijs, inkoopPrijs, leverancier, adres, postcode, plaats);
-            controller.removeProduct();
+            ///controller.removeProduct();
 
             requestDispatcher = req.getRequestDispatcher("/voorraad.jsp");
         }
